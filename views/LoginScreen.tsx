@@ -23,7 +23,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 type Props = {
-	navigation: NativeStackNavigationProp<RootStackParamList, "Home">;
+	navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
 const LoginScreen = ({ navigation }: Props) => {
@@ -31,7 +31,7 @@ const LoginScreen = ({ navigation }: Props) => {
 
 	const handleLogin = () => {
 		console.log("Login successful");
-		navigation.replace("Home"); // Replace Login with Home screen
+		navigation.replace("BottomNavigation"); // Replace Login with Home screen
 	};
 
 	return (
