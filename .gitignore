@@ -29,6 +29,7 @@ android/.idea/
 android/local.properties
 android/captures/
 android/.cxx/
+android/build/
 *.iml
 
 # iOS
