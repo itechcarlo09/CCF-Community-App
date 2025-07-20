@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const EventScreen = () => {
+const EventFormScreen = () => {
 	return (
 		<View style={styles.container}>
-			<Text style={styles.text}>🎉 Welcome to the Event Screen!</Text>
+			<Text style={styles.text}>🎉 Welcome to the EventForm Screen!</Text>
 		</View>
 	);
 };
@@ -14,4 +14,4 @@ const styles = StyleSheet.create({
 	text: { fontSize: 18, fontWeight: "bold" },
 });
 
-export default EventScreen;
+export default EventFormScreen;
