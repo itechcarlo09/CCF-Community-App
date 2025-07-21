@@ -7,6 +7,7 @@ import {
 	Alert,
 	ActivityIndicator,
 	FlatList,
+	TouchableOpacity,
 } from "react-native";
 import { getApp } from "@react-native-firebase/app";
 import {
@@ -47,9 +48,6 @@ const EventScreen = ({ navigation }: any) => {
 		fetchEvents();
 	}, []);
 
-	console.log("Events:", events);
-	console.log("Loading:", loading);
-
 	// const getEvents = async () => {
 	// 	const snapshot = await getDocs(collection(db, "Events"));
 	// 	snapshot.forEach((doc: any) => {
@@ -69,7 +67,12 @@ const EventScreen = ({ navigation }: any) => {
 				data={events}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
-					<Text style={styles.text}>🎉 Welcome to the {item.Name}!</Text>
+					<TouchableOpacity
+						style={styles.card}
+						onPress={() => console.log(item.id)}
+					>
+						<Text style={styles.text}>🎉 Are you ready for {item.Name}!</Text>
+					</TouchableOpacity>
 				)}
 			/>
 		</View>
@@ -78,12 +81,13 @@ const EventScreen = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
 	container: { flex: 1, justifyContent: "center", alignItems: "center" },
-	text: { fontSize: 18, fontWeight: "bold" },
+	text: { fontSize: 18, fontWeight: "bold", color: "#fff" },
 	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
 	card: {
+		elevation: 6,
 		padding: 16,
 		marginVertical: 8,
-		backgroundColor: "#f2f2f2",
+		backgroundColor: "#c00b0bff",
 		borderRadius: 8,
 	},
 	title: { fontSize: 18, fontWeight: "bold" },
