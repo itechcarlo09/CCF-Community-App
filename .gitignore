@@ -75,3 +75,5 @@ fastlane/screenshots/**/*.png
 *.keystore
 *.jks
 *.p12
+android/app/google-services.json
+ios/GoogleService-Info.plist
