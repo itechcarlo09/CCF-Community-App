@@ -14,6 +14,7 @@ import {
 } from "@react-native-firebase/firestore";
 import { User } from "../../firebase/firestore/types/User";
 import UserListItem from "./components/UserListItem";
+import { getAllUsers } from "../../firebase/firestore/userService";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -29,11 +30,7 @@ const UserScreen = ({ navigation }: any) => {
 
 	const fetchUsers = async () => {
 		try {
-			const snapshot = await getDocs(collection(db, "Users"));
-			const userList: User[] = snapshot.docs.map((doc: any) => ({
-				id: doc.id,
-				...doc.data(),
-			})) as User[];
+			const userList = await getAllUsers();
 			setUsers(userList);
 		} catch (error) {
 			console.error("Error fetching users:", error);
