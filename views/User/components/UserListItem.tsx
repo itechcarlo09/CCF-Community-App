@@ -18,8 +18,8 @@ const UserListItem = ({ user, onPress }: Props) => (
 			/>
 		</View>
 		<Text style={styles.text}>
-			{user.firstName} {user.middleName ? user.middleName[0] + ". " : ""}
-			{user.lastName}
+			{user.lastName} {user.firstName}{" "}
+			{user.middleName ? user.middleName[0] + ". " : ""}
 		</Text>
 	</TouchableOpacity>
 );

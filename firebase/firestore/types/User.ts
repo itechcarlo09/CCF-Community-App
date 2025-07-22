@@ -5,6 +5,10 @@ export type CreateUserInput = {
 	updatedAt?: Date;
 };
 
+export type FirebaseUser = CreateUserInput & {
+	createdAt: Date;
+};
+
 export type User = CreateUserInput & {
 	id: string;
 	createdAt: Date;

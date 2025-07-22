@@ -6,9 +6,9 @@ import {
 	updateDoc,
 } from "@react-native-firebase/firestore";
 import { db } from "../firebaseConfig";
-import { CreateUserInput, User } from "./types/User";
+import { FirebaseUser, User } from "./types/User";
 
-export const createUser = async (data: CreateUserInput) => {
+export const createUser = async (data: FirebaseUser) => {
 	return await addDoc(collection(db, "Users"), data);
 };
 

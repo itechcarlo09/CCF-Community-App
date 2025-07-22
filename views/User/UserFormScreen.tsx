@@ -61,6 +61,7 @@ const UserFormScreen = () => {
 			userId
 				? await updateUser(userId, values as Partial<User>)
 				: await createUser({
+						createdAt: new Date(),
 						...values,
 				  });
 			resetForm();
