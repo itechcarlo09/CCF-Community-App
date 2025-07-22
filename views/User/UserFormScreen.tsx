@@ -1,9 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, SafeAreaView } from "react-native";
+import { View, StyleSheet, Button } from "react-native";
 import TextField from "../../components/TextField";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { getFirestore } from "@react-native-firebase/firestore";
+import { getApp } from "@react-native-firebase/app";
+import { createUser } from "../../firebase/firestore/userService";
+import { User } from "../../firebase/firestore/types/User";
 
 const UserSchema = Yup.object().shape({
 	firstName: Yup.string().required("Required"),
@@ -11,16 +15,38 @@ const UserSchema = Yup.object().shape({
 });
 
 const UserFormScreen = () => {
+	const app = getApp();
+	const db = getFirestore(app);
+
+	const initialValues: Omit<User, "id" | "createdAt"> = {
+		firstName: "",
+		middleName: "",
+		lastName: "",
+	};
+
 	const insets = useSafeAreaInsets();
-	const submitUser = () => {
-		console.log("User successfully added");
+
+	const handleSubmit = async (
+		values: typeof initialValues,
+		{ resetForm }: any
+	) => {
+		try {
+			await createUser({
+				...values,
+				createdAt: new Date(),
+			});
+			resetForm();
+			console.log("User created");
+		} catch (error) {
+			console.error("Error creating user:", error);
+		}
 	};
 
 	return (
 		<Formik
-			initialValues={{ firstName: "" }}
+			initialValues={initialValues}
 			validationSchema={UserSchema}
-			onSubmit={submitUser}
+			onSubmit={handleSubmit}
 		>
 			{({ handleSubmit }) => (
 				<View style={[styles.flex, { paddingTop: insets.top }]}>
@@ -36,7 +62,7 @@ const UserFormScreen = () => {
 					/>
 					<TextField
 						name="lastName"
-						label="last Name"
+						label="Last Name"
 						placeholder="Enter Last Name"
 					/>
 					<Button title="Add User" onPress={() => handleSubmit()} />
