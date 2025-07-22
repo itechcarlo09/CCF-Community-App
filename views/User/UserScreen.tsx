@@ -16,29 +16,30 @@ import {
 	getDocs,
 } from "@react-native-firebase/firestore";
 
-type Event = {
+type User = {
 	id: string;
-	Name: string;
-	Date: string;
+	FirstName: string;
+	MiddleName: string;
+	LastName: string;
 };
 
-const EventScreen = ({ navigation }: any) => {
+const UserScreen = ({ navigation }: any) => {
 	const app = getApp();
 	const db = getFirestore(app);
-	const [events, setEvents] = useState<Event[]>([]);
+	const [events, setEvents] = useState<User[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchEvents = async () => {
 			try {
-				const snapshot = await getDocs(collection(db, "Events"));
-				const eventList: Event[] = snapshot.docs.map((doc: any) => ({
+				const snapshot = await getDocs(collection(db, "Users"));
+				const userList: User[] = snapshot.docs.map((doc: any) => ({
 					id: doc.id,
 					...doc.data(),
-				})) as Event[];
-				setEvents(eventList);
+				})) as User[];
+				setEvents(userList);
 			} catch (error) {
-				console.error("Error fetching events:", error);
+				console.error("Error fetching users:", error);
 			} finally {
 				setLoading(false);
 			}
@@ -46,6 +47,8 @@ const EventScreen = ({ navigation }: any) => {
 
 		fetchEvents();
 	}, []);
+
+	console.log(events);
 
 	if (loading) {
 		return <ActivityIndicator size="large" style={styles.loader} />;
@@ -61,7 +64,10 @@ const EventScreen = ({ navigation }: any) => {
 						style={styles.card}
 						onPress={() => console.log(item.id)}
 					>
-						<Text style={styles.text}>🎉 Are you ready for {item.Name}!</Text>
+						<Text style={styles.text}>
+							🎉 Welcome to Elevate {item.FirstName} {item.MiddleName[0]}.{" "}
+							{item.LastName}!
+						</Text>
 					</TouchableOpacity>
 				)}
 			/>
@@ -84,4 +90,4 @@ const styles = StyleSheet.create({
 	subtitle: { fontSize: 14, color: "gray" },
 });
 
-export default EventScreen;
+export default UserScreen;

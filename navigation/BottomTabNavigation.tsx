@@ -5,6 +5,7 @@ import HomeScreen from "../views/HomeScreen";
 import EventNavigator from "./EventNavigation";
 import { Alert, Button } from "react-native";
 import EventScreen from "../views/Event/EventScreen";
+import UserScreen from "../views/User/UserScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,6 +38,20 @@ export default function BottomTabNavigator() {
 						<Button
 							onPress={() => navigation.navigate("EventNavigation")}
 							title="Add Event"
+							color="#000"
+						/>
+					),
+				})}
+			/>
+			<Tab.Screen
+				name="UserTab"
+				component={UserScreen}
+				options={({ navigation }: any) => ({
+					title: "User",
+					headerRight: () => (
+						<Button
+							onPress={() => navigation.navigate("UserNavigation")}
+							title="Add User"
 							color="#000"
 						/>
 					),
