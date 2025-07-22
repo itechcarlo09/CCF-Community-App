@@ -47,7 +47,7 @@ const LoginScreen = ({ navigation }: Props) => {
 				validationSchema={LoginSchema}
 				onSubmit={handleLogin}
 			>
-				{({ handleChange, handleBlur, handleSubmit, values }) => (
+				{({ handleChange, handleSubmit, values }) => (
 					<View>
 						<Text>Login</Text>
 						<TextInput

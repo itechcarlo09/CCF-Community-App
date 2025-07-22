@@ -1,16 +1,42 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button, SafeAreaView } from "react-native";
+import TextField from "../../components/TextField";
+import * as Yup from "yup";
+import { Formik } from "formik";
+
+const EventSchema = Yup.object().shape({
+	name: Yup.string().required("Required"),
+});
 
 const EventFormScreen = () => {
+	const handleLogin = () => {
+		console.log("Event successfully added");
+	};
+
 	return (
-		<View style={styles.container}>
-			<Text style={styles.text}>🎉 Welcome to the EventForm Screen!</Text>
-		</View>
+		<SafeAreaView style={styles.flex}>
+			<Formik
+				initialValues={{ name: "" }}
+				validationSchema={EventSchema}
+				onSubmit={handleLogin}
+			>
+				{({ handleSubmit, values }) => (
+					<View>
+						<TextField
+							name="name"
+							label="Event Name"
+							placeholder="Enter event name"
+						/>
+						<Button title="Login" onPress={() => handleSubmit()} />
+					</View>
+				)}
+			</Formik>
+		</SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: { flex: 1, justifyContent: "center", alignItems: "center" },
+	flex: { flex: 1 },
 	text: { fontSize: 18, fontWeight: "bold" },
 });
 
