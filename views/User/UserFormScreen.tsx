@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getFirestore } from "@react-native-firebase/firestore";
 import { getApp } from "@react-native-firebase/app";
 import { createUser } from "../../firebase/firestore/userService";
-import { User } from "../../firebase/firestore/types/User";
+import { CreateUserInput, User } from "../../firebase/firestore/types/User";
 
 const UserSchema = Yup.object().shape({
 	firstName: Yup.string().required("Required"),
@@ -18,7 +18,7 @@ const UserFormScreen = () => {
 	const app = getApp();
 	const db = getFirestore(app);
 
-	const initialValues: Omit<User, "id" | "createdAt"> = {
+	const initialValues: Omit<CreateUserInput, "id" | "createdAt"> = {
 		firstName: "",
 		middleName: "",
 		lastName: "",
@@ -33,7 +33,6 @@ const UserFormScreen = () => {
 		try {
 			await createUser({
 				...values,
-				createdAt: new Date(),
 			});
 			resetForm();
 			console.log("User created");

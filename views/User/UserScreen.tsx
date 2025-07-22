@@ -1,18 +1,9 @@
-import React, {
-	useCallback,
-	useEffect,
-	useLayoutEffect,
-	useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
 	View,
-	Text,
 	StyleSheet,
-	Button,
-	Alert,
 	ActivityIndicator,
 	FlatList,
-	TouchableOpacity,
 	RefreshControl,
 } from "react-native";
 import { getApp } from "@react-native-firebase/app";
@@ -22,13 +13,19 @@ import {
 	getDocs,
 } from "@react-native-firebase/firestore";
 import { User } from "../../firebase/firestore/types/User";
+import UserListItem from "./components/UserListItem";
+
+const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
 	const app = getApp();
 	const db = getFirestore(app);
-	const [events, setEvents] = useState<User[]>([]);
+	const [users, setUsers] = useState<User[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
+	const Refresh = () => (
+		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+	);
 
 	const fetchUsers = async () => {
 		try {
@@ -37,7 +34,7 @@ const UserScreen = ({ navigation }: any) => {
 				id: doc.id,
 				...doc.data(),
 			})) as User[];
-			setEvents(userList);
+			setUsers(userList);
 		} catch (error) {
 			console.error("Error fetching users:", error);
 		} finally {
@@ -62,41 +59,34 @@ const UserScreen = ({ navigation }: any) => {
 	return (
 		<View style={styles.container}>
 			<FlatList
-				data={events}
+				data={users}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
-					<TouchableOpacity
-						style={styles.card}
-						onPress={() => console.log(item.id)}
-					>
-						<Text style={styles.text}>
-							🎉 Welcome to Elevate {item.firstName}{" "}
-							{item.middleName ? item.middleName[0] + ". " : ""}
-							{item.lastName}!
-						</Text>
-					</TouchableOpacity>
+					<UserListItem
+						user={item}
+						onPress={(id) => console.log("User ID:", id)}
+					/>
 				)}
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}
+				ItemSeparatorComponent={Separator}
+				refreshControl={Refresh()}
 			/>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: { flex: 1, justifyContent: "center", paddingHorizontal: 16 },
-	text: { fontSize: 18, fontWeight: "bold", color: "#fff" },
-	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
-	card: {
-		elevation: 6,
-		padding: 16,
-		marginVertical: 8,
-		backgroundColor: "#c00b0bff",
-		borderRadius: 8,
+	container: {
+		flex: 1,
+		justifyContent: "center",
+		backgroundColor: "#952828ff",
 	},
+	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
 	title: { fontSize: 18, fontWeight: "bold" },
 	subtitle: { fontSize: 14, color: "gray" },
+	separator: {
+		height: 1,
+		marginHorizontal: 16,
+	},
 });
 
 export default UserScreen;
