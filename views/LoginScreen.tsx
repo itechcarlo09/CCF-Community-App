@@ -12,10 +12,11 @@ import {
 import { RootStackParamList } from "../navigation/types";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import TextField from "../components/TextField";
 
 const LoginSchema = Yup.object().shape({
 	username: Yup.string()
-		.oneOf(["Admin"], 'username must be "admin"')
+		.oneOf(["Admin"], 'username must be "Admin"')
 		.required("Required"),
 	password: Yup.string()
 		.oneOf(["1234"], 'Input must be "1234"')
@@ -39,7 +40,6 @@ const LoginScreen = ({ navigation }: Props) => {
 			style={{
 				flex: 1,
 				justifyContent: "center",
-				alignItems: "center",
 			}}
 		>
 			<Formik
@@ -47,35 +47,19 @@ const LoginScreen = ({ navigation }: Props) => {
 				validationSchema={LoginSchema}
 				onSubmit={handleLogin}
 			>
-				{({ handleChange, handleSubmit, values }) => (
-					<View>
-						<Text>Login</Text>
-						<TextInput
-							style={{
-								height: 40,
-								borderColor: "gray",
-								borderWidth: 1,
-								marginBottom: 10,
-								paddingHorizontal: 10,
-							}}
-							id="email"
-							onChangeText={handleChange("username")}
+				{({ handleSubmit }) => (
+					<View style={styles.container}>
+						<TextField
+							name="username"
+							label="Username"
 							placeholder="Username"
-							value={values.username}
 						/>
-						<Text>Password</Text>
-						<View style={styles.inputWrapper}>
-							<TextInput
-								style={styles.input}
-								placeholder="Password"
-								secureTextEntry={secure}
-								value={values.password}
-								onChangeText={handleChange("password")}
-							/>
-							<TouchableOpacity onPress={() => setSecure(!secure)}>
-								<Text style={styles.toggle}>{secure ? "Show" : "Hide"}</Text>
-							</TouchableOpacity>
-						</View>
+						<TextField
+							name="password"
+							label="Password"
+							placeholder="Password"
+							secureTextEntry={true}
+						/>
 						<Button title="Login" onPress={() => handleSubmit()} />
 					</View>
 				)}

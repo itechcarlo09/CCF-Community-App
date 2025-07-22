@@ -11,18 +11,29 @@ export const styles = StyleSheet.create({
 		color: "#222",
 	},
 	input: {
-		borderWidth: 1,
-		borderColor: "#ccc",
-		borderRadius: 8,
-		padding: 10,
+		flex: 1,
 		fontSize: 16,
+		color: "#333",
 	},
 	inputError: {
 		borderColor: "red",
+	},
+	toggle: {
+		color: "#007BFF",
+		paddingLeft: 12,
+		marginLeft: 8,
 	},
 	error: {
 		color: "red",
 		marginTop: 4,
 		fontSize: 14,
+	},
+	inputContainer: {
+		borderWidth: 1,
+		borderColor: "#ccc",
+		borderRadius: 8,
+		paddingHorizontal: 10,
+		flexDirection: "row",
+		alignItems: "center",
 	},
 });
