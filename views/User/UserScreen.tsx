@@ -64,7 +64,12 @@ const UserScreen = ({ navigation }: any) => {
 				renderItem={({ item }) => (
 					<UserListItem
 						user={item}
-						onPress={(id) => console.log("User ID:", id)}
+						onPress={(id) =>
+							navigation.navigate("UserNavigation", {
+								screen: "UserForm",
+								params: { id: id },
+							})
+						}
 					/>
 				)}
 				ItemSeparatorComponent={Separator}
