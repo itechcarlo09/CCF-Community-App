@@ -2,36 +2,39 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Button, ActivityIndicator } from "react-native";
 import TextField from "../../components/TextField";
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getFirestore } from "@react-native-firebase/firestore";
-import { getApp } from "@react-native-firebase/app";
 import {
 	createUser,
 	getUser,
 	updateUser,
 } from "../../firebase/firestore/userService";
-import { User } from "../../firebase/firestore/types/User";
+import { CreateUserInput, User } from "../../firebase/firestore/types/User";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { UserStackParamList } from "../../navigation/types";
+import DatePicker from "../../components/DatePicker";
+import dayjs from "dayjs";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
 const UserSchema = Yup.object().shape({
 	firstName: Yup.string().required("Required"),
 	lastName: Yup.string().required("Required"),
+	birthDate: Yup.date().required("Birthdate is required"),
 });
 
-const UserFormScreen = () => {
+const UserFormScreen = ({ navigation }: any) => {
+	const insets = useSafeAreaInsets();
 	const route = useRoute<UserRouteProp>();
 	const { id: userId = null } = route.params || {};
 	const [loading, setLoading] = useState<boolean>(!!userId);
 	const [initialValues, setInitialValues] = useState<
-		Omit<User, "id" | "createdAt">
+		Omit<CreateUserInput, "id" | "createdAt">
 	>({
 		firstName: "",
 		middleName: "",
 		lastName: "",
+		birthDate: dayjs().subtract(13, "year").toDate(),
 	});
 
 	useEffect(() => {
@@ -43,6 +46,7 @@ const UserFormScreen = () => {
 						firstName: user.firstName,
 						middleName: user.middleName || "",
 						lastName: user.lastName,
+						birthDate: user.birthDate.toDate(),
 						updatedAt: new Date(),
 					});
 				}
@@ -50,8 +54,6 @@ const UserFormScreen = () => {
 			})();
 		}
 	}, [userId]);
-
-	const insets = useSafeAreaInsets();
 
 	const handleSubmit = async (
 		values: typeof initialValues,
@@ -61,9 +63,9 @@ const UserFormScreen = () => {
 			userId
 				? await updateUser(userId, values as Partial<User>)
 				: await createUser({
-						createdAt: new Date(),
 						...values,
 				  });
+			navigation.goBack();
 			resetForm();
 		} catch (error) {
 			console.error("Error creating user:", error);
@@ -97,6 +99,7 @@ const UserFormScreen = () => {
 						label="Last Name"
 						placeholder="Enter Last Name"
 					/>
+					<Field name="birthDate" component={DatePicker} label="Birth Date" />
 					<Button
 						title={`${userId ? "Edit" : "Add"} User`}
 						onPress={() => handleSubmit()}

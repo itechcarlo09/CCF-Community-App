@@ -8,10 +8,13 @@ import {
 	updateDoc,
 } from "@react-native-firebase/firestore";
 import { db } from "../firebaseConfig";
-import { FirebaseUser, User } from "./types/User";
+import { CreateUserInput, FirebaseUser, User } from "./types/User";
 
-export const createUser = async (data: FirebaseUser) => {
-	return await addDoc(collection(db, "Users"), data);
+export const createUser = async (data: CreateUserInput) => {
+	return (await addDoc(collection(db, "Users"), {
+		...data,
+		createdAt: new Date(),
+	})) as FirebaseUser;
 };
 
 export const updateUser = async (id: string, data: Partial<User>) => {
@@ -19,11 +22,11 @@ export const updateUser = async (id: string, data: Partial<User>) => {
 	await updateDoc(docRef, data);
 };
 
-export const getUser = async (id: string): Promise<User | null> => {
+export const getUser = async (id: string): Promise<FirebaseUser | null> => {
 	const docRef = doc(db, "Users", id);
 	const docSnap = await getDoc(docRef);
 	return docSnap.exists()
-		? ({ id: docSnap.id, ...docSnap.data() } as User)
+		? ({ id: docSnap.id, ...docSnap.data() } as FirebaseUser)
 		: null;
 };
 
