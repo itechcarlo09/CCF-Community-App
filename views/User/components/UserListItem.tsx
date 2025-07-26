@@ -4,6 +4,7 @@ import { User } from "../../../firebase/firestore/types/User";
 import CircularImage from "../../../components/CircularImage";
 import { Timestamp } from "@react-native-firebase/firestore";
 import dayjs from "dayjs";
+import { formatFullName } from "../../../src/utils/stringUtils";
 
 interface Props {
 	user: User;
@@ -32,12 +33,9 @@ const UserListItem = ({ user, onPress }: Props) => {
 			</View>
 			<View>
 				<Text style={styles.text}>
-					{user.lastName} {user.firstName}{" "}
-					{user.middleName ? user.middleName[0] + ". " : ""}
+					{formatFullName(user.firstName, user.lastName, user.middleName)}
 				</Text>
-				<Text style={styles.detailText}>
-					{age !== null ? `• ${age} yrs old` : ""}
-				</Text>
+				<Text style={styles.detailText}>{age ? `• ${age} yrs old` : ""}</Text>
 			</View>
 		</TouchableOpacity>
 	);

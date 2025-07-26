@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Text, View, Pressable } from "react-native";
 import DatePickerLib from "react-native-date-picker";
-import dayjs from "dayjs";
 import { DatePickerProps } from "./types";
 import { styles } from "./styles";
+import { formatFullDate } from "../../src/utils/dateFormatter";
 
 const DatePicker: React.FC<DatePickerProps> = ({
 	field,
@@ -22,9 +22,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 				onPress={() => setOpen(true)}
 				style={[styles.input, hasError && styles.inputError]}
 			>
-				<Text style={styles.inputText}>
-					{dayjs(field.value).format("MMMM D, YYYY")}
-				</Text>
+				<Text style={styles.inputText}>{formatFullDate(field.value)}</Text>
 			</Pressable>
 
 			<DatePickerLib

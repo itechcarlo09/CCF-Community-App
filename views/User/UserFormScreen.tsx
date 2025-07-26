@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Button, ActivityIndicator } from "react-native";
+import {
+	View,
+	StyleSheet,
+	Button,
+	ActivityIndicator,
+	Alert,
+} from "react-native";
 import TextField from "../../components/TextField";
 import * as Yup from "yup";
 import { Field, Formik } from "formik";
@@ -42,7 +48,7 @@ const UserFormScreen = ({ navigation }: any) => {
 			(async () => {
 				const user = await getUser(userId);
 				if (user) {
-					console.log("User data:", user.birthDate);
+					// Alert.alert("Birthdate", `${user.birthDate}`);
 					setInitialValues({
 						firstName: user.firstName,
 						middleName: user.middleName || "",
