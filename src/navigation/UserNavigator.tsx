@@ -1,14 +1,13 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import EventScreen from "../views/Event/EventScreen";
-import EventFormScreen from "../views/Event/EventFormScreen";
+import UserFormScreen from "../../views/User/UserFormScreen";
 
 const Stack = createNativeStackNavigator();
 
-export default function EventNavigator() {
+export default function UserNavigator() {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
-			<Stack.Screen name="EventForm" component={EventFormScreen} />
+			<Stack.Screen name="UserForm" component={UserFormScreen} />
 		</Stack.Navigator>
 	);
 }

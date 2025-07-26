@@ -62,7 +62,7 @@ const UserScreen = ({ navigation }: any) => {
 					<UserListItem
 						user={item}
 						onPress={(id) =>
-							navigation.navigate("UserNavigation", {
+							navigation.navigate("UserNavigator", {
 								screen: "UserForm",
 								params: { id: id },
 							})

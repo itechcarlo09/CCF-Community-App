@@ -8,21 +8,14 @@
 import { StyleSheet, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "./views/LoginScreen";
-import HomeScreen from "./views/HomeScreen";
-import BottomTabNavigator from "./navigation/BottomTabNavigation";
-import RootNavigator from "./navigation/RootNavigation";
+import RootNavigator from "./src/navigation/RootNavigator";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
 	const isDarkMode = useColorScheme() === "dark";
 
-	return (
-		<NavigationContainer>
-			<RootNavigator />
-		</NavigationContainer>
-	);
+	return <RootNavigator />;
 }
 
 const styles = StyleSheet.create({

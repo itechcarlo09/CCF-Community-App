@@ -11,9 +11,9 @@ import {
 } from "../../firebase/firestore/userService";
 import { CreateUserInput, User } from "../../firebase/firestore/types/User";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { UserStackParamList } from "../../navigation/types";
 import DatePicker from "../../components/DatePicker";
 import dayjs from "dayjs";
+import { UserStackParamList } from "../../src/types/navigation";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -42,11 +42,14 @@ const UserFormScreen = ({ navigation }: any) => {
 			(async () => {
 				const user = await getUser(userId);
 				if (user) {
+					console.log("User data:", user.birthDate);
 					setInitialValues({
 						firstName: user.firstName,
 						middleName: user.middleName || "",
 						lastName: user.lastName,
-						birthDate: user.birthDate.toDate(),
+						// TODO handle null birthDate
+						birthDate:
+							user.birthDate?.toDate() ?? dayjs().subtract(13, "year").toDate(), // Default to 13 years ago if birthDate is null
 						updatedAt: new Date(),
 					});
 				}

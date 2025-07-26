@@ -1,18 +1,10 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useState } from "react";
-import {
-	Alert,
-	Button,
-	StyleSheet,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from "react-native";
-import { RootStackParamList } from "../navigation/types";
+import React from "react";
+import { Button, StyleSheet, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import TextField from "../components/TextField";
+import { AppStackParamList } from "../src/types/navigation";
 
 const LoginSchema = Yup.object().shape({
 	username: Yup.string()
@@ -24,15 +16,13 @@ const LoginSchema = Yup.object().shape({
 });
 
 type Props = {
-	navigation: NativeStackNavigationProp<RootStackParamList>;
+	navigation: NativeStackNavigationProp<AppStackParamList, "Login">;
 };
 
 const LoginScreen = ({ navigation }: Props) => {
-	const [secure, setSecure] = useState(true);
-
 	const handleLogin = () => {
 		console.log("Login successful");
-		navigation.replace("BottomNavigation"); // Replace Login with Home screen
+		navigation.navigate("BottomNavigator"); // Replace Login with Home screen
 	};
 
 	return (

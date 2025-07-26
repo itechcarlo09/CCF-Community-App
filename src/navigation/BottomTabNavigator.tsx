@@ -1,15 +1,14 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import HomeScreen from "../views/HomeScreen";
-import EventNavigator from "./EventNavigation";
 import { Alert, Button } from "react-native";
-import EventScreen from "../views/Event/EventScreen";
-import UserScreen from "../views/User/UserScreen";
+import EventScreen from "../../views/Event/EventScreen";
+import HomeScreen from "../../views/HomeScreen";
+import UserScreen from "../../views/User/UserScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
+function BottomTabNavigator() {
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
@@ -36,7 +35,7 @@ export default function BottomTabNavigator() {
 					title: "Event",
 					headerRight: () => (
 						<Button
-							onPress={() => navigation.navigate("EventNavigation")}
+							onPress={() => navigation.navigate("EventNavigator")}
 							title="Add Event"
 							color="#000"
 						/>
@@ -50,7 +49,7 @@ export default function BottomTabNavigator() {
 					title: "User",
 					headerRight: () => (
 						<Button
-							onPress={() => navigation.navigate("UserNavigation")}
+							onPress={() => navigation.navigate("UserNavigator")}
 							title="Add User"
 							color="#000"
 						/>
@@ -60,3 +59,5 @@ export default function BottomTabNavigator() {
 		</Tab.Navigator>
 	);
 }
+
+export default BottomTabNavigator;
