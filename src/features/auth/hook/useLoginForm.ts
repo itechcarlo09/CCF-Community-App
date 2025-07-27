@@ -1,0 +1,59 @@
+import { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import dayjs from "dayjs";
+import { useNavigation } from "@react-navigation/native";
+import { Alert } from "react-native";
+import { Login } from "../model/Login";
+
+const useLoginForm = () => {
+	const [loading, setLoading] = useState(false);
+	const navigation = useNavigation();
+
+	const formik = useFormik({
+		initialValues: {
+			email: "",
+			password: "",
+		},
+		validationSchema: Yup.object({
+			email: Yup.string()
+				.email("Invalid email format")
+				.required("Email is required"),
+			password: Yup.string()
+				.required("Password is required")
+				.min(8, "Password must be at least 8 characters")
+				.matches(/[A-Z]/, "Must contain at least one uppercase letter")
+				.matches(/[a-z]/, "Must contain at least one lowercase letter")
+				.matches(/[0-9]/, "Must contain at least one number")
+				.matches(/[@$!%*?&]/, "Must contain at least one special character"),
+		}),
+		onSubmit: async (values) => {
+			setLoading(true);
+			try {
+				const auth: Omit<Login, "id" | "createdAt" | "updatedAt"> = {
+					email: values.email,
+					password: values.password,
+				};
+
+				// if (userId) {
+				// 	await updateUser(userId, { ...user, updatedAt: now });
+				// } else {
+				// 	await addUser({ ...user });
+				// }
+
+				navigation.goBack();
+			} catch (err) {
+				Alert.alert("Error", "Failed to save user");
+			} finally {
+				setLoading(false);
+			}
+		},
+	});
+
+	return {
+		formik,
+		loading,
+	};
+};
+
+export default useLoginForm;

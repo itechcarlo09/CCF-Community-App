@@ -3,8 +3,8 @@ import React from "react";
 import { Button, StyleSheet, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import TextField from "../components/TextField";
-import { AppStackParamList } from "../src/types/navigation";
+import { AppStackParamList } from "../../../types/navigation";
+import useLoginForm from "../hook/useLoginForm";
 
 const LoginSchema = Yup.object().shape({
 	username: Yup.string()
@@ -20,10 +20,7 @@ type Props = {
 };
 
 const LoginScreen = ({ navigation }: Props) => {
-	const handleLogin = () => {
-		console.log("Login successful");
-		navigation.navigate("BottomNavigator"); // Replace Login with Home screen
-	};
+	const { formik, loading } = useLoginForm();
 
 	return (
 		<View
@@ -32,28 +29,7 @@ const LoginScreen = ({ navigation }: Props) => {
 				justifyContent: "center",
 			}}
 		>
-			<Formik
-				initialValues={{ username: "", password: "" }}
-				validationSchema={LoginSchema}
-				onSubmit={handleLogin}
-			>
-				{({ handleSubmit }) => (
-					<View style={styles.container}>
-						<TextField
-							name="username"
-							label="Username"
-							placeholder="Username"
-						/>
-						<TextField
-							name="password"
-							label="Password"
-							placeholder="Password"
-							secureTextEntry={true}
-						/>
-						<Button title="Login" onPress={() => handleSubmit()} />
-					</View>
-				)}
-			</Formik>
+			<Button title="Login" onPress={formik.handleSubmit as any} />
 		</View>
 	);
 };
