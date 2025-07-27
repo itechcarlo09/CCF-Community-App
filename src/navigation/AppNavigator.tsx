@@ -9,7 +9,10 @@ const Stack = createNativeStackNavigator();
 
 function AppNavigator() {
 	return (
-		<Stack.Navigator screenOptions={{ headerShown: false }}>
+		<Stack.Navigator
+			screenOptions={{ headerShown: false }}
+			initialRouteName="BottomNavigator"
+		>
 			<Stack.Screen name="Login" component={LoginScreen} />
 			<Stack.Screen name="BottomNavigator" component={BottomTabNavigator} />
 			<Stack.Screen name="EventNavigator" component={EventNavigator} />

@@ -2,10 +2,32 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
+dayjs.extend(relativeTime);
+
+/**
+ * Returns age in years from a given birthdate.
+ * @param birthdate A JS Date or ISO string
+ */
+export const ageNow = (birthdate?: Date | string): string => {
+	if (!birthdate) return "-";
+
+	const date = dayjs(birthdate);
+	const now = dayjs();
+
+	const age = now.diff(date, "year");
+	return `${age} years old`;
+};
+
+// Example: show "3 hours ago", "in 2 days"
+export const fromNow = (value: Date | string | null | undefined): string => {
+	if (!value) return "-";
+	return dayjs(value).fromNow();
+};
 
 /**
  * Format full readable date: January 5, 2025

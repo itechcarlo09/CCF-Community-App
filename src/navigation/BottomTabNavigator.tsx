@@ -4,7 +4,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Alert, Button } from "react-native";
 import EventScreen from "../../views/Event/EventScreen";
 import HomeScreen from "../../views/HomeScreen";
-import UserScreen from "../../views/User/UserScreen";
+import UserScreen from "../features/user/view/UserScreen";
 
 const Tab = createBottomTabNavigator();
 

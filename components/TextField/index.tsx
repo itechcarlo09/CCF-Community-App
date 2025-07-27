@@ -1,31 +1,38 @@
 import React, { useState } from "react";
 import { View, TextInput, Text, TouchableOpacity } from "react-native";
-import { useField } from "formik";
 import { TextFieldProps } from "./types";
 import { styles } from "./styles";
 
-const TextField: React.FC<TextFieldProps> = ({
-	name,
+interface Props extends TextFieldProps {
+	value: string;
+	onChangeText: (text: string) => void;
+	onBlur?: () => void;
+	error?: string;
+	touched?: boolean;
+}
+
+const TextField: React.FC<Props> = ({
 	label,
 	secureTextEntry = false,
+	value,
+	onChangeText,
+	onBlur,
+	error,
+	touched,
 	...inputProps
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
-	const [field, meta, helpers] = useField(name);
 
 	return (
 		<View style={styles.container}>
 			{label && <Text style={styles.label}>{label}</Text>}
 			<View style={styles.inputContainer}>
 				<TextInput
-					style={[
-						styles.input,
-						meta.touched && meta.error ? styles.inputError : null,
-					]}
-					value={field.value}
+					style={[styles.input, touched && error ? styles.inputError : null]}
+					value={value}
 					placeholderTextColor={"#999"}
-					onChangeText={helpers.setValue}
-					onBlur={() => helpers.setTouched(true)}
+					onChangeText={onChangeText}
+					onBlur={onBlur}
 					secureTextEntry={secureTextEntry && !showPassword}
 					{...inputProps}
 				/>
@@ -35,9 +42,7 @@ const TextField: React.FC<TextFieldProps> = ({
 					</TouchableOpacity>
 				)}
 			</View>
-			{meta.touched && meta.error && (
-				<Text style={styles.error}>{meta.error}</Text>
-			)}
+			{touched && error && <Text style={styles.error}>{error}</Text>}
 		</View>
 	);
 };

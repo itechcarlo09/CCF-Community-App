@@ -51,9 +51,21 @@ export const normalizeSpace = (text: string): string => {
 export const formatFullName = (
 	first: string,
 	last: string,
-	middle: string | null
+	middle?: string
 ): string => {
 	return `${capitalizeFirst(last)}, ${capitalizeWords(first)}${
 		middle ? ` ${getInitial(middle)}.` : ""
 	}`;
+};
+
+export const isNullOrEmpty = (value: any): boolean => {
+	return (
+		value === null ||
+		value === undefined ||
+		(typeof value === "string" && value.trim() === "") ||
+		(Array.isArray(value) && value.length === 0) ||
+		(typeof value === "object" &&
+			!Array.isArray(value) &&
+			Object.keys(value).length === 0)
+	);
 };
