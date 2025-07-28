@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Button, SafeAreaView } from "react-native";
-import TextField from "../../components/TextField";
+import TextField from "../../src/components/TextField";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

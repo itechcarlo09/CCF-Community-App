@@ -21,13 +21,12 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 			firstName: "",
 			middleName: "",
 			lastName: "",
-			// birthdate: "", // formatted string
+			birthdate: "",
 		},
 		validationSchema: Yup.object({
 			firstName: Yup.string().required("Required"),
 			lastName: Yup.string().required("Required"),
-			// email: Yup.string().email("Invalid email").required("Required"),
-			// birthdate: Yup.string().required("Required"),
+			birthdate: Yup.date().nullable().required("Birthdate is required"),
 		}),
 		onSubmit: async (values) => {
 			setLoading(true);
@@ -66,7 +65,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 					firstName: user.firstName,
 					middleName: user.middleName ?? "",
 					lastName: user.lastName,
-					// birthdate: dayjs(user.birthdate).format("YYYY-MM-DD"),
+					birthdate: dayjs(user.birthdate).format("YYYY-MM-DD"),
 				});
 			}
 			setLoading(false);
