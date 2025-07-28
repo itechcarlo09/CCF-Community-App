@@ -5,6 +5,7 @@ import { useUserForm } from "../hooks/useUserForm";
 import TextField from "../../../../components/TextField";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { UserStackParamList } from "../../../types/navigation";
+import { DatePickerField } from "../../../../components/DatePicker";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -18,21 +19,41 @@ const UserFormScreen = () => {
 		<View style={[styles.flex, { paddingTop: insets.top }]}>
 			<TextField
 				placeholder="Enter First Name"
+				label="First Name"
+				required={true}
 				value={formik.values.firstName}
 				onChangeText={formik.handleChange("firstName")}
+				error={formik.errors.firstName}
+				touched={formik.touched.firstName}
 				name={"firstName"}
 			/>
 			<TextField
 				placeholder="Enter Middle Name"
+				label="Middle Name"
 				value={formik.values.middleName}
 				onChangeText={formik.handleChange("middleName")}
+				error={formik.errors.middleName}
+				touched={formik.touched.middleName}
 				name={"middleName"}
 			/>
 			<TextField
 				placeholder="Enter Last Name"
+				label="Last Name"
+				required={true}
 				value={formik.values.lastName}
 				onChangeText={formik.handleChange("lastName")}
+				error={formik.errors.lastName}
+				touched={formik.touched.lastName}
 				name={"lastName"}
+			/>
+			<DatePickerField
+				name="birthdate"
+				label="Birthdate"
+				required={true}
+				value={formik.values.birthdate}
+				error={formik.errors.birthdate}
+				touched={formik.touched.birthdate}
+				onChange={formik.setFieldValue}
 			/>
 			<Button
 				title={"Submit"}

@@ -9,23 +9,30 @@ interface Props extends TextFieldProps {
 	onBlur?: () => void;
 	error?: string;
 	touched?: boolean;
+	required?: boolean;
 }
 
 const TextField: React.FC<Props> = ({
 	label,
-	secureTextEntry = false,
+	secureTextEntry,
 	value,
 	onChangeText,
 	onBlur,
 	error,
 	touched,
+	required,
 	...inputProps
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
 		<View style={styles.container}>
-			{label && <Text style={styles.label}>{label}</Text>}
+			{label && (
+				<Text style={styles.label}>
+					{label}
+					{required && <Text style={styles.required}> *</Text>}
+				</Text>
+			)}
 			<View style={styles.inputContainer}>
 				<TextInput
 					style={[styles.input, touched && error ? styles.inputError : null]}

@@ -8,7 +8,6 @@ import TextField from "../../../../components/TextField";
 
 const LoginScreen = () => {
 	const { formik, loading } = useLoginForm();
-	console.log(formik.errors);
 
 	if (loading) return <Loading />;
 

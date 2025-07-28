@@ -11,23 +11,26 @@ export const styles = StyleSheet.create({
 		color: "#222",
 	},
 	input: {
+		padding: 12,
 		borderWidth: 1,
+		borderRadius: 6,
 		borderColor: "#ccc",
-		paddingVertical: 12,
-		paddingHorizontal: 16,
-		borderRadius: 8,
 		backgroundColor: "#f9f9f9",
-	},
-	inputError: {
-		borderColor: "#ff4d4f",
 	},
 	inputText: {
 		fontSize: 16,
-		color: "#000",
+		color: "#333",
 	},
-	errorText: {
+	placeholderText: {
+		fontSize: 16,
+		color: "#999",
+	},
+	error: {
+		color: "red",
 		fontSize: 12,
-		color: "#ff4d4f",
 		marginTop: 4,
+	},
+	required: {
+		color: "red",
 	},
 });

@@ -1,8 +1,9 @@
-import { FieldInputProps, FormikProps } from "formik";
-
-export type DatePickerProps = {
-	field: FieldInputProps<Date>;
-	form: FormikProps<any>;
+export interface DatePickerFieldProps {
+	name: string;
 	label?: string;
-	maximumDate?: Date;
-};
+	value: Date | string | null;
+	touched?: boolean;
+	error?: string;
+	required?: boolean;
+	onChange: (field: string, value: any) => void;
+}
