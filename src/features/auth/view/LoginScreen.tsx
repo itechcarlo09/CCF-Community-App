@@ -5,8 +5,10 @@ import { AppStackParamList } from "../../../types/navigation";
 import useLoginForm from "../hook/useLoginForm";
 import Loading from "../../../components/Loading";
 import TextField from "../../../../components/TextField";
+import { useTheme } from "../../../theme/ThemeProvider";
 
 const LoginScreen = () => {
+	const { theme } = useTheme();
 	const { formik, loading } = useLoginForm();
 
 	if (loading) return <Loading />;
@@ -37,6 +39,7 @@ const LoginScreen = () => {
 			/>
 			<Button
 				title={"Submit"}
+				color={theme.blue[500]}
 				onPress={formik.handleSubmit as any}
 				disabled={loading}
 			/>

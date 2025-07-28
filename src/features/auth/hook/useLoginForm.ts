@@ -19,14 +19,14 @@ const useLoginForm = () => {
 		},
 		validationSchema: Yup.object({
 			email: Yup.string()
-				// .email("Invalid email format")
+				// .email("Invalid email format") // TODO Uncomment if email validation is needed
 				.required("Email is required"),
 			password: Yup.string().required("Password is required"),
 			// .min(8, "Password must be at least 8 characters")
 			// .matches(/[A-Z]/, "Must contain at least one uppercase letter")
 			// .matches(/[a-z]/, "Must contain at least one lowercase letter")
 			// .matches(/[0-9]/, "Must contain at least one number")
-			// .matches(/[@$!%*?&]/, "Must contain at least one special character"),
+			// .matches(/[@$!%*?&]/, "Must contain at least one special character"), // TODO Uncomment if password validation is needed
 		}),
 		onSubmit: async (values) => {
 			setLoading(true);
