@@ -2,10 +2,10 @@ import React from "react";
 import { View, Button, StyleSheet } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
-import TextField from "../../../../components/TextField";
+import TextField from "../../../components/TextField";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { UserStackParamList } from "../../../types/navigation";
-import { DatePickerField } from "../../../../components/DatePicker";
+import { DatePickerField } from "../../../components/DatePicker";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 

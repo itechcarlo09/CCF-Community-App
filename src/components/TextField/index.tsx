@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, Text, TouchableOpacity } from "react-native";
 import { TextFieldProps } from "./types";
 import { styles } from "./styles";
+import { useTheme } from "../../theme/ThemeProvider";
 
 interface Props extends TextFieldProps {
 	value: string;
@@ -23,21 +24,26 @@ const TextField: React.FC<Props> = ({
 	required,
 	...inputProps
 }) => {
+	const { theme } = useTheme();
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
 		<View style={styles.container}>
 			{label && (
-				<Text style={styles.label}>
+				<Text style={[styles.label, { color: theme.slate[700] }]}>
 					{label}
 					{required && <Text style={styles.required}> *</Text>}
 				</Text>
 			)}
-			<View style={styles.inputContainer}>
+			<View style={[styles.inputContainer, { borderColor: theme.slate[500] }]}>
 				<TextInput
-					style={[styles.input, touched && error ? styles.inputError : null]}
+					style={[
+						styles.input,
+						touched && error ? styles.inputError : null,
+						{ color: theme.slate[900] },
+					]}
 					value={value}
-					placeholderTextColor={"#999"}
+					placeholderTextColor={theme.slate[500]}
 					onChangeText={onChangeText}
 					onBlur={onBlur}
 					secureTextEntry={secureTextEntry && !showPassword}
@@ -45,7 +51,9 @@ const TextField: React.FC<Props> = ({
 				/>
 				{secureTextEntry && (
 					<TouchableOpacity onPress={() => setShowPassword((prev) => !prev)}>
-						<Text style={styles.toggle}>{showPassword ? "Hide" : "Show"}</Text>
+						<Text style={[styles.toggle, { color: theme.blue[500] }]}>
+							{showPassword ? "Hide" : "Show"}
+						</Text>
 					</TouchableOpacity>
 				)}
 			</View>

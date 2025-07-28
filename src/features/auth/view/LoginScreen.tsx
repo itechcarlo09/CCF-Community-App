@@ -1,11 +1,10 @@
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { ActivityIndicator, Button, StyleSheet, View } from "react-native";
-import { AppStackParamList } from "../../../types/navigation";
+import { StyleSheet, Text, View } from "react-native";
 import useLoginForm from "../hook/useLoginForm";
 import Loading from "../../../components/Loading";
-import TextField from "../../../../components/TextField";
+import TextField from "../../../components/TextField";
 import { useTheme } from "../../../theme/ThemeProvider";
+import Button from "../../../components/Button";
 
 const LoginScreen = () => {
 	const { theme } = useTheme();
@@ -14,32 +13,32 @@ const LoginScreen = () => {
 	if (loading) return <Loading />;
 
 	return (
-		<View
-			style={{
-				flex: 1,
-				justifyContent: "center",
-			}}
-		>
-			<TextField
-				placeholder="Enter Email"
-				value={formik.values.email}
-				onChangeText={formik.handleChange("email")}
-				error={formik.errors.email}
-				touched={formik.touched.email}
-				name={"email"}
-			/>
-			<TextField
-				placeholder="Enter Password"
-				value={formik.values.password}
-				onChangeText={formik.handleChange("password")}
-				name={"password"}
-				touched={formik.touched.password}
-				error={formik.errors.password}
-				secureTextEntry={true}
-			/>
+		<View style={styles.mainContainer}>
+			<Text style={styles.signInText}>Sign In</Text>
+			<View style={styles.fieldContainer}>
+				<TextField
+					placeholder="Enter Email"
+					label="Email"
+					value={formik.values.email}
+					onChangeText={formik.handleChange("email")}
+					error={formik.errors.email}
+					touched={formik.touched.email}
+					name={"email"}
+				/>
+				<TextField
+					placeholder="Enter Password"
+					label="Password"
+					value={formik.values.password}
+					onChangeText={formik.handleChange("password")}
+					name={"password"}
+					touched={formik.touched.password}
+					error={formik.errors.password}
+					secureTextEntry={true}
+				/>
+			</View>
 			<Button
-				title={"Submit"}
-				color={theme.blue[500]}
+				title="Login"
+				style={{ backgroundColor: theme.blue[500] }}
 				onPress={formik.handleSubmit as any}
 				disabled={loading}
 			/>
@@ -48,8 +47,20 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-	container: {
-		padding: 16,
+	mainContainer: {
+		flex: 1,
+		justifyContent: "center",
+		padding: 24,
+	},
+	fieldContainer: {
+		marginVertical: 64,
+	},
+	signInText: {
+		fontSize: 36,
+		fontWeight: "bold",
+		fontFamily: "Sans",
+		color: "#000",
+		textAlign: "center",
 	},
 	inputWrapper: {
 		flexDirection: "row",

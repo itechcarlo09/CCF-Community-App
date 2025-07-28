@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { styles } from "./styles";
 import { DatePickerFieldProps } from "./types";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatFullDate } from "../../src/utils/dateFormatter";
+import { formatFullDate } from "../../utils/dateFormatter";
 
 export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 	name,
