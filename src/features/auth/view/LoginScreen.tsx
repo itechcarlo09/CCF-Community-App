@@ -1,26 +1,16 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { Button, StyleSheet, View } from "react-native";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import { ActivityIndicator, Button, StyleSheet, View } from "react-native";
 import { AppStackParamList } from "../../../types/navigation";
 import useLoginForm from "../hook/useLoginForm";
+import Loading from "../../../components/Loading";
+import TextField from "../../../../components/TextField";
 
-const LoginSchema = Yup.object().shape({
-	username: Yup.string()
-		.oneOf(["Admin"], 'username must be "Admin"')
-		.required("Required"),
-	password: Yup.string()
-		.oneOf(["1234"], 'Input must be "1234"')
-		.required("Required"),
-});
-
-type Props = {
-	navigation: NativeStackNavigationProp<AppStackParamList, "Login">;
-};
-
-const LoginScreen = ({ navigation }: Props) => {
+const LoginScreen = () => {
 	const { formik, loading } = useLoginForm();
+	console.log(formik.errors);
+
+	if (loading) return <Loading />;
 
 	return (
 		<View
@@ -29,7 +19,28 @@ const LoginScreen = ({ navigation }: Props) => {
 				justifyContent: "center",
 			}}
 		>
-			<Button title="Login" onPress={formik.handleSubmit as any} />
+			<TextField
+				placeholder="Enter Email"
+				value={formik.values.email}
+				onChangeText={formik.handleChange("email")}
+				error={formik.errors.email}
+				touched={formik.touched.email}
+				name={"email"}
+			/>
+			<TextField
+				placeholder="Enter Password"
+				value={formik.values.password}
+				onChangeText={formik.handleChange("password")}
+				name={"password"}
+				touched={formik.touched.password}
+				error={formik.errors.password}
+				secureTextEntry={true}
+			/>
+			<Button
+				title={"Submit"}
+				onPress={formik.handleSubmit as any}
+				disabled={loading}
+			/>
 		</View>
 	);
 };

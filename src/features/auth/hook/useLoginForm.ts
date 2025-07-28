@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import dayjs from "dayjs";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { Login } from "../model/Login";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AppStackParamList } from "../../../types/navigation";
 
 const useLoginForm = () => {
 	const [loading, setLoading] = useState(false);
-	const navigation = useNavigation();
+	const navigation =
+		useNavigation<NativeStackNavigationProp<AppStackParamList, "Login">>();
 
 	const formik = useFormik({
 		initialValues: {
@@ -17,15 +19,14 @@ const useLoginForm = () => {
 		},
 		validationSchema: Yup.object({
 			email: Yup.string()
-				.email("Invalid email format")
+				// .email("Invalid email format")
 				.required("Email is required"),
-			password: Yup.string()
-				.required("Password is required")
-				.min(8, "Password must be at least 8 characters")
-				.matches(/[A-Z]/, "Must contain at least one uppercase letter")
-				.matches(/[a-z]/, "Must contain at least one lowercase letter")
-				.matches(/[0-9]/, "Must contain at least one number")
-				.matches(/[@$!%*?&]/, "Must contain at least one special character"),
+			password: Yup.string().required("Password is required"),
+			// .min(8, "Password must be at least 8 characters")
+			// .matches(/[A-Z]/, "Must contain at least one uppercase letter")
+			// .matches(/[a-z]/, "Must contain at least one lowercase letter")
+			// .matches(/[0-9]/, "Must contain at least one number")
+			// .matches(/[@$!%*?&]/, "Must contain at least one special character"),
 		}),
 		onSubmit: async (values) => {
 			setLoading(true);
@@ -35,13 +36,9 @@ const useLoginForm = () => {
 					password: values.password,
 				};
 
-				// if (userId) {
-				// 	await updateUser(userId, { ...user, updatedAt: now });
-				// } else {
-				// 	await addUser({ ...user });
-				// }
-
-				navigation.goBack();
+				if (values.email === "Admin" && values.password === "1234") {
+					navigation.navigate("BottomNavigator");
+				}
 			} catch (err) {
 				Alert.alert("Error", "Failed to save user");
 			} finally {

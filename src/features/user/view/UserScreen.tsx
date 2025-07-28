@@ -1,13 +1,8 @@
 import React, { useCallback, useState } from "react";
-import {
-	View,
-	StyleSheet,
-	ActivityIndicator,
-	FlatList,
-	RefreshControl,
-} from "react-native";
+import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
+import Loading from "../../../components/Loading";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -24,9 +19,7 @@ const UserScreen = ({ navigation }: any) => {
 		setRefreshing(false);
 	}, []);
 
-	if (loading) {
-		return <ActivityIndicator size="large" style={styles.loader} />;
-	}
+	if (loading) return <Loading />;
 
 	return (
 		<View style={styles.container}>
