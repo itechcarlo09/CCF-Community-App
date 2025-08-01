@@ -35,6 +35,7 @@ android/build/
 # iOS
 ios/build/
 ios/Pods/
+ios/Podfile.lock
 ios/DerivedData/
 ios/*.xcworkspace/
 ios/*.xcodeproj/xcuserdata/
