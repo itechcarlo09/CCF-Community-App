@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -6,43 +6,24 @@ import {
 	ActivityIndicator,
 	FlatList,
 	TouchableOpacity,
+	RefreshControl,
 } from "react-native";
-import { getApp } from "@react-native-firebase/app";
-import {
-	getFirestore,
-	collection,
-	getDocs,
-} from "@react-native-firebase/firestore";
+import { Event } from "../model/Event";
+import { useEventViewModel } from "../viewModel/useEventViewModel";
 
-type Event = {
-	id: string;
-	Name: string;
-	Date: string;
-};
+const Separator = () => <View style={styles.separator} />;
 
-const EventScreen = ({ navigation }: any) => {
-	const app = getApp();
-	const db = getFirestore(app);
-	const [events, setEvents] = useState<Event[]>([]);
-	const [loading, setLoading] = useState(true);
+const EventScreen = () => {
+	const { events, refresh, loading } = useEventViewModel();
+	const [refreshing, setRefreshing] = useState(false);
+	const Refresh = () => (
+		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+	);
 
-	useEffect(() => {
-		const fetchEvents = async () => {
-			try {
-				const snapshot = await getDocs(collection(db, "Events"));
-				const eventList: Event[] = snapshot.docs.map((doc: any) => ({
-					id: doc.id,
-					...doc.data(),
-				})) as Event[];
-				setEvents(eventList);
-			} catch (error) {
-				console.error("Error fetching events:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchEvents();
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		refresh();
+		setRefreshing(false);
 	}, []);
 
 	if (loading) {
@@ -54,12 +35,14 @@ const EventScreen = ({ navigation }: any) => {
 			<FlatList
 				data={events}
 				keyExtractor={(item) => item.id}
+				ItemSeparatorComponent={Separator}
+				refreshControl={Refresh()}
 				renderItem={({ item }) => (
 					<TouchableOpacity
 						style={styles.card}
 						onPress={() => console.log(item.id)}
 					>
-						<Text style={styles.text}>🎉 Are you ready for {item.Name}!</Text>
+						<Text style={styles.text}>🎉 Are you ready for {item.name}!</Text>
 					</TouchableOpacity>
 				)}
 			/>
@@ -80,6 +63,10 @@ const styles = StyleSheet.create({
 	},
 	title: { fontSize: 18, fontWeight: "bold" },
 	subtitle: { fontSize: 14, color: "gray" },
+	separator: {
+		height: 1,
+		marginHorizontal: 16,
+	},
 });
 
 export default EventScreen;
