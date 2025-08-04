@@ -5,21 +5,29 @@ import { Button } from "react-native";
 import HomeScreen from "../../views/HomeScreen";
 import UserScreen from "../features/user/view/UserScreen";
 import EventScreen from "../features/event/view/EventScreen";
+import { useTheme } from "../theme/ThemeProvider";
 
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
+	const { theme } = useTheme();
+
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
-				tabBarActiveTintColor: "#007bff",
-				tabBarInactiveTintColor: "gray",
-				tabBarIcon: ({ color, size }) => {
-					let iconName = "home-outline";
-					if (route.name === "HomeTab") iconName = "home-outline";
-					else if (route.name === "EventTab") iconName = "person-outline";
-					else if (route.name === "SettingsTab") iconName = "settings-outline";
-					return <Ionicons name={"home-outline"} size={size} color={color} />;
+				tabBarActiveTintColor: theme.blue[500],
+				tabBarInactiveTintColor: theme.text,
+				tabBarIcon: ({ focused, color, size }) => {
+					let iconName = "home";
+					if (route.name === "HomeTab")
+						iconName = focused ? "home" : "home-outline";
+					else if (route.name === "EventTab")
+						iconName = focused ? "calendar-clear" : "calendar-clear-outline";
+					else if (route.name === "UserTab")
+						iconName = focused ? "documents" : "documents-outline";
+					else if (route.name === "AccountTab")
+						iconName = focused ? "person-circle" : "person-circle-outline";
+					return <Ionicons name={iconName} size={size} color={color} />;
 				},
 			})}
 		>
@@ -46,7 +54,7 @@ function BottomTabNavigator() {
 				name="UserTab"
 				component={UserScreen}
 				options={({ navigation }: any) => ({
-					title: "User",
+					title: "Records",
 					headerRight: () => (
 						<Button
 							onPress={() => navigation.navigate("UserNavigator")}
@@ -54,6 +62,13 @@ function BottomTabNavigator() {
 							color="#000"
 						/>
 					),
+				})}
+			/>
+			<Tab.Screen
+				name="AccountTab"
+				component={UserScreen}
+				options={() => ({
+					title: "Account",
 				})}
 			/>
 		</Tab.Navigator>
