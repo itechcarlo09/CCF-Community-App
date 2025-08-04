@@ -41,6 +41,11 @@ export const useUserViewModel = () => {
 		await fetchUsers();
 	};
 
+	const getUsers = async (): Promise<any> => {
+		console.log("Fetching users...");
+		return await userRepository.getUsers();
+	};
+
 	const getUser = async (id: string): Promise<User | null> => {
 		return await userRepository.getUserById(id);
 	};
@@ -62,6 +67,7 @@ export const useUserViewModel = () => {
 	return {
 		users,
 		loading,
+		getUsers,
 		refresh: fetchUsers,
 		addUser,
 		getUser,

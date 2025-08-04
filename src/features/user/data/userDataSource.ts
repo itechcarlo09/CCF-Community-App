@@ -1,6 +1,7 @@
 import firestore from "@react-native-firebase/firestore";
 import { userConverter } from "./userConverter";
 import { User } from "../model/user";
+import apiClient from "../../../services/apiClient";
 
 const userCollection = firestore().collection("users");
 
@@ -13,6 +14,12 @@ export const userDataSource = {
 			console.error("userDataSource.get error:", error);
 			return null;
 		}
+	},
+
+	async getUsers(): Promise<User[]> {
+		const res = await apiClient.get<any[]>("/school");
+		console.log("getUsers response:", res);
+		return res.data;
 	},
 
 	async getAll(): Promise<User[]> {

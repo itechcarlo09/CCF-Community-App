@@ -7,11 +7,13 @@ import Loading from "../../../components/Loading";
 const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
-	const { users, refresh, loading } = useUserViewModel();
+	const { users, getUsers, refresh, loading } = useUserViewModel();
 	const [refreshing, setRefreshing] = useState(false);
 	const Refresh = () => (
 		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 	);
+
+	console.log(getUsers());
 
 	const onRefresh = useCallback(async () => {
 		setRefreshing(true);

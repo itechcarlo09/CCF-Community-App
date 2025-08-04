@@ -1,6 +1,8 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
 
 project.ext.react = [
     enableHermes: true  // ✅ Add this here
@@ -88,6 +90,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", (findProperty("newArchEnabled") ?: false).toString()
+        buildConfigField "boolean", "IS_HERMES_ENABLED", (findProperty("hermesEnabled") ?: true).toString()
     }
     signingConfigs {
         debug {
