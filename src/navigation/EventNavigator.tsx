@@ -1,6 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import EventFormScreen from "../../views/Event/EventFormScreen";
+import EventFormScreen from "../features/event/view/EventFormScreen";
 
 const Stack = createNativeStackNavigator();
 

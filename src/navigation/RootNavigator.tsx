@@ -3,8 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AppNavigator from "./AppNavigator";
 import { NavigationContainer } from "@react-navigation/native";
 
-const Stack = createNativeStackNavigator();
-
 export default function RootNavigator() {
 	return (
 		// <Stack.Navigator

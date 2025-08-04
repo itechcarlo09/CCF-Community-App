@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Alert, Button } from "react-native";
-import EventScreen from "../../views/Event/EventScreen";
+import { Button } from "react-native";
 import HomeScreen from "../../views/HomeScreen";
 import UserScreen from "../features/user/view/UserScreen";
+import EventScreen from "../features/event/view/EventScreen";
 
 const Tab = createBottomTabNavigator();
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, SafeAreaView } from "react-native";
+import { View, StyleSheet, Button } from "react-native";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

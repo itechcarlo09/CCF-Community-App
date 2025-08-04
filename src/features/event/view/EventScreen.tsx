@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	View,
 	Text,
@@ -8,7 +8,6 @@ import {
 	TouchableOpacity,
 	RefreshControl,
 } from "react-native";
-import { Event } from "../model/Event";
 import { useEventViewModel } from "../viewModel/useEventViewModel";
 
 const Separator = () => <View style={styles.separator} />;
