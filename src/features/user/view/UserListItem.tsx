@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import CircularImage from "../../../../components/CircularImage";
+import CircularImage from "../../../components/CircularImage";
 import { UserUI } from "../viewModel/useUserViewModel";
 
 interface Props {
