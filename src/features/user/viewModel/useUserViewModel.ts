@@ -27,7 +27,7 @@ const mapUserToUI = (user: User): RecordItemUI => ({
 			? "Timothy"
 			: user.dGroupLeader
 			? "DMember"
-			: "Attendee",
+			: "Pending Member",
 });
 
 export const useUserViewModel = () => {

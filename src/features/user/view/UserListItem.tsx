@@ -29,7 +29,7 @@ const UserListItem = ({ user, onPress }: Props) => {
 				</Text>
 			</View>
 			<View style={{ alignItems: "flex-end", gap: 8 }}>
-				<Badge type={user.membershipType} path={""} />
+				<Badge type={user.membershipType} dleader={user.dleaderName} />
 				<View style={{ alignItems: "flex-end", gap: 2 }}>
 					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
 						<MdiIcon

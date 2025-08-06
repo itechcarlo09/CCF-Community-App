@@ -8,7 +8,8 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 		textAlignVertical: "center",
 		borderRadius: 4.5,
+		paddingHorizontal: 8,
 		height: 22,
-		width: 70,
+		minWidth: 70,
 	},
 });

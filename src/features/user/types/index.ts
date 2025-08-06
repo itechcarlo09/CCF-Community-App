@@ -1,1 +1,5 @@
-export type MembershipType = "DLeader" | "Timothy" | "DMember" | "Attendee";
+export type MembershipType =
+	| "DLeader"
+	| "Timothy"
+	| "DMember"
+	| "Pending Member";

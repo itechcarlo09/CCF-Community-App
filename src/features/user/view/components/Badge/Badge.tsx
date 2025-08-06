@@ -1,36 +1,43 @@
 import React from "react";
-import Svg, { Path } from "react-native-svg";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { styles } from "./Badge.styles";
 import { BadgeProps } from "./Badge.types";
-import { MembershipType } from "../../../types";
 import { useTheme } from "../../../../../theme/ThemeProvider";
 
-const Badge: React.FC<BadgeProps> = ({
-	type,
-	path,
-	size = 24,
-	color = "#000",
-	style,
-}) => {
+const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 	const { theme } = useTheme();
+
+	// Determine text color based on type and dleader
+	let textColor;
+	if (type === "DLeader") {
+		textColor = theme.badge.success.text;
+	} else if (type === "Timothy") {
+		textColor = theme.badge.primary.text;
+	} else if (dleader) {
+		textColor = theme.badge.secondary.text;
+	} else {
+		textColor = theme.badge.warning.text;
+	}
+
+	// Determine background color based on type and dleader
+	let backgroundColor;
+	if (type === "DLeader") {
+		backgroundColor = theme.badge.success.background;
+	} else if (type === "Timothy") {
+		backgroundColor = theme.badge.primary.background;
+	} else if (dleader) {
+		backgroundColor = theme.badge.secondary.background;
+	} else {
+		backgroundColor = theme.badge.warning.background;
+	}
+
 	return (
 		<Text
 			style={[
 				styles.text,
 				{
-					color:
-						type == "DLeader"
-							? theme.badge.success.text
-							: type == "Timothy"
-							? theme.badge.primary.text
-							: theme.badge.secondary.text,
-					backgroundColor:
-						type == "DLeader"
-							? theme.badge.success.background
-							: type == "Timothy"
-							? theme.badge.primary.background
-							: theme.badge.secondary.background,
+					color: textColor,
+					backgroundColor: backgroundColor,
 				},
 			]}
 		>

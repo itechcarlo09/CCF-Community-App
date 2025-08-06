@@ -24,6 +24,10 @@ export const lightColors = {
 			background: "#EBEDEF",
 			text: "#40464F",
 		},
+		warning: {
+			background: "#FBF0DA",
+			text: "#73510D",
+		},
 		success: {
 			background: "#D6F0E0",
 			text: "#0D6832",

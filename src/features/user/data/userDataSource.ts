@@ -2,7 +2,7 @@ import firestore from "@react-native-firebase/firestore";
 import { userConverter } from "./userConverter";
 import { User } from "../model/user";
 import apiClient from "../../../services/apiClient";
-import records from "../records.json";
+import records from "../recordsSample.json";
 
 const userCollection = firestore().collection("users");
 
