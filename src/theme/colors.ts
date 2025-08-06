@@ -36,6 +36,7 @@ export const lightColors = {
 	gray: {
 		200: "#E5E7EB",
 		500: "#6B7280",
+		900: "#111827",
 	},
 	blue: {
 		50: "#EFF6FF",
@@ -87,7 +88,9 @@ export const darkColors = {
 		},
 	},
 	gray: {
-		200: "E5E7EB",
+		200: "#E5E7EB",
+		500: "#6B7280",
+		900: "#111827",
 	},
 	blue: {
 		50: "#EFF6FF",
