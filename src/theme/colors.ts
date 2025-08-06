@@ -7,6 +7,14 @@ export const lightColors = {
 	border: "#E5E7EB",
 	success: "#10B981",
 	error: "#EF4444",
+	textDanger: {
+		onDanger: {
+			secondary: "#900B09",
+		},
+	},
+	textPositive: {
+		secondary: "#009951",
+	},
 	badge: {
 		primary: {
 			background: "#DFE7F6",

@@ -49,9 +49,14 @@ const UserListItem = ({ user, onPress }: Props) => {
 						<Ionicons
 							name={"alert-circle-sharp"}
 							size={12}
-							color={theme.slate[600]}
+							color={theme.textDanger.onDanger.secondary}
 						/>
-						<Text style={[styles.detailText, { color: theme.slate[600] }]}>
+						<Text
+							style={[
+								styles.detailText,
+								{ color: theme.textDanger.onDanger.secondary },
+							]}
+						>
 							Member Status
 						</Text>
 					</View>

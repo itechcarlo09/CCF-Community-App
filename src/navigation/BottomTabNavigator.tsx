@@ -15,6 +15,7 @@ function BottomTabNavigator() {
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
+				headerShown: false,
 				tabBarActiveTintColor: theme.blue[500],
 				tabBarInactiveTintColor: theme.text,
 				tabBarIcon: ({ focused, color, size }) => {
@@ -31,46 +32,10 @@ function BottomTabNavigator() {
 				},
 			})}
 		>
-			<Tab.Screen
-				name="HomeTab"
-				component={HomeScreen}
-				options={{ title: "Home" }}
-			/>
-			<Tab.Screen
-				name="EventTab"
-				component={EventScreen}
-				options={({ navigation }: any) => ({
-					title: "Event",
-					headerRight: () => (
-						<Button
-							onPress={() => navigation.navigate("EventNavigator")}
-							title="Add Event"
-							color="#000"
-						/>
-					),
-				})}
-			/>
-			<Tab.Screen
-				name="UserTab"
-				component={UserScreen}
-				options={({ navigation }: any) => ({
-					title: "Records",
-					headerRight: () => (
-						<Button
-							onPress={() => navigation.navigate("UserNavigator")}
-							title="Add User"
-							color="#000"
-						/>
-					),
-				})}
-			/>
-			<Tab.Screen
-				name="AccountTab"
-				component={UserScreen}
-				options={() => ({
-					title: "Account",
-				})}
-			/>
+			<Tab.Screen name="HomeTab" component={HomeScreen} />
+			<Tab.Screen name="EventTab" component={EventScreen} />
+			<Tab.Screen name="UserTab" component={UserScreen} />
+			<Tab.Screen name="AccountTab" component={UserScreen} />
 		</Tab.Navigator>
 	);
 }
