@@ -1,0 +1,68 @@
+[
+	{
+		"id": 1,
+		"firstName": "John",
+		"middleName": null,
+		"lastName": "Doe",
+		"facebookLink": "jd@facebook.com",
+		"contactNumber": "1234567890",
+		"email": "johndoe@example.com",
+		"gender": "Male",
+		"birthDate": "1990-01-01T00:00:00.000Z",
+		"userType": "Member",
+		"dGroupLeaderId": null,
+		"createdAt": "2025-08-05T15:48:09.710Z",
+		"updatedAt": "2025-08-05T07:48:09.035Z",
+		"emergencyContactName": "Jane Doe",
+		"emergencyContactNumber": "0987654321",
+		"education": [
+			{
+				"id": 2,
+				"schoolId": 2,
+				"accountId": 1,
+				"gradeYear": "Graduated",
+				"course": "BSIT",
+				"startDate": "2017-09-01T00:00:00.000Z",
+				"endDate": "2025-09-01T00:00:00.000Z",
+				"createdAt": "2025-08-05T22:49:40.369Z",
+				"updatedAt": "2025-08-05T22:54:01.351Z"
+			}
+		]
+	},
+	{
+		"id": 2,
+		"firstName": "John",
+		"middleName": null,
+		"lastName": "Doe JR",
+		"facebookLink": "jd@facebook.com",
+		"contactNumber": "1234567890",
+		"email": "johndoe@example.com",
+		"gender": "Male",
+		"birthDate": "2010-01-01T00:00:00.000Z",
+		"userType": "Member",
+		"dGroupLeaderId": 1,
+		"createdAt": "2025-08-05T15:50:11.458Z",
+		"updatedAt": "2025-08-05T15:51:18.576Z",
+		"emergencyContactName": "John Doe",
+		"emergencyContactNumber": "0987654321",
+		"education": []
+	},
+	{
+		"id": 4,
+		"firstName": "TestFname",
+		"middleName": null,
+		"lastName": "TestLName",
+		"facebookLink": "jd@facebook.com",
+		"contactNumber": "1234567890",
+		"email": "email@gmail.com",
+		"gender": "Female",
+		"birthDate": "2010-01-01T00:00:00.000Z",
+		"userType": "DGM",
+		"dGroupLeaderId": 1,
+		"createdAt": "2025-08-05T16:06:09.354Z",
+		"updatedAt": "2025-08-05T16:07:33.563Z",
+		"emergencyContactName": "John Doe",
+		"emergencyContactNumber": "0987654321",
+		"education": []
+	}
+]

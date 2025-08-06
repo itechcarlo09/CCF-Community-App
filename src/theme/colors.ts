@@ -7,6 +7,24 @@ export const lightColors = {
 	border: "#E5E7EB",
 	success: "#10B981",
 	error: "#EF4444",
+	badge: {
+		primary: {
+			background: "#DFE7F6",
+			text: "#2C58A0",
+		},
+		secondary: {
+			background: "#EBEDEF",
+			text: "#40464F",
+		},
+		success: {
+			background: "#D6F0E0",
+			text: "#0D6832",
+		},
+	},
+	gray: {
+		200: "#E5E7EB",
+		500: "#6B7280",
+	},
 	blue: {
 		50: "#EFF6FF",
 		100: "#60A5FA",
@@ -42,6 +60,23 @@ export const darkColors = {
 	border: "#374151",
 	success: "#34D399",
 	error: "#F87171",
+	badge: {
+		primary: {
+			background: "#DFE7F6",
+			text: "#2C58A0",
+		},
+		secondary: {
+			background: "#EBEDEF",
+			text: "#40464F",
+		},
+		success: {
+			background: "#D6F0E0",
+			text: "#0D6832",
+		},
+	},
+	gray: {
+		200: "E5E7EB",
+	},
 	blue: {
 		50: "#EFF6FF",
 		100: "#60A5FA",

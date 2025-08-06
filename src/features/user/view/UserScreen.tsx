@@ -8,20 +8,17 @@ const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
 	const { users, getUsers, refresh, loading } = useUserViewModel();
-	const [refreshing, setRefreshing] = useState(false);
-	const Refresh = () => (
-		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-	);
+	// const [refreshing, setRefreshing] = useState(false);
+	// const Refresh = () => (
+	// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 
-	console.log(getUsers());
+	// const onRefresh = useCallback(async () => {
+	// 	setRefreshing(true);
+	// 	refresh();
+	// 	setRefreshing(false);
+	// }, []);
 
-	const onRefresh = useCallback(async () => {
-		setRefreshing(true);
-		refresh();
-		setRefreshing(false);
-	}, []);
-
-	if (loading) return <Loading />;
+	// if (loading) return <Loading />;
 
 	return (
 		<View style={styles.container}>
@@ -40,7 +37,7 @@ const UserScreen = ({ navigation }: any) => {
 					/>
 				)}
 				ItemSeparatorComponent={Separator}
-				refreshControl={Refresh()}
+				// refreshControl={Refresh()}
 			/>
 		</View>
 	);
@@ -50,7 +47,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: "center",
-		backgroundColor: "#952828ff",
 	},
 	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
 	title: { fontSize: 18, fontWeight: "bold" },

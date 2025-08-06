@@ -18,3 +18,19 @@ export interface User {
 	// isActive?: boolean;
 	// role?: "admin" | "user" | "moderator"; // extendable enum
 }
+
+export interface User {
+	accountId: number;
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	facebookLink: string;
+	contactNumber: string;
+	email: string;
+	gender: string;
+	birthDate: Date;
+	type: string;
+	dGroupLeaderId: string;
+	createdDate: Date;
+	updatedDate: Date;
+}

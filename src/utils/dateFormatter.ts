@@ -13,6 +13,20 @@ dayjs.extend(relativeTime);
  * Returns age in years from a given birthdate.
  * @param birthdate A JS Date or ISO string
  */
+export const ageNumber = (birthdate?: Date | string): number => {
+	if (!birthdate) return 0;
+
+	const date = dayjs(birthdate);
+	const now = dayjs();
+
+	const age = now.diff(date, "year");
+	return age;
+};
+
+/**
+ * Returns age in years from a given birthdate.
+ * @param birthdate A JS Date or ISO string
+ */
 export const ageNow = (birthdate?: Date | string): string => {
 	if (!birthdate) return "-";
 

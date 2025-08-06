@@ -1,31 +1,30 @@
 import { useEffect, useState } from "react";
 import { userRepository } from "../data/userRepository";
 import { User } from "../model/user";
-import { ageNow, fromNow } from "../../../utils/dateFormatter";
+import { ageNow, ageNumber } from "../../../utils/dateFormatter";
 import { formatFullName } from "../../../utils/stringUtils";
+import { UserUI } from "../model/UserUI";
+import { RecordItemUI } from "../model/RecordListItem";
 
-// Optional: UI-specific shape
-export interface UserUI {
-	id: string;
-	fullName: string;
-	fallbackText: string; // Used for CircularImage fallback
-	ageText: string;
-}
-
-const mapUserToUI = (user: User): UserUI => ({
+const mapUserToUI = (user: User): RecordItemUI => ({
 	id: user.id,
 	fallbackText: `${user.firstName[0]}${user.lastName[0]}`,
 	fullName: formatFullName(user.firstName, user.lastName, user.middleName),
-	ageText: ageNow(user.birthdate),
+	age: ageNumber(user.birthDate),
+	ministryText:
+		ageNumber(user.birthDate) < 22
+			? "Elevate Youth Ministry"
+			: "B1G Singles Ministry",
+	status: "Active Member",
 });
 
 export const useUserViewModel = () => {
-	const [users, setUsers] = useState<UserUI[]>([]);
+	const [users, setUsers] = useState<RecordItemUI[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const fetchUsers = async () => {
 		setLoading(true);
-		const result = await userRepository.getAllUsers();
+		const result = await userRepository.getUsers();
 		const mapped = result.map(mapUserToUI);
 		setUsers(mapped);
 		setLoading(false);

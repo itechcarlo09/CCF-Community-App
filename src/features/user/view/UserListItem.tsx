@@ -1,38 +1,95 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import CircularImage from "../../../components/CircularImage";
-import { UserUI } from "../viewModel/useUserViewModel";
+import { RecordItemUI } from "../model/RecordListItem";
+import { useTheme } from "../../../theme/ThemeProvider";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 interface Props {
-	user: UserUI;
+	user: RecordItemUI;
 	onPress: (id?: string) => void;
 }
 
 const UserListItem = ({ user, onPress }: Props) => {
+	const { theme } = useTheme();
 	return (
-		<TouchableOpacity style={styles.card} onPress={() => onPress(user.id)}>
-			<CircularImage uri={""} size={50} fallbackText={user.fallbackText} />
-			<View>
-				<Text style={styles.text}>{user.fullName}</Text>
-				<Text style={styles.detailText}>{user.ageText}</Text>
+		<TouchableOpacity
+			style={[styles.card, { backgroundColor: theme.background }]}
+			onPress={() => onPress(user.id)}
+		>
+			<CircularImage uri={""} size={45} fallbackText={user.fallbackText} />
+			<View style={styles.flex}>
+				<Text style={[styles.text, { color: theme.text }]}>
+					{user.fullName}, {user.age}
+				</Text>
+				<Text style={[styles.detailText, { color: theme.text }]}>
+					{user.ministryText}
+				</Text>
+			</View>
+			<View style={{ alignItems: "flex-end", gap: 8 }}>
+				<Text
+					style={[
+						styles.membershipTypeText,
+						{
+							color: theme.badge.primary.text,
+							backgroundColor: theme.badge.primary.background,
+						},
+					]}
+				>
+					DMember
+				</Text>
+				<View style={{ alignItems: "flex-end", gap: 2 }}>
+					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+						<Ionicons name={"people-sharp"} size={12} color={theme.gray[500]} />
+						<Text style={[styles.detailText, { color: theme.gray[500] }]}>
+							DLeader's Name
+						</Text>
+					</View>
+					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+						<Ionicons
+							name={"alert-circle-sharp"}
+							size={12}
+							color={theme.slate[600]}
+						/>
+						<Text style={[styles.detailText, { color: theme.slate[600] }]}>
+							Member Status
+						</Text>
+					</View>
+				</View>
 			</View>
 		</TouchableOpacity>
 	);
 };
 
 const styles = StyleSheet.create({
+	flex: { flex: 1 },
 	card: {
-		elevation: 6,
 		padding: 16,
 		marginVertical: 8,
-		backgroundColor: "#c00b0bff",
 		borderRadius: 8,
+		height: 100,
 		flexDirection: "row",
 		columnGap: 12,
 		marginHorizontal: 16,
+		alignItems: "center",
 	},
-	text: { fontSize: 18, fontWeight: "bold", color: "#fff" },
-	detailText: { fontSize: 12, color: "#fff" },
+	text: {
+		lineHeight: 20,
+		fontSize: 14,
+		fontWeight: "semibold",
+		flexWrap: "wrap",
+	},
+	detailText: { fontSize: 12, lineHeight: 16, fontWeight: "normal" },
+	membershipTypeText: {
+		fontSize: 12,
+		lineHeight: 16,
+		fontWeight: "bold",
+		textAlign: "center",
+		textAlignVertical: "center",
+		borderRadius: 4.5,
+		height: 22,
+		width: 70,
+	},
 });
 
 export default UserListItem;
