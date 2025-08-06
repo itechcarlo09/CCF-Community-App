@@ -22,38 +22,38 @@ export const useEventViewModel = () => {
 
 	const fetchEvents = async () => {
 		setLoading(true);
-		const result = await eventRepository.getAllEvents();
-		const mapped = result.map(mapEventToUI);
-		setEvents(mapped);
+		// const result = await eventRepository.getAllEvents();
+		// const mapped = result.map(mapEventToUI);
+		// setEvents(mapped);
 		setLoading(false);
 	};
 
-	const addEvent = async (
-		activity: Omit<Event, "id" | "createdAt" | "updatedAt">
-	) => {
-		await eventRepository.addEvent({
-			...activity,
-			createdAt: new Date(),
-		});
-		await fetchEvents();
-	};
+	// const addEvent = async (
+	// 	activity: Omit<Event, "id" | "createdAt" | "updatedAt">
+	// ) => {
+	// 	await eventRepository.addEvent({
+	// 		...activity,
+	// 		createdAt: new Date(),
+	// 	});
+	// 	await fetchEvents();
+	// };
 
-	const getEvent = async (id: string): Promise<Event | null> => {
-		return await eventRepository.getEventById(id);
-	};
+	// const getEvent = async (id: string): Promise<Event | null> => {
+	// 	return await eventRepository.getEventById(id);
+	// };
 
-	const updateEvent = async (id: string, data: Partial<Event>) => {
-		await eventRepository.updateEvent(id, {
-			...data,
-			updatedAt: new Date(),
-		});
-		await fetchEvents();
-	};
+	// const updateEvent = async (id: string, data: Partial<Event>) => {
+	// 	await eventRepository.updateEvent(id, {
+	// 		...data,
+	// 		updatedAt: new Date(),
+	// 	});
+	// 	await fetchEvents();
+	// };
 
-	const deleteEvent = async (id: string) => {
-		await eventRepository.deleteEvent(id);
-		await fetchEvents();
-	};
+	// const deleteEvent = async (id: string) => {
+	// 	await eventRepository.deleteEvent(id);
+	// 	await fetchEvents();
+	// };
 
 	useEffect(() => {
 		fetchEvents();
@@ -63,9 +63,5 @@ export const useEventViewModel = () => {
 		events,
 		loading,
 		refresh: fetchEvents,
-		addEvent,
-		getEvent,
-		updateEvent,
-		deleteEvent,
 	};
 };

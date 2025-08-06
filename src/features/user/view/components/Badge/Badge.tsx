@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { styles } from "./Badge.styles";
 import { BadgeProps } from "./Badge.types";
 import { useTheme } from "../../../../../theme/ThemeProvider";
@@ -32,17 +32,18 @@ const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 	}
 
 	return (
-		<Text
-			style={[
-				styles.text,
-				{
-					color: textColor,
-					backgroundColor: backgroundColor,
-				},
-			]}
-		>
-			{type}
-		</Text>
+		<View style={[styles.container, { backgroundColor }]}>
+			<Text
+				style={[
+					styles.text,
+					{
+						color: textColor,
+					},
+				]}
+			>
+				{type}
+			</Text>
+		</View>
 	);
 };
 

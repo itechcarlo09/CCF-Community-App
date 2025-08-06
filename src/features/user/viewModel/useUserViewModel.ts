@@ -42,34 +42,29 @@ export const useUserViewModel = () => {
 		setLoading(false);
 	};
 
-	const addUser = async (
-		user: Omit<User, "id" | "createdAt" | "updatedAt">
-	) => {
-		await userRepository.addUser({
-			...user,
-			createdAt: new Date(),
-		});
-		await fetchUsers();
-	};
+	// const addUser = async (
+	// 	user: Omit<User, "id" | "createdAt" | "updatedAt">
+	// ) => {
+	// 	await userRepository.addUser({
+	// 		...user,
+	// 		createdAt: new Date(),
+	// 	});
+	// 	await fetchUsers();
+	// };
 
-	const getUsers = async (): Promise<any> => {
-		console.log("Fetching users...");
-		return await userRepository.getUsers();
-	};
+	// const getUser = async (id: string): Promise<User | null> => {
+	// 	return await userRepository.getUserById(id);
+	// };
 
-	const getUser = async (id: string): Promise<User | null> => {
-		return await userRepository.getUserById(id);
-	};
+	// const updateUser = async (id: string, data: Partial<User>) => {
+	// 	await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
+	// 	await fetchUsers();
+	// };
 
-	const updateUser = async (id: string, data: Partial<User>) => {
-		await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
-		await fetchUsers();
-	};
-
-	const deleteUser = async (id: string) => {
-		await userRepository.deleteUser(id);
-		await fetchUsers();
-	};
+	// const deleteUser = async (id: string) => {
+	// 	await userRepository.deleteUser(id);
+	// 	await fetchUsers();
+	// };
 
 	useEffect(() => {
 		fetchUsers();
@@ -78,11 +73,6 @@ export const useUserViewModel = () => {
 	return {
 		users,
 		loading,
-		getUsers,
 		refresh: fetchUsers,
-		addUser,
-		getUser,
-		updateUser,
-		deleteUser,
 	};
 };
