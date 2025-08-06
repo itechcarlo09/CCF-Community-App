@@ -1,10 +1,12 @@
+import { MembershipType } from "../types";
+
 export interface RecordItemUI {
-	id: string;
+	id: number;
 	fullName: string;
 	fallbackText: string; // Used for CircularImage fallback
 	age: number;
 	ministryText: string;
 	status: string;
-	leaderType?: string;
-	dleaderName?: string;
+	membershipType: MembershipType;
+	dleaderName?: string | null;
 }

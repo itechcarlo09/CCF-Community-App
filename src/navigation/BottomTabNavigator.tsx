@@ -27,10 +27,26 @@ function BottomTabNavigator() {
 				},
 			})}
 		>
-			<Tab.Screen name="HomeTab" component={HomeScreen} />
-			<Tab.Screen name="EventTab" component={EventScreen} />
-			<Tab.Screen name="UserTab" component={UserScreen} />
-			<Tab.Screen name="AccountTab" component={UserScreen} />
+			<Tab.Screen
+				name="HomeTab"
+				component={HomeScreen}
+				options={{ title: "Home" }}
+			/>
+			<Tab.Screen
+				name="EventTab"
+				component={EventScreen}
+				options={{ title: "Events" }}
+			/>
+			<Tab.Screen
+				name="UserTab"
+				component={UserScreen}
+				options={{ title: "Records" }}
+			/>
+			<Tab.Screen
+				name="AccountTab"
+				component={UserScreen}
+				options={{ title: "Account" }}
+			/>
 		</Tab.Navigator>
 	);
 }

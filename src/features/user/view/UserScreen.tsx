@@ -3,11 +3,16 @@ import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
 import Loading from "../../../components/Loading";
+import {
+	SafeAreaView,
+	useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
 	const { users, getUsers, refresh, loading } = useUserViewModel();
+	const insets = useSafeAreaInsets();
 	// const [refreshing, setRefreshing] = useState(false);
 	// const Refresh = () => (
 	// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -21,10 +26,10 @@ const UserScreen = ({ navigation }: any) => {
 	// if (loading) return <Loading />;
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { paddingTop: insets.top }]}>
 			<FlatList
 				data={users}
-				keyExtractor={(item) => item.id}
+				keyExtractor={(item) => String(item.id)}
 				renderItem={({ item }) => (
 					<UserListItem
 						user={item}
@@ -36,6 +41,8 @@ const UserScreen = ({ navigation }: any) => {
 						}
 					/>
 				)}
+				ListHeaderComponent={<View style={{ height: 16 }} />}
+				ListFooterComponent={<View style={{ height: 16 }} />}
 				ItemSeparatorComponent={Separator}
 				// refreshControl={Refresh()}
 			/>
@@ -52,8 +59,7 @@ const styles = StyleSheet.create({
 	title: { fontSize: 18, fontWeight: "bold" },
 	subtitle: { fontSize: 14, color: "gray" },
 	separator: {
-		height: 1,
-		marginHorizontal: 16,
+		height: 6,
 	},
 });
 

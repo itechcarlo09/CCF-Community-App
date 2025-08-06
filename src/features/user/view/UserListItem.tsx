@@ -1,16 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CircularImage from "../../../components/CircularImage";
 import { RecordItemUI } from "../model/RecordListItem";
 import { useTheme } from "../../../theme/ThemeProvider";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { mdiAccountMultipleOutline, mdiAlertCircle } from "@mdi/js";
-import Svg, { Path } from "react-native-svg";
+import { mdiAccountMultipleOutline, mdiCheckCircleOutline } from "@mdi/js";
 import MdiIcon from "../../../components/MdiIcon";
+import Badge from "./components/Badge/Badge";
 
 interface Props {
 	user: RecordItemUI;
-	onPress: (id?: string) => void;
+	onPress: (id?: number) => void;
 }
 
 const UserListItem = ({ user, onPress }: Props) => {
@@ -30,17 +29,7 @@ const UserListItem = ({ user, onPress }: Props) => {
 				</Text>
 			</View>
 			<View style={{ alignItems: "flex-end", gap: 8 }}>
-				<Text
-					style={[
-						styles.membershipTypeText,
-						{
-							color: theme.badge.primary.text,
-							backgroundColor: theme.badge.primary.background,
-						},
-					]}
-				>
-					DMember
-				</Text>
+				<Badge type={user.membershipType} path={""} />
 				<View style={{ alignItems: "flex-end", gap: 2 }}>
 					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
 						<MdiIcon
@@ -49,19 +38,19 @@ const UserListItem = ({ user, onPress }: Props) => {
 							color={theme.gray[500]}
 						/>
 						<Text style={[styles.detailText, { color: theme.gray[500] }]}>
-							DLeader's Name
+							{user.dleaderName ? user.dleaderName : "Pending"}
 						</Text>
 					</View>
 					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
 						<MdiIcon
-							path={mdiAlertCircle}
+							path={mdiCheckCircleOutline}
 							size={12}
-							color={theme.textDanger.onDanger.secondary}
+							color={theme.textPositive.secondary}
 						/>
 						<Text
 							style={[
 								styles.detailText,
-								{ color: theme.textDanger.onDanger.secondary },
+								{ color: theme.textPositive.secondary },
 							]}
 						>
 							Active Member
@@ -77,7 +66,6 @@ const styles = StyleSheet.create({
 	flex: { flex: 1 },
 	card: {
 		padding: 16,
-		marginVertical: 8,
 		borderRadius: 8,
 		height: 100,
 		flexDirection: "row",

@@ -1,68 +1,238 @@
 [
 	{
 		"id": 1,
-		"firstName": "John",
-		"middleName": null,
-		"lastName": "Doe",
-		"facebookLink": "jd@facebook.com",
-		"contactNumber": "1234567890",
-		"email": "johndoe@example.com",
-		"gender": "Male",
-		"birthDate": "1990-01-01T00:00:00.000Z",
-		"userType": "Member",
-		"dGroupLeaderId": null,
-		"createdAt": "2025-08-05T15:48:09.710Z",
-		"updatedAt": "2025-08-05T07:48:09.035Z",
-		"emergencyContactName": "Jane Doe",
-		"emergencyContactNumber": "0987654321",
-		"education": [
-			{
-				"id": 2,
-				"schoolId": 2,
-				"accountId": 1,
-				"gradeYear": "Graduated",
-				"course": "BSIT",
-				"startDate": "2017-09-01T00:00:00.000Z",
-				"endDate": "2025-09-01T00:00:00.000Z",
-				"createdAt": "2025-08-05T22:49:40.369Z",
-				"updatedAt": "2025-08-05T22:54:01.351Z"
-			}
-		]
+		"firstName": "Alice",
+		"lastName": "Smith",
+		"middleName": "Marie",
+		"birthDate": "1985-07-10T00:00:00.000Z",
+		"dGroupLeader": null,
+		"dGroupMembers": 3
 	},
 	{
 		"id": 2,
-		"firstName": "John",
+		"firstName": "Bob",
+		"lastName": "Johnson",
+		"middleName": "Lee",
+		"birthDate": "1990-05-20T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Alice",
+			"middleName": "Marie",
+			"lastName": "Smith"
+		},
+		"dGroupMembers": 0
+	},
+	{
+		"id": 3,
+		"firstName": "Charlie",
+		"lastName": "Brown",
 		"middleName": null,
-		"lastName": "Doe JR",
-		"facebookLink": "jd@facebook.com",
-		"contactNumber": "1234567890",
-		"email": "johndoe@example.com",
-		"gender": "Male",
-		"birthDate": "2010-01-01T00:00:00.000Z",
-		"userType": "Member",
-		"dGroupLeaderId": 1,
-		"createdAt": "2025-08-05T15:50:11.458Z",
-		"updatedAt": "2025-08-05T15:51:18.576Z",
-		"emergencyContactName": "John Doe",
-		"emergencyContactNumber": "0987654321",
-		"education": []
+		"birthDate": "2004-11-15T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Alice",
+			"middleName": "Marie",
+			"lastName": "Smith"
+		},
+		"dGroupMembers": 1
 	},
 	{
 		"id": 4,
-		"firstName": "TestFname",
+		"firstName": "Diana",
+		"lastName": "Reyes",
+		"middleName": "Anne",
+		"birthDate": "2003-04-01T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Alice",
+			"middleName": "Marie",
+			"lastName": "Smith"
+		},
+		"dGroupMembers": 2
+	},
+	{
+		"id": 5,
+		"firstName": "Edward",
+		"lastName": "Nguyen",
 		"middleName": null,
-		"lastName": "TestLName",
-		"facebookLink": "jd@facebook.com",
-		"contactNumber": "1234567890",
-		"email": "email@gmail.com",
-		"gender": "Female",
-		"birthDate": "2010-01-01T00:00:00.000Z",
-		"userType": "DGM",
-		"dGroupLeaderId": 1,
-		"createdAt": "2025-08-05T16:06:09.354Z",
-		"updatedAt": "2025-08-05T16:07:33.563Z",
-		"emergencyContactName": "John Doe",
-		"emergencyContactNumber": "0987654321",
-		"education": []
+		"birthDate": "1988-03-12T00:00:00.000Z",
+		"dGroupLeader": null,
+		"dGroupMembers": 4
+	},
+	{
+		"id": 6,
+		"firstName": "Faith",
+		"lastName": "Kim",
+		"middleName": "Grace",
+		"birthDate": "1996-07-30T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Edward",
+			"middleName": null,
+			"lastName": "Nguyen"
+		},
+		"dGroupMembers": 0
+	},
+	{
+		"id": 7,
+		"firstName": "George",
+		"lastName": "Lopez",
+		"middleName": "James",
+		"birthDate": "1999-10-18T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Edward",
+			"middleName": null,
+			"lastName": "Nguyen"
+		},
+		"dGroupMembers": 1
+	},
+	{
+		"id": 8,
+		"firstName": "Hannah",
+		"lastName": "Ortiz",
+		"middleName": null,
+		"birthDate": "2000-02-28T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Edward",
+			"middleName": null,
+			"lastName": "Nguyen"
+		},
+		"dGroupMembers": 2
+	},
+	{
+		"id": 9,
+		"firstName": "Ian",
+		"lastName": "Cruz",
+		"middleName": null,
+		"birthDate": "2001-01-15T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Edward",
+			"middleName": null,
+			"lastName": "Nguyen"
+		},
+		"dGroupMembers": 3
+	},
+	{
+		"id": 10,
+		"firstName": "Jane",
+		"lastName": "Doe",
+		"middleName": "Lynn",
+		"birthDate": "1993-08-22T00:00:00.000Z",
+		"dGroupLeader": null,
+		"dGroupMembers": 3
+	},
+	{
+		"id": 11,
+		"firstName": "Kevin",
+		"lastName": "Ortiz",
+		"middleName": null,
+		"birthDate": "1997-09-09T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Jane",
+			"middleName": "Lynn",
+			"lastName": "Doe"
+		},
+		"dGroupMembers": 0
+	},
+	{
+		"id": 12,
+		"firstName": "Laura",
+		"lastName": "Cruz",
+		"middleName": "Anne",
+		"birthDate": "1998-12-25T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Jane",
+			"middleName": "Lynn",
+			"lastName": "Doe"
+		},
+		"dGroupMembers": 2
+	},
+	{
+		"id": 13,
+		"firstName": "Mike",
+		"lastName": "Smith",
+		"middleName": null,
+		"birthDate": "1995-06-03T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Jane",
+			"middleName": "Lynn",
+			"lastName": "Doe"
+		},
+		"dGroupMembers": 3
+	},
+	{
+		"id": 14,
+		"firstName": "Nina",
+		"lastName": "Johnson",
+		"middleName": null,
+		"birthDate": "1990-09-14T00:00:00.000Z",
+		"dGroupLeader": null,
+		"dGroupMembers": 0
+	},
+	{
+		"id": 15,
+		"firstName": "Oscar",
+		"lastName": "Brown",
+		"middleName": "Ray",
+		"birthDate": "1992-02-10T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Nina",
+			"middleName": null,
+			"lastName": "Johnson"
+		},
+		"dGroupMembers": 1
+	},
+	{
+		"id": 16,
+		"firstName": "Paul",
+		"lastName": "Martinez",
+		"middleName": null,
+		"birthDate": "2002-06-15T00:00:00.000Z",
+		"dGroupLeader": null,
+		"dGroupMembers": 0
+	},
+	{
+		"id": 17,
+		"firstName": "Rachel",
+		"lastName": "Lopez",
+		"middleName": "Lynn",
+		"birthDate": "2004-09-05T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Edward",
+			"middleName": null,
+			"lastName": "Nguyen"
+		},
+		"dGroupMembers": 2
+	},
+	{
+		"id": 18,
+		"firstName": "Steve",
+		"lastName": "Cruz",
+		"middleName": "Ray",
+		"birthDate": "1994-01-09T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Rachel",
+			"middleName": "Lynn",
+			"lastName": "Lopez"
+		},
+		"dGroupMembers": 0
+	},
+	{
+		"id": 19,
+		"firstName": "Tina",
+		"lastName": "Garcia",
+		"middleName": null,
+		"birthDate": "2001-11-22T00:00:00.000Z",
+		"dGroupLeader": null,
+		"dGroupMembers": 1
+	},
+	{
+		"id": 20,
+		"firstName": "Uma",
+		"lastName": "Patel",
+		"middleName": null,
+		"birthDate": "1999-03-30T00:00:00.000Z",
+		"dGroupLeader": {
+			"firstName": "Jane",
+			"middleName": "Lynn",
+			"lastName": "Doe"
+		},
+		"dGroupMembers": 3
 	}
 ]

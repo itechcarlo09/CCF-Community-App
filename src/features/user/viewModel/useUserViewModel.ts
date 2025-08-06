@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { userRepository } from "../data/userRepository";
 import { User } from "../model/user";
-import { ageNow, ageNumber } from "../../../utils/dateFormatter";
+import { ageNumber } from "../../../utils/dateFormatter";
 import { formatFullName } from "../../../utils/stringUtils";
-import { UserUI } from "../model/UserUI";
 import { RecordItemUI } from "../model/RecordListItem";
 
 const mapUserToUI = (user: User): RecordItemUI => ({
@@ -12,10 +11,23 @@ const mapUserToUI = (user: User): RecordItemUI => ({
 	fullName: formatFullName(user.firstName, user.lastName, user.middleName),
 	age: ageNumber(user.birthDate),
 	ministryText:
-		ageNumber(user.birthDate) < 22
-			? "Elevate Youth Ministry"
-			: "B1G Singles Ministry",
+		ageNumber(user.birthDate) < 22 ? "ELEVATE Youth" : "B1G Singles",
 	status: "Active Member",
+	dleaderName: user.dGroupLeader
+		? formatFullName(
+				user.dGroupLeader.firstName,
+				user.dGroupLeader.lastName,
+				user.dGroupLeader.middleName
+		  )
+		: null,
+	membershipType:
+		user.dGroupMembers > 2
+			? "DLeader"
+			: user.dGroupMembers > 0
+			? "Timothy"
+			: user.dGroupLeader
+			? "DMember"
+			: "Attendee",
 });
 
 export const useUserViewModel = () => {

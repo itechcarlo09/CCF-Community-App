@@ -1,5 +1,5 @@
 export interface User {
-	id: string;
+	id: number;
 
 	// Profile Info
 	firstName: string;
@@ -19,18 +19,18 @@ export interface User {
 	// role?: "admin" | "user" | "moderator"; // extendable enum
 }
 
-export interface User {
-	accountId: number;
+export interface DGroupLeader {
 	firstName: string;
 	middleName?: string;
 	lastName: string;
-	facebookLink: string;
-	contactNumber: string;
-	email: string;
-	gender: string;
+}
+
+export interface User {
+	id: number;
+	firstName: string;
+	middleName?: string;
+	lastName: string;
 	birthDate: Date;
-	type: string;
-	dGroupLeaderId: string;
-	createdDate: Date;
-	updatedDate: Date;
+	dGroupLeader?: DGroupLeader | null;
+	dGroupMembers: number;
 }
