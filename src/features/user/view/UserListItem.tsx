@@ -4,6 +4,9 @@ import CircularImage from "../../../components/CircularImage";
 import { RecordItemUI } from "../model/RecordListItem";
 import { useTheme } from "../../../theme/ThemeProvider";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { mdiAccountMultipleOutline, mdiAlertCircle } from "@mdi/js";
+import Svg, { Path } from "react-native-svg";
+import MdiIcon from "../../../components/MdiIcon";
 
 interface Props {
 	user: RecordItemUI;
@@ -40,14 +43,18 @@ const UserListItem = ({ user, onPress }: Props) => {
 				</Text>
 				<View style={{ alignItems: "flex-end", gap: 2 }}>
 					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-						<Ionicons name={"people-sharp"} size={12} color={theme.gray[500]} />
+						<MdiIcon
+							path={mdiAccountMultipleOutline}
+							size={12}
+							color={theme.gray[500]}
+						/>
 						<Text style={[styles.detailText, { color: theme.gray[500] }]}>
 							DLeader's Name
 						</Text>
 					</View>
 					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-						<Ionicons
-							name={"alert-circle-sharp"}
+						<MdiIcon
+							path={mdiAlertCircle}
 							size={12}
 							color={theme.textDanger.onDanger.secondary}
 						/>
@@ -57,7 +64,7 @@ const UserListItem = ({ user, onPress }: Props) => {
 								{ color: theme.textDanger.onDanger.secondary },
 							]}
 						>
-							Member Status
+							Active Member
 						</Text>
 					</View>
 				</View>
