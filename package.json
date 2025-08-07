@@ -3,9 +3,10 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"android": "ENVFILE=.env.development react-native run-android",
+		"update-env": "node scripts/update-env.js",
+		"android": "yarn update-env && ENVFILE=.env.development react-native run-android",
 		"android:prod": "ENVFILE=.env.production react-native run-android",
-		"ios": "ENVFILE=.env.development react-native run-ios",
+		"ios": "yarn update-env && ENVFILE=.env.development react-native run-ios",
 		"ios:prod": "ENVFILE=.env.production react-native run-ios",
 		"lint": "eslint .",
 		"start": "react-native start",
