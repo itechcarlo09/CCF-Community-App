@@ -62,6 +62,11 @@ export const lightColors = {
 		800: "#1E293B",
 		900: "#0F172A",
 	},
+	icon: {
+		danger: {
+			tertiary: "#EC221F",
+		},
+	},
 };
 
 export const darkColors = {
@@ -115,6 +120,11 @@ export const darkColors = {
 		700: "#334155",
 		800: "#1E293B",
 		900: "#0F172A",
+	},
+	icon: {
+		danger: {
+			tertiary: "#EC221F",
+		},
 	},
 };
 

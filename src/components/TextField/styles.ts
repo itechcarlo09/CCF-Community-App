@@ -12,10 +12,6 @@ export const styles = StyleSheet.create({
 	input: {
 		flex: 1,
 		fontSize: 16,
-		marginVertical: 8,
-	},
-	inputError: {
-		borderColor: "red",
 	},
 	toggle: {
 		paddingLeft: 12,
@@ -27,12 +23,11 @@ export const styles = StyleSheet.create({
 		fontSize: 14,
 	},
 	inputContainer: {
+		borderRadius: 6,
 		borderWidth: 1,
+		height: 42,
 		paddingHorizontal: 10,
 		flexDirection: "row",
 		alignItems: "center",
-	},
-	required: {
-		color: "red",
 	},
 });

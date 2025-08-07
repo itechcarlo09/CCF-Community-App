@@ -14,7 +14,7 @@ interface UseUserFormProps {
 export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const navigation = useNavigation();
-	const { addUser, updateUser, getUser } = useUserViewModel();
+	// const { addUser, updateUser, getUser } = useUserViewModel();
 
 	const formik = useFormik({
 		initialValues: {
@@ -24,26 +24,26 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 			birthdate: "",
 		},
 		validationSchema: Yup.object({
-			firstName: Yup.string().required("Required"),
-			lastName: Yup.string().required("Required"),
+			firstName: Yup.string().required("Please enter a valid first name"),
+			lastName: Yup.string().required("Please enter a valid last name"),
 			birthdate: Yup.date().nullable().required("Birthdate is required"),
 		}),
 		onSubmit: async (values) => {
 			setLoading(true);
 			try {
 				const now = new Date();
-				const user: Omit<User, "id" | "createdAt" | "updatedAt"> = {
-					firstName: values.firstName,
-					middleName: values.middleName,
-					lastName: values.lastName,
-					birthdate: new Date(),
-				};
+				// const user: Omit<User, "id" | "createdAt" | "updatedAt"> = {
+				// 	firstName: values.firstName,
+				// 	middleName: values.middleName,
+				// 	lastName: values.lastName,
+				// 	birthdate: new Date(),
+				// };
 
-				if (userId) {
-					await updateUser(userId, { ...user, updatedAt: now });
-				} else {
-					await addUser({ ...user });
-				}
+				// if (userId) {
+				// 	await updateUser(userId, { ...user, updatedAt: now });
+				// } else {
+				// 	await addUser({ ...user });
+				// }
 
 				navigation.goBack();
 			} catch (err) {
@@ -59,15 +59,15 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 		const load = async () => {
 			if (!userId) return;
 			setLoading(true);
-			const user = await getUser(userId);
-			if (user) {
-				formik.setValues({
-					firstName: user.firstName,
-					middleName: user.middleName ?? "",
-					lastName: user.lastName,
-					birthdate: dayjs(user.birthdate).format("YYYY-MM-DD"),
-				});
-			}
+			// const user = await getUser(userId);
+			// if (user) {
+			// 	formik.setValues({
+			// 		firstName: user.firstName,
+			// 		middleName: user.middleName ?? "",
+			// 		lastName: user.lastName,
+			// 		birthdate: dayjs(user.birthdate).format("YYYY-MM-DD"),
+			// 	});
+			// }
 			setLoading(false);
 		};
 		load();

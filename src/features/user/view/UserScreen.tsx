@@ -22,7 +22,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
-	const { users, getUsers, refresh, loading } = useUserViewModel();
+	const { users } = useUserViewModel();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const [open, setOpen] = useState(false);
@@ -84,7 +84,14 @@ const UserScreen = ({ navigation }: any) => {
 						}}
 					/>
 				</View>
-				<TouchableOpacity style={styles.addButton}>
+				<TouchableOpacity
+					style={styles.addButton}
+					onPress={() =>
+						navigation.navigate("UserNavigator", {
+							screen: "UserForm",
+						})
+					}
+				>
 					<MdiIcon path={mdiPlusBoxOutline} size={18} color={"#323232"} />
 				</TouchableOpacity>
 			</View>

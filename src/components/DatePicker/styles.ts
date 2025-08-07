@@ -14,8 +14,6 @@ export const styles = StyleSheet.create({
 		padding: 12,
 		borderWidth: 1,
 		borderRadius: 6,
-		borderColor: "#ccc",
-		backgroundColor: "#f9f9f9",
 	},
 	inputText: {
 		fontSize: 16,
@@ -23,7 +21,6 @@ export const styles = StyleSheet.create({
 	},
 	placeholderText: {
 		fontSize: 16,
-		color: "#999",
 	},
 	error: {
 		color: "red",

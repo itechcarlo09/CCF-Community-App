@@ -32,18 +32,22 @@ const TextField: React.FC<Props> = ({
 			{label && (
 				<Text style={[styles.label, { color: theme.slate[700] }]}>
 					{label}
-					{required && <Text style={styles.required}> *</Text>}
+					{required && <Text style={{ color: theme.blue[500] }}> *</Text>}
 				</Text>
 			)}
-			<View style={[styles.inputContainer, { borderColor: theme.slate[500] }]}>
+			<View
+				style={[
+					styles.inputContainer,
+					{
+						borderColor:
+							touched && error ? theme.icon.danger.tertiary : theme.slate[500],
+					},
+				]}
+			>
 				<TextInput
-					style={[
-						styles.input,
-						touched && error ? styles.inputError : null,
-						{ color: theme.slate[900] },
-					]}
+					style={[styles.input, { color: theme.slate[900] }]}
 					value={value}
-					placeholderTextColor={theme.slate[500]}
+					placeholderTextColor={theme.slate[400]}
 					onChangeText={onChangeText}
 					onBlur={onBlur}
 					secureTextEntry={secureTextEntry && !showPassword}

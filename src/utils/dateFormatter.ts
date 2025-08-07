@@ -24,6 +24,18 @@ export const ageNumber = (birthdate?: Date | string): number => {
 };
 
 /**
+ * Returns new Date when year added.
+ * @param dateToSet A JS Date or ISO string
+ * @param years A number
+ */
+export const addYearsAsDate = (
+	dateToSet: Date | string,
+	years: number
+): Date => {
+	return dayjs(dateToSet).add(years, "year").toDate();
+};
+
+/**
  * Returns age in years from a given birthdate.
  * @param birthdate A JS Date or ISO string
  */
