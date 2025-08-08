@@ -43,12 +43,11 @@ export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
 					{required && <Text style={{ color: theme.blue[500] }}> *</Text>}
 				</Text>
 			)}
-
-			{/* TODO: change the package of Dropdown from "@react-native-dropdown-picker" to "@react-native-element-dropdown" */}
 			<DropDownPicker
 				open={open}
 				searchable={searchable}
 				value={value}
+				listMode="SCROLLVIEW"
 				items={items}
 				placeholder={placeholder}
 				searchPlaceholder="Search DGroup Leader"
@@ -73,8 +72,9 @@ export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
 				}}
 				dropDownContainerStyle={{
 					zIndex: 1,
-					...(Platform.OS === "android" && { position: "relative" }),
-					...(Platform.OS === "android" && { top: 0 }),
+					// TODO: change the package of Dropdown from "@react-native-dropdown-picker" to "@react-native-element-dropdown"
+					// because of this, the dropdown causes to push all the items below.
+					...(Platform.OS == "android" && { position: "relative", top: 0 }),
 					borderColor: theme.gray[200],
 					borderWidth: 1,
 				}}

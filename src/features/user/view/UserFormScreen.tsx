@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import {
+	View,
+	StyleSheet,
+	Text,
+	KeyboardAvoidingView,
+	Platform,
+} from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
 import TextField from "../../../components/TextField";
@@ -14,6 +20,7 @@ import Button from "../../../components/Button";
 import Gender from "../../../types/enums/Gender";
 import { DropdownOption } from "../../../types/dropdownOption";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
+import { ScrollView } from "react-native-gesture-handler";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -39,7 +46,10 @@ const UserFormScreen = () => {
 	}, [dLeaderOptions]);
 
 	return (
-		<View style={[styles.container, { paddingTop: insets.top }]}>
+		<KeyboardAvoidingView
+			behavior={"padding"}
+			style={[styles.container, { paddingTop: insets.top }]}
+		>
 			<View style={styles.headerRow}>
 				<MdiIcon path={mdiArrowLeft} size={24} color="#323232" />
 				<Text style={[styles.title, { color: theme.text }]}>
@@ -47,7 +57,9 @@ const UserFormScreen = () => {
 				</Text>
 				<View style={styles.placeholder} />
 			</View>
-			<View
+			<ScrollView
+				automaticallyAdjustKeyboardInsets={true}
+				// keyboardShouldPersistTaps="handled"
 				style={[
 					styles.fieldsContainer,
 					{ backgroundColor: theme.background, borderColor: theme.gray[200] },
@@ -126,8 +138,8 @@ const UserFormScreen = () => {
 					onPress={formik.handleSubmit as any}
 					disabled={loading}
 				/>
-			</View>
-		</View>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	);
 };
 
