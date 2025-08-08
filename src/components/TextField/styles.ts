@@ -1,17 +1,15 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-	container: {
-		marginBottom: 16,
-	},
 	label: {
 		fontSize: 16,
-		fontWeight: "500",
+		fontWeight: 500,
 		marginBottom: 6,
 	},
 	input: {
 		flex: 1,
 		fontSize: 16,
+		fontWeight: 400,
 	},
 	toggle: {
 		paddingLeft: 12,
@@ -19,7 +17,7 @@ export const styles = StyleSheet.create({
 	},
 	error: {
 		color: "red",
-		marginTop: 4,
+		marginTop: 8,
 		fontSize: 14,
 	},
 	inputContainer: {

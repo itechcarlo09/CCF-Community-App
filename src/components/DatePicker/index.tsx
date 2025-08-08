@@ -27,7 +27,7 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 	const [showPicker, setShowPicker] = useState(false);
 
 	const show = () => setShowPicker(true);
-	const handleChange = (_: any, selectedDate?: Date) => {
+	const handleChange = (selectedDate?: Date) => {
 		setShowPicker(Platform.OS === "ios");
 		if (selectedDate) {
 			onChange(name, selectedDate);
@@ -69,9 +69,9 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 				open={showPicker}
 				maximumDate={new Date()}
 				date={value ? new Date(value) : new Date()}
-				onDateChange={handleChange}
-				onConfirm={() => {
+				onConfirm={(date) => {
 					setShowPicker(false);
+					handleChange(date);
 				}}
 				onCancel={() => {
 					setShowPicker(false);

@@ -1,19 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
 	View,
 	StyleSheet,
 	FlatList,
-	RefreshControl,
 	TouchableOpacity,
 	Text,
 } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
-import Loading from "../../../components/Loading";
-import {
-	SafeAreaView,
-	useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MdiIcon from "../../../components/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
@@ -57,7 +52,7 @@ const UserScreen = ({ navigation }: any) => {
 			>
 				Records
 			</Text>
-			<View style={[styles.sortContainer, { zIndex: 1000 }]}>
+			<View style={[styles.sortContainer, { zIndex: 1 }]}>
 				<View style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}>
 					<Text style={[styles.sortText, { color: theme.gray[900] }]}>
 						Sort

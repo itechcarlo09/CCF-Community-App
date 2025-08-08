@@ -28,7 +28,7 @@ const TextField: React.FC<Props> = ({
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
-		<View style={styles.container}>
+		<View>
 			{label && (
 				<Text style={[styles.label, { color: theme.slate[700] }]}>
 					{label}

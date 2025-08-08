@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
 	},
 	fieldContainer: {
 		marginVertical: 64,
+		rowGap: 16,
 	},
 	signInText: {
 		fontSize: 36,
