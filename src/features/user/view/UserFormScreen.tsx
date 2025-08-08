@@ -38,9 +38,6 @@ const UserFormScreen = () => {
 	const { id } = route.params || {};
 	const { formik, loading } = useUserForm({ userId: id });
 
-	console.log("backendList: ", dLeaderOptions);
-	console.log("actual list: ", dLeaders);
-
 	useEffect(() => {
 		setDLeaders(dLeaderOptions);
 	}, [dLeaderOptions]);
@@ -65,79 +62,81 @@ const UserFormScreen = () => {
 					{ backgroundColor: theme.background, borderColor: theme.gray[200] },
 				]}
 			>
-				<Text style={[styles.subTitle, { color: theme.text }]}>
-					Basic Information
-				</Text>
-				<TextField
-					placeholder="Enter First Name"
-					label="First Name"
-					required={true}
-					value={formik.values.firstName}
-					onChangeText={formik.handleChange("firstName")}
-					error={formik.errors.firstName}
-					touched={formik.touched.firstName}
-					name={"firstName"}
-				/>
-				<TextField
-					placeholder="Enter Middle Name"
-					label="Middle Name"
-					value={formik.values.middleName}
-					onChangeText={formik.handleChange("middleName")}
-					error={formik.errors.middleName}
-					touched={formik.touched.middleName}
-					name={"middleName"}
-				/>
-				<TextField
-					placeholder="Enter Last Name"
-					label="Last Name"
-					required={true}
-					value={formik.values.lastName}
-					onChangeText={formik.handleChange("lastName")}
-					error={formik.errors.lastName}
-					touched={formik.touched.lastName}
-					name={"lastName"}
-				/>
-				<View style={styles.dualFields}>
-					<DatePickerField
-						name="birthdate"
-						label="Birthdate"
+				<View style={styles.fieldGap}>
+					<Text style={[styles.subTitle, { color: theme.text }]}>
+						Basic Information
+					</Text>
+					<TextField
+						placeholder="Enter First Name"
+						label="First Name"
 						required={true}
-						value={formik.values.birthdate}
-						error={formik.errors.birthdate}
-						touched={formik.touched.birthdate}
-						onChange={formik.setFieldValue}
+						value={formik.values.firstName}
+						onChangeText={formik.handleChange("firstName")}
+						error={formik.errors.firstName}
+						touched={formik.touched.firstName}
+						name={"firstName"}
 					/>
+					<TextField
+						placeholder="Enter Middle Name"
+						label="Middle Name"
+						value={formik.values.middleName}
+						onChangeText={formik.handleChange("middleName")}
+						error={formik.errors.middleName}
+						touched={formik.touched.middleName}
+						name={"middleName"}
+					/>
+					<TextField
+						placeholder="Enter Last Name"
+						label="Last Name"
+						required={true}
+						value={formik.values.lastName}
+						onChangeText={formik.handleChange("lastName")}
+						error={formik.errors.lastName}
+						touched={formik.touched.lastName}
+						name={"lastName"}
+					/>
+					<View style={styles.dualFields}>
+						<DatePickerField
+							name="birthdate"
+							label="Birthdate"
+							required={true}
+							value={formik.values.birthdate}
+							error={formik.errors.birthdate}
+							touched={formik.touched.birthdate}
+							onChange={formik.setFieldValue}
+						/>
+						<DropdownPickerField
+							name={"gender"}
+							label="Gender"
+							placeholder="Gender"
+							containerStyle={styles.genderContainer}
+							required
+							value={formik.values.gender}
+							error={formik.errors.gender}
+							touched={formik.touched.gender}
+							onChange={formik.setFieldValue}
+							options={genderOptions}
+						/>
+					</View>
 					<DropdownPickerField
-						name={"gender"}
-						label="Gender"
-						placeholder="Gender"
-						containerStyle={styles.genderContainer}
+						name={"leaderId"}
+						placeholder="Select DGroup Leader"
+						label="DGroup Leader"
 						required
-						value={formik.values.gender}
-						error={formik.errors.gender}
-						touched={formik.touched.gender}
+						searchable
+						value={formik.values.leaderId}
+						error={formik.errors.leaderId}
+						touched={formik.touched.leaderId}
 						onChange={formik.setFieldValue}
-						options={genderOptions}
+						options={dLeaders}
+					/>
+					<Button
+						title="Submit"
+						style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
+						onPress={formik.handleSubmit as any}
+						disabled={loading}
 					/>
 				</View>
-				<DropdownPickerField
-					name={"leaderId"}
-					placeholder="Select DGroup Leader"
-					label="DGroup Leader"
-					required
-					searchable
-					value={formik.values.leaderId}
-					error={formik.errors.leaderId}
-					touched={formik.touched.leaderId}
-					onChange={formik.setFieldValue}
-					options={dLeaders}
-				/>
-				<Button
-					title="Submit"
-					style={{ backgroundColor: theme.blue[500] }}
-					onPress={formik.handleSubmit as any}
-					disabled={loading}
-				/>
 			</ScrollView>
 		</KeyboardAvoidingView>
 	);
@@ -188,6 +187,10 @@ const styles = StyleSheet.create({
 		borderStartStartRadius: 0,
 		borderStartEndRadius: 0,
 	},
+	saveBtn: {
+		marginTop: 24,
+	},
+	fieldGap: { rowGap: 8 },
 });
 
 export default UserFormScreen;

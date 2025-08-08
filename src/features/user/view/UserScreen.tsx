@@ -148,7 +148,8 @@ const styles = StyleSheet.create({
 		borderStartEndRadius: 0,
 	},
 	addButton: {
-		height: 24,
+		height: 42,
+		width: 42,
 		justifyContent: "center",
 		marginLeft: 10,
 	},

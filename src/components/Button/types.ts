@@ -1,10 +1,15 @@
-import { ViewStyle, TextStyle, GestureResponderEvent } from "react-native";
+import {
+	ViewStyle,
+	TextStyle,
+	GestureResponderEvent,
+	StyleProp,
+} from "react-native";
 
 export interface CustomButtonProps {
 	title: string;
 	onPress: (event: GestureResponderEvent) => void;
 	disabled?: boolean;
 	loading?: boolean;
-	style?: ViewStyle;
+	style?: StyleProp<ViewStyle> | undefined;
 	textStyle?: TextStyle;
 }
