@@ -1,4 +1,6 @@
+import { ViewStyle } from "react-native";
 import { ValueType } from "react-native-dropdown-picker";
+import { DropdownOption } from "../../types/dropdownOption";
 
 export interface DropdownPickerFieldProps {
 	name: string;
@@ -7,5 +9,9 @@ export interface DropdownPickerFieldProps {
 	touched?: boolean;
 	error?: string;
 	required?: boolean;
+	containerStyle?: ViewStyle;
 	onChange: (field: string, value: any) => void;
+	options: DropdownOption<string>[];
+	searchable?: boolean;
+	placeholder?: string;
 }

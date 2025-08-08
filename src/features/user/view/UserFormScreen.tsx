@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Button, StyleSheet, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
 import TextField from "../../../components/TextField";
@@ -10,15 +10,33 @@ import MdiIcon from "../../../components/MdiIcon";
 import { mdiArrowLeft } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import { DropdownPickerField } from "../../../components/DropdownPicker";
+import Button from "../../../components/Button";
+import Gender from "../../../types/enums/Gender";
+import { DropdownOption } from "../../../types/dropdownOption";
+import { useUserViewModel } from "../viewModel/useUserViewModel";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
+const genderOptions: DropdownOption<Gender>[] = [
+	{ label: Gender.Male, value: Gender.Male },
+	{ label: Gender.Female, value: Gender.Female },
+];
+
 const UserFormScreen = () => {
+	const { dLeaderOptions } = useUserViewModel();
 	const route = useRoute<UserRouteProp>();
+	const [dLeaders, setDLeaders] = useState<DropdownOption[]>([]);
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const { id } = route.params || {};
 	const { formik, loading } = useUserForm({ userId: id });
+
+	console.log("backendList: ", dLeaderOptions);
+	console.log("actual list: ", dLeaders);
+
+	useEffect(() => {
+		setDLeaders(dLeaderOptions);
+	}, [dLeaderOptions]);
 
 	return (
 		<View style={[styles.container, { paddingTop: insets.top }]}>
@@ -80,24 +98,31 @@ const UserFormScreen = () => {
 					<DropdownPickerField
 						name={"gender"}
 						label="Gender"
+						placeholder="Gender"
+						containerStyle={styles.genderContainer}
 						required
 						value={formik.values.gender}
 						error={formik.errors.gender}
 						touched={formik.touched.gender}
 						onChange={formik.setFieldValue}
+						options={genderOptions}
 					/>
 				</View>
 				<DropdownPickerField
-					name={"gender"}
-					label="Gender"
+					name={"leaderId"}
+					placeholder="Select DGroup Leader"
+					label="DGroup Leader"
 					required
-					value={formik.values.gender}
-					error={formik.errors.gender}
-					touched={formik.touched.gender}
+					searchable
+					value={formik.values.leaderId}
+					error={formik.errors.leaderId}
+					touched={formik.touched.leaderId}
 					onChange={formik.setFieldValue}
+					options={dLeaders}
 				/>
 				<Button
-					title={"Submit"}
+					title="Submit"
+					style={{ backgroundColor: theme.blue[500] }}
 					onPress={formik.handleSubmit as any}
 					disabled={loading}
 				/>
@@ -119,6 +144,10 @@ const styles = StyleSheet.create({
 	},
 	icon: {
 		width: 16,
+	},
+	genderContainer: {
+		width: 130,
+		zIndex: 1000,
 	},
 	title: {
 		position: "absolute",

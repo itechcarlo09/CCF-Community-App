@@ -1,15 +1,10 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-	container: {
-		marginBottom: 16,
-		width: 130,
-	},
 	label: {
 		fontSize: 16,
 		fontWeight: "500",
 		marginBottom: 6,
-		color: "#222",
 	},
 	input: {
 		padding: 12,
@@ -18,7 +13,6 @@ export const styles = StyleSheet.create({
 	},
 	inputText: {
 		fontSize: 16,
-		color: "#333",
 	},
 	placeholderText: {
 		fontSize: 16,
@@ -33,9 +27,8 @@ export const styles = StyleSheet.create({
 		color: "red",
 	},
 	dropdown: {
-		minHeight: 40,
+		minHeight: 42,
 		borderRadius: 6,
 		borderWidth: 1,
-		height: 42,
 	},
 });

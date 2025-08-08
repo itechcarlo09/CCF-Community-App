@@ -4,6 +4,7 @@ import { User } from "../model/user";
 import { ageNumber } from "../../../utils/dateFormatter";
 import { formatFullName } from "../../../utils/stringUtils";
 import { RecordItemUI } from "../model/RecordListItem";
+import { DropdownOption } from "../../../types/dropdownOption";
 
 const mapUserToUI = (user: User): RecordItemUI => ({
 	id: user.id,
@@ -30,15 +31,23 @@ const mapUserToUI = (user: User): RecordItemUI => ({
 			: "Pending Member",
 });
 
+const mapUserToDLeadersList = (user: User): DropdownOption => ({
+	label: formatFullName(user.firstName, user.lastName, user.middleName),
+	value: String(user.id),
+});
+
 export const useUserViewModel = () => {
 	const [users, setUsers] = useState<RecordItemUI[]>([]);
+	const [dLeaderOptions, setDLeaderOptions] = useState<DropdownOption[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const fetchUsers = async () => {
 		setLoading(true);
 		const result = await userRepository.getUsers();
-		const mapped = result.map(mapUserToUI);
-		setUsers(mapped);
+		const mappedUsers = result.map(mapUserToUI);
+		const mappedDleadersDropdown = result.map(mapUserToDLeadersList);
+		setUsers(mappedUsers);
+		setDLeaderOptions(mappedDleadersDropdown);
 		setLoading(false);
 	};
 
@@ -72,6 +81,7 @@ export const useUserViewModel = () => {
 
 	return {
 		users,
+		dLeaderOptions,
 		loading,
 		refresh: fetchUsers,
 	};
