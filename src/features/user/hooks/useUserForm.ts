@@ -22,11 +22,13 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 			middleName: "",
 			lastName: "",
 			birthdate: "",
+			gender: "",
 		},
 		validationSchema: Yup.object({
 			firstName: Yup.string().required("Please enter a valid first name"),
 			lastName: Yup.string().required("Please enter a valid last name"),
 			birthdate: Yup.date().nullable().required("Birthdate is required"),
+			gender: Yup.string().required("Please select a gender"),
 		}),
 		onSubmit: async (values) => {
 			setLoading(true);

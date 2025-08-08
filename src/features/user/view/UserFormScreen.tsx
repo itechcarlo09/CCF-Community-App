@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Button, StyleSheet, Text } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
@@ -9,7 +9,7 @@ import { DatePickerField } from "../../../components/DatePicker";
 import MdiIcon from "../../../components/MdiIcon";
 import { mdiArrowLeft } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
-import DropDownPicker from "react-native-dropdown-picker";
+import { DropdownPickerField } from "../../../components/DropdownPicker";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -17,12 +17,6 @@ const UserFormScreen = () => {
 	const route = useRoute<UserRouteProp>();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
-	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState("Male");
-	const [items, setItems] = useState([
-		{ label: "Male", value: "Male" },
-		{ label: "Female", value: "Female" },
-	]);
 	const { id } = route.params || {};
 	const { formik, loading } = useUserForm({ userId: id });
 
@@ -83,28 +77,25 @@ const UserFormScreen = () => {
 						touched={formik.touched.birthdate}
 						onChange={formik.setFieldValue}
 					/>
-					<DropDownPicker
-						open={open}
-						value={value}
-						items={items}
-						setOpen={setOpen}
-						setValue={setValue}
-						setItems={setItems}
-						style={[
-							styles.dropdown,
-							{ borderColor: theme.gray[200], borderWidth: 2 },
-						]}
-						containerStyle={{
-							zIndex: 1,
-							width: 164,
-						}}
-						dropDownContainerStyle={{
-							zIndex: 1,
-							borderColor: theme.gray[200],
-							borderWidth: 2,
-						}}
+					<DropdownPickerField
+						name={"gender"}
+						label="Gender"
+						required
+						value={formik.values.gender}
+						error={formik.errors.gender}
+						touched={formik.touched.gender}
+						onChange={formik.setFieldValue}
 					/>
 				</View>
+				<DropdownPickerField
+					name={"gender"}
+					label="Gender"
+					required
+					value={formik.values.gender}
+					error={formik.errors.gender}
+					touched={formik.touched.gender}
+					onChange={formik.setFieldValue}
+				/>
 				<Button
 					title={"Submit"}
 					onPress={formik.handleSubmit as any}

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
 	container: {
 		marginBottom: 16,
-		flex: 1,
+		width: 130,
 	},
 	label: {
 		fontSize: 16,
@@ -12,16 +12,13 @@ export const styles = StyleSheet.create({
 		color: "#222",
 	},
 	input: {
-		alignItems: "flex-start",
-		justifyContent: "center",
+		padding: 12,
 		borderWidth: 1,
 		borderRadius: 6,
-		height: 42,
 	},
 	inputText: {
 		fontSize: 16,
 		color: "#333",
-		marginStart: 10,
 	},
 	placeholderText: {
 		fontSize: 16,
@@ -34,5 +31,11 @@ export const styles = StyleSheet.create({
 	},
 	required: {
 		color: "red",
+	},
+	dropdown: {
+		minHeight: 40,
+		borderRadius: 6,
+		borderWidth: 1,
+		height: 42,
 	},
 });

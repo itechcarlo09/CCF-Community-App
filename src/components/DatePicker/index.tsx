@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import {
-	View,
-	Text,
-	TouchableOpacity,
-	Platform,
-	Modal,
-	Button,
-} from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { styles } from "./styles";
 import { DatePickerFieldProps } from "./types";
-import { addYearsAsDate, formatFullDate } from "../../utils/dateFormatter";
+import { formatFullDate } from "../../utils/dateFormatter";
 import { useTheme } from "../../theme/ThemeProvider";
-import dayjs from "dayjs";
 import DatePicker from "react-native-date-picker";
 
 export const DatePickerField: React.FC<DatePickerFieldProps> = ({
