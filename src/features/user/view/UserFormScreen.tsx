@@ -21,6 +21,7 @@ import Gender from "../../../types/enums/Gender";
 import { DropdownOption } from "../../../types/dropdownOption";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { ScrollView } from "react-native-gesture-handler";
+import Title from "./components/Title";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -63,9 +64,7 @@ const UserFormScreen = () => {
 				]}
 			>
 				<View style={styles.fieldGap}>
-					<Text style={[styles.subTitle, { color: theme.text }]}>
-						Basic Information
-					</Text>
+					<Title title={"Basic Information"} />
 					<TextField
 						placeholder="Enter First Name"
 						label="First Name"
@@ -130,6 +129,7 @@ const UserFormScreen = () => {
 						onChange={formik.setFieldValue}
 						options={dLeaders}
 					/>
+					<Title title={"Contact Information"} />
 					<Button
 						title="Submit"
 						style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 		borderStartEndRadius: 0,
 	},
 	saveBtn: {
-		marginTop: 24,
+		marginTop: 16,
 	},
 	fieldGap: { rowGap: 8 },
 });
