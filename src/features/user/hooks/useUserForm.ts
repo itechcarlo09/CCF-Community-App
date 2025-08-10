@@ -11,27 +11,65 @@ interface UseUserFormProps {
 	userId?: string;
 }
 
+export const initialValues = {
+	firstName: "",
+	middleName: "",
+	lastName: "",
+	birthdate: "",
+	gender: "",
+	leaderId: "",
+	contactNumber: "",
+	email: "",
+	facebook: "",
+	emergencyPerson: "",
+	emergencyNumber: "",
+};
+
+const validationSchema = Yup.object({
+	firstName: Yup.string().required("Please enter a valid first name"),
+	lastName: Yup.string().required("Please enter a valid last name"),
+	birthdate: Yup.date().nullable().required("Birthdate is required"),
+	gender: Yup.string().required("Please select a gender"),
+	leaderId: Yup.string().required("Please select a DGroup Leader"),
+	contactNumber: Yup.string()
+		.required("Contact number is required")
+		.test(
+			"starts-with-9",
+			"Contact number must start with 9",
+			(value) => !value || value.startsWith("9")
+		)
+		.test(
+			"length-check",
+			"Contact number must be 10 digits",
+			(value) => !value || /^\d{10}$/.test(value)
+		),
+	email: Yup.string()
+		.email("Please enter a valid email address")
+		.required("Email is required"),
+	facebook: Yup.string().required("Please enter a valid facebook"),
+	emergencyPerson: Yup.string().required("Please enter a valid contact person"),
+	emergencyNumber: Yup.string()
+		.required("Number of contact person is required")
+		.test(
+			"starts-with-9",
+			"Number of contact person must start with 9",
+			(value) => !value || value.startsWith("9")
+		)
+		.test(
+			"length-check",
+			"Number of contact person must be 10 digits",
+			(value) => !value || /^\d{10}$/.test(value)
+		),
+});
+
 export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const navigation = useNavigation();
 	// const { addUser, updateUser, getUser } = useUserViewModel();
 
 	const formik = useFormik({
-		initialValues: {
-			firstName: "",
-			middleName: "",
-			lastName: "",
-			birthdate: "",
-			gender: "",
-			leaderId: "",
-		},
-		validationSchema: Yup.object({
-			firstName: Yup.string().required("Please enter a valid first name"),
-			lastName: Yup.string().required("Please enter a valid last name"),
-			birthdate: Yup.date().nullable().required("Birthdate is required"),
-			gender: Yup.string().required("Please select a gender"),
-			leaderId: Yup.string().required("Please select a DGroup Leader"),
-		}),
+		initialValues: initialValues,
+		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			setLoading(true);
 			try {

@@ -58,6 +58,25 @@ export const formatFullName = (
 	}`;
 };
 
+/**
+ * Formats a phone number into XXX-XXX-XXXX.
+ * Non-numeric characters are removed automatically.
+ */
+export const formatPhoneNumber = (value: string): string => {
+	const cleaned = value.replace(/\D/g, ""); // remove non-digits
+
+	if (cleaned.length <= 3) {
+		return cleaned;
+	}
+	if (cleaned.length <= 6) {
+		return `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+	}
+	return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(
+		6,
+		10
+	)}`;
+};
+
 export const isNullOrEmpty = (value: any): boolean => {
 	return (
 		value === null ||
