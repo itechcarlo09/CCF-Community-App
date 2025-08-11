@@ -58,6 +58,13 @@ export const fromNow = (value: Date | string | null | undefined): string => {
 /**
  * Format full readable date: January 5, 2025
  */
+export const formatYear = (date: Date | string | null): string => {
+	return date ? dayjs(date).format("YYYY") : "";
+};
+
+/**
+ * Format full readable date: January 5, 2025
+ */
 export const formatFullDate = (date: Date | string | null): string => {
 	return date ? dayjs(date).format("MMMM D, YYYY") : "";
 };

@@ -6,4 +6,6 @@ export interface DatePickerFieldProps {
 	error?: string;
 	required?: boolean;
 	onChange: (field: string, value: any) => void;
+	mode?: "date" | "time" | "datetime";
+	isYearOnly?: boolean;
 }

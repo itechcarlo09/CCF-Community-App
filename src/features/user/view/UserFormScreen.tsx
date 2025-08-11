@@ -5,6 +5,8 @@ import {
 	Text,
 	KeyboardAvoidingView,
 	Platform,
+	TouchableOpacity,
+	GestureResponderEvent,
 } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
@@ -13,7 +15,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { UserStackParamList } from "../../../types/navigation";
 import { DatePickerField } from "../../../components/DatePicker";
 import MdiIcon from "../../../components/MdiIcon";
-import { mdiArrowLeft } from "@mdi/js";
+import {
+	mdiArrowLeft,
+	mdiPlus,
+	mdiTrashCan,
+	mdiTrashCanOutline,
+} from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import { DropdownPickerField } from "../../../components/DropdownPicker";
 import Button from "../../../components/Button";
@@ -81,6 +88,7 @@ const UserFormScreen = () => {
 						},
 					]}
 				>
+					{/* Basic Information Fields */}
 					<View style={styles.fieldGap}>
 						<Title title={"Basic Information"} />
 						<TextField
@@ -203,6 +211,77 @@ const UserFormScreen = () => {
 							touched={formik.touched.emergencyNumber}
 							name={"emergencyNumber"}
 						/>
+						{/* Education header */}
+						<View style={[styles.headerRow]}>
+							<Title title={"Education"} />
+							<Button
+								title={"Add Education"}
+								onPress={function (event: GestureResponderEvent): void {
+									throw new Error("Function not implemented.");
+								}}
+								style={{
+									backgroundColor: theme.background,
+									borderWidth: 1,
+									borderColor: theme.slate[500],
+									marginTop: 24,
+								}}
+								textStyle={{ color: theme.text }}
+								icon={<MdiIcon path={mdiPlus} size={24} color={theme.text} />}
+							/>
+						</View>
+						<View style={styles.fieldGap}>
+							<View style={[styles.headerRow]}>
+								<Title title={"Education 1"} />
+								<MdiIcon
+									path={mdiTrashCanOutline}
+									size={24}
+									color={theme.text}
+								/>
+							</View>
+							<TextField
+								placeholder="Enter school"
+								label="School"
+								required
+								value={formik.values.school}
+								onChangeText={formik.handleChange("school")}
+								error={formik.errors.school}
+								touched={formik.touched.school}
+								name={"school"}
+							/>
+							<TextField
+								placeholder="Enter degree/program"
+								label="Degree/Program"
+								required
+								value={formik.values.degree}
+								onChangeText={formik.handleChange("degree")}
+								error={formik.errors.degree}
+								touched={formik.touched.degree}
+								name={"degree"}
+							/>
+							<View style={styles.dualFields}>
+								<DatePickerField
+									name="startDate"
+									label="Start Date"
+									mode="date"
+									isYearOnly
+									required
+									value={formik.values.startDate}
+									error={formik.errors.startDate}
+									touched={formik.touched.startDate}
+									onChange={formik.setFieldValue}
+								/>
+								<DatePickerField
+									name="endDate"
+									label="End Date"
+									isYearOnly
+									required
+									value={formik.values.endDate}
+									error={formik.errors.endDate}
+									touched={formik.touched.endDate}
+									onChange={formik.setFieldValue}
+								/>
+							</View>
+						</View>
 						<Button
 							title="Submit"
 							style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
@@ -225,7 +304,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between", // or 'center' with absolute-positioned icon
-		height: 32,
 	},
 	icon: {
 		width: 16,

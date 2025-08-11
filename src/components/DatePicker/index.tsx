@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { styles } from "./styles";
 import { DatePickerFieldProps } from "./types";
-import { formatFullDate } from "../../utils/dateFormatter";
+import { formatFullDate, formatYear } from "../../utils/dateFormatter";
 import { useTheme } from "../../theme/ThemeProvider";
 import DatePicker from "react-native-date-picker";
 
@@ -14,6 +14,8 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 	error,
 	required,
 	onChange,
+	mode = "date",
+	isYearOnly = false,
 }) => {
 	const { theme } = useTheme();
 	const [showPicker, setShowPicker] = useState(false);
@@ -46,7 +48,9 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 			>
 				{value ? (
 					<Text style={styles.inputText}>
-						{formatFullDate(new Date(value))}
+						{isYearOnly
+							? formatYear(new Date(value))
+							: formatFullDate(new Date(value))}
 					</Text>
 				) : (
 					<Text style={[styles.placeholderText, { color: theme.slate[400] }]}>
@@ -57,7 +61,7 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 
 			<DatePicker
 				modal
-				mode="date"
+				mode={mode}
 				open={showPicker}
 				maximumDate={new Date()}
 				date={value ? new Date(value) : new Date()}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Text, TouchableOpacity, ActivityIndicator, View } from "react-native";
 import { CustomButtonProps } from "./types";
 import { styles } from "./styles";
 
@@ -10,6 +10,8 @@ const Button: React.FC<CustomButtonProps> = ({
 	loading = false,
 	style,
 	textStyle,
+	icon,
+	iconPosition = "left",
 }) => {
 	return (
 		<TouchableOpacity
@@ -21,7 +23,15 @@ const Button: React.FC<CustomButtonProps> = ({
 			{loading ? (
 				<ActivityIndicator color="#fff" />
 			) : (
-				<Text style={[styles.text, textStyle]}>{title}</Text>
+				<View style={styles.content}>
+					{icon && iconPosition === "left" && (
+						<View style={styles.iconLeft}>{icon}</View>
+					)}
+					<Text style={[styles.text, textStyle]}>{title}</Text>
+					{icon && iconPosition === "right" && (
+						<View style={styles.iconRight}>{icon}</View>
+					)}
+				</View>
 			)}
 		</TouchableOpacity>
 	);

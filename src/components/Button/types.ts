@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
 	ViewStyle,
 	TextStyle,
@@ -12,4 +13,6 @@ export interface CustomButtonProps {
 	loading?: boolean;
 	style?: StyleProp<ViewStyle> | undefined;
 	textStyle?: TextStyle;
+	icon?: ReactNode; // 🆕 can pass any icon component
+	iconPosition?: "left" | "right"; // 🆕 where to place it
 }
