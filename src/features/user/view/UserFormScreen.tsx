@@ -46,116 +46,6 @@ const UserFormScreen = () => {
 	}, [dLeaderOptions]);
 
 	return (
-		// <KeyboardAvoidingView
-		// 	behavior={"padding"}
-		// 	style={[
-		// 		styles.container,
-		// 		{ paddingTop: insets.top, paddingBottom: insets.bottom },
-		// 	]}
-		// >
-		// 	<View style={styles.headerRow}>
-		// 		<MdiIcon path={mdiArrowLeft} size={24} color="#323232" />
-		// 		<Text style={[styles.title, { color: theme.text }]}>
-		// 			Add New Record
-		// 		</Text>
-		// 		<View style={styles.placeholder} />
-		// 	</View>
-		// 	<ScrollView
-		// 		automaticallyAdjustKeyboardInsets={true}
-		// 		style={[
-		// 			styles.fieldsContainer,
-		// 			{ backgroundColor: theme.background, borderColor: theme.gray[200] },
-		// 		]}
-		// 	>
-		// 		<View style={styles.fieldGap}>
-		// 			<Title title={"Basic Information"} />
-		// 			<TextField
-		// 				placeholder="Enter First Name"
-		// 				label="First Name"
-		// 				required
-		// 				value={formik.values.firstName}
-		// 				onChangeText={formik.handleChange("firstName")}
-		// 				error={formik.errors.firstName}
-		// 				touched={formik.touched.firstName}
-		// 				name={"firstName"}
-		// 			/>
-		// 			<TextField
-		// 				placeholder="Enter Middle Name"
-		// 				label="Middle Name"
-		// 				value={formik.values.middleName}
-		// 				onChangeText={formik.handleChange("middleName")}
-		// 				error={formik.errors.middleName}
-		// 				touched={formik.touched.middleName}
-		// 				name={"middleName"}
-		// 			/>
-		// 			<TextField
-		// 				placeholder="Enter Last Name"
-		// 				label="Last Name"
-		// 				required
-		// 				value={formik.values.lastName}
-		// 				onChangeText={formik.handleChange("lastName")}
-		// 				error={formik.errors.lastName}
-		// 				touched={formik.touched.lastName}
-		// 				name={"lastName"}
-		// 			/>
-		// 			<View style={styles.dualFields}>
-		// 				<DatePickerField
-		// 					name="birthdate"
-		// 					label="Birthdate"
-		// 					required
-		// 					value={formik.values.birthdate}
-		// 					error={formik.errors.birthdate}
-		// 					touched={formik.touched.birthdate}
-		// 					onChange={formik.setFieldValue}
-		// 				/>
-		// 				<DropdownPickerField
-		// 					name={"gender"}
-		// 					label="Gender"
-		// 					placeholder="Gender"
-		// 					containerStyle={styles.genderContainer}
-		// 					required
-		// 					value={formik.values.gender}
-		// 					error={formik.errors.gender}
-		// 					touched={formik.touched.gender}
-		// 					onChange={formik.setFieldValue}
-		// 					options={genderOptions}
-		// 				/>
-		// 			</View>
-		// 			<DropdownPickerField
-		// 				name={"leaderId"}
-		// 				placeholder="Select DGroup Leader"
-		// 				label="DGroup Leader"
-		// 				required
-		// 				searchable
-		// 				value={formik.values.leaderId}
-		// 				error={formik.errors.leaderId}
-		// 				touched={formik.touched.leaderId}
-		// 				onChange={formik.setFieldValue}
-		// 				options={dLeaders}
-		// 			/>
-		// 			<Title title={"Contact Information"} />
-		// 			<TextField
-		// 				placeholder="XXX-XXX-XXXX"
-		// 				label="Contact Number"
-		// 				required
-		// 				inputType={InputType.Phone}
-		// 				value={formik.values.contactNumber}
-		// 				onChangeText={(text) =>
-		// 					formik.setFieldValue("contactNumber", formatPhoneNumber(text))
-		// 				}
-		// 				error={formik.errors.contactNumber}
-		// 				touched={formik.touched.contactNumber}
-		// 				name={"contactNumber"}
-		// 			/>
-		// 		</View>
-		// 	</ScrollView>
-		// 	<Button
-		// 		title="Submit"
-		// 		style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
-		// 		onPress={formik.handleSubmit as any}
-		// 		disabled={loading}
-		// 	/>
-		// </KeyboardAvoidingView>
 		<KeyboardAvoidingView
 			style={{ flex: 1 }}
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -182,7 +72,6 @@ const UserFormScreen = () => {
 						{
 							backgroundColor: theme.background,
 							borderColor: theme.gray[200],
-							paddingBottom: 24, // space for keyboard
 						},
 					]}
 				>
@@ -309,21 +198,21 @@ const UserFormScreen = () => {
 							touched={formik.touched.emergencyNumber}
 							name={"emergencyNumber"}
 						/>
+						<Button
+							title="Submit"
+							style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
+							onPress={formik.handleSubmit as any}
+							disabled={loading}
+						/>
 					</View>
 				</ScrollView>
-				<Button
-					title="Submit"
-					style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
-					onPress={formik.handleSubmit as any}
-					disabled={loading}
-				/>
 			</View>
 		</KeyboardAvoidingView>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: { paddingHorizontal: 16, rowGap: 17 },
+	container: { flex: 1, paddingHorizontal: 16, rowGap: 17 },
 	fieldsContainer: { borderRadius: 6, padding: 24, rowGap: 8 },
 	text: { fontSize: 18, fontWeight: "bold" },
 	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
