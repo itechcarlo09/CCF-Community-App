@@ -10,7 +10,7 @@ export interface User {
 	// profileImage?: string;
 
 	// Birthdate & timestamps
-	birthdate: Date; // converted from Firestore Timestamp
+	birthdate?: Date; // converted from Firestore Timestamp
 	createdAt: Date;
 	updatedAt?: Date; // optional, can be null if not updated
 
@@ -32,5 +32,12 @@ export interface User {
 	lastName: string;
 	birthDate: Date;
 	dGroupLeader?: DGroupLeader | null;
-	dGroupMembers: number;
+	facebookLink: string;
+	contactNumber: string;
+	dGroupMembers?: number;
+	email: string;
+	gender: string;
+	userType: string;
+	emergencyContactName: string;
+	emergencyContactNumber: string;
 }

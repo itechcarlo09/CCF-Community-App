@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	View,
 	StyleSheet,
 	FlatList,
 	TouchableOpacity,
 	Text,
+	RefreshControl,
 } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
@@ -13,11 +14,12 @@ import MdiIcon from "../../../components/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import DropDownPicker from "react-native-dropdown-picker";
+import Loading from "../../../components/Loading";
 
 const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
-	const { users } = useUserViewModel();
+	const { users, refresh, loading } = useUserViewModel();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const [open, setOpen] = useState(false);
@@ -26,17 +28,16 @@ const UserScreen = ({ navigation }: any) => {
 		{ label: "Name A to Z", value: "Asc" },
 		{ label: "Name Z to A", value: "Desc" },
 	]);
-	// const [refreshing, setRefreshing] = useState(false);
-	// const Refresh = () => (
-	// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+	const [refreshing, setRefreshing] = useState(false);
+	const Refresh = () => (
+		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+	);
 
-	// const onRefresh = useCallback(async () => {
-	// 	setRefreshing(true);
-	// 	refresh();
-	// 	setRefreshing(false);
-	// }, []);
-
-	// if (loading) return <Loading />;
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		refresh();
+		setRefreshing(false);
+	}, []);
 
 	return (
 		<View style={[styles.container, { paddingTop: insets.top }]}>
@@ -92,25 +93,30 @@ const UserScreen = ({ navigation }: any) => {
 			</View>
 
 			{/* Important: zIndex must be lower than the dropdown */}
-			<FlatList
-				data={users}
-				keyExtractor={(item) => String(item.id)}
-				renderItem={({ item }) => (
-					<UserListItem
-						user={item}
-						onPress={(id) =>
-							navigation.navigate("UserNavigator", {
-								screen: "UserForm",
-								params: { id },
-							})
-						}
-					/>
-				)}
-				ListHeaderComponent={<View style={{ height: 6 }} />}
-				ListFooterComponent={<View style={{ height: 16 }} />}
-				ItemSeparatorComponent={Separator}
-				contentContainerStyle={{ zIndex: 0 }}
-			/>
+			{loading ? (
+				<Loading />
+			) : (
+				<FlatList
+					data={users}
+					keyExtractor={(item) => String(item.id)}
+					renderItem={({ item }) => (
+						<UserListItem
+							user={item}
+							onPress={(id) =>
+								navigation.navigate("UserNavigator", {
+									screen: "UserForm",
+									params: { id },
+								})
+							}
+						/>
+					)}
+					refreshControl={Refresh()}
+					ListHeaderComponent={<View style={{ height: 6 }} />}
+					ListFooterComponent={<View style={{ height: 16 }} />}
+					ItemSeparatorComponent={Separator}
+					contentContainerStyle={{ zIndex: 0 }}
+				/>
+			)}
 		</View>
 	);
 };

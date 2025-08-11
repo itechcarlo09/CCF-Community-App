@@ -5,4 +5,5 @@ export interface MdiIconProps {
 	size?: number;
 	color?: string;
 	style?: StyleProp<ViewStyle>;
+	onPress?: () => void;
 }

@@ -6,7 +6,7 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 } from "react-native";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
 import TextField from "../../../components/TextField";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -34,6 +34,7 @@ const genderOptions: DropdownOption<Gender>[] = [
 
 const UserFormScreen = () => {
 	const { dLeaderOptions } = useUserViewModel();
+	const navigation = useNavigation();
 	const route = useRoute<UserRouteProp>();
 	const [dLeaders, setDLeaders] = useState<DropdownOption[]>([]);
 	const insets = useSafeAreaInsets();
@@ -58,10 +59,15 @@ const UserFormScreen = () => {
 				]}
 			>
 				<View style={styles.headerRow}>
-					<MdiIcon path={mdiArrowLeft} size={24} color="#323232" />
 					<Text style={[styles.title, { color: theme.text }]}>
 						Add New Record
 					</Text>
+					<MdiIcon
+						path={mdiArrowLeft}
+						size={24}
+						color="#323232"
+						onPress={navigation.goBack}
+					/>
 					<View style={styles.placeholder} />
 				</View>
 
@@ -133,7 +139,6 @@ const UserFormScreen = () => {
 							name={"leaderId"}
 							placeholder="Select DGroup Leader"
 							label="DGroup Leader"
-							required
 							searchable
 							value={formik.values.leaderId}
 							error={formik.errors.leaderId}
@@ -145,7 +150,7 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="XXX-XXX-XXXX"
 							label="Contact Number"
-							required
+							// required
 							inputType={InputType.Phone}
 							value={formik.values.contactNumber}
 							onChangeText={(text) =>
@@ -158,7 +163,7 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="Enter Email"
 							label="Email"
-							required
+							// required
 							value={formik.values.email}
 							onChangeText={formik.handleChange("email")}
 							error={formik.errors.email}
@@ -168,7 +173,7 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="Enter Facebook Link"
 							label="Facebook Link"
-							required
+							// required
 							value={formik.values.facebook}
 							onChangeText={formik.handleChange("facebook")}
 							error={formik.errors.facebook}
@@ -178,7 +183,7 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="Enter Contact Person"
 							label="Contact Person in case of emergency"
-							required
+							// required
 							value={formik.values.emergencyPerson}
 							onChangeText={formik.handleChange("emergencyPerson")}
 							error={formik.errors.emergencyPerson}
@@ -188,7 +193,7 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="XXX-XXX-XXXX"
 							label="Number of Contact Person"
-							required
+							// required
 							inputType={InputType.Phone}
 							value={formik.values.emergencyNumber}
 							onChangeText={(text) =>

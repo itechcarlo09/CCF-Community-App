@@ -22,9 +22,9 @@ const mapUserToUI = (user: User): RecordItemUI => ({
 		  )
 		: null,
 	membershipType:
-		user.dGroupMembers > 2
+		(user.dGroupMembers ? user.dGroupMembers : 0) > 2
 			? "DLeader"
-			: user.dGroupMembers > 0
+			: (user.dGroupMembers ? user.dGroupMembers : 0) > 0
 			? "Timothy"
 			: user.dGroupLeader
 			? "DMember"
@@ -51,15 +51,14 @@ export const useUserViewModel = () => {
 		setLoading(false);
 	};
 
-	// const addUser = async (
-	// 	user: Omit<User, "id" | "createdAt" | "updatedAt">
-	// ) => {
-	// 	await userRepository.addUser({
-	// 		...user,
-	// 		createdAt: new Date(),
-	// 	});
-	// 	await fetchUsers();
-	// };
+	const addUser = async (
+		user: Omit<User, "id" | "createdAt" | "updatedAt">
+	) => {
+		await userRepository.addUser({
+			...user,
+		});
+		await fetchUsers();
+	};
 
 	// const getUser = async (id: string): Promise<User | null> => {
 	// 	return await userRepository.getUserById(id);
@@ -83,6 +82,7 @@ export const useUserViewModel = () => {
 		users,
 		dLeaderOptions,
 		loading,
+		addUser,
 		refresh: fetchUsers,
 	};
 };

@@ -54,7 +54,7 @@ const TextField: React.FC<Props> = ({
 
 	const getMaxLength = () => {
 		if (maxLength) return maxLength;
-		if (inputType === "phone") return 11; // PH contact number
+		if (inputType === "phone") return 12; // PH contact number
 		return undefined;
 	};
 
@@ -86,7 +86,6 @@ const TextField: React.FC<Props> = ({
 					<View
 						style={{
 							width: 53,
-							height: 40,
 							borderStartStartRadius: 5,
 							borderStartEndRadius: 5,
 							borderRightWidth: 1,

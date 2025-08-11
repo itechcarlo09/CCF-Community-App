@@ -30,42 +30,65 @@ const validationSchema = Yup.object({
 	lastName: Yup.string().required("Please enter a valid last name"),
 	birthdate: Yup.date().nullable().required("Birthdate is required"),
 	gender: Yup.string().required("Please select a gender"),
-	leaderId: Yup.string().required("Please select a DGroup Leader"),
-	contactNumber: Yup.string()
-		.required("Contact number is required")
-		.test(
-			"starts-with-9",
-			"Contact number must start with 9",
-			(value) => !value || value.startsWith("9")
-		)
-		.test(
-			"length-check",
-			"Contact number must be 10 digits",
-			(value) => !value || /^\d{10}$/.test(value)
-		),
-	email: Yup.string()
-		.email("Please enter a valid email address")
-		.required("Email is required"),
-	facebook: Yup.string().required("Please enter a valid facebook"),
-	emergencyPerson: Yup.string().required("Please enter a valid contact person"),
-	emergencyNumber: Yup.string()
-		.required("Number of contact person is required")
-		.test(
-			"starts-with-9",
-			"Number of contact person must start with 9",
-			(value) => !value || value.startsWith("9")
-		)
-		.test(
-			"length-check",
-			"Number of contact person must be 10 digits",
-			(value) => !value || /^\d{10}$/.test(value)
-		),
+	// contactNumber: Yup.string()
+	// 	.required("Contact number is required")
+	// 	.test("starts-with-9", "Contact number must start with 9", (value) => {
+	// 		if (!value) return false;
+	// 		const digitsOnly = value.replace(/\D/g, "");
+	// 		return digitsOnly.startsWith("9");
+	// 	})
+	// 	.test(
+	// 		"length-check",
+	// 		"Contact number must have exactly 10 digits",
+	// 		(value) => {
+	// 			if (!value) return false;
+	// 			const digitsOnly = value.replace(/\D/g, "");
+	// 			return digitsOnly.length === 10;
+	// 		}
+	// 	)
+	// 	.test(
+	// 		"dash-format",
+	// 		"Contact number must be in the format 999-999-9999",
+	// 		(value) => {
+	// 			if (!value) return false;
+	// 			return /^\d{3}-\d{3}-\d{4}$/.test(value);
+	// 		}
+	// 	),
+	// email: Yup.string()
+	// 	.email("Please enter a valid email address")
+	// 	.required("Email is required"),
+	// facebook: Yup.string().required("Please enter a valid facebook"),
+	// emergencyPerson: Yup.string().required("Please enter a valid contact person"),
+	// emergencyNumber: Yup.string()
+	// 	.required("Contact number is required")
+	// 	.test("starts-with-9", "Contact number must start with 9", (value) => {
+	// 		if (!value) return false;
+	// 		const digitsOnly = value.replace(/\D/g, "");
+	// 		return digitsOnly.startsWith("9");
+	// 	})
+	// 	.test(
+	// 		"length-check",
+	// 		"Contact number must have exactly 10 digits",
+	// 		(value) => {
+	// 			if (!value) return false;
+	// 			const digitsOnly = value.replace(/\D/g, "");
+	// 			return digitsOnly.length === 10;
+	// 		}
+	// 	)
+	// 	.test(
+	// 		"dash-format",
+	// 		"Contact number must be in the format 999-999-9999",
+	// 		(value) => {
+	// 			if (!value) return false;
+	// 			return /^\d{3}-\d{3}-\d{4}$/.test(value);
+	// 		}
+	// 	),
 });
 
 export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const navigation = useNavigation();
-	// const { addUser, updateUser, getUser } = useUserViewModel();
+	const { addUser } = useUserViewModel();
 
 	const formik = useFormik({
 		initialValues: initialValues,
@@ -73,23 +96,31 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 		onSubmit: async (values) => {
 			setLoading(true);
 			try {
-				const now = new Date();
-				// const user: Omit<User, "id" | "createdAt" | "updatedAt"> = {
-				// 	firstName: values.firstName,
-				// 	middleName: values.middleName,
-				// 	lastName: values.lastName,
-				// 	birthdate: new Date(),
-				// };
+				const user: Omit<User, "id" | "createdAt" | "updatedAt"> = {
+					firstName: values.firstName,
+					middleName: values.middleName,
+					lastName: values.lastName,
+					gender: values.gender,
+					contactNumber: values.contactNumber,
+					email: values.email,
+					birthDate: new Date(values.birthdate),
+					facebookLink: values.facebook,
+					userType: "Member",
+					emergencyContactName: values.emergencyPerson,
+					emergencyContactNumber: values.emergencyNumber,
+				};
 
 				// if (userId) {
 				// 	await updateUser(userId, { ...user, updatedAt: now });
 				// } else {
-				// 	await addUser({ ...user });
+
+				await addUser({ ...user });
 				// }
 
 				navigation.goBack();
 			} catch (err) {
 				Alert.alert("Error", "Failed to save user");
+				console.log(err);
 			} finally {
 				setLoading(false);
 			}
