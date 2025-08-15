@@ -5,8 +5,7 @@ import {
 	Text,
 	KeyboardAvoidingView,
 	Platform,
-	TouchableOpacity,
-	GestureResponderEvent,
+	FlatList,
 } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
@@ -15,12 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { UserStackParamList } from "../../../types/navigation";
 import { DatePickerField } from "../../../components/DatePicker";
 import MdiIcon from "../../../components/MdiIcon";
-import {
-	mdiArrowLeft,
-	mdiPlus,
-	mdiTrashCan,
-	mdiTrashCanOutline,
-} from "@mdi/js";
+import { mdiArrowLeft, mdiPlus, mdiTrashCanOutline } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import { DropdownPickerField } from "../../../components/DropdownPicker";
 import Button from "../../../components/Button";
@@ -47,7 +41,16 @@ const UserFormScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const { id } = route.params || {};
-	const { formik, loading } = useUserForm({ userId: id });
+	const {
+		formik,
+		loading,
+		addDynamicField,
+		updateEndYears,
+		dynamicFields,
+		removeDynamicField,
+	} = useUserForm({
+		userId: id,
+	});
 
 	useEffect(() => {
 		setDLeaders(dLeaderOptions);
@@ -80,6 +83,7 @@ const UserFormScreen = () => {
 
 				<ScrollView
 					keyboardShouldPersistTaps="handled"
+					nestedScrollEnabled
 					contentContainerStyle={[
 						styles.fieldsContainer,
 						{
@@ -139,7 +143,7 @@ const UserFormScreen = () => {
 								value={formik.values.gender}
 								error={formik.errors.gender}
 								touched={formik.touched.gender}
-								onChange={formik.setFieldValue}
+								onChange={(field, value) => formik.setFieldValue(field, value)}
 								options={genderOptions}
 							/>
 						</View>
@@ -216,9 +220,7 @@ const UserFormScreen = () => {
 							<Title title={"Education"} />
 							<Button
 								title={"Add Education"}
-								onPress={function (event: GestureResponderEvent): void {
-									throw new Error("Function not implemented.");
-								}}
+								onPress={addDynamicField}
 								style={{
 									backgroundColor: theme.background,
 									borderWidth: 1,
@@ -229,59 +231,124 @@ const UserFormScreen = () => {
 								icon={<MdiIcon path={mdiPlus} size={24} color={theme.text} />}
 							/>
 						</View>
-						<View style={styles.fieldGap}>
-							<View style={[styles.headerRow]}>
-								<Title title={"Education 1"} />
-								<MdiIcon
-									path={mdiTrashCanOutline}
-									size={24}
-									color={theme.text}
-								/>
-							</View>
-							<TextField
-								placeholder="Enter school"
-								label="School"
-								required
-								value={formik.values.school}
-								onChangeText={formik.handleChange("school")}
-								error={formik.errors.school}
-								touched={formik.touched.school}
-								name={"school"}
-							/>
-							<TextField
-								placeholder="Enter degree/program"
-								label="Degree/Program"
-								required
-								value={formik.values.degree}
-								onChangeText={formik.handleChange("degree")}
-								error={formik.errors.degree}
-								touched={formik.touched.degree}
-								name={"degree"}
-							/>
-							<View style={styles.dualFields}>
-								<DatePickerField
-									name="startDate"
-									label="Start Date"
-									mode="date"
-									isYearOnly
-									required
-									value={formik.values.startDate}
-									error={formik.errors.startDate}
-									touched={formik.touched.startDate}
-									onChange={formik.setFieldValue}
-								/>
-								<DatePickerField
-									name="endDate"
-									label="End Date"
-									isYearOnly
-									required
-									value={formik.values.endDate}
-									error={formik.errors.endDate}
-									touched={formik.touched.endDate}
-									onChange={formik.setFieldValue}
-								/>
-							</View>
-						</View>
+
+						<FlatList
+							data={dynamicFields}
+							keyExtractor={(item, index) => item.title || index.toString()}
+							renderItem={({ item, index }) => {
+								return (
+									<View style={styles.fieldGap}>
+										<View style={[styles.headerRow]}>
+											<Title title={`Education ${index + 1}`} />
+											<MdiIcon
+												path={mdiTrashCanOutline}
+												size={24}
+												color={theme.text}
+												onPress={() => {
+													removeDynamicField(item.title);
+													formik.setFieldValue(item.title, undefined);
+												}}
+											/>
+										</View>
+										<TextField
+											placeholder="Enter school"
+											label="School"
+											required
+											value={formik.values?.[`${item.title}`]?.["school"] ?? ""}
+											onChangeText={formik.handleChange(`${item.title}.school`)}
+											error={formik.errors?.[`${item.title}`]?.["school"] ?? ""}
+											touched={
+												formik.touched?.[`${item.title}`]?.["school"] ?? ""
+											}
+											name={`${item.title}.school`}
+										/>
+										<TextField
+											placeholder="Enter degree/program"
+											label="Degree/Program"
+											required
+											value={formik.values?.[`${item.title}`]?.["degree"] ?? ""}
+											onChangeText={formik.handleChange(`${item.title}.degree`)}
+											error={formik.errors?.[`${item.title}`]?.["degree"] ?? ""}
+											touched={
+												formik.touched?.[`${item.title}`]?.["degree"] ?? ""
+											}
+											name={`${item.title}.degree`}
+										/>
+										<View style={styles.dualFields}>
+											<DropdownPickerField
+												name={`${item.title}.startdate`}
+												placeholder="Select Start Date"
+												label="Start Date"
+												required
+												containerStyle={{ flex: 1 }}
+												dropDownDirection="TOP"
+												value={
+													formik.values?.[`${item.title}`]?.["startdate"] ?? ""
+												}
+												error={
+													formik.errors?.[`${item.title}`]?.["startDate"] ?? ""
+												}
+												touched={
+													formik.touched?.[`${item.title}`]?.["startDate"] ?? ""
+												}
+												onChange={(name, value) => {
+													formik.setFieldValue(name, value);
+													updateEndYears(item.title, value); // update only this field’s endYears
+												}}
+												options={item.startYears ?? []}
+											/>
+											{/* TODO: make it hidden when start date is not selected. */}
+											<DropdownPickerField
+												name={`${item.title}.enddate`}
+												placeholder="Select End Date"
+												label="End Date"
+												required
+												containerStyle={{ flex: 1 }}
+												dropDownDirection="TOP"
+												value={
+													formik.values?.[`${item.title}`]?.["enddate"] ?? ""
+												}
+												error={
+													formik.errors?.[`${item.title}`]?.["endDate"] ?? ""
+												}
+												touched={
+													formik.touched?.[`${item.title}`]?.["endDate"] ?? ""
+												}
+												onChange={formik.setFieldValue}
+												options={item.endYears ?? []}
+											/>
+											{/* <DatePickerField
+											name={`${groupKey}.startDate`}
+											label="Start Date"
+											mode="date"
+											isYearOnly
+											required
+											value={formik.values[`${groupKey}.startDate`]}
+											error={formik.errors[`${groupKey}.startDate`]}
+											touched={formik.touched[`${groupKey}.startDate`]}
+											onChange={formik.setFieldValue}
+										/> */}
+											{/* <DatePickerField
+											name={`${item.groupKey}.endDate`}
+											label="End Date"
+											mode="date"
+											isYearOnly
+											required
+											value={formik.values[`${item.groupKey}.endDate`]}
+											error={formik.errors[`${item.groupKey}.endDate`]}
+											touched={formik.touched[`${item.groupKey}.endDate`]}
+											onChange={formik.setFieldValue}
+										/> */}
+										</View>
+									</View>
+								);
+							}}
+							// refreshControl={Refresh()}
+							ListHeaderComponent={<View style={{ height: 6 }} />}
+							ListFooterComponent={<View style={{ height: 16 }} />}
+							// ItemSeparatorComponent={Separator}
+							contentContainerStyle={{ zIndex: 0 }}
+						/>
 						<Button
 							title="Submit"
 							style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}

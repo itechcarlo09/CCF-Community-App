@@ -10,6 +10,21 @@ dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
 /**
+ * Returns list of current year untill 99 years less.
+ * @param birthdate A JS Date or ISO string
+ */
+export const getYearsNowMinus99 = (year: number = new Date().getFullYear()) => {
+	const currentYear = new Date(year, 0, 1).getFullYear();
+	const years: number[] = [];
+
+	for (let year = currentYear; year >= currentYear - 99; year--) {
+		years.push(year);
+	}
+
+	return years;
+};
+
+/**
  * Returns age in years from a given birthdate.
  * @param birthdate A JS Date or ISO string
  */

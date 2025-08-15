@@ -20,6 +20,7 @@ export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
 	options,
 	searchable,
 	placeholder,
+	dropDownDirection,
 }) => {
 	const { theme } = useTheme();
 	const [open, setOpen] = useState(false);
@@ -49,6 +50,7 @@ export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
 				value={value}
 				listMode="SCROLLVIEW"
 				items={items}
+				dropDownDirection={dropDownDirection || "BOTTOM"}
 				placeholder={placeholder}
 				searchPlaceholder="Search DGroup Leader"
 				searchPlaceholderTextColor={theme.slate[400]}

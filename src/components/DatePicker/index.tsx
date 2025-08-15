@@ -48,9 +48,7 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 			>
 				{value ? (
 					<Text style={styles.inputText}>
-						{isYearOnly
-							? formatYear(new Date(value))
-							: formatFullDate(new Date(value))}
+						{isYearOnly ? String(value) : formatFullDate(new Date(value))}
 					</Text>
 				) : (
 					<Text style={[styles.placeholderText, { color: theme.slate[400] }]}>

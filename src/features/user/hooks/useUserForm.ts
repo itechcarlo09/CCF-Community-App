@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
@@ -11,7 +11,7 @@ interface UseUserFormProps {
 	userId?: string;
 }
 
-export const initialValues = {
+const staticInitialValues = {
 	firstName: "",
 	middleName: "",
 	lastName: "",
@@ -25,7 +25,7 @@ export const initialValues = {
 	emergencyNumber: "",
 };
 
-const validationSchema = Yup.object({
+const staticSchema = Yup.object({
 	firstName: Yup.string().required("Please enter a valid first name"),
 	lastName: Yup.string().required("Please enter a valid last name"),
 	birthdate: Yup.date().nullable().required("Birthdate is required"),
@@ -85,13 +85,63 @@ const validationSchema = Yup.object({
 	// 	),
 });
 
+const buildDynamicSchema = (fieldsArray: any[]) => {
+	const shape: Record<string, any> = {};
+	fieldsArray.forEach((group) => {
+		const key = Object.keys(group)[0];
+		const fields = group[key];
+		const groupShape: Record<string, any> = {};
+		Object.entries(fields).forEach(([name, config]: any) => {
+			let validator =
+				config.type === "number"
+					? Yup.number().typeError("Must be a number")
+					: Yup.string();
+			validator = validator.required(`${config.label} is required`);
+			groupShape[name] = validator;
+		});
+		shape[key] = Yup.object().shape(groupShape);
+	});
+	return Yup.object().shape(shape);
+};
+
 export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const navigation = useNavigation();
 	const { addUser } = useUserViewModel();
+	const [dynamicFields, setDynamicFields] = useState<any[]>();
+	const [nextId, setNextId] = useState(1);
+
+	const getYearsNowMinus99 = useCallback(() => {
+		const currentYear = new Date().getFullYear();
+		return Array.from({ length: 100 }, (_, i) => ({
+			label: String(currentYear - i),
+			value: String(currentYear - i),
+		}));
+	}, []);
+
+	const addDynamicField = useCallback(() => {
+		const groupKey = `education${nextId}`;
+		setDynamicFields((prev) => [
+			...(prev || []),
+			{
+				title: groupKey,
+				startYears: getYearsNowMinus99(),
+			},
+		]);
+		setNextId((id) => id + 1); // increment for next add
+	}, [nextId]);
+
+	const removeDynamicField = useCallback((groupKey: string) => {
+		setDynamicFields((prev) => prev?.filter((group) => !group[groupKey]));
+	}, []);
+
+	const validationSchema = useMemo(
+		() => staticSchema.concat(buildDynamicSchema(dynamicFields ?? [])),
+		[dynamicFields]
+	);
 
 	const formik = useFormik({
-		initialValues: initialValues,
+		initialValues: staticInitialValues,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			setLoading(true);
@@ -127,6 +177,34 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 		},
 	});
 
+	const updateEndYears = useCallback(
+		(groupKey: string, startYearValue: string) => {
+			setDynamicFields((prev) => {
+				if (!prev) return prev;
+
+				return prev.map((field) => {
+					if (field.title !== groupKey) return field;
+
+					const currentYear = new Date().getFullYear();
+					const start = Number(startYearValue);
+
+					const years = Array.from(
+						{ length: currentYear - start + 1 },
+						(_, i) => ({
+							label: String(start + i),
+							value: String(start + i),
+						})
+					);
+
+					return { ...field, endYears: years };
+				});
+			});
+		},
+		[]
+	);
+
+	console.log("Dynamic Fields: ", dynamicFields);
+
 	// Load user if editing
 	useEffect(() => {
 		const load = async () => {
@@ -149,5 +227,9 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	return {
 		formik,
 		loading,
+		dynamicFields,
+		updateEndYears,
+		addDynamicField,
+		removeDynamicField,
 	};
 };
