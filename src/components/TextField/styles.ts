@@ -11,6 +11,10 @@ export const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: 400,
 	},
+	toggleContainer: {
+		alignItems: "center",
+		justifyContent: "center",
+	},
 	toggle: {
 		paddingLeft: 12,
 		marginLeft: 8,
@@ -23,7 +27,6 @@ export const styles = StyleSheet.create({
 	inputContainer: {
 		borderRadius: 6,
 		borderWidth: 1,
-		height: 42,
 		paddingHorizontal: 10,
 		flexDirection: "row",
 	},

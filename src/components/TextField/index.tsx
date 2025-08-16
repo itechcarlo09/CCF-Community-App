@@ -125,12 +125,15 @@ const TextField: React.FC<Props> = ({
 					onChangeText={onChangeText}
 					onBlur={onBlur}
 					keyboardType={getKeyboardType()}
-					secureTextEntry={getSecureEntry()}
+					secureTextEntry={showPassword ? false : getSecureEntry()}
 					maxLength={getMaxLength()}
 					{...inputProps}
 				/>
 				{secureTextEntry && (
-					<TouchableOpacity onPress={() => setShowPassword((prev) => !prev)}>
+					<TouchableOpacity
+						onPress={() => setShowPassword((prev) => !prev)}
+						style={styles.toggleContainer}
+					>
 						<Text style={[styles.toggle, { color: theme.blue[500] }]}>
 							{showPassword ? "Hide" : "Show"}
 						</Text>
