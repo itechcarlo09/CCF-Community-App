@@ -46,10 +46,14 @@ const UserFormScreen = () => {
 	const {
 		formik,
 		loading,
-		addDynamicField,
-		updateEndYears,
-		educationsFields,
-		removeDynamicField,
+		educationFields,
+		employmentFields,
+		addEducationField,
+		removeEducationField,
+		addEmploymentField,
+		removeEmploymentField,
+		updateEducationEndYears,
+		updateEmploymentEndYears,
 	} = useUserForm({
 		userId: id,
 	});
@@ -214,7 +218,7 @@ const UserFormScreen = () => {
 						<Title title={"Education"} />
 						<Button
 							title={"Add Education"}
-							onPress={addDynamicField}
+							onPress={addEducationField}
 							style={{
 								backgroundColor: theme.background,
 								borderWidth: 1,
@@ -225,99 +229,105 @@ const UserFormScreen = () => {
 						/>
 					</View>
 
-					<FlatList
-						data={educationsFields}
-						ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-						keyExtractor={(item, index) => item.title || index.toString()}
-						renderItem={({ item, index }) => (
-							<View style={styles.fieldGap}>
-								<View style={[styles.headerRow]}>
-									<Title title={`Education ${index + 1}`} />
-									<MdiIcon
-										path={mdiTrashCanOutline}
-										size={24}
-										color={theme.text}
-										onPress={() => {
-											removeDynamicField(item.title);
-											formik.setFieldValue(item.title, undefined);
-										}}
-									/>
-								</View>
-								<TextField
-									placeholder="Enter school"
-									label="School"
-									required
-									value={formik.values?.[`${item.title}`]?.["school"] ?? ""}
-									onChangeText={formik.handleChange(`${item.title}.school`)}
-									error={getIn(formik.errors, `${item.title}.school`) ?? ""}
-									touched={getIn(formik.touched, `${item.title}.school`)}
-									name={`${item.title}.school`}
-								/>
-								<TextField
-									placeholder="Enter degree/program"
-									label="Degree/Program"
-									required
-									value={formik.values?.[`${item.title}`]?.["degree"] ?? ""}
-									onChangeText={formik.handleChange(`${item.title}.degree`)}
-									error={formik.errors?.[`${item.title}`]?.["degree"] ?? ""}
-									touched={formik.touched?.[`${item.title}`]?.["degree"] ?? ""}
-									name={`${item.title}.degree`}
-								/>
-								<View style={styles.dualFields}>
-									<DropdownPickerField
-										name={`${item.title}.startdate`}
-										placeholder="Select Start Date"
-										label="Start Date"
+					{educationFields && educationFields.length > 0 && (
+						<FlatList
+							data={educationFields}
+							ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+							keyExtractor={(item, index) => item.title || index.toString()}
+							renderItem={({ item, index }) => (
+								<View style={styles.fieldGap}>
+									<View style={[styles.headerRow]}>
+										<Title title={`Education ${index + 1}`} />
+										<MdiIcon
+											path={mdiTrashCanOutline}
+											size={24}
+											color={theme.text}
+											onPress={() => {
+												removeEducationField(item.title);
+												formik.setFieldValue(item.title, undefined);
+											}}
+										/>
+									</View>
+									<TextField
+										placeholder="Enter school"
+										label="School"
 										required
-										containerStyle={{ flex: 1 }}
-										dropDownDirection="TOP"
-										value={
-											formik.values?.[`${item.title}`]?.["startdate"] ?? ""
-										}
-										error={
-											formik.errors?.[`${item.title}`]?.["startdate"] ?? ""
-										}
-										touched={
-											formik.touched?.[`${item.title}`]?.["startdate"] ?? ""
-										}
-										onChange={(name, value) => {
-											formik.setFieldValue(name, value);
-											updateEndYears(item.title, value);
-										}}
-										options={item.startYears ?? []}
+										value={formik.values?.[`${item.title}`]?.["school"] ?? ""}
+										onChangeText={formik.handleChange(`${item.title}.school`)}
+										error={getIn(formik.errors, `${item.title}.school`) ?? ""}
+										touched={getIn(formik.touched, `${item.title}.school`)}
+										name={`${item.title}.school`}
 									/>
-									{/* TODO: make it hidden when start date is not selected. */}
-									<DropdownPickerField
-										name={`${item.title}.enddate`}
-										placeholder="Select End Date"
-										label="End Date"
+									<TextField
+										placeholder="Enter degree/program"
+										label="Degree/Program"
 										required
-										containerStyle={{ flex: 1 }}
-										dropDownDirection="TOP"
-										value={formik.values?.[`${item.title}`]?.["enddate"] ?? ""}
-										error={formik.errors?.[`${item.title}`]?.["enddate"] ?? ""}
+										value={formik.values?.[`${item.title}`]?.["degree"] ?? ""}
+										onChangeText={formik.handleChange(`${item.title}.degree`)}
+										error={formik.errors?.[`${item.title}`]?.["degree"] ?? ""}
 										touched={
-											formik.touched?.[`${item.title}`]?.["enddate"] ?? ""
+											formik.touched?.[`${item.title}`]?.["degree"] ?? ""
 										}
-										onChange={formik.setFieldValue}
-										options={item.endYears ?? []}
+										name={`${item.title}.degree`}
 									/>
+									<View style={styles.dualFields}>
+										<DropdownPickerField
+											name={`${item.title}.startdate`}
+											placeholder="Select Start Date"
+											label="Start Date"
+											required
+											containerStyle={{ flex: 1 }}
+											dropDownDirection="TOP"
+											value={
+												formik.values?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											error={
+												formik.errors?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											touched={
+												formik.touched?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											onChange={(name, value) => {
+												formik.setFieldValue(name, value);
+												updateEducationEndYears(item.title, value);
+											}}
+											options={item.startYears ?? []}
+										/>
+										{/* TODO: make it hidden when start date is not selected. */}
+										<DropdownPickerField
+											name={`${item.title}.enddate`}
+											placeholder="Select End Date"
+											label="End Date"
+											required
+											containerStyle={{ flex: 1 }}
+											dropDownDirection="TOP"
+											value={
+												formik.values?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											error={
+												formik.errors?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											touched={
+												formik.touched?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											onChange={formik.setFieldValue}
+											options={item.endYears ?? []}
+										/>
+									</View>
 								</View>
-							</View>
-						)}
-						// refreshControl={Refresh()}
-						ListHeaderComponent={<View style={{ height: 6 }} />}
-						ListFooterComponent={<View style={{ height: 16 }} />}
-						// ItemSeparatorComponent={Separator}
-						contentContainerStyle={{ zIndex: 0 }}
-					/>
+							)}
+							ListHeaderComponent={<View style={{ height: 6 }} />}
+							ListFooterComponent={<View style={{ height: 16 }} />}
+							contentContainerStyle={{ zIndex: 0 }}
+						/>
+					)}
 
 					{/* Employment header */}
 					<View style={[styles.headerRow, { marginTop: 24 }]}>
-						<Title title={"Work"} />
+						<Title title={"Work/Occupation"} />
 						<Button
 							title={"Add Work"}
-							onPress={addDynamicField}
+							onPress={addEmploymentField}
 							style={{
 								backgroundColor: theme.background,
 								borderWidth: 1,
@@ -328,92 +338,98 @@ const UserFormScreen = () => {
 						/>
 					</View>
 
-					<FlatList
-						data={educationsFields}
-						ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-						keyExtractor={(item, index) => item.title || index.toString()}
-						renderItem={({ item, index }) => (
-							<View style={styles.fieldGap}>
-								<View style={[styles.headerRow]}>
-									<Title title={`Education ${index + 1}`} />
-									<MdiIcon
-										path={mdiTrashCanOutline}
-										size={24}
-										color={theme.text}
-										onPress={() => {
-											removeDynamicField(item.title);
-											formik.setFieldValue(item.title, undefined);
-										}}
-									/>
-								</View>
-								<TextField
-									placeholder="Enter school"
-									label="School"
-									required
-									value={formik.values?.[`${item.title}`]?.["school"] ?? ""}
-									onChangeText={formik.handleChange(`${item.title}.school`)}
-									error={getIn(formik.errors, `${item.title}.school`) ?? ""}
-									touched={getIn(formik.touched, `${item.title}.school`)}
-									name={`${item.title}.school`}
-								/>
-								<TextField
-									placeholder="Enter degree/program"
-									label="Degree/Program"
-									required
-									value={formik.values?.[`${item.title}`]?.["degree"] ?? ""}
-									onChangeText={formik.handleChange(`${item.title}.degree`)}
-									error={formik.errors?.[`${item.title}`]?.["degree"] ?? ""}
-									touched={formik.touched?.[`${item.title}`]?.["degree"] ?? ""}
-									name={`${item.title}.degree`}
-								/>
-								<View style={styles.dualFields}>
-									<DropdownPickerField
-										name={`${item.title}.startdate`}
-										placeholder="Select Start Date"
-										label="Start Date"
+					{employmentFields && employmentFields.length > 0 && (
+						<FlatList
+							data={employmentFields}
+							ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+							keyExtractor={(item, index) => item.title || index.toString()}
+							renderItem={({ item, index }) => (
+								<View style={styles.fieldGap}>
+									<View style={[styles.headerRow]}>
+										<Title title={`Work ${index + 1}`} />
+										<MdiIcon
+											path={mdiTrashCanOutline}
+											size={24}
+											color={theme.text}
+											onPress={() => {
+												removeEmploymentField(item.title);
+												formik.setFieldValue(item.title, undefined);
+											}}
+										/>
+									</View>
+									<TextField
+										placeholder="Enter Company/Organization"
+										label="Company/Organization"
 										required
-										containerStyle={{ flex: 1 }}
-										dropDownDirection="TOP"
-										value={
-											formik.values?.[`${item.title}`]?.["startdate"] ?? ""
-										}
-										error={
-											formik.errors?.[`${item.title}`]?.["startdate"] ?? ""
-										}
-										touched={
-											formik.touched?.[`${item.title}`]?.["startdate"] ?? ""
-										}
-										onChange={(name, value) => {
-											formik.setFieldValue(name, value);
-											updateEndYears(item.title, value);
-										}}
-										options={item.startYears ?? []}
+										value={formik.values?.[`${item.title}`]?.["company"] ?? ""}
+										onChangeText={formik.handleChange(`${item.title}.company`)}
+										error={getIn(formik.errors, `${item.title}.company`) ?? ""}
+										touched={getIn(formik.touched, `${item.title}.company`)}
+										name={`${item.title}.company`}
 									/>
-									{/* TODO: make it hidden when start date is not selected. */}
-									<DropdownPickerField
-										name={`${item.title}.enddate`}
-										placeholder="Select End Date"
-										label="End Date"
+									<TextField
+										placeholder="Enter Title/Position"
+										label="Title/Position"
 										required
-										containerStyle={{ flex: 1 }}
-										dropDownDirection="TOP"
-										value={formik.values?.[`${item.title}`]?.["enddate"] ?? ""}
-										error={formik.errors?.[`${item.title}`]?.["enddate"] ?? ""}
+										value={formik.values?.[`${item.title}`]?.["position"] ?? ""}
+										onChangeText={formik.handleChange(`${item.title}.position`)}
+										error={formik.errors?.[`${item.title}`]?.["position"] ?? ""}
 										touched={
-											formik.touched?.[`${item.title}`]?.["enddate"] ?? ""
+											formik.touched?.[`${item.title}`]?.["position"] ?? ""
 										}
-										onChange={formik.setFieldValue}
-										options={item.endYears ?? []}
+										name={`${item.title}.position`}
 									/>
+									<View style={styles.dualFields}>
+										<DropdownPickerField
+											name={`${item.title}.startdate`}
+											placeholder="Select Start Date"
+											label="Start Date"
+											required
+											containerStyle={{ flex: 1 }}
+											dropDownDirection="TOP"
+											value={
+												formik.values?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											error={
+												formik.errors?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											touched={
+												formik.touched?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											onChange={(name, value) => {
+												formik.setFieldValue(name, value);
+												updateEmploymentEndYears(item.title, value);
+											}}
+											options={item.startYears ?? []}
+										/>
+										{/* TODO: make it hidden when start date is not selected. */}
+										<DropdownPickerField
+											name={`${item.title}.enddate`}
+											placeholder="Select End Date"
+											label="End Date"
+											required
+											containerStyle={{ flex: 1 }}
+											dropDownDirection="TOP"
+											value={
+												formik.values?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											error={
+												formik.errors?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											touched={
+												formik.touched?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											onChange={formik.setFieldValue}
+											options={item.endYears ?? []}
+										/>
+									</View>
 								</View>
-							</View>
-						)}
-						// refreshControl={Refresh()}
-						ListHeaderComponent={<View style={{ height: 6 }} />}
-						ListFooterComponent={<View style={{ height: 16 }} />}
-						// ItemSeparatorComponent={Separator}
-						contentContainerStyle={{ zIndex: 0 }}
-					/>
+							)}
+							ListHeaderComponent={<View style={{ height: 6 }} />}
+							ListFooterComponent={<View style={{ height: 16 }} />}
+							contentContainerStyle={{ zIndex: 0 }}
+						/>
+					)}
 					<Button
 						title="Submit"
 						style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
@@ -471,7 +487,7 @@ const styles = StyleSheet.create({
 		borderStartEndRadius: 0,
 	},
 	saveBtn: {
-		marginTop: 16,
+		marginVertical: 16,
 	},
 	fieldGap: { rowGap: 8 },
 });

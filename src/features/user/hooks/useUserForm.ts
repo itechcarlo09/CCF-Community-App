@@ -91,10 +91,15 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
 	const { addUser } = useUserViewModel();
-	const [educationsFields, setEducationsFields] =
-		useState<EducationEmploymentConfig[]>();
 
-	const [nextId, setNextId] = useState(1);
+	const [educationFields, setEducationFields] = useState<
+		EducationEmploymentConfig[]
+	>([]);
+	const [employmentFields, setEmploymentFields] = useState<
+		EducationEmploymentConfig[]
+	>([]);
+	const [nextEduId, setNextEduId] = useState(1);
+	const [nextEmpId, setNextEmpId] = useState(1);
 
 	const getYearsNowMinus99 = useCallback(() => {
 		const currentYear = new Date().getFullYear();
@@ -104,46 +109,41 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 		}));
 	}, []);
 
-	const buildDynamicSchema = (fieldsArray: any[]) => {
+	const buildDynamicSchema = (
+		educationArray: EducationEmploymentConfig[],
+		employmentArray: EducationEmploymentConfig[]
+	) => {
 		const shape: Record<string, any> = {};
 
-		fieldsArray.forEach((group) => {
-			// build the schema for that group
+		// Education schema
+		educationArray.forEach((group) => {
 			shape[group.title] = Yup.object().shape({
-				school: Yup.string().required("Please enter a school"),
-				degree: Yup.string().required("Please enter a valid degree/program"),
-				startdate: Yup.string().required("Please enter a valid year"),
-				enddate: Yup.string().required("Please enter a valid year"),
+				school: Yup.string().required("School is required"),
+				degree: Yup.string().required("Degree is required"),
+				startdate: Yup.string().required("Start date is required"),
+				enddate: Yup.string().required("End date is required"),
+			});
+		});
+
+		// Employment schema
+		employmentArray.forEach((group) => {
+			shape[group.title] = Yup.object().shape({
+				company: Yup.string().required("Company is required"),
+				position: Yup.string().required("Position is required"),
+				startdate: Yup.string().required("Start date is required"),
+				enddate: Yup.string().required("End date is required"),
 			});
 		});
 
 		return Yup.object().required().shape(shape);
 	};
 
-	const addDynamicField = useCallback(() => {
-		const groupKey = `education${nextId}`;
-		setEducationsFields((prev) => [
-			...(prev || []),
-			{
-				title: groupKey,
-				startYears: getYearsNowMinus99(),
-			},
-		]);
-
-		formik.setFieldValue(groupKey, {
-			school: "",
-			degree: "",
-			startdate: "",
-			enddate: "",
-		});
-
-		formik.validateForm();
-		setNextId((id) => id + 1); // increment for next add
-	}, [nextId]);
-
 	const validationSchema = useMemo(
-		() => staticSchema.concat(buildDynamicSchema(educationsFields ?? [])),
-		[educationsFields]
+		() =>
+			staticSchema.concat(
+				buildDynamicSchema(educationFields ?? [], employmentFields ?? [])
+			),
+		[educationFields, employmentFields]
 	);
 
 	useEffect(() => {
@@ -191,27 +191,112 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 		},
 	});
 
-	const removeDynamicField = useCallback(
+	const addEducationField = useCallback(() => {
+		const groupKey = `education${nextEduId}`;
+
+		setEducationFields((prev) => [
+			...prev,
+			{
+				title: groupKey,
+				startYears: getYearsNowMinus99(),
+			},
+		]);
+
+		formik.setFieldValue(groupKey, {
+			school: "",
+			degree: "",
+			startdate: "",
+			enddate: "",
+		});
+
+		formik.validateForm();
+		setNextEduId((id) => id + 1);
+	}, [nextEduId, formik, getYearsNowMinus99]);
+
+	const addEmploymentField = useCallback(() => {
+		const groupKey = `employment${nextEmpId}`;
+
+		setEmploymentFields((prev) => [
+			...prev,
+			{
+				title: groupKey,
+				startYears: getYearsNowMinus99(),
+			},
+		]);
+
+		formik.setFieldValue(groupKey, {
+			company: "",
+			position: "",
+			startdate: "",
+			enddate: "",
+		});
+
+		formik.validateForm();
+		setNextEmpId((id) => id + 1);
+	}, [nextEmpId, formik, getYearsNowMinus99]);
+
+	const removeEducationField = useCallback(
 		(groupKey: string) => {
-			setEducationsFields((prev) =>
-				prev?.filter((group) => group.title !== groupKey)
-			);
+			setEducationFields((prev) => prev.filter((g) => g.title !== groupKey));
 			formik.setFieldValue(groupKey, undefined);
 			formik.validateForm();
 		},
 		[formik]
 	);
 
-	const updateEndYears = useCallback(
+	const removeEmploymentField = useCallback(
+		(groupKey: string) => {
+			setEmploymentFields((prev) => prev.filter((g) => g.title !== groupKey));
+			formik.setFieldValue(groupKey, undefined);
+			formik.validateForm();
+		},
+		[formik]
+	);
+
+	const updateEducationEndYears = useCallback(
 		(groupKey: string, startYearValue: string) => {
-			setEducationsFields((prev) => {
+			setEducationFields((prev) => {
 				if (!prev) return prev;
 
 				return prev.map((field) => {
 					if (field.title !== groupKey) return field;
 
-					const currentYear = new Date().getFullYear();
 					const start = Number(startYearValue);
+					const currentYear = new Date().getFullYear();
+
+					if (isNaN(start) || start > currentYear) {
+						return { ...field, endYears: [] };
+					}
+
+					const years = Array.from(
+						{ length: currentYear - start + 1 },
+						(_, i) => ({
+							label: String(start + i),
+							value: String(start + i),
+						})
+					);
+
+					return { ...field, endYears: years };
+				});
+			});
+		},
+		[]
+	);
+
+	const updateEmploymentEndYears = useCallback(
+		(groupKey: string, startYearValue: string) => {
+			setEmploymentFields((prev) => {
+				if (!prev) return prev;
+
+				return prev.map((field) => {
+					if (field.title !== groupKey) return field;
+
+					const start = Number(startYearValue);
+					const currentYear = new Date().getFullYear();
+
+					if (isNaN(start) || start > currentYear) {
+						return { ...field, endYears: [] };
+					}
 
 					const years = Array.from(
 						{ length: currentYear - start + 1 },
@@ -250,9 +335,13 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	return {
 		formik,
 		loading,
-		educationsFields,
-		updateEndYears,
-		addDynamicField,
-		removeDynamicField,
+		educationFields,
+		employmentFields,
+		addEducationField,
+		removeEducationField,
+		addEmploymentField,
+		removeEmploymentField,
+		updateEducationEndYears,
+		updateEmploymentEndYears,
 	};
 };
