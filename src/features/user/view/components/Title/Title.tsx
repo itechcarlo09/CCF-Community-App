@@ -7,7 +7,11 @@ import { useTheme } from "../../../../../theme/ThemeProvider";
 const Title: React.FC<TitleProps> = ({ title }) => {
 	const { theme } = useTheme();
 
-	return <Text style={[styles.subTitle, { color: theme.text }]}>{title}</Text>;
+	return (
+		<View style={styles.container}>
+			<Text style={[styles.subTitle, { color: theme.text }]}>{title}</Text>
+		</View>
+	);
 };
 
 export default Title;

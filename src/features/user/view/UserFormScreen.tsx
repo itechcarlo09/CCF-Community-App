@@ -216,7 +216,7 @@ const UserFormScreen = () => {
 							name={"emergencyNumber"}
 						/>
 						{/* Education header */}
-						<View style={[styles.headerRow]}>
+						<View style={[styles.headerRow, { marginTop: 24 }]}>
 							<Title title={"Education"} />
 							<Button
 								title={"Add Education"}
@@ -225,7 +225,6 @@ const UserFormScreen = () => {
 									backgroundColor: theme.background,
 									borderWidth: 1,
 									borderColor: theme.slate[500],
-									marginTop: 24,
 								}}
 								textStyle={{ color: theme.text }}
 								icon={<MdiIcon path={mdiPlus} size={24} color={theme.text} />}
@@ -234,6 +233,7 @@ const UserFormScreen = () => {
 
 						<FlatList
 							data={dynamicFields}
+							ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
 							keyExtractor={(item, index) => item.title || index.toString()}
 							renderItem={({ item, index }) => {
 								return (
@@ -293,7 +293,7 @@ const UserFormScreen = () => {
 												}
 												onChange={(name, value) => {
 													formik.setFieldValue(name, value);
-													updateEndYears(item.title, value); // update only this field’s endYears
+													updateEndYears(item.title, value);
 												}}
 												options={item.startYears ?? []}
 											/>
@@ -317,28 +317,6 @@ const UserFormScreen = () => {
 												onChange={formik.setFieldValue}
 												options={item.endYears ?? []}
 											/>
-											{/* <DatePickerField
-											name={`${groupKey}.startDate`}
-											label="Start Date"
-											mode="date"
-											isYearOnly
-											required
-											value={formik.values[`${groupKey}.startDate`]}
-											error={formik.errors[`${groupKey}.startDate`]}
-											touched={formik.touched[`${groupKey}.startDate`]}
-											onChange={formik.setFieldValue}
-										/> */}
-											{/* <DatePickerField
-											name={`${item.groupKey}.endDate`}
-											label="End Date"
-											mode="date"
-											isYearOnly
-											required
-											value={formik.values[`${item.groupKey}.endDate`]}
-											error={formik.errors[`${item.groupKey}.endDate`]}
-											touched={formik.touched[`${item.groupKey}.endDate`]}
-											onChange={formik.setFieldValue}
-										/> */}
 										</View>
 									</View>
 								);
