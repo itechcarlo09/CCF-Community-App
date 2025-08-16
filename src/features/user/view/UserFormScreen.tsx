@@ -47,7 +47,7 @@ const UserFormScreen = () => {
 		loading,
 		addDynamicField,
 		updateEndYears,
-		dynamicFields,
+		educationsFields,
 		removeDynamicField,
 	} = useUserForm({
 		userId: id,
@@ -233,7 +233,116 @@ const UserFormScreen = () => {
 						</View>
 
 						<FlatList
-							data={dynamicFields}
+							data={educationsFields}
+							ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+							keyExtractor={(item, index) => item.title || index.toString()}
+							renderItem={({ item, index }) => (
+								<View style={styles.fieldGap}>
+									<View style={[styles.headerRow]}>
+										<Title title={`Education ${index + 1}`} />
+										<MdiIcon
+											path={mdiTrashCanOutline}
+											size={24}
+											color={theme.text}
+											onPress={() => {
+												removeDynamicField(item.title);
+												formik.setFieldValue(item.title, undefined);
+											}}
+										/>
+									</View>
+									<TextField
+										placeholder="Enter school"
+										label="School"
+										required
+										value={formik.values?.[`${item.title}`]?.["school"] ?? ""}
+										onChangeText={formik.handleChange(`${item.title}.school`)}
+										error={getIn(formik.errors, `${item.title}.school`) ?? ""}
+										touched={getIn(formik.touched, `${item.title}.school`)}
+										name={`${item.title}.school`}
+									/>
+									<TextField
+										placeholder="Enter degree/program"
+										label="Degree/Program"
+										required
+										value={formik.values?.[`${item.title}`]?.["degree"] ?? ""}
+										onChangeText={formik.handleChange(`${item.title}.degree`)}
+										error={formik.errors?.[`${item.title}`]?.["degree"] ?? ""}
+										touched={
+											formik.touched?.[`${item.title}`]?.["degree"] ?? ""
+										}
+										name={`${item.title}.degree`}
+									/>
+									<View style={styles.dualFields}>
+										<DropdownPickerField
+											name={`${item.title}.startdate`}
+											placeholder="Select Start Date"
+											label="Start Date"
+											required
+											containerStyle={{ flex: 1 }}
+											dropDownDirection="TOP"
+											value={
+												formik.values?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											error={
+												formik.errors?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											touched={
+												formik.touched?.[`${item.title}`]?.["startdate"] ?? ""
+											}
+											onChange={(name, value) => {
+												formik.setFieldValue(name, value);
+												updateEndYears(item.title, value);
+											}}
+											options={item.startYears ?? []}
+										/>
+										{/* TODO: make it hidden when start date is not selected. */}
+										<DropdownPickerField
+											name={`${item.title}.enddate`}
+											placeholder="Select End Date"
+											label="End Date"
+											required
+											containerStyle={{ flex: 1 }}
+											dropDownDirection="TOP"
+											value={
+												formik.values?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											error={
+												formik.errors?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											touched={
+												formik.touched?.[`${item.title}`]?.["enddate"] ?? ""
+											}
+											onChange={formik.setFieldValue}
+											options={item.endYears ?? []}
+										/>
+									</View>
+								</View>
+							)}
+							// refreshControl={Refresh()}
+							ListHeaderComponent={<View style={{ height: 6 }} />}
+							ListFooterComponent={<View style={{ height: 16 }} />}
+							// ItemSeparatorComponent={Separator}
+							contentContainerStyle={{ zIndex: 0 }}
+						/>
+
+						{/* Employment header */}
+						<View style={[styles.headerRow, { marginTop: 24 }]}>
+							<Title title={"Work"} />
+							<Button
+								title={"Add Work"}
+								onPress={addDynamicField}
+								style={{
+									backgroundColor: theme.background,
+									borderWidth: 1,
+									borderColor: theme.slate[500],
+								}}
+								textStyle={{ color: theme.text }}
+								icon={<MdiIcon path={mdiPlus} size={24} color={theme.text} />}
+							/>
+						</View>
+
+						<FlatList
+							data={educationsFields}
 							ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
 							keyExtractor={(item, index) => item.title || index.toString()}
 							renderItem={({ item, index }) => (

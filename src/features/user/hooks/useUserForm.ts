@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { User } from "../model/user";
+import { EducationEmploymentConfig } from "../../../types/userTypes";
 
 interface UseUserFormProps {
 	userId?: string;
@@ -87,10 +88,12 @@ const staticSchema = Yup.object({
 
 export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
-	const dynamicInitialValues: Record<string, any> = {};
+	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
 	const { addUser } = useUserViewModel();
-	const [dynamicFields, setDynamicFields] = useState<any[]>();
+	const [educationsFields, setEducationsFields] =
+		useState<EducationEmploymentConfig[]>();
+
 	const [nextId, setNextId] = useState(1);
 
 	const getYearsNowMinus99 = useCallback(() => {
@@ -119,7 +122,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 
 	const addDynamicField = useCallback(() => {
 		const groupKey = `education${nextId}`;
-		setDynamicFields((prev) => [
+		setEducationsFields((prev) => [
 			...(prev || []),
 			{
 				title: groupKey,
@@ -139,8 +142,8 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	}, [nextId]);
 
 	const validationSchema = useMemo(
-		() => staticSchema.concat(buildDynamicSchema(dynamicFields ?? [])),
-		[dynamicFields]
+		() => staticSchema.concat(buildDynamicSchema(educationsFields ?? [])),
+		[educationsFields]
 	);
 
 	useEffect(() => {
@@ -190,7 +193,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 
 	const removeDynamicField = useCallback(
 		(groupKey: string) => {
-			setDynamicFields((prev) =>
+			setEducationsFields((prev) =>
 				prev?.filter((group) => group.title !== groupKey)
 			);
 			formik.setFieldValue(groupKey, undefined);
@@ -201,7 +204,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 
 	const updateEndYears = useCallback(
 		(groupKey: string, startYearValue: string) => {
-			setDynamicFields((prev) => {
+			setEducationsFields((prev) => {
 				if (!prev) return prev;
 
 				return prev.map((field) => {
@@ -247,7 +250,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	return {
 		formik,
 		loading,
-		dynamicFields,
+		educationsFields,
 		updateEndYears,
 		addDynamicField,
 		removeDynamicField,
