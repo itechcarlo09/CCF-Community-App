@@ -110,10 +110,10 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 		fieldsArray.forEach((group) => {
 			// build the schema for that group
 			shape[group.title] = Yup.object().shape({
-				school: Yup.string().required("School is required"),
-				degree: Yup.string().required("Degree/Program is required"),
-				startdate: Yup.string().required("Start Year is required"),
-				enddate: Yup.string().required("End Year is required"),
+				school: Yup.string().required("Please enter a school"),
+				degree: Yup.string().required("Please enter a valid degree/program"),
+				startdate: Yup.string().required("Please enter a valid year"),
+				enddate: Yup.string().required("Please enter a valid year"),
 			});
 		});
 
