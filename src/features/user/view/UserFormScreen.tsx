@@ -258,7 +258,6 @@ const UserFormScreen = () => {
 										onChangeText={formik.handleChange(`${item.title}.school`)}
 										error={getIn(formik.errors, `${item.title}.school`) ?? ""}
 										touched={getIn(formik.touched, `${item.title}.school`)}
-										onBlur={formik.handleBlur(`${item.title}.school`)}
 										name={`${item.title}.school`}
 									/>
 									<TextField
