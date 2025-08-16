@@ -5,6 +5,7 @@ import {
 	Text,
 	TouchableOpacity,
 	KeyboardTypeOptions,
+	Platform,
 } from "react-native";
 import { TextFieldProps } from "./types";
 import { styles } from "./styles";
@@ -77,6 +78,13 @@ const TextField: React.FC<Props> = ({
 						...(inputType === "phone"
 							? {
 									paddingLeft: 0,
+							  }
+							: {}),
+					},
+					{
+						...(Platform.OS === "ios"
+							? {
+									height: 42,
 							  }
 							: {}),
 					},
