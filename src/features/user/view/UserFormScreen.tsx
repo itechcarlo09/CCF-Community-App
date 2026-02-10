@@ -27,6 +27,7 @@ import InputType from "../../../types/enums/InputType";
 import { formatPhoneNumber } from "../../../utils/stringUtils";
 import { getIn } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { CustomDropdown } from "../../../components/CustomDropdown/CustomDropdown";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -132,20 +133,12 @@ const UserFormScreen = () => {
 							touched={formik.touched.birthdate}
 							onChange={formik.setFieldValue}
 						/>
-						<DropdownPickerField
-							name={"gender"}
-							label="Gender"
-							placeholder="Gender"
-							containerStyle={styles.genderContainer}
-							required
-							value={formik.values.gender}
-							error={formik.errors.gender}
-							touched={formik.touched.gender}
-							onChange={(field, value) => formik.setFieldValue(field, value)}
-							options={genderOptions}
+						<CustomDropdown
+							data={["Option 1", "Option 2", "Option 3"]}
+							onSelect={(value) => console.log("Selected:", value)}
 						/>
 					</View>
-					<DropdownPickerField
+					{/* <DropdownPickerField
 						name={"leaderId"}
 						placeholder="Select DGroup Leader"
 						label="DGroup Leader"
@@ -155,7 +148,7 @@ const UserFormScreen = () => {
 						touched={formik.touched.leaderId}
 						onChange={formik.setFieldValue}
 						options={dLeaders}
-					/>
+					/> */}
 					<Title title={"Contact Information"} />
 					<TextField
 						placeholder="XXX-XXX-XXXX"

@@ -1,34 +1,46 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+	container: {
+		backgroundColor: "white",
+		padding: 16,
+	},
+	dropdown: {
+		height: 50,
+		borderColor: "gray",
+		borderWidth: 0.5,
+		borderRadius: 8,
+		paddingHorizontal: 8,
+	},
+	icon: {
+		marginRight: 5,
+	},
 	label: {
-		fontSize: 16,
-		fontWeight: "500",
-		marginBottom: 6,
+		position: "absolute",
+		backgroundColor: "white",
+		left: 22,
+		top: 8,
+		zIndex: 999,
+		paddingHorizontal: 8,
+		fontSize: 14,
 	},
-	input: {
-		padding: 12,
-		borderWidth: 1,
-		borderRadius: 6,
-	},
-	inputText: {
+	placeholderStyle: {
 		fontSize: 16,
 	},
-	placeholderText: {
+	selectedTextStyle: {
 		fontSize: 16,
-		marginStart: 10,
+	},
+	iconStyle: {
+		width: 20,
+		height: 20,
+	},
+	inputSearchStyle: {
+		height: 40,
+		fontSize: 16,
 	},
 	error: {
 		color: "red",
 		fontSize: 12,
 		marginTop: 4,
-	},
-	required: {
-		color: "red",
-	},
-	dropdown: {
-		minHeight: 42,
-		borderRadius: 6,
-		borderWidth: 1,
 	},
 });

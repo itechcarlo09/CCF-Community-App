@@ -1,18 +1,17 @@
 import { ViewStyle } from "react-native";
-import { DropDownDirectionType, ValueType } from "react-native-dropdown-picker";
 import { DropdownOption } from "../../types/dropdownOption";
 
-export interface DropdownPickerFieldProps {
+export interface ElementDropdownProps<T = any> {
 	name: string;
 	label?: string;
-	value: ValueType | null;
+	labelField: string; // key in data for display text
+	valueField: string; // key in data for value
 	touched?: boolean;
 	error?: string;
 	required?: boolean;
 	containerStyle?: ViewStyle;
-	onChange: (field: string, value: any) => void;
+	onChange: (field: string, value: string) => void;
 	options: DropdownOption<string>[];
 	searchable?: boolean;
 	placeholder?: string;
-	dropDownDirection?: DropDownDirectionType;
 }

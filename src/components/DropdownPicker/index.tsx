@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Platform } from "react-native";
+import { View, Text } from "react-native";
 import { styles } from "./styles";
-import { DropdownPickerFieldProps } from "./types";
+import { ElementDropdownProps } from "./types";
 import { useTheme } from "../../theme/ThemeProvider";
-import DropDownPicker from "react-native-dropdown-picker";
 import { DropdownOption } from "../../types/dropdownOption";
-import MdiIcon from "../MdiIcon";
-import { mdiMagnify } from "@mdi/js";
+import { Dropdown } from "react-native-element-dropdown";
 
-export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
+export const DropdownPickerField: React.FC<ElementDropdownProps> = ({
 	name,
 	label,
-	value,
+	valueField,
 	touched,
 	error,
 	required,
@@ -20,10 +18,10 @@ export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
 	options,
 	searchable,
 	placeholder,
-	dropDownDirection,
 }) => {
 	const { theme } = useTheme();
 	const [open, setOpen] = useState(false);
+	const [isFocus, setIsFocus] = useState(false);
 	const [items, setItems] = useState<DropdownOption<string>[]>(options);
 
 	const setState: React.Dispatch<(prevState: any) => any> = (updater) => {
@@ -44,7 +42,28 @@ export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
 					{required && <Text style={{ color: theme.blue[500] }}> *</Text>}
 				</Text>
 			)}
-			<DropDownPicker
+			<Dropdown
+				style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+				placeholderStyle={styles.placeholderStyle}
+				selectedTextStyle={styles.selectedTextStyle}
+				inputSearchStyle={styles.inputSearchStyle}
+				iconStyle={styles.iconStyle}
+				data={items}
+				search={searchable}
+				maxHeight={300}
+				labelField="label"
+				valueField="value"
+				placeholder={placeholder}
+				searchPlaceholder="Search..."
+				value={valueField}
+				onFocus={() => setIsFocus(true)}
+				onBlur={() => setIsFocus(false)}
+				onChange={(item) => {
+					setState(item.value);
+					setIsFocus(false);
+				}}
+			/>
+			{/* <DropDownPicker
 				open={open}
 				searchable={searchable}
 				value={value}
@@ -90,7 +109,7 @@ export const DropdownPickerField: React.FC<DropdownPickerFieldProps> = ({
 							),
 					  }
 					: {})}
-			/>
+			/> */}
 
 			{touched && error && <Text style={styles.error}>{error}</Text>}
 		</View>

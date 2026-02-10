@@ -13,7 +13,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MdiIcon from "../../../components/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
-import DropDownPicker from "react-native-dropdown-picker";
 import Loading from "../../../components/Loading";
 
 const Separator = () => <View style={styles.separator} />;
@@ -58,7 +57,7 @@ const UserScreen = ({ navigation }: any) => {
 					<Text style={[styles.sortText, { color: theme.gray[900] }]}>
 						Sort
 					</Text>
-					<DropDownPicker
+					{/* <DropDownPicker
 						open={open}
 						value={value}
 						items={items}
@@ -78,7 +77,7 @@ const UserScreen = ({ navigation }: any) => {
 							borderColor: theme.gray[200],
 							borderWidth: 2,
 						}}
-					/>
+					/> */}
 				</View>
 				<TouchableOpacity
 					style={styles.addButton}
