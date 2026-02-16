@@ -6,6 +6,8 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	FlatList,
+	Touchable,
+	TouchableOpacity,
 } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
@@ -28,6 +30,7 @@ import { formatPhoneNumber } from "../../../utils/stringUtils";
 import { getIn } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CustomDropdown } from "../../../components/CustomDropdown/CustomDropdown";
+import ChoiceChip from "../../../components/ChoiceChip";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -123,33 +126,28 @@ const UserFormScreen = () => {
 						touched={formik.touched.lastName}
 						name={"lastName"}
 					/>
-					<View style={styles.dualFields}>
-						<DatePickerField
-							name="birthdate"
-							label="Birthdate"
-							required
-							value={formik.values.birthdate}
-							error={formik.errors.birthdate}
-							touched={formik.touched.birthdate}
-							onChange={formik.setFieldValue}
-						/>
-						<CustomDropdown
-							data={["Option 1", "Option 2", "Option 3"]}
-							onSelect={(value) => console.log("Selected:", value)}
-						/>
-					</View>
-					{/* <DropdownPickerField
-						name={"leaderId"}
-						placeholder="Select DGroup Leader"
-						label="DGroup Leader"
-						searchable
-						valueField={formik.values.leaderId}
-						error={formik.errors.leaderId}
-						touched={formik.touched.leaderId}
+					<DatePickerField
+						name="birthdate"
+						label="Birthdate"
+						required
+						value={formik.values.birthdate}
+						error={formik.errors.birthdate}
+						touched={formik.touched.birthdate}
 						onChange={formik.setFieldValue}
-						options={dLeaders}
-						labelField={""}
-					/> */}
+					/>
+					<ChoiceChip
+						name={"gender"}
+						title={"Gender"}
+						label="Gender"
+						required
+						value={formik.values.gender}
+						error={formik.errors.gender}
+						touched={formik.touched.gender}
+						options={genderOptions}
+						onChange={formik.setFieldValue}
+					/>
+				</View>
+				<View style={styles.fieldGap}>
 					<Title title={"Contact Information"} />
 					<TextField
 						placeholder="XXX-XXX-XXXX"
@@ -207,221 +205,6 @@ const UserFormScreen = () => {
 						touched={formik.touched.emergencyNumber}
 						name={"emergencyNumber"}
 					/>
-					{/* Education header */}
-					{/* <View style={[styles.headerRow, { marginTop: 24 }]}>
-						<Title title={"Education"} />
-						<Button
-							title={"Add Education"}
-							onPress={addEducationField}
-							style={{
-								backgroundColor: theme.background,
-								borderWidth: 1,
-								borderColor: theme.slate[500],
-							}}
-							textStyle={{ color: theme.text }}
-							icon={<MdiIcon path={mdiPlus} size={24} color={theme.text} />}
-						/>
-					</View>
-
-					{educationFields && educationFields.length > 0 && (
-						<FlatList
-							data={educationFields}
-							ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-							keyExtractor={(item, index) => item.title || index.toString()}
-							renderItem={({ item, index }) => (
-								<View style={styles.fieldGap}>
-									<View style={[styles.headerRow]}>
-										<Title title={`Education ${index + 1}`} />
-										<MdiIcon
-											path={mdiTrashCanOutline}
-											size={24}
-											color={theme.text}
-											onPress={() => {
-												removeEducationField(item.title);
-												formik.setFieldValue(item.title, undefined);
-											}}
-										/>
-									</View>
-									<TextField
-										placeholder="Enter school"
-										label="School"
-										required
-										value={formik.values?.[`${item.title}`]?.["school"] ?? ""}
-										onChangeText={formik.handleChange(`${item.title}.school`)}
-										error={getIn(formik.errors, `${item.title}.school`) ?? ""}
-										touched={getIn(formik.touched, `${item.title}.school`)}
-										name={`${item.title}.school`}
-									/>
-									<TextField
-										placeholder="Enter degree/program"
-										label="Degree/Program"
-										required
-										value={formik.values?.[`${item.title}`]?.["degree"] ?? ""}
-										onChangeText={formik.handleChange(`${item.title}.degree`)}
-										error={formik.errors?.[`${item.title}`]?.["degree"] ?? ""}
-										touched={
-											formik.touched?.[`${item.title}`]?.["degree"] ?? ""
-										}
-										name={`${item.title}.degree`}
-									/>
-									<View style={styles.dualFields}>
-										<DropdownPickerField
-											name={`${item.title}.startdate`}
-											placeholder="Select Start Date"
-											label="Start Date"
-											required
-											containerStyle={{ flex: 1 }}
-											dropDownDirection="TOP"
-											value={
-												formik.values?.[`${item.title}`]?.["startdate"] ?? ""
-											}
-											error={
-												formik.errors?.[`${item.title}`]?.["startdate"] ?? ""
-											}
-											touched={
-												formik.touched?.[`${item.title}`]?.["startdate"] ?? ""
-											}
-											onChange={(name, value) => {
-												formik.setFieldValue(name, value);
-												updateEducationEndYears(item.title, value);
-											}}
-											options={item.startYears ?? []}
-										/>
-										<DropdownPickerField
-											name={`${item.title}.enddate`}
-											placeholder="Select End Date"
-											label="End Date"
-											required
-											containerStyle={{ flex: 1 }}
-											dropDownDirection="TOP"
-											value={
-												formik.values?.[`${item.title}`]?.["enddate"] ?? ""
-											}
-											error={
-												formik.errors?.[`${item.title}`]?.["enddate"] ?? ""
-											}
-											touched={
-												formik.touched?.[`${item.title}`]?.["enddate"] ?? ""
-											}
-											onChange={formik.setFieldValue}
-											options={item.endYears ?? []}
-										/>
-									</View>
-								</View>
-							)}
-							ListHeaderComponent={<View style={{ height: 6 }} />}
-							ListFooterComponent={<View style={{ height: 16 }} />}
-							contentContainerStyle={{ zIndex: 0 }}
-						/>
-					)} */}
-
-					{/* Employment header */}
-					{/* <View style={[styles.headerRow, { marginTop: 24 }]}>
-						<Title title={"Work/Occupation"} />
-						<Button
-							title={"Add Work"}
-							onPress={addEmploymentField}
-							style={{
-								backgroundColor: theme.background,
-								borderWidth: 1,
-								borderColor: theme.slate[500],
-							}}
-							textStyle={{ color: theme.text }}
-							icon={<MdiIcon path={mdiPlus} size={24} color={theme.text} />}
-						/>
-					</View>
-
-					{employmentFields && employmentFields.length > 0 && (
-						<FlatList
-							data={employmentFields}
-							ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-							keyExtractor={(item, index) => item.title || index.toString()}
-							renderItem={({ item, index }) => (
-								<View style={styles.fieldGap}>
-									<View style={[styles.headerRow]}>
-										<Title title={`Work ${index + 1}`} />
-										<MdiIcon
-											path={mdiTrashCanOutline}
-											size={24}
-											color={theme.text}
-											onPress={() => {
-												removeEmploymentField(item.title);
-												formik.setFieldValue(item.title, undefined);
-											}}
-										/>
-									</View>
-									<TextField
-										placeholder="Enter Company/Organization"
-										label="Company/Organization"
-										required
-										value={formik.values?.[`${item.title}`]?.["company"] ?? ""}
-										onChangeText={formik.handleChange(`${item.title}.company`)}
-										error={getIn(formik.errors, `${item.title}.company`) ?? ""}
-										touched={getIn(formik.touched, `${item.title}.company`)}
-										name={`${item.title}.company`}
-									/>
-									<TextField
-										placeholder="Enter Title/Position"
-										label="Title/Position"
-										required
-										value={formik.values?.[`${item.title}`]?.["position"] ?? ""}
-										onChangeText={formik.handleChange(`${item.title}.position`)}
-										error={formik.errors?.[`${item.title}`]?.["position"] ?? ""}
-										touched={
-											formik.touched?.[`${item.title}`]?.["position"] ?? ""
-										}
-										name={`${item.title}.position`}
-									/>
-									<View style={styles.dualFields}>
-										<DropdownPickerField
-											name={`${item.title}.startdate`}
-											placeholder="Select Start Date"
-											label="Start Date"
-											required
-											containerStyle={{ flex: 1 }}
-											dropDownDirection="TOP"
-											value={
-												formik.values?.[`${item.title}`]?.["startdate"] ?? ""
-											}
-											error={
-												formik.errors?.[`${item.title}`]?.["startdate"] ?? ""
-											}
-											touched={
-												formik.touched?.[`${item.title}`]?.["startdate"] ?? ""
-											}
-											onChange={(name, value) => {
-												formik.setFieldValue(name, value);
-												updateEmploymentEndYears(item.title, value);
-											}}
-											options={item.startYears ?? []}
-										/>
-										<DropdownPickerField
-											name={`${item.title}.enddate`}
-											placeholder="Select End Date"
-											label="End Date"
-											required
-											containerStyle={{ flex: 1 }}
-											dropDownDirection="TOP"
-											value={
-												formik.values?.[`${item.title}`]?.["enddate"] ?? ""
-											}
-											error={
-												formik.errors?.[`${item.title}`]?.["enddate"] ?? ""
-											}
-											touched={
-												formik.touched?.[`${item.title}`]?.["enddate"] ?? ""
-											}
-											onChange={formik.setFieldValue}
-											options={item.endYears ?? []}
-										/>
-									</View>
-								</View>
-							)}
-							ListHeaderComponent={<View style={{ height: 6 }} />}
-							ListFooterComponent={<View style={{ height: 16 }} />}
-							contentContainerStyle={{ zIndex: 0 }}
-						/>
-					)} */}
 					<Button
 						title="Submit"
 						style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
@@ -436,7 +219,7 @@ const UserFormScreen = () => {
 
 const styles = StyleSheet.create({
 	container: { flex: 1, paddingHorizontal: 16, rowGap: 17 },
-	fieldsContainer: { borderRadius: 6, padding: 24, rowGap: 8 },
+	fieldsContainer: { borderRadius: 6, padding: 24, rowGap: 32 },
 	text: { fontSize: 18, fontWeight: "bold" },
 	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
 	headerRow: {
