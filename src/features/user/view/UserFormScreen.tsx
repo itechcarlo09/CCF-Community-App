@@ -91,7 +91,10 @@ const UserFormScreen = () => {
 				keyboardShouldPersistTaps="handled"
 				contentContainerStyle={[
 					styles.fieldsContainer,
-					{ backgroundColor: theme.background, borderColor: theme.gray[200] },
+					{
+						backgroundColor: theme.background,
+						borderColor: theme.gray[200],
+					},
 				]}
 			>
 				{/* Basic Information Fields */}
@@ -147,7 +150,7 @@ const UserFormScreen = () => {
 						onChange={formik.setFieldValue}
 					/>
 				</View>
-				<View style={styles.fieldGap}>
+				<View style={[styles.fieldGap, { marginBottom: 16 }]}>
 					<Title title={"Contact Information"} />
 					<TextField
 						placeholder="XXX-XXX-XXXX"
@@ -205,21 +208,25 @@ const UserFormScreen = () => {
 						touched={formik.touched.emergencyNumber}
 						name={"emergencyNumber"}
 					/>
-					<Button
-						title="Submit"
-						style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
-						onPress={formik.handleSubmit as any}
-						disabled={loading}
-					/>
 				</View>
 			</KeyboardAwareScrollView>
+			<Button
+				title="Submit"
+				style={{ backgroundColor: theme.blue[500] }}
+				onPress={formik.handleSubmit as any}
+				disabled={loading}
+			/>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: { flex: 1, paddingHorizontal: 16, rowGap: 17 },
-	fieldsContainer: { borderRadius: 6, padding: 24, rowGap: 32 },
+	fieldsContainer: {
+		borderRadius: 6,
+		padding: 24,
+		rowGap: 32,
+	},
 	text: { fontSize: 18, fontWeight: "bold" },
 	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
 	headerRow: {
@@ -260,9 +267,6 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 		borderStartStartRadius: 0,
 		borderStartEndRadius: 0,
-	},
-	saveBtn: {
-		marginVertical: 16,
 	},
 	fieldGap: { rowGap: 8 },
 });
