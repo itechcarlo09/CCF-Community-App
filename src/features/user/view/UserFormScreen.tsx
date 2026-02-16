@@ -138,7 +138,7 @@ const UserFormScreen = () => {
 							onSelect={(value) => console.log("Selected:", value)}
 						/>
 					</View>
-					<DropdownPickerField
+					{/* <DropdownPickerField
 						name={"leaderId"}
 						placeholder="Select DGroup Leader"
 						label="DGroup Leader"
@@ -149,7 +149,7 @@ const UserFormScreen = () => {
 						onChange={formik.setFieldValue}
 						options={dLeaders}
 						labelField={""}
-					/>
+					/> */}
 					<Title title={"Contact Information"} />
 					<TextField
 						placeholder="XXX-XXX-XXXX"
@@ -208,7 +208,7 @@ const UserFormScreen = () => {
 						name={"emergencyNumber"}
 					/>
 					{/* Education header */}
-					<View style={[styles.headerRow, { marginTop: 24 }]}>
+					{/* <View style={[styles.headerRow, { marginTop: 24 }]}>
 						<Title title={"Education"} />
 						<Button
 							title={"Add Education"}
@@ -287,7 +287,6 @@ const UserFormScreen = () => {
 											}}
 											options={item.startYears ?? []}
 										/>
-										{/* TODO: make it hidden when start date is not selected. */}
 										<DropdownPickerField
 											name={`${item.title}.enddate`}
 											placeholder="Select End Date"
@@ -314,10 +313,10 @@ const UserFormScreen = () => {
 							ListFooterComponent={<View style={{ height: 16 }} />}
 							contentContainerStyle={{ zIndex: 0 }}
 						/>
-					)}
+					)} */}
 
 					{/* Employment header */}
-					<View style={[styles.headerRow, { marginTop: 24 }]}>
+					{/* <View style={[styles.headerRow, { marginTop: 24 }]}>
 						<Title title={"Work/Occupation"} />
 						<Button
 							title={"Add Work"}
@@ -396,7 +395,6 @@ const UserFormScreen = () => {
 											}}
 											options={item.startYears ?? []}
 										/>
-										{/* TODO: make it hidden when start date is not selected. */}
 										<DropdownPickerField
 											name={`${item.title}.enddate`}
 											placeholder="Select End Date"
@@ -423,7 +421,7 @@ const UserFormScreen = () => {
 							ListFooterComponent={<View style={{ height: 16 }} />}
 							contentContainerStyle={{ zIndex: 0 }}
 						/>
-					)}
+					)} */}
 					<Button
 						title="Submit"
 						style={[styles.saveBtn, { backgroundColor: theme.blue[500] }]}
