@@ -29,6 +29,7 @@ export type AppRouteProp<T extends keyof AppStackParamList> = RouteProp<
 
 export type UserStackParamList = {
 	UserForm: { id?: string }; // Optional id for editing existing user
+	onSuccess?: () => void;
 };
 
 export type UserNavigationProp = NativeStackNavigationProp<UserStackParamList>;

@@ -84,6 +84,12 @@ const UserScreen = ({ navigation }: any) => {
 					onPress={() =>
 						navigation.navigate("UserNavigator", {
 							screen: "UserForm",
+							params: {
+								onSuccess: () => {
+									onRefresh();
+									console.log("User added successfully, refreshing list...");
+								},
+							},
 						})
 					}
 				>
@@ -102,7 +108,6 @@ const UserScreen = ({ navigation }: any) => {
 						<UserListItem
 							user={item}
 							onPress={(id) => {
-								console.log(id);
 								navigation.navigate("UserNavigator", {
 									screen: "UserForm",
 									params: { id },

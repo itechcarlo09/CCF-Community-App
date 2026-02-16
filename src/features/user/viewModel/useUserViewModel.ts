@@ -57,7 +57,6 @@ export const useUserViewModel = () => {
 		await userRepository.addUser({
 			...user,
 		});
-		await fetchUsers();
 	};
 
 	const getUser = async (id: string): Promise<User | null> => {

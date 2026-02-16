@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { User } from "../model/user";
@@ -55,9 +55,9 @@ const staticSchema = Yup.object({
 	// 			return /^\d{3}-\d{3}-\d{4}$/.test(value);
 	// 		}
 	// 	),
-	// email: Yup.string()
-	// 	.email("Please enter a valid email address")
-	// 	.required("Email is required"),
+	email: Yup.string()
+		.email("Please enter a valid email address")
+		.required("Email is required"),
 	// facebook: Yup.string().required("Please enter a valid facebook"),
 	// emergencyPerson: Yup.string().required("Please enter a valid contact person"),
 	// emergencyNumber: Yup.string()
@@ -91,6 +91,8 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
 	const { addUser, getUser } = useUserViewModel();
+	const route = useRoute();
+	const onSuccess = (route.params as any)?.onSuccess;
 
 	const [educationFields, setEducationFields] = useState<
 		EducationEmploymentConfig[]
@@ -162,7 +164,9 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 			try {
 				const user: Omit<User, "id" | "createdAt" | "updatedAt"> = {
 					firstName: values.firstName,
-					middleName: values.middleName,
+					...(values.middleName?.trim() && {
+						middleName: values.middleName.trim(),
+					}),
 					lastName: values.lastName,
 					gender: values.gender,
 					contactNumber: values.contactNumber,
@@ -177,10 +181,9 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 				// if (userId) {
 				// 	await updateUser(userId, { ...user, updatedAt: now });
 				// } else {
-
 				await addUser({ ...user });
 				// }
-
+				onSuccess?.();
 				navigation.goBack();
 			} catch (err) {
 				Alert.alert("Error", "Failed to save user");

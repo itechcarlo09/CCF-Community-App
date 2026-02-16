@@ -168,7 +168,7 @@ const UserFormScreen = () => {
 					<TextField
 						placeholder="Enter Email"
 						label="Email"
-						// required
+						required
 						value={formik.values.email}
 						onChangeText={formik.handleChange("email")}
 						error={formik.errors.email}
