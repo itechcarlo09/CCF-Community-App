@@ -31,7 +31,7 @@ export interface User {
 	middleName?: string;
 	lastName: string;
 	birthDate: Date;
-	dGroupLeader?: DGroupLeader | null;
+	dGroupLeaderId?: string | null;
 	facebookLink: string;
 	contactNumber: string;
 	dGroupMembers?: number;

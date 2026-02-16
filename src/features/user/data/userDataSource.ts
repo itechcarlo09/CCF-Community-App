@@ -1,4 +1,5 @@
 import apiClient from "../../../services/apiClient";
+import { User } from "../model/user";
 import records from "../recordsSample.json";
 
 export const userDataSource = {
@@ -36,6 +37,19 @@ export const userDataSource = {
 			}
 
 			throw new Error("Database error: " + error.message);
+		}
+	},
+
+	async getUserById(userId: string): Promise<User | null> {
+		try {
+			console.log(apiClient);
+			const res = await apiClient.get<User>(`/account/${userId}`);
+			return res.data ? res.data : null;
+		} catch (error: any) {
+			console.log(error);
+			console.error("getUserById error:", error.message ?? error);
+			// Optional: You can throw a custom error or handle it gracefully
+			return null;
 		}
 	},
 

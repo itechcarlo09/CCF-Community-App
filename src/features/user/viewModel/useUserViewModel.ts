@@ -14,19 +14,19 @@ const mapUserToUI = (user: User): RecordItemUI => ({
 	ministryText:
 		ageNumber(user.birthDate) < 22 ? "ELEVATE Youth" : "B1G Singles",
 	status: "Active Member",
-	dleaderName: user.dGroupLeader
-		? formatFullName(
-				user.dGroupLeader.firstName,
-				user.dGroupLeader.lastName,
-				user.dGroupLeader.middleName
-		  )
-		: null,
+	// dleaderName: user.dGroupLeader
+	// 	? formatFullName(
+	// 			user.dGroupLeader.firstName,
+	// 			user.dGroupLeader.lastName,
+	// 			user.dGroupLeader.middleName,
+	// 	  )
+	// 	: null,
 	membershipType:
 		(user.dGroupMembers ? user.dGroupMembers : 0) > 2
 			? "DLeader"
 			: (user.dGroupMembers ? user.dGroupMembers : 0) > 0
 			? "Timothy"
-			: user.dGroupLeader
+			: user.dGroupLeaderId
 			? "DMember"
 			: "Pending Member",
 });
@@ -52,7 +52,7 @@ export const useUserViewModel = () => {
 	};
 
 	const addUser = async (
-		user: Omit<User, "id" | "createdAt" | "updatedAt">
+		user: Omit<User, "id" | "createdAt" | "updatedAt">,
 	) => {
 		await userRepository.addUser({
 			...user,
@@ -60,9 +60,9 @@ export const useUserViewModel = () => {
 		await fetchUsers();
 	};
 
-	// const getUser = async (id: string): Promise<User | null> => {
-	// 	return await userRepository.getUserById(id);
-	// };
+	const getUser = async (id: string): Promise<User | null> => {
+		return await userRepository.getUserById(id);
+	};
 
 	// const updateUser = async (id: string, data: Partial<User>) => {
 	// 	await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
@@ -83,6 +83,7 @@ export const useUserViewModel = () => {
 		dLeaderOptions,
 		loading,
 		addUser,
+		getUser,
 		refresh: fetchUsers,
 	};
 };

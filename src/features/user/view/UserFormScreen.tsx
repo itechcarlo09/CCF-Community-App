@@ -138,17 +138,18 @@ const UserFormScreen = () => {
 							onSelect={(value) => console.log("Selected:", value)}
 						/>
 					</View>
-					{/* <DropdownPickerField
+					<DropdownPickerField
 						name={"leaderId"}
 						placeholder="Select DGroup Leader"
 						label="DGroup Leader"
 						searchable
-						value={formik.values.leaderId}
+						valueField={formik.values.leaderId}
 						error={formik.errors.leaderId}
 						touched={formik.touched.leaderId}
 						onChange={formik.setFieldValue}
 						options={dLeaders}
-					/> */}
+						labelField={""}
+					/>
 					<Title title={"Contact Information"} />
 					<TextField
 						placeholder="XXX-XXX-XXXX"

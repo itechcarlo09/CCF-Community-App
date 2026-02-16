@@ -101,12 +101,13 @@ const UserScreen = ({ navigation }: any) => {
 					renderItem={({ item }) => (
 						<UserListItem
 							user={item}
-							onPress={(id) =>
+							onPress={(id) => {
+								console.log(id);
 								navigation.navigate("UserNavigator", {
 									screen: "UserForm",
 									params: { id },
-								})
-							}
+								});
+							}}
 						/>
 					)}
 					refreshControl={Refresh()}

@@ -90,7 +90,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
-	const { addUser } = useUserViewModel();
+	const { addUser, getUser } = useUserViewModel();
 
 	const [educationFields, setEducationFields] = useState<
 		EducationEmploymentConfig[]
@@ -111,7 +111,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 
 	const buildDynamicSchema = (
 		educationArray: EducationEmploymentConfig[],
-		employmentArray: EducationEmploymentConfig[]
+		employmentArray: EducationEmploymentConfig[],
 	) => {
 		const shape: Record<string, any> = {};
 
@@ -141,9 +141,9 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const validationSchema = useMemo(
 		() =>
 			staticSchema.concat(
-				buildDynamicSchema(educationFields ?? [], employmentFields ?? [])
+				buildDynamicSchema(educationFields ?? [], employmentFields ?? []),
 			),
-		[educationFields, employmentFields]
+		[educationFields, employmentFields],
 	);
 
 	useEffect(() => {
@@ -241,7 +241,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 			formik.setFieldValue(groupKey, undefined);
 			formik.validateForm();
 		},
-		[formik]
+		[formik],
 	);
 
 	const removeEmploymentField = useCallback(
@@ -250,7 +250,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 			formik.setFieldValue(groupKey, undefined);
 			formik.validateForm();
 		},
-		[formik]
+		[formik],
 	);
 
 	const updateEducationEndYears = useCallback(
@@ -273,14 +273,14 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 						(_, i) => ({
 							label: String(start + i),
 							value: String(start + i),
-						})
+						}),
 					);
 
 					return { ...field, endYears: years };
 				});
 			});
 		},
-		[]
+		[],
 	);
 
 	const updateEmploymentEndYears = useCallback(
@@ -303,14 +303,14 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 						(_, i) => ({
 							label: String(start + i),
 							value: String(start + i),
-						})
+						}),
 					);
 
 					return { ...field, endYears: years };
 				});
 			});
 		},
-		[]
+		[],
 	);
 
 	// Load user if editing
@@ -318,15 +318,22 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 		const load = async () => {
 			if (!userId) return;
 			setLoading(true);
-			// const user = await getUser(userId);
-			// if (user) {
-			// 	formik.setValues({
-			// 		firstName: user.firstName,
-			// 		middleName: user.middleName ?? "",
-			// 		lastName: user.lastName,
-			// 		birthdate: dayjs(user.birthdate).format("YYYY-MM-DD"),
-			// 	});
-			// }
+			const user = await getUser(userId);
+			if (user) {
+				formik.setValues({
+					firstName: user.firstName,
+					middleName: user.middleName ?? "",
+					lastName: user.lastName,
+					birthdate: dayjs(user.birthdate).format("YYYY-MM-DD"),
+					gender: user.gender,
+					leaderId: user.dGroupLeaderId ? String(user.dGroupLeaderId) : "",
+					contactNumber: user.contactNumber,
+					email: user.email,
+					facebook: user.facebookLink,
+					emergencyPerson: user.emergencyContactName,
+					emergencyNumber: user.emergencyContactNumber,
+				});
+			}
 			setLoading(false);
 		};
 		load();
