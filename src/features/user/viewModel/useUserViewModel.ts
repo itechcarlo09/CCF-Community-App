@@ -63,6 +63,24 @@ export const useUserViewModel = () => {
 		return await userRepository.getUserById(id);
 	};
 
+	const searchUsers = async (searchText: string) => {
+		if (searchText.trim() === "") {
+			await fetchUsers();
+			return;
+		}
+		setLoading(true);
+		const result = await userRepository.searchUsers(searchText);
+		const mappedUsers = result.map(mapUserToUI);
+		setUsers(mappedUsers);
+		setLoading(false);
+	};
+
+	// const searchUsers = async (searchtext: string): Promise<User[]> => {
+	// 	setLoading(true);
+	// 	return await userRepository.searchUsers(searchtext);
+	// 	setLoading(false);
+	// };
+
 	// const updateUser = async (id: string, data: Partial<User>) => {
 	// 	await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
 	// 	await fetchUsers();
@@ -82,6 +100,7 @@ export const useUserViewModel = () => {
 		dLeaderOptions,
 		loading,
 		addUser,
+		searchUsers,
 		getUser,
 		refresh: fetchUsers,
 	};

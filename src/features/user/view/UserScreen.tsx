@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -14,15 +14,19 @@ import MdiIcon from "../../../components/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import Loading from "../../../components/Loading";
+import { SearchField } from "../../../components/SearchField";
+import useDebounce from "../hooks/useDebounce";
 
 const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
-	const { users, refresh, loading } = useUserViewModel();
+	const { users, refresh, loading, searchUsers } = useUserViewModel();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState("Asc");
+	const [search, setSearch] = useState("");
+	const debouncedSearchTerm = useDebounce(search, 500);
 	const [items, setItems] = useState([
 		{ label: "Name A to Z", value: "Asc" },
 		{ label: "Name Z to A", value: "Desc" },
@@ -37,6 +41,10 @@ const UserScreen = ({ navigation }: any) => {
 		refresh();
 		setRefreshing(false);
 	}, []);
+
+	useEffect(() => {
+		searchUsers(debouncedSearchTerm);
+	}, [debouncedSearchTerm]);
 
 	return (
 		<View style={[styles.container, { paddingTop: insets.top }]}>
@@ -79,6 +87,11 @@ const UserScreen = ({ navigation }: any) => {
 						}}
 					/> */}
 				</View>
+				<SearchField
+					onChange={setSearch}
+					value={search}
+					onCancel={() => setSearch("")}
+				/>
 				<TouchableOpacity
 					style={styles.addButton}
 					onPress={() =>
@@ -135,7 +148,6 @@ const styles = StyleSheet.create({
 		marginHorizontal: 16,
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "space-between",
 	},
 	sortBox: {
 		height: 40,
@@ -168,5 +180,4 @@ const styles = StyleSheet.create({
 		height: 6,
 	},
 });
-
 export default UserScreen;

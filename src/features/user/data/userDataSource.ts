@@ -16,6 +16,21 @@ export const userDataSource = {
 		}
 	},
 
+	async searchUsers(searchText: string): Promise<any[]> {
+		try {
+			console.log(apiClient);
+			const res = await apiClient.get<any[]>(
+				`/account/search-by-name?name=${searchText}`,
+			);
+			return res.data ? res.data : __DEV__ ? records : [];
+		} catch (error: any) {
+			console.log(error);
+			console.error("searchUsers error:", error.message ?? error);
+			// Optional: You can throw a custom error or handle it gracefully
+			return __DEV__ ? records : [];
+		}
+	},
+
 	async addUser(data: any): Promise<any | null> {
 		try {
 			const res = await apiClient.post<any>("/account", {
@@ -42,11 +57,9 @@ export const userDataSource = {
 
 	async getUserById(userId: string): Promise<User | null> {
 		try {
-			console.log(apiClient);
 			const res = await apiClient.get<User>(`/account/${userId}`);
 			return res.data ? res.data : null;
 		} catch (error: any) {
-			console.log(error);
 			console.error("getUserById error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
 			return null;
