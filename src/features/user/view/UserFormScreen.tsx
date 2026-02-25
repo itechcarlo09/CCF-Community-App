@@ -31,6 +31,7 @@ import { getIn } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CustomDropdown } from "../../../components/CustomDropdown/CustomDropdown";
 import ChoiceChip from "../../../components/ChoiceChip";
+import SelectField from "../../../components/SelectField";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -148,6 +149,12 @@ const UserFormScreen = () => {
 						touched={formik.touched.gender}
 						options={genderOptions}
 						onChange={formik.setFieldValue}
+					/>
+					<SelectField
+						label="Discipleship Leader"
+						name="leaderName"
+						value={formik.values.leaderName}
+						error={formik.errors.leaderName}
 					/>
 				</View>
 				<View style={[styles.fieldGap, { marginBottom: 16 }]}>
