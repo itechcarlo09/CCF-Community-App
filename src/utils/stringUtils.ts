@@ -51,7 +51,7 @@ export const normalizeSpace = (text: string): string => {
 export const formatFullName = (
 	first: string,
 	last: string,
-	middle?: string
+	middle?: string,
 ): string => {
 	return `${capitalizeFirst(last)}, ${capitalizeWords(first)}${
 		middle ? ` ${getInitial(middle)}.` : ""
@@ -73,7 +73,7 @@ export const formatPhoneNumber = (value: string): string => {
 	}
 	return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(
 		6,
-		10
+		10,
 	)}`;
 };
 
@@ -87,4 +87,17 @@ export const isNullOrEmpty = (value: any): boolean => {
 			!Array.isArray(value) &&
 			Object.keys(value).length === 0)
 	);
+};
+
+export const normalizePHNumber = (number: string): string => {
+	// Remove spaces, dashes, or parentheses
+	number = number.replace(/[\s\-\(\)]/g, "");
+
+	if (number.startsWith("+63")) {
+		return number.slice(3); // Remove '+63'
+	} else if (number.startsWith("0")) {
+		return number.slice(1); // Remove leading '0'
+	} else {
+		return number; // Already normalized
+	}
 };

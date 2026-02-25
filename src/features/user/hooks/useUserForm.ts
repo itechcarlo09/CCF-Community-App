@@ -7,7 +7,11 @@ import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { User } from "../model/user";
 import { EducationEmploymentConfig } from "../../../types/userTypes";
-import { formatFullName } from "../../../utils/stringUtils";
+import {
+	formatFullName,
+	formatPhoneNumber,
+	normalizePHNumber,
+} from "../../../utils/stringUtils";
 
 interface UseUserFormProps {
 	userId?: string;
@@ -32,59 +36,59 @@ const staticSchema = Yup.object({
 	lastName: Yup.string().required("Please enter a valid last name"),
 	birthdate: Yup.date().nullable().required("Birthdate is required"),
 	gender: Yup.string().required("Please select a gender"),
-	// contactNumber: Yup.string()
-	// 	.required("Contact number is required")
-	// 	.test("starts-with-9", "Contact number must start with 9", (value) => {
-	// 		if (!value) return false;
-	// 		const digitsOnly = value.replace(/\D/g, "");
-	// 		return digitsOnly.startsWith("9");
-	// 	})
-	// 	.test(
-	// 		"length-check",
-	// 		"Contact number must have exactly 10 digits",
-	// 		(value) => {
-	// 			if (!value) return false;
-	// 			const digitsOnly = value.replace(/\D/g, "");
-	// 			return digitsOnly.length === 10;
-	// 		}
-	// 	)
-	// 	.test(
-	// 		"dash-format",
-	// 		"Contact number must be in the format 999-999-9999",
-	// 		(value) => {
-	// 			if (!value) return false;
-	// 			return /^\d{3}-\d{3}-\d{4}$/.test(value);
-	// 		}
-	// 	),
+	contactNumber: Yup.string()
+		.nullable()
+		.notRequired()
+		.test("starts-with-9", "Contact number must start with 9", (value) => {
+			if (!value || value.trim() === "") return true;
+			const digitsOnly = value.replace(/\D/g, "");
+			return digitsOnly.startsWith("9");
+		})
+		.test(
+			"length-check",
+			"Contact number must have exactly 10 digits",
+			(value) => {
+				if (!value || value.trim() === "") return true;
+				const digitsOnly = value.replace(/\D/g, "");
+				return digitsOnly.length === 10;
+			},
+		)
+		.test(
+			"dash-format",
+			"Contact number must be in the format 999-999-9999",
+			(value) => {
+				if (!value || value.trim() === "") return true;
+				return /^\d{3}-\d{3}-\d{4}$/.test(value);
+			},
+		),
 	email: Yup.string()
 		.email("Please enter a valid email address")
 		.required("Email is required"),
-	// facebook: Yup.string().required("Please enter a valid facebook"),
-	// emergencyPerson: Yup.string().required("Please enter a valid contact person"),
-	// emergencyNumber: Yup.string()
-	// 	.required("Contact number is required")
-	// 	.test("starts-with-9", "Contact number must start with 9", (value) => {
-	// 		if (!value) return false;
-	// 		const digitsOnly = value.replace(/\D/g, "");
-	// 		return digitsOnly.startsWith("9");
-	// 	})
-	// 	.test(
-	// 		"length-check",
-	// 		"Contact number must have exactly 10 digits",
-	// 		(value) => {
-	// 			if (!value) return false;
-	// 			const digitsOnly = value.replace(/\D/g, "");
-	// 			return digitsOnly.length === 10;
-	// 		}
-	// 	)
-	// 	.test(
-	// 		"dash-format",
-	// 		"Contact number must be in the format 999-999-9999",
-	// 		(value) => {
-	// 			if (!value) return false;
-	// 			return /^\d{3}-\d{3}-\d{4}$/.test(value);
-	// 		}
-	// 	),
+	emergencyNumber: Yup.string()
+		.nullable()
+		.notRequired()
+		.test("starts-with-9", "Contact number must start with 9", (value) => {
+			if (!value || value.trim() === "") return true;
+			const digitsOnly = value.replace(/\D/g, "");
+			return digitsOnly.startsWith("9");
+		})
+		.test(
+			"length-check",
+			"Contact number must have exactly 10 digits",
+			(value) => {
+				if (!value || value.trim() === "") return true;
+				const digitsOnly = value.replace(/\D/g, "");
+				return digitsOnly.length === 10;
+			},
+		)
+		.test(
+			"dash-format",
+			"Contact number must be in the format 999-999-9999",
+			(value) => {
+				if (!value || value.trim() === "") return true;
+				return /^\d{3}-\d{3}-\d{4}$/.test(value);
+			},
+		),
 });
 
 export const useUserForm = ({ userId }: UseUserFormProps) => {
@@ -342,11 +346,17 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 									dLeader?.middleName,
 							  ) ?? ""
 							: "",
-						contactNumber: user.contactNumber,
+						contactNumber: formatPhoneNumber(
+							normalizePHNumber(user.contactNumber),
+						),
 						email: user.email,
 						facebook: user.facebookLink,
 						emergencyPerson: user.emergencyContactName,
-						emergencyNumber: user.emergencyContactNumber,
+						emergencyNumber: user.emergencyContactNumber
+							? formatPhoneNumber(
+									normalizePHNumber(user.emergencyContactNumber),
+							  )
+							: "",
 					});
 				}
 			} catch (err) {
