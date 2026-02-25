@@ -327,7 +327,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 					firstName: user.firstName,
 					middleName: user.middleName ?? "",
 					lastName: user.lastName,
-					birthdate: dayjs(user.birthdate).format("YYYY-MM-DD"),
+					birthdate: dayjs(user.birthDate).format("YYYY-MM-DD"),
 					gender: user.gender,
 					leaderName: user.dGroupLeaderId ? String(user.dGroupLeaderId) : "",
 					contactNumber: user.contactNumber,

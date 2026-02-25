@@ -44,7 +44,6 @@ const UserFormScreen = () => {
 	const { dLeaderOptions } = useUserViewModel();
 	const navigation = useNavigation();
 	const route = useRoute<UserRouteProp>();
-	const [dLeaders, setDLeaders] = useState<DropdownOption[]>([]);
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const { id } = route.params || {};
@@ -63,10 +62,6 @@ const UserFormScreen = () => {
 		userId: id,
 	});
 
-	useEffect(() => {
-		setDLeaders(dLeaderOptions);
-	}, [dLeaderOptions]);
-
 	return (
 		<View
 			style={[
@@ -76,7 +71,7 @@ const UserFormScreen = () => {
 		>
 			<View style={styles.headerRow}>
 				<Text style={[styles.title, { color: theme.text }]}>
-					Add New Record
+					{id ? "Edit User Record" : "Add New Record"}
 				</Text>
 				<MdiIcon
 					path={mdiArrowLeft}
