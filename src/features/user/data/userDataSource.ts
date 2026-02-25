@@ -66,23 +66,23 @@ export const userDataSource = {
 		}
 	},
 
-	// async editUser(id: string, data: Partial<any>): Promise<any | null> {
-	// 	try {
-	// 		const res = await apiClient.put<any>(`/account/${id}`, data);
-	// 		return res.data ?? null;
-	// 	} catch (error: any) {
-	// 		console.error("editUser error:", error.message ?? error);
+	async editUser(id: string, data: Partial<any>): Promise<any | null> {
+		try {
+			const res = await apiClient.patch<any>(`/account/${id}`, data);
+			return res.data ?? null;
+		} catch (error: any) {
+			console.error("editUser error:", error.message ?? error);
 
-	// 		// DEV mode: simulate update in local JSON data
-	// 		if (__DEV__) {
-	// 			const index = records.findIndex((user) => user.id === id);
-	// 			if (index !== -1) {
-	// 				records[index] = { ...records[index], ...data };
-	// 				return records[index];
-	// 			}
-	// 		}
+			// DEV mode: simulate update in local JSON data
+			if (__DEV__) {
+				const index = records.findIndex((user) => user.id === Number(id));
+				if (index !== -1) {
+					records[index] = { ...records[index], ...data };
+					return records[index];
+				}
+			}
 
-	// 		return null;
-	// 	}
-	// },
+			return null;
+		}
+	},
 };

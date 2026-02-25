@@ -5,4 +5,5 @@ export const userRepository = {
 	searchUsers: userDataSource.searchUsers,
 	getUserById: userDataSource.getUserById,
 	addUser: userDataSource.addUser,
+	updateUser: userDataSource.editUser,
 };

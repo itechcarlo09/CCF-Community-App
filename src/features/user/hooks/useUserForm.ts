@@ -90,7 +90,7 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
-	const { addUser, getUser } = useUserViewModel();
+	const { addUser, getUser, updateUser } = useUserViewModel();
 	const route = useRoute();
 	const onSuccess = (route.params as any)?.onSuccess;
 
@@ -178,11 +178,11 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 					emergencyContactNumber: values.emergencyNumber,
 				};
 
-				// if (userId) {
-				// 	await updateUser(userId, { ...user, updatedAt: now });
-				// } else {
-				await addUser({ ...user });
-				// }
+				if (userId) {
+					await updateUser(userId, { ...user });
+				} else {
+					await addUser({ ...user });
+				}
 				onSuccess?.();
 				navigation.goBack();
 			} catch (err) {

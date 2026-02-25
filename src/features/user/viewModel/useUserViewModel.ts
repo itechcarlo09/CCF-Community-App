@@ -81,10 +81,10 @@ export const useUserViewModel = () => {
 	// 	setLoading(false);
 	// };
 
-	// const updateUser = async (id: string, data: Partial<User>) => {
-	// 	await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
-	// 	await fetchUsers();
-	// };
+	const updateUser = async (id: string, data: Partial<User>) => {
+		await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
+		await fetchUsers();
+	};
 
 	// const deleteUser = async (id: string) => {
 	// 	await userRepository.deleteUser(id);
@@ -100,6 +100,7 @@ export const useUserViewModel = () => {
 		dLeaderOptions,
 		loading,
 		addUser,
+		updateUser,
 		searchUsers,
 		getUser,
 		refresh: fetchUsers,
