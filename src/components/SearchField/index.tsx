@@ -4,14 +4,19 @@ import {
 	View,
 	TextInput,
 	TouchableOpacity,
-	StyleSheet,
 	Pressable,
 	Text,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../theme/ThemeProvider";
+import { styles } from "./styles";
+import { CustomSearchFieldProps } from "./types";
 
-export function SearchField({ value, onChange, onCancel }) {
+export const SearchField: React.FC<CustomSearchFieldProps> = ({
+	value,
+	onChangeText,
+	onCancel,
+}) => {
 	const { theme } = useTheme();
 	return (
 		<View style={styles.container}>
@@ -19,7 +24,7 @@ export function SearchField({ value, onChange, onCancel }) {
 			<TextInput
 				style={[styles.input, { color: theme.slate[900] }]}
 				value={value}
-				onChangeText={onChange}
+				onChangeText={onChangeText}
 				placeholder="Search"
 				placeholderTextColor={theme.slate[400]}
 			/>
@@ -31,16 +36,4 @@ export function SearchField({ value, onChange, onCancel }) {
 			)}
 		</View>
 	);
-}
-
-const styles = StyleSheet.create({
-	container: {
-		flexDirection: "row",
-		padding: 8,
-		alignItems: "center",
-		flex: 1,
-	},
-	icon: { marginRight: 8, color: "#888" },
-	input: { flex: 1, fontSize: 16, fontWeight: 400 },
-	cancel: { marginLeft: 12, color: "blue" },
-});
+};

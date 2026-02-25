@@ -62,9 +62,9 @@ const UserScreen = ({ navigation }: any) => {
 			</Text>
 			<View style={[styles.sortContainer, { zIndex: 1 }]}>
 				<View style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}>
-					<Text style={[styles.sortText, { color: theme.gray[900] }]}>
+					{/* <Text style={[styles.sortText, { color: theme.gray[900] }]}>
 						Sort
-					</Text>
+					</Text> */}
 					{/* <DropDownPicker
 						open={open}
 						value={value}
@@ -88,7 +88,7 @@ const UserScreen = ({ navigation }: any) => {
 					/> */}
 				</View>
 				<SearchField
-					onChange={setSearch}
+					onChangeText={(value) => setSearch(value)}
 					value={search}
 					onCancel={() => setSearch("")}
 				/>
