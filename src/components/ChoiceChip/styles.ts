@@ -22,6 +22,10 @@ export const styles = StyleSheet.create({
 	disabled: {
 		backgroundColor: "#A0A0A0",
 	},
+	errorButton: {
+		borderWidth: 1,
+		borderColor: "#FF0000",
+	},
 	content: {
 		flexDirection: "row",
 		alignItems: "center",
@@ -35,5 +39,10 @@ export const styles = StyleSheet.create({
 	dualFields: {
 		columnGap: 12,
 		flexDirection: "row",
+	},
+	error: {
+		color: "#FF0000",
+		marginTop: 8,
+		fontSize: 14,
 	},
 });
