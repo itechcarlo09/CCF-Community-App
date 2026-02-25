@@ -63,6 +63,13 @@ export const useUserViewModel = () => {
 		return await userRepository.getUserById(id);
 	};
 
+	const getDLeaders = async (excludeId: string): Promise<RecordItemUI[]> => {
+		setLoading(true);
+		const users = await userRepository.getUsers(); // or your firestore call
+		setLoading(false);
+		return users.filter((u) => u.id !== excludeId).map(mapUserToUI);
+	};
+
 	const searchUsers = async (searchText: string) => {
 		if (searchText.trim() === "") {
 			await fetchUsers();
@@ -103,6 +110,7 @@ export const useUserViewModel = () => {
 		updateUser,
 		searchUsers,
 		getUser,
+		getDLeaders,
 		refresh: fetchUsers,
 	};
 };

@@ -1,7 +1,17 @@
-import { NavigatorScreenParams } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export type RootStackParamList = {};
+// -----------------------------
+// Root Stack (if you have multiple stacks, like Auth + App)
+// -----------------------------
+export type RootStackParamList = {
+	AuthStack: undefined;
+	AppStack: undefined;
+};
 
+// -----------------------------
+// Auth Stack
+// -----------------------------
 export type AuthStackParamList = {
 	Login: undefined;
 	// Register: undefined;
@@ -14,11 +24,14 @@ export type AuthRouteProp<T extends keyof AuthStackParamList> = RouteProp<
 	T
 >;
 
+// -----------------------------
+// App Stack (main app navigation)
+// -----------------------------
 export type AppStackParamList = {
 	Login: undefined;
 	BottomNavigator: undefined;
 	EventNavigator: undefined;
-	UserNavigator: undefined;
+	UserNavigator: undefined; // This links to UserStack
 };
 
 export type AppNavigationProp = NativeStackNavigationProp<AppStackParamList>;
@@ -27,19 +40,34 @@ export type AppRouteProp<T extends keyof AppStackParamList> = RouteProp<
 	T
 >;
 
+// -----------------------------
+// User Stack (nested stack for user-related screens)
+// -----------------------------
 export type UserStackParamList = {
-	UserForm: { id?: string }; // Optional id for editing existing user
-	onSuccess?: () => void;
+	UserForm: { id?: string; onSuccess?: () => void } | undefined;
+	DleaderScreen: {
+		id?: string;
+		onSelect: (id: string, fullName: string) => void;
+	}; // make id optional
 };
 
-export type UserNavigationProp = NativeStackNavigationProp<UserStackParamList>;
+export type UserNavigationProp<
+	T extends keyof UserStackParamList = keyof UserStackParamList,
+> = NativeStackNavigationProp<UserStackParamList, T>;
 export type UserRouteProp<T extends keyof UserStackParamList> = RouteProp<
 	UserStackParamList,
 	T
 >;
 
+// -----------------------------
+// Merge UserStack into ReactNavigation Root
+// -----------------------------
 declare global {
 	namespace ReactNavigation {
-		interface RootParamList extends RootStackParamList {}
+		interface RootParamList
+			extends RootStackParamList,
+				AppStackParamList,
+				AuthStackParamList,
+				UserStackParamList {}
 	}
 }

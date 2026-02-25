@@ -7,6 +7,7 @@ import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { User } from "../model/user";
 import { EducationEmploymentConfig } from "../../../types/userTypes";
+import { formatFullName } from "../../../utils/stringUtils";
 
 interface UseUserFormProps {
 	userId?: string;
@@ -322,6 +323,10 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 			if (!userId) return;
 			setLoading(true);
 			const user = await getUser(userId);
+			let dLeader: User | null = null;
+			if (user?.dGroupLeaderId) {
+				dLeader = await getUser(String(user.dGroupLeaderId));
+			}
 			if (user) {
 				formik.setValues({
 					firstName: user.firstName,
@@ -329,7 +334,13 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 					lastName: user.lastName,
 					birthdate: dayjs(user.birthDate).format("YYYY-MM-DD"),
 					gender: user.gender,
-					leaderName: user.dGroupLeaderId ? String(user.dGroupLeaderId) : "",
+					leaderName: dLeader
+						? formatFullName(
+								dLeader?.firstName,
+								dLeader?.lastName,
+								dLeader?.middleName,
+						  ) ?? ""
+						: "",
 					contactNumber: user.contactNumber,
 					email: user.email,
 					facebook: user.facebookLink,

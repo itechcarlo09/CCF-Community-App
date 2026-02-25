@@ -32,6 +32,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { CustomDropdown } from "../../../components/CustomDropdown/CustomDropdown";
 import ChoiceChip from "../../../components/ChoiceChip";
 import SelectField from "../../../components/SelectField";
+import Loading from "../../../components/Loading";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -41,7 +42,6 @@ const genderOptions: DropdownOption<Gender>[] = [
 ];
 
 const UserFormScreen = () => {
-	const { dLeaderOptions } = useUserViewModel();
 	const navigation = useNavigation();
 	const route = useRoute<UserRouteProp>();
 	const insets = useSafeAreaInsets();
@@ -81,137 +81,154 @@ const UserFormScreen = () => {
 				/>
 				<View style={styles.placeholder} />
 			</View>
-
-			<KeyboardAwareScrollView
-				enableOnAndroid
-				keyboardShouldPersistTaps="handled"
-				contentContainerStyle={[
-					styles.fieldsContainer,
-					{
-						backgroundColor: theme.background,
-						borderColor: theme.gray[200],
-					},
-				]}
-			>
-				{/* Basic Information Fields */}
-				<View style={styles.fieldGap}>
-					<Title title={"Basic Information"} />
-					<TextField
-						placeholder="Enter First Name"
-						label="First Name"
-						required
-						value={formik.values.firstName}
-						onChangeText={formik.handleChange("firstName")}
-						error={formik.errors.firstName}
-						touched={formik.touched.firstName}
-						name={"firstName"}
-					/>
-					<TextField
-						placeholder="Enter Middle Name"
-						label="Middle Name"
-						value={formik.values.middleName}
-						onChangeText={formik.handleChange("middleName")}
-						error={formik.errors.middleName}
-						touched={formik.touched.middleName}
-						name={"middleName"}
-					/>
-					<TextField
-						placeholder="Enter Last Name"
-						label="Last Name"
-						required
-						value={formik.values.lastName}
-						onChangeText={formik.handleChange("lastName")}
-						error={formik.errors.lastName}
-						touched={formik.touched.lastName}
-						name={"lastName"}
-					/>
-					<DatePickerField
-						name="birthdate"
-						label="Birthdate"
-						required
-						value={formik.values.birthdate}
-						error={formik.errors.birthdate}
-						touched={formik.touched.birthdate}
-						onChange={formik.setFieldValue}
-					/>
-					<ChoiceChip
-						name={"gender"}
-						title={"Gender"}
-						label="Gender"
-						required
-						value={formik.values.gender}
-						error={formik.errors.gender}
-						touched={formik.touched.gender}
-						options={genderOptions}
-						onChange={formik.setFieldValue}
-					/>
-					<SelectField
-						label="Discipleship Leader"
-						name="leaderName"
-						value={formik.values.leaderName}
-						error={formik.errors.leaderName}
-					/>
-				</View>
-				<View style={[styles.fieldGap, { marginBottom: 16 }]}>
-					<Title title={"Contact Information"} />
-					<TextField
-						placeholder="XXX-XXX-XXXX"
-						label="Contact Number"
-						// required
-						inputType={InputType.Phone}
-						value={formik.values.contactNumber}
-						onChangeText={(text) =>
-							formik.setFieldValue("contactNumber", formatPhoneNumber(text))
-						}
-						error={formik.errors.contactNumber}
-						touched={formik.touched.contactNumber}
-						name={"contactNumber"}
-					/>
-					<TextField
-						placeholder="Enter Email"
-						label="Email"
-						required
-						value={formik.values.email}
-						onChangeText={formik.handleChange("email")}
-						error={formik.errors.email}
-						touched={formik.touched.email}
-						name={"email"}
-					/>
-					<TextField
-						placeholder="Enter Facebook Link"
-						label="Facebook Link"
-						// required
-						value={formik.values.facebook}
-						onChangeText={formik.handleChange("facebook")}
-						error={formik.errors.facebook}
-						touched={formik.touched.facebook}
-						name={"facebook"}
-					/>
-					<TextField
-						placeholder="Enter Contact Person"
-						label="Contact Person in case of emergency"
-						// required
-						value={formik.values.emergencyPerson}
-						onChangeText={formik.handleChange("emergencyPerson")}
-						error={formik.errors.emergencyPerson}
-						touched={formik.touched.emergencyPerson}
-						name={"emergencyPerson"}
-					/>
-					<TextField
-						placeholder="XXX-XXX-XXXX"
-						label="Number of Contact Person"
-						// required
-						inputType={InputType.Phone}
-						value={formik.values.emergencyNumber}
-						onChangeText={(text) =>
-							formik.setFieldValue("emergencyNumber", formatPhoneNumber(text))
-						}
-						error={formik.errors.emergencyNumber}
-						touched={formik.touched.emergencyNumber}
-						name={"emergencyNumber"}
-					/>
-				</View>
-			</KeyboardAwareScrollView>
+			{loading ? (
+				<Loading />
+			) : (
+				<KeyboardAwareScrollView
+					enableOnAndroid
+					keyboardShouldPersistTaps="handled"
+					contentContainerStyle={[
+						styles.fieldsContainer,
+						{
+							backgroundColor: theme.background,
+							borderColor: theme.gray[200],
+						},
+					]}
+				>
+					{/* Basic Information Fields */}
+					<View style={styles.fieldGap}>
+						<Title title={"Basic Information"} />
+						<TextField
+							placeholder="Enter First Name"
+							label="First Name"
+							required
+							value={formik.values.firstName}
+							onChangeText={formik.handleChange("firstName")}
+							error={formik.errors.firstName}
+							touched={formik.touched.firstName}
+							name={"firstName"}
+						/>
+						<TextField
+							placeholder="Enter Middle Name"
+							label="Middle Name"
+							value={formik.values.middleName}
+							onChangeText={formik.handleChange("middleName")}
+							error={formik.errors.middleName}
+							touched={formik.touched.middleName}
+							name={"middleName"}
+						/>
+						<TextField
+							placeholder="Enter Last Name"
+							label="Last Name"
+							required
+							value={formik.values.lastName}
+							onChangeText={formik.handleChange("lastName")}
+							error={formik.errors.lastName}
+							touched={formik.touched.lastName}
+							name={"lastName"}
+						/>
+						<DatePickerField
+							name="birthdate"
+							label="Birthdate"
+							required
+							value={formik.values.birthdate}
+							error={formik.errors.birthdate}
+							touched={formik.touched.birthdate}
+							onChange={formik.setFieldValue}
+						/>
+						<ChoiceChip
+							name={"gender"}
+							title={"Gender"}
+							label="Gender"
+							required
+							value={formik.values.gender}
+							error={formik.errors.gender}
+							touched={formik.touched.gender}
+							options={genderOptions}
+							onChange={formik.setFieldValue}
+						/>
+						<SelectField
+							label="Discipleship Leader"
+							name="leaderName"
+							value={formik.values.leaderName}
+							error={formik.errors.leaderName}
+							onPress={() => {
+								navigation.navigate("DleaderScreen", {
+									id,
+									onSelect: (selectedId: string, fullName: string) => {
+										console.log(
+											"Selected Leader ID in UserFormScreen:",
+											selectedId,
+											fullName,
+										);
+										formik.setFieldValue("leaderId", selectedId);
+										formik.setFieldValue("leaderName", fullName);
+									},
+								});
+							}}
+						/>
+					</View>
+					<View style={[styles.fieldGap, { marginBottom: 16 }]}>
+						<Title title={"Contact Information"} />
+						<TextField
+							placeholder="XXX-XXX-XXXX"
+							label="Contact Number"
+							// required
+							inputType={InputType.Phone}
+							value={formik.values.contactNumber}
+							onChangeText={(text) =>
+								formik.setFieldValue("contactNumber", formatPhoneNumber(text))
+							}
+							error={formik.errors.contactNumber}
+							touched={formik.touched.contactNumber}
+							name={"contactNumber"}
+						/>
+						<TextField
+							placeholder="Enter Email"
+							label="Email"
+							required
+							value={formik.values.email}
+							onChangeText={formik.handleChange("email")}
+							error={formik.errors.email}
+							touched={formik.touched.email}
+							name={"email"}
+						/>
+						<TextField
+							placeholder="Enter Facebook Link"
+							label="Facebook Link"
+							// required
+							value={formik.values.facebook}
+							onChangeText={formik.handleChange("facebook")}
+							error={formik.errors.facebook}
+							touched={formik.touched.facebook}
+							name={"facebook"}
+						/>
+						<TextField
+							placeholder="Enter Contact Person"
+							label="Contact Person in case of emergency"
+							// required
+							value={formik.values.emergencyPerson}
+							onChangeText={formik.handleChange("emergencyPerson")}
+							error={formik.errors.emergencyPerson}
+							touched={formik.touched.emergencyPerson}
+							name={"emergencyPerson"}
+						/>
+						<TextField
+							placeholder="XXX-XXX-XXXX"
+							label="Number of Contact Person"
+							// required
+							inputType={InputType.Phone}
+							value={formik.values.emergencyNumber}
+							onChangeText={(text) =>
+								formik.setFieldValue("emergencyNumber", formatPhoneNumber(text))
+							}
+							error={formik.errors.emergencyNumber}
+							touched={formik.touched.emergencyNumber}
+							name={"emergencyNumber"}
+						/>
+					</View>
+				</KeyboardAwareScrollView>
+			)}
 			<Button
 				title="Submit"
 				style={{ backgroundColor: theme.blue[500] }}

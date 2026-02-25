@@ -5,12 +5,10 @@ import { styles } from "./styles";
 import { useTheme } from "../../theme/ThemeProvider";
 
 const SelectField: React.FC<CustomSelectFieldProps> = ({
-	name,
 	onPress,
 	required,
 	label,
 	disabled = false,
-	textStyle,
 	value,
 	error,
 }) => {
@@ -32,6 +30,7 @@ const SelectField: React.FC<CustomSelectFieldProps> = ({
 						borderColor: error ? theme.icon.danger.tertiary : theme.slate[500],
 					},
 				]}
+				onPress={onPress}
 				activeOpacity={0.7}
 			>
 				<View style={styles.content}>

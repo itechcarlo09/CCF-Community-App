@@ -1,12 +1,5 @@
-import React, { useRef, useState } from "react";
-import {
-	Animated,
-	View,
-	TextInput,
-	TouchableOpacity,
-	Pressable,
-	Text,
-} from "react-native";
+import React from "react";
+import { View, TextInput, Pressable } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../theme/ThemeProvider";
 import { styles } from "./styles";
@@ -16,10 +9,11 @@ export const SearchField: React.FC<CustomSearchFieldProps> = ({
 	value,
 	onChangeText,
 	onCancel,
+	style,
 }) => {
 	const { theme } = useTheme();
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, style]}>
 			<Ionicons name="search" size={20} style={styles.icon} />
 			<TextInput
 				style={[styles.input, { color: theme.slate[900] }]}

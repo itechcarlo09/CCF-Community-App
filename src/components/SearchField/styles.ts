@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		flex: 1,
-		height: 40,
+		maxHeight: 40,
 		borderWidth: 1,
 		borderColor: "#ccc",
 		borderRadius: 8,

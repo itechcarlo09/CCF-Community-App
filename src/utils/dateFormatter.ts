@@ -45,7 +45,7 @@ export const ageNumber = (birthdate?: Date | string): number => {
  */
 export const addYearsAsDate = (
 	dateToSet: Date | string,
-	years: number
+	years: number,
 ): Date => {
 	return dayjs(dateToSet).add(years, "year").toDate();
 };
