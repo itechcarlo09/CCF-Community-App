@@ -60,9 +60,7 @@ export const userDataSource = {
 			const res = await apiClient.get<User>(`/account/${userId}`);
 			return res.data ? res.data : null;
 		} catch (error: any) {
-			console.error("getUserById error:", error.message ?? error);
-			// Optional: You can throw a custom error or handle it gracefully
-			return null;
+			throw new Error(error.message);
 		}
 	},
 

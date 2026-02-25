@@ -321,34 +321,41 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 	useEffect(() => {
 		const load = async () => {
 			if (!userId) return;
-			setLoading(true);
-			const user = await getUser(userId);
-			let dLeader: User | null = null;
-			if (user?.dGroupLeaderId) {
-				dLeader = await getUser(String(user.dGroupLeaderId));
+			try {
+				setLoading(true);
+				const user = await getUser(userId);
+				let dLeader: User | null = null;
+				if (user?.dGroupLeaderId) {
+					dLeader = await getUser(String(user.dGroupLeaderId));
+				}
+				if (user) {
+					formik.setValues({
+						firstName: user.firstName,
+						middleName: user.middleName ?? "",
+						lastName: user.lastName,
+						birthdate: dayjs(user.birthDate).format("YYYY-MM-DD"),
+						gender: user.gender,
+						leaderName: dLeader
+							? formatFullName(
+									dLeader?.firstName,
+									dLeader?.lastName,
+									dLeader?.middleName,
+							  ) ?? ""
+							: "",
+						contactNumber: user.contactNumber,
+						email: user.email,
+						facebook: user.facebookLink,
+						emergencyPerson: user.emergencyContactName,
+						emergencyNumber: user.emergencyContactNumber,
+					});
+				}
+			} catch (err) {
+				Alert.alert("Error", "Failed to fetch the user");
+				console.log(err);
+				navigation.goBack();
+			} finally {
+				setLoading(false);
 			}
-			if (user) {
-				formik.setValues({
-					firstName: user.firstName,
-					middleName: user.middleName ?? "",
-					lastName: user.lastName,
-					birthdate: dayjs(user.birthDate).format("YYYY-MM-DD"),
-					gender: user.gender,
-					leaderName: dLeader
-						? formatFullName(
-								dLeader?.firstName,
-								dLeader?.lastName,
-								dLeader?.middleName,
-						  ) ?? ""
-						: "",
-					contactNumber: user.contactNumber,
-					email: user.email,
-					facebook: user.facebookLink,
-					emergencyPerson: user.emergencyContactName,
-					emergencyNumber: user.emergencyContactNumber,
-				});
-			}
-			setLoading(false);
 		};
 		load();
 	}, [userId]);
