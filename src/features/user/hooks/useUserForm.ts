@@ -15,6 +15,7 @@ import {
 
 interface UseUserFormProps {
 	userId?: string;
+	onSuccess?: () => void;
 }
 
 const staticInitialValues = {
@@ -24,6 +25,7 @@ const staticInitialValues = {
 	birthdate: "",
 	gender: "",
 	leaderName: "",
+	dLeaderID: "",
 	contactNumber: "",
 	email: "",
 	facebook: "",
@@ -89,15 +91,15 @@ const staticSchema = Yup.object({
 				return /^\d{3}-\d{3}-\d{4}$/.test(value);
 			},
 		),
+	dGroupLeaderId: Yup.number().nullable(),
 });
 
-export const useUserForm = ({ userId }: UseUserFormProps) => {
+export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
 	const { addUser, getUser, updateUser } = useUserViewModel();
 	const route = useRoute();
-	const onSuccess = (route.params as any)?.onSuccess;
 
 	const [educationFields, setEducationFields] = useState<
 		EducationEmploymentConfig[]
@@ -181,6 +183,9 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 					userType: "Member",
 					emergencyContactName: values.emergencyPerson,
 					emergencyContactNumber: values.emergencyNumber,
+					...(values.dLeaderID?.trim() && {
+						dGroupLeaderId: Number(values.dLeaderID),
+					}),
 				};
 
 				if (userId) {
@@ -188,11 +193,9 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 				} else {
 					await addUser({ ...user });
 				}
-				onSuccess?.();
-				navigation.goBack();
+				onSuccess && onSuccess();
 			} catch (err) {
 				Alert.alert("Error", "Failed to save user");
-				console.log(err);
 			} finally {
 				setLoading(false);
 			}
@@ -357,11 +360,11 @@ export const useUserForm = ({ userId }: UseUserFormProps) => {
 									normalizePHNumber(user.emergencyContactNumber),
 							  )
 							: "",
+						dLeaderID: "",
 					});
 				}
 			} catch (err) {
 				Alert.alert("Error", "Failed to fetch the user");
-				console.log(err);
 				navigation.goBack();
 			} finally {
 				setLoading(false);

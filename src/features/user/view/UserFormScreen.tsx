@@ -1,14 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-	View,
-	StyleSheet,
-	Text,
-	KeyboardAvoidingView,
-	Platform,
-	FlatList,
-	Touchable,
-	TouchableOpacity,
-} from "react-native";
+import React from "react";
+import { View, StyleSheet, Text } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
 import TextField from "../../../components/TextField";
@@ -16,20 +7,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { UserStackParamList } from "../../../types/navigation";
 import { DatePickerField } from "../../../components/DatePicker";
 import MdiIcon from "../../../components/MdiIcon";
-import { mdiArrowLeft, mdiPlus, mdiTrashCanOutline } from "@mdi/js";
+import { mdiArrowLeft } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
-import { DropdownPickerField } from "../../../components/DropdownPicker";
 import Button from "../../../components/Button";
 import Gender from "../../../types/enums/Gender";
 import { DropdownOption } from "../../../types/dropdownOption";
-import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { ScrollView } from "react-native-gesture-handler";
 import Title from "./components/Title";
 import InputType from "../../../types/enums/InputType";
 import { formatPhoneNumber } from "../../../utils/stringUtils";
-import { getIn } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { CustomDropdown } from "../../../components/CustomDropdown/CustomDropdown";
 import ChoiceChip from "../../../components/ChoiceChip";
 import SelectField from "../../../components/SelectField";
 import Loading from "../../../components/Loading";
@@ -46,20 +32,15 @@ const UserFormScreen = () => {
 	const route = useRoute<UserRouteProp>();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
-	const { id } = route.params || {};
-	const {
-		formik,
-		loading,
-		educationFields,
-		employmentFields,
-		addEducationField,
-		removeEducationField,
-		addEmploymentField,
-		removeEmploymentField,
-		updateEducationEndYears,
-		updateEmploymentEndYears,
-	} = useUserForm({
+	const { id, onSuccess } = route.params || {};
+	const { formik, loading } = useUserForm({
 		userId: id,
+		onSuccess: () => {
+			if (onSuccess) {
+				onSuccess();
+			}
+			navigation.goBack();
+		},
 	});
 
 	return (
@@ -95,7 +76,6 @@ const UserFormScreen = () => {
 						},
 					]}
 				>
-					{/* Basic Information Fields */}
 					<View style={styles.fieldGap}>
 						<Title title={"Basic Information"} />
 						<TextField
@@ -156,12 +136,7 @@ const UserFormScreen = () => {
 								navigation.navigate("DleaderScreen", {
 									id,
 									onSelect: (selectedId: string, fullName: string) => {
-										console.log(
-											"Selected Leader ID in UserFormScreen:",
-											selectedId,
-											fullName,
-										);
-										formik.setFieldValue("leaderId", selectedId);
+										formik.setFieldValue("dLeaderID", selectedId);
 										formik.setFieldValue("leaderName", fullName);
 									},
 								});
@@ -173,7 +148,6 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="XXX-XXX-XXXX"
 							label="Contact Number"
-							// required
 							inputType={InputType.Phone}
 							value={formik.values.contactNumber}
 							onChangeText={(text) =>
@@ -196,7 +170,6 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="Enter Facebook Link"
 							label="Facebook Link"
-							// required
 							value={formik.values.facebook}
 							onChangeText={formik.handleChange("facebook")}
 							error={formik.errors.facebook}
@@ -206,7 +179,6 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="Enter Contact Person"
 							label="Contact Person in case of emergency"
-							// required
 							value={formik.values.emergencyPerson}
 							onChangeText={formik.handleChange("emergencyPerson")}
 							error={formik.errors.emergencyPerson}
@@ -216,7 +188,6 @@ const UserFormScreen = () => {
 						<TextField
 							placeholder="XXX-XXX-XXXX"
 							label="Number of Contact Person"
-							// required
 							inputType={InputType.Phone}
 							value={formik.values.emergencyNumber}
 							onChangeText={(text) =>
@@ -251,7 +222,7 @@ const styles = StyleSheet.create({
 	headerRow: {
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "space-between", // or 'center' with absolute-positioned icon
+		justifyContent: "space-between",
 	},
 	icon: {
 		width: 16,
@@ -275,7 +246,7 @@ const styles = StyleSheet.create({
 		fontWeight: 600,
 	},
 	placeholder: {
-		width: 24, // Same width as the icon to keep center alignment
+		width: 24,
 	},
 	dualFields: {
 		columnGap: 12,

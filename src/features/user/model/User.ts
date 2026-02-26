@@ -31,10 +31,11 @@ export interface User {
 	middleName?: string;
 	lastName: string;
 	birthDate: Date;
-	dGroupLeaderId?: string | null;
+	dGroupLeaderId?: number;
+	dGroupLeader?: DGroupLeader;
 	facebookLink: string;
 	contactNumber: string;
-	dGroupMembers?: number;
+	dGroupMembers?: DGroupLeader[];
 	email: string;
 	gender: string;
 	userType: string;

@@ -5,11 +5,9 @@ import records from "../recordsSample.json";
 export const userDataSource = {
 	async getUsers(): Promise<any[]> {
 		try {
-			console.log(apiClient);
 			const res = await apiClient.get<any[]>("/account/all");
 			return res.data ? res.data : __DEV__ ? records : [];
 		} catch (error: any) {
-			console.log(error);
 			console.error("getUsers error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
 			return __DEV__ ? records : [];
@@ -18,13 +16,11 @@ export const userDataSource = {
 
 	async searchUsers(searchText: string): Promise<any[]> {
 		try {
-			console.log(apiClient);
 			const res = await apiClient.get<any[]>(
 				`/account/search-by-name?name=${searchText}`,
 			);
 			return res.data ? res.data : __DEV__ ? records : [];
 		} catch (error: any) {
-			console.log(error);
 			console.error("searchUsers error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
 			return __DEV__ ? records : [];

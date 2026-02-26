@@ -11,14 +11,20 @@ import { UserStackParamList } from "../../../types/navigation";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RecordItemUI } from "../model/RecordListItem";
 
+type UserRouteProp = RouteProp<UserStackParamList, "DleaderScreen">;
+
 const Separator = () => <View style={styles.separator} />;
 
 const DleaderScreen = ({ navigation }: any) => {
 	const { getDLeaders, loading } = useUserViewModel();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
-	const route = useRoute<RouteProp<UserStackParamList, "DleaderScreen">>();
-	const { id } = (route.params as { id: string }) || {};
+	const route = useRoute<UserRouteProp>();
+	const { id, onSelect } =
+		(route.params as {
+			id: string;
+			onSelect: (id: string, fullName: string) => void;
+		}) || {};
 	const [Dleaders, setDLeaders] = useState<RecordItemUI[]>([]);
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
@@ -38,8 +44,7 @@ const DleaderScreen = ({ navigation }: any) => {
 	}, []);
 
 	const handleSelect = (id: string, fullName: string) => {
-		console.log("Selected Dleader ID:", id, fullName);
-		route.params.onSelect(id, fullName);
+		onSelect(id, fullName);
 		navigation.goBack();
 	};
 
@@ -64,7 +69,6 @@ const DleaderScreen = ({ navigation }: any) => {
 				onCancel={() => setSearch("")}
 			/>
 
-			{/* Important: zIndex must be lower than the dropdown */}
 			{loading ? (
 				<Loading />
 			) : (

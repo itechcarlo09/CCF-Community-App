@@ -22,11 +22,11 @@ const mapUserToUI = (user: User): RecordItemUI => ({
 	// 	  )
 	// 	: null,
 	membershipType:
-		(user.dGroupMembers ? user.dGroupMembers : 0) > 2
+		user?.dGroupMembers && user.dGroupMembers.length > 2
 			? "DLeader"
-			: (user.dGroupMembers ? user.dGroupMembers : 0) > 0
+			: user?.dGroupMembers && user.dGroupMembers.length > 0
 			? "Timothy"
-			: user.dGroupLeaderId
+			: user.dGroupLeader
 			? "DMember"
 			: "Pending Member",
 });
@@ -82,15 +82,8 @@ export const useUserViewModel = () => {
 		setLoading(false);
 	};
 
-	// const searchUsers = async (searchtext: string): Promise<User[]> => {
-	// 	setLoading(true);
-	// 	return await userRepository.searchUsers(searchtext);
-	// 	setLoading(false);
-	// };
-
 	const updateUser = async (id: string, data: Partial<User>) => {
 		await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
-		await fetchUsers();
 	};
 
 	// const deleteUser = async (id: string) => {
