@@ -34,7 +34,7 @@ function BottomTabNavigator() {
 			/>
 			<Tab.Screen
 				name="EventTab"
-				component={EventScreen}
+				component={HomeScreen}
 				options={{ title: "Events" }}
 			/>
 			<Tab.Screen
