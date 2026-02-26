@@ -19,6 +19,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import ChoiceChip from "../../../components/ChoiceChip";
 import SelectField from "../../../components/SelectField";
 import Loading from "../../../components/Loading";
+import topUsers from "../topUsers.json";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 
@@ -42,6 +43,9 @@ const UserFormScreen = () => {
 			navigation.goBack();
 		},
 	});
+	const topUser = id
+		? topUsers.find((topUser) => topUser.id === Number(id))
+		: null;
 
 	return (
 		<View
@@ -127,21 +131,23 @@ const UserFormScreen = () => {
 							options={genderOptions}
 							onChange={formik.setFieldValue}
 						/>
-						<SelectField
-							label="Discipleship Leader"
-							name="leaderName"
-							value={formik.values.leaderName}
-							error={formik.errors.leaderName}
-							onPress={() => {
-								navigation.navigate("DleaderScreen", {
-									id,
-									onSelect: (selectedId: string, fullName: string) => {
-										formik.setFieldValue("dLeaderID", selectedId);
-										formik.setFieldValue("leaderName", fullName);
-									},
-								});
-							}}
-						/>
+						{!topUser && (
+							<SelectField
+								label="Discipleship Leader"
+								name="leaderName"
+								value={formik.values.leaderName}
+								error={formik.errors.leaderName}
+								onPress={() => {
+									navigation.navigate("DleaderScreen", {
+										id,
+										onSelect: (selectedId: string, fullName: string) => {
+											formik.setFieldValue("dLeaderID", selectedId);
+											formik.setFieldValue("leaderName", fullName);
+										},
+									});
+								}}
+							/>
+						)}
 					</View>
 					<View style={[styles.fieldGap, { marginBottom: 16 }]}>
 						<Title title={"Contact Information"} />

@@ -99,7 +99,6 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
 	const { addUser, getUser, updateUser } = useUserViewModel();
-	const route = useRoute();
 
 	const [educationFields, setEducationFields] = useState<
 		EducationEmploymentConfig[]

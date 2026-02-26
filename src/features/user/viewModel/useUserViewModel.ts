@@ -125,10 +125,6 @@ export const useUserViewModel = () => {
 	// 	await fetchUsers();
 	// };
 
-	useEffect(() => {
-		fetchUsers();
-	}, []);
-
 	return {
 		users,
 		dLeaderOptions,
@@ -139,5 +135,6 @@ export const useUserViewModel = () => {
 		getUser,
 		getDLeaders,
 		refresh: fetchUsers,
+		fetchUsers,
 	};
 };
