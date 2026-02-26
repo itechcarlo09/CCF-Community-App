@@ -6,8 +6,6 @@ import { useTheme } from "../../../theme/ThemeProvider";
 import { mdiAccountMultipleOutline, mdiCheckCircleOutline } from "@mdi/js";
 import MdiIcon from "../../../components/MdiIcon";
 import Badge from "./components/Badge/Badge";
-import { RouteProp } from "@react-navigation/native";
-import { AppStackParamList } from "../../../types/navigation";
 
 interface Props {
 	user: RecordItemUI;

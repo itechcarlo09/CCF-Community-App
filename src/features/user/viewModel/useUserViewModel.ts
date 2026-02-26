@@ -6,25 +6,33 @@ import { formatFullName } from "../../../utils/stringUtils";
 import { RecordItemUI } from "../model/RecordListItem";
 import { DropdownOption } from "../../../types/dropdownOption";
 
+const MAX_AGE_FOR_ELEVATE = 22;
+const MIN_DGROUP_MEMBERS_FOR_DLEADER = 3;
+const MIN_DGROUP_MEMBERS_FOR_TIMOTHY = 1;
+
 const mapUserToUI = (user: User): RecordItemUI => ({
 	id: user.id,
 	fallbackText: `${user.firstName[0]}${user.lastName[0]}`,
 	fullName: formatFullName(user.firstName, user.lastName, user.middleName),
 	age: ageNumber(user.birthDate),
 	ministryText:
-		ageNumber(user.birthDate) < 22 ? "ELEVATE Youth" : "B1G Singles",
+		ageNumber(user.birthDate) <= MAX_AGE_FOR_ELEVATE
+			? "ELEVATE Youth"
+			: "B1G Singles",
 	status: "Active Member",
-	// dleaderName: user.dGroupLeader
-	// 	? formatFullName(
-	// 			user.dGroupLeader.firstName,
-	// 			user.dGroupLeader.lastName,
-	// 			user.dGroupLeader.middleName,
-	// 	  )
-	// 	: null,
+	dleaderName: user.dGroupLeader
+		? formatFullName(
+				user.dGroupLeader.firstName,
+				user.dGroupLeader.lastName,
+				user.dGroupLeader.middleName,
+		  )
+		: null,
 	membershipType:
-		user?.dGroupMembers && user.dGroupMembers.length > 2
+		user?.dGroupMembers &&
+		user.dGroupMembers.length >= MIN_DGROUP_MEMBERS_FOR_DLEADER
 			? "DLeader"
-			: user?.dGroupMembers && user.dGroupMembers.length > 0
+			: user?.dGroupMembers &&
+			  user.dGroupMembers.length >= MIN_DGROUP_MEMBERS_FOR_TIMOTHY
 			? "Timothy"
 			: user.dGroupLeader
 			? "DMember"
