@@ -96,6 +96,7 @@ const staticSchema = Yup.object({
 
 export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
+	const [user, setUser] = useState<User | null>(null);
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
 	const { addUser, getUser, updateUser } = useUserViewModel();
@@ -335,6 +336,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 					dLeader = await getUser(String(user.dGroupLeaderId));
 				}
 				if (user) {
+					setUser(user);
 					formik.setValues({
 						firstName: user.firstName,
 						middleName: user.middleName ?? "",
@@ -375,6 +377,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	return {
 		formik,
 		loading,
+		user,
 		educationFields,
 		employmentFields,
 		addEducationField,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
@@ -34,7 +34,7 @@ const UserFormScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const { id, onSuccess } = route.params || {};
-	const { formik, loading } = useUserForm({
+	const { formik, loading, user } = useUserForm({
 		userId: id,
 		onSuccess: () => {
 			if (onSuccess) {
@@ -43,8 +43,9 @@ const UserFormScreen = () => {
 			navigation.goBack();
 		},
 	});
-	const topUser = id
-		? topUsers.find((topUser) => topUser.id === Number(id))
+	const email = user?.email || "";
+	const topUser = email
+		? topUsers.find((topUser) => topUser.email === email)
 		: null;
 
 	return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { userRepository } from "../data/userRepository";
 import { User } from "../model/user";
 import { ageNumber } from "../../../utils/dateFormatter";
@@ -23,8 +23,7 @@ const mapUserToUI = (user: User): RecordItemUI => {
 
 	const ministryText =
 		age <= MAX_AGE_FOR_ELEVATE ? "ELEVATE Youth" : "B1G Singles";
-
-	const topUser = topUsers.find((topUser) => topUser.id === user.id);
+	const topUser = topUsers.find((topUser) => topUser.email === user.email);
 	const dleaderName =
 		topUser?.dleaderName ??
 		(user.dGroupLeader
