@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { User } from "../model/user";
+import { DGroupBasicInfo, User } from "../model/user";
 import { EducationEmploymentConfig } from "../../../types/userTypes";
 import {
 	formatFullName,
@@ -331,7 +331,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 			try {
 				setLoading(true);
 				const user = await getUser(userId);
-				let dLeader: User | null = null;
+				let dLeader: DGroupBasicInfo | null = null;
 				if (user?.dGroupLeaderId) {
 					dLeader = await getUser(String(user.dGroupLeaderId));
 				}
