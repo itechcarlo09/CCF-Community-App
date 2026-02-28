@@ -15,11 +15,11 @@ import { DropdownOption } from "../../../types/dropdownOption";
 import Title from "./components/Title";
 import InputType from "../../../types/enums/InputType";
 import { formatPhoneNumber } from "../../../utils/stringUtils";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ChoiceChip from "../../../components/ChoiceChip";
 import SelectField from "../../../components/SelectField";
 import Loading from "../../../components/Loading";
 import topUsers from "../topUsers.json";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 

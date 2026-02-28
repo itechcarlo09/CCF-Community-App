@@ -10,14 +10,17 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { ThemeProvider } from "./src/theme/ThemeProvider";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
 	return (
-		<ThemeProvider>
-			<RootNavigator />
-		</ThemeProvider>
+		<KeyboardProvider>
+			<ThemeProvider>
+				<RootNavigator />
+			</ThemeProvider>
+		</KeyboardProvider>
 	);
 }
 
