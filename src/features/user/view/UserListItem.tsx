@@ -35,9 +35,16 @@ const UserListItem = ({ user, onPress }: Props) => {
 						<MdiIcon
 							path={mdiAccountMultipleOutline}
 							size={12}
-							color={theme.gray[500]}
+							color={user.dleaderName ? theme.gray[500] : theme.error}
 						/>
-						<Text style={[styles.detailText, { color: theme.gray[500] }]}>
+						<Text
+							style={[
+								styles.detailText,
+								{
+									color: user.dleaderName ? theme.gray[500] : theme.error,
+								},
+							]}
+						>
 							{user.dleaderName ? user.dleaderName : "Pending"}
 						</Text>
 					</View>

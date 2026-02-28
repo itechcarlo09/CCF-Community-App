@@ -14,6 +14,7 @@ const Button: React.FC<ChoiceChipProps> = ({
 	onChange,
 	name,
 	value,
+	touched,
 	error,
 }) => {
 	const { theme } = useTheme();
@@ -40,7 +41,7 @@ const Button: React.FC<ChoiceChipProps> = ({
 								backgroundColor: value === option.value ? "#007AFF" : "#E0E0E0",
 								borderColor: value === option.value ? "#007AFF" : "#E0E0E0",
 							},
-							error && styles.errorButton,
+							touched && error && styles.errorButton,
 						]}
 						onPress={() => {
 							const newItem = option; // For simplicity, just select the first item
@@ -64,7 +65,7 @@ const Button: React.FC<ChoiceChipProps> = ({
 					</TouchableOpacity>
 				))}
 			</View>
-			{error && <Text style={styles.error}>{error}</Text>}
+			{touched && error && <Text style={styles.error}>{error}</Text>}
 		</View>
 	);
 };

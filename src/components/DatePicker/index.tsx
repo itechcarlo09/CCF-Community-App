@@ -71,7 +71,6 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
 					setShowPicker(false);
 				}}
 			/>
-
 			{touched && error && <Text style={styles.error}>{error}</Text>}
 		</View>
 	);

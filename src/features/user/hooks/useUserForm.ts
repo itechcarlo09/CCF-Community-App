@@ -36,7 +36,7 @@ const staticInitialValues = {
 const staticSchema = Yup.object({
 	firstName: Yup.string().required("Please enter a valid first name"),
 	lastName: Yup.string().required("Please enter a valid last name"),
-	birthdate: Yup.date().nullable().required("Birthdate is required"),
+	birthdate: Yup.date().required("Birthdate is required"),
 	gender: Yup.string().required("Please select a gender"),
 	contactNumber: Yup.string()
 		.nullable()
