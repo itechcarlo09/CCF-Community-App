@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
 import TextField from "../../../components/TextField";
@@ -49,12 +49,7 @@ const UserFormScreen = () => {
 		: null;
 
 	return (
-		<View
-			style={[
-				styles.container,
-				{ paddingTop: insets.top, paddingBottom: insets.bottom },
-			]}
-		>
+		<SafeAreaView style={[styles.container]}>
 			<View style={styles.headerRow}>
 				<Text style={[styles.title, { color: theme.text }]}>
 					{id ? "Edit User Record" : "Add New Record"}
@@ -71,7 +66,6 @@ const UserFormScreen = () => {
 				<Loading />
 			) : (
 				<KeyboardAwareScrollView
-					enableOnAndroid
 					keyboardShouldPersistTaps="handled"
 					contentContainerStyle={[
 						styles.fieldsContainer,
@@ -150,7 +144,7 @@ const UserFormScreen = () => {
 							/>
 						)}
 					</View>
-					<View style={[styles.fieldGap, { marginBottom: 16 }]}>
+					<View style={styles.fieldGap}>
 						<Title title={"Contact Information"} />
 						<TextField
 							placeholder="XXX-XXX-XXXX"
@@ -213,15 +207,20 @@ const UserFormScreen = () => {
 				onPress={formik.handleSubmit as any}
 				disabled={loading}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: { flex: 1, paddingHorizontal: 16, rowGap: 17 },
+	container: {
+		flex: 1,
+		paddingHorizontal: 16,
+		rowGap: 17,
+		paddingVertical: 12,
+	},
 	fieldsContainer: {
 		borderRadius: 6,
-		padding: 24,
+		paddingHorizontal: 16,
 		rowGap: 32,
 	},
 	text: { fontSize: 18, fontWeight: "bold" },
