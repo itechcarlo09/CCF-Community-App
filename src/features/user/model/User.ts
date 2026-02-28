@@ -19,7 +19,8 @@ export interface User {
 	// role?: "admin" | "user" | "moderator"; // extendable enum
 }
 
-export interface DGroupLeader {
+export interface DGroupBasicInfo {
+	id: number;
 	firstName: string;
 	middleName?: string;
 	lastName: string;
@@ -31,11 +32,10 @@ export interface User {
 	middleName?: string;
 	lastName: string;
 	birthDate: Date;
-	dGroupLeaderId?: number;
-	dGroupLeader?: DGroupLeader;
+	dGroupLeader?: DGroupBasicInfo;
 	facebookLink: string;
 	contactNumber: string;
-	dGroupMembers?: DGroupLeader[];
+	dGroupMembers?: DGroupBasicInfo[];
 	email: string;
 	gender: string;
 	userType: string;

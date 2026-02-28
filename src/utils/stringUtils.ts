@@ -49,11 +49,14 @@ export const normalizeSpace = (text: string): string => {
  * "First, Middle, Last" → "Last, First M."
  */
 export const formatFullName = (
-	first: string,
-	last: string,
+	first?: string,
+	last?: string,
 	middle?: string,
 ): string => {
-	return `${capitalizeFirst(last)}, ${capitalizeWords(first)}${
+	const safeFirst = first ?? "";
+	const safeLast = last ?? "";
+
+	return `${capitalizeFirst(safeLast)}, ${capitalizeWords(safeFirst)}${
 		middle ? ` ${getInitial(middle)}.` : ""
 	}`;
 };
