@@ -75,48 +75,86 @@ export const useUserViewModel = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const fetchUsers = async () => {
-		setLoading(true);
-		const result = await userRepository.getUsers();
-		const mappedUsers = result.map(mapUserToUI);
-		const mappedDleadersDropdown = result.map(mapUserToDLeadersList);
-		setUsers(mappedUsers);
-		setDLeaderOptions(mappedDleadersDropdown);
-		setLoading(false);
+		try {
+			setLoading(true);
+			const result = await userRepository.getUsers();
+			const mappedUsers = result.map(mapUserToUI);
+			const mappedDleadersDropdown = result.map(mapUserToDLeadersList);
+			setUsers(mappedUsers);
+			setDLeaderOptions(mappedDleadersDropdown);
+		} catch (error) {
+			console.error("Error fetching users:", error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const addUser = async (
 		user: Omit<User, "id" | "createdAt" | "updatedAt">,
 	) => {
-		await userRepository.addUser({
-			...user,
-		});
+		try {
+			setLoading(true);
+			await userRepository.addUser({
+				...user,
+			});
+		} catch (error) {
+			console.error("Error adding user:", error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const getUser = async (id: string): Promise<User | null> => {
-		return await userRepository.getUserById(id);
+		try {
+			setLoading(true);
+			return await userRepository.getUserById(id);
+		} catch (error) {
+			console.error("Error fetching user:", error);
+			return null;
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const getDLeaders = async (excludeId: string): Promise<RecordItemUI[]> => {
-		setLoading(true);
-		const users = await userRepository.getUsers(); // or your firestore call
-		setLoading(false);
-		return users.filter((u) => u.id !== excludeId).map(mapUserToUI);
+		try {
+			setLoading(true);
+			const users = await userRepository.getUsers();
+			return users.filter((u) => u.id !== excludeId).map(mapUserToUI);
+		} catch (error) {
+			console.error("Error fetching DLeaders:", error);
+			return [];
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const searchUsers = async (searchText: string) => {
-		if (searchText.trim() === "") {
-			await fetchUsers();
-			return;
+		try {
+			setLoading(true);
+			if (searchText.trim() === "") {
+				await fetchUsers();
+				return;
+			}
+			const result = await userRepository.searchUsers(searchText);
+			const mappedUsers = result.map(mapUserToUI);
+			setUsers(mappedUsers);
+		} catch (error) {
+			console.error("Error searching users:", error);
+		} finally {
+			setLoading(false);
 		}
-		setLoading(true);
-		const result = await userRepository.searchUsers(searchText);
-		const mappedUsers = result.map(mapUserToUI);
-		setUsers(mappedUsers);
-		setLoading(false);
 	};
 
 	const updateUser = async (id: string, data: Partial<User>) => {
-		await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
+		try {
+			setLoading(true);
+			await userRepository.updateUser(id, { ...data, updatedAt: new Date() });
+		} catch (error) {
+			console.error("Error updating user:", error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	// const deleteUser = async (id: string) => {
