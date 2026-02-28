@@ -10,9 +10,10 @@ import useDebounce from "../hooks/useDebounce";
 import { UserStackParamList } from "../../../types/navigation";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RecordItemUI } from "../model/RecordListItem";
+import MdiIcon from "../../../components/MdiIcon";
+import { mdiArrowLeft } from "@mdi/js";
 
 type UserRouteProp = RouteProp<UserStackParamList, "DleaderScreen">;
-
 const Separator = () => <View style={styles.separator} />;
 
 const DleaderScreen = ({ navigation }: any) => {
@@ -41,7 +42,7 @@ const DleaderScreen = ({ navigation }: any) => {
 
 	useEffect(() => {
 		getDLeaders(id).then(setDLeaders);
-	}, []);
+	}, [debouncedSearchTerm]);
 
 	const handleSelect = (id: string, fullName: string) => {
 		onSelect(id, fullName);
@@ -50,25 +51,53 @@ const DleaderScreen = ({ navigation }: any) => {
 
 	return (
 		<View style={[styles.container, { paddingTop: insets.top }]}>
-			<Text
-				style={{
-					marginHorizontal: 16,
-					color: theme.text,
-					fontWeight: "semibold",
-					fontSize: 20,
-					lineHeight: 32,
-					marginBottom: 5,
-				}}
-			>
-				Discipleship Leaders
-			</Text>
-			<SearchField
-				style={{ marginHorizontal: 16, marginBottom: 10 }}
-				onChangeText={(value) => setSearch(value)}
-				value={search}
-				onCancel={() => setSearch("")}
-			/>
+			<View style={styles.headerRow}>
+				<Text style={[styles.title, { color: theme.text }]}>
+					Discipleship Leaders
+				</Text>
+				<MdiIcon
+					path={mdiArrowLeft}
+					size={24}
+					color="#323232"
+					onPress={navigation.goBack}
+				/>
+				<View style={styles.placeholder} />
+			</View>
+			<View style={styles.sortContainer}>
+				<View style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}>
+					{/* <Text style={[styles.sortText, { color: theme.gray[900] }]}>
+						Sort
+					</Text> */}
+					{/* <DropDownPicker
+						open={open}
+						value={value}
+						items={items}
+						setOpen={setOpen}
+						setValue={setValue}
+						setItems={setItems}
+						style={[
+							styles.dropdown,
+							{ borderColor: theme.gray[200], borderWidth: 2 },
+						]}
+						containerStyle={{
+							zIndex: 1000,
+							width: 164,
+						}}
+						dropDownContainerStyle={{
+							zIndex: 1000,
+							borderColor: theme.gray[200],
+							borderWidth: 2,
+						}}
+					/> */}
+				</View>
+				<SearchField
+					onChangeText={(value) => setSearch(value)}
+					value={search}
+					onCancel={() => setSearch("")}
+				/>
+			</View>
 
+			{/* Important: zIndex must be lower than the dropdown */}
 			{loading ? (
 				<Loading />
 			) : (
@@ -131,6 +160,25 @@ const styles = StyleSheet.create({
 	},
 	separator: {
 		height: 6,
+	},
+	headerRow: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		paddingVertical: 12,
+		paddingHorizontal: 16,
+	},
+	title: {
+		position: "absolute",
+		left: 0,
+		right: 0,
+		textAlign: "center",
+		fontSize: 20,
+		lineHeight: 32,
+		fontWeight: 600,
+	},
+	placeholder: {
+		width: 24,
 	},
 });
 export default DleaderScreen;
