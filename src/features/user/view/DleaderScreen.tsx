@@ -56,7 +56,7 @@ const DleaderScreen = ({ navigation }: any) => {
 		<View style={[styles.container, { paddingTop: insets.top }]}>
 			<View style={styles.headerRow}>
 				<Text style={[styles.title, { color: theme.text }]}>
-					Discipleship Leaders
+					Select Discipleship Leaders
 				</Text>
 				<MdiIcon
 					path={mdiArrowLeft}

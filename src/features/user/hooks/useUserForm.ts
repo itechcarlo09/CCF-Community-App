@@ -182,9 +182,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 					userType: "Member",
 					emergencyContactName: values.emergencyPerson,
 					emergencyContactNumber: values.emergencyNumber,
-					...(values.dLeaderID?.trim() && {
-						dGroupLeaderId: Number(values.dLeaderID),
-					}),
+					dGroupLeaderId: values.dLeaderID ? Number(values.dLeaderID) : null,
 				};
 
 				if (userId) {
@@ -335,7 +333,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 					dLeader = await getUser(String(user.dGroupLeaderId));
 				}
 				if (user) {
-					setUser(user);
+					setUser({ ...user, dGroupLeader: dLeader ?? undefined });
 					formik.setValues({
 						firstName: user.firstName,
 						middleName: user.middleName ?? "",

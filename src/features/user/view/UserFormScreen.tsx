@@ -14,7 +14,7 @@ import Gender from "../../../types/enums/Gender";
 import { DropdownOption } from "../../../types/dropdownOption";
 import Title from "./components/Title";
 import InputType from "../../../types/enums/InputType";
-import { formatPhoneNumber } from "../../../utils/stringUtils";
+import { formatFullName, formatPhoneNumber } from "../../../utils/stringUtils";
 import ChoiceChip from "../../../components/ChoiceChip";
 import SelectField from "../../../components/SelectField";
 import Loading from "../../../components/Loading";
@@ -27,6 +27,8 @@ const genderOptions: DropdownOption<Gender>[] = [
 	{ label: Gender.Male, value: Gender.Male },
 	{ label: Gender.Female, value: Gender.Female },
 ];
+
+const noId = 0;
 
 const UserFormScreen = () => {
 	const navigation = useNavigation();
@@ -46,6 +48,29 @@ const UserFormScreen = () => {
 	const topUser = email
 		? topUsers.find((topUser) => topUser.email === email)
 		: null;
+
+	const setDleadersWhenGenderChanged = (
+		field: string,
+		value: string | null,
+	) => {
+		formik.setFieldValue("gender", value);
+		formik.setFieldValue(
+			"leaderName",
+			value === user?.gender
+				? user?.dGroupLeader
+					? formatFullName(
+							user?.dGroupLeader?.firstName,
+							user?.dGroupLeader?.lastName,
+							user?.dGroupLeader?.middleName,
+					  )
+					: ""
+				: "",
+		);
+		formik.setFieldValue(
+			"dLeaderID",
+			value === user?.gender ? user?.dGroupLeader?.id ?? null : null,
+		);
+	};
 
 	return (
 		<SafeAreaView style={[styles.container]}>
@@ -123,7 +148,9 @@ const UserFormScreen = () => {
 							error={formik.errors.gender}
 							touched={formik.touched.gender}
 							options={genderOptions}
-							onChange={formik.setFieldValue}
+							onChange={
+								id ? setDleadersWhenGenderChanged : formik.setFieldValue
+							}
 						/>
 						{!topUser && (
 							<SelectField
@@ -140,7 +167,7 @@ const UserFormScreen = () => {
 										return;
 									}
 									navigation.navigate("DleaderScreen", {
-										id,
+										id: id ? Number(id) : noId,
 										gender:
 											formik.values.gender === Gender.Male
 												? Gender.Male

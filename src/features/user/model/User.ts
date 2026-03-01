@@ -32,7 +32,7 @@ export interface User {
 	middleName?: string;
 	lastName: string;
 	birthDate: Date;
-	dGroupLeaderId?: number;
+	dGroupLeaderId?: number | null;
 	dGroupLeader?: DGroupBasicInfo;
 	facebookLink: string;
 	contactNumber: string;
