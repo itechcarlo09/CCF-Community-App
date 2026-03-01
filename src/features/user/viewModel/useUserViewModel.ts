@@ -7,6 +7,7 @@ import { RecordItemUI } from "../model/RecordListItem";
 import { DropdownOption } from "../../../types/dropdownOption";
 import topUsers from "../topUsers.json";
 import { MembershipType } from "../types";
+import Gender from "../../../types/enums/Gender";
 
 const MAX_AGE_FOR_ELEVATE = 22;
 const MIN_DGROUP_MEMBERS_FOR_DLEADER = 3;
@@ -116,11 +117,14 @@ export const useUserViewModel = () => {
 		}
 	};
 
-	const getDLeaders = async (excludeId: string): Promise<RecordItemUI[]> => {
+	const getDLeaders = async (
+		excludeId: number,
+		gender: Gender,
+	): Promise<RecordItemUI[]> => {
 		try {
 			setLoading(true);
-			const users = await userRepository.getUsers();
-			return users.filter((u) => u.id !== excludeId).map(mapUserToUI);
+			const dleaders = await userRepository.getDLeaders(excludeId, gender);
+			return dleaders.map(mapUserToUI);
 		} catch (error) {
 			console.error("Error fetching DLeaders:", error);
 			return [];

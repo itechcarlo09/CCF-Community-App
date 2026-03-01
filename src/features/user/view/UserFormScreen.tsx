@@ -31,7 +31,6 @@ const genderOptions: DropdownOption<Gender>[] = [
 const UserFormScreen = () => {
 	const navigation = useNavigation();
 	const route = useRoute<UserRouteProp>();
-	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const { id, onSuccess } = route.params || {};
 	const { formik, loading, user } = useUserForm({
@@ -133,8 +132,19 @@ const UserFormScreen = () => {
 								value={formik.values.leaderName}
 								error={formik.errors.leaderName}
 								onPress={() => {
+									if (!formik.values.gender) {
+										formik.setFieldError(
+											"leaderName",
+											"Please select gender first",
+										);
+										return;
+									}
 									navigation.navigate("DleaderScreen", {
 										id,
+										gender:
+											formik.values.gender === Gender.Male
+												? Gender.Male
+												: Gender.Female,
 										onSelect: (selectedId: string, fullName: string) => {
 											formik.setFieldValue("dLeaderID", selectedId);
 											formik.setFieldValue("leaderName", fullName);

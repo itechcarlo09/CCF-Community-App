@@ -12,18 +12,21 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { RecordItemUI } from "../model/RecordListItem";
 import MdiIcon from "../../../components/MdiIcon";
 import { mdiArrowLeft } from "@mdi/js";
+import Gender from "../../../types/enums/Gender";
 
 type UserRouteProp = RouteProp<UserStackParamList, "DleaderScreen">;
 const Separator = () => <View style={styles.separator} />;
+const defaultId = 0;
 
 const DleaderScreen = ({ navigation }: any) => {
 	const { getDLeaders, loading } = useUserViewModel();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const route = useRoute<UserRouteProp>();
-	const { id, onSelect } =
+	const { id, gender, onSelect } =
 		(route.params as {
-			id: string;
+			id: number;
+			gender: Gender;
 			onSelect: (id: string, fullName: string) => void;
 		}) || {};
 	const [Dleaders, setDLeaders] = useState<RecordItemUI[]>([]);
@@ -36,12 +39,12 @@ const DleaderScreen = ({ navigation }: any) => {
 
 	const onRefresh = useCallback(async () => {
 		setRefreshing(true);
-		setDLeaders(await getDLeaders(id));
+		setDLeaders(await getDLeaders(id ?? defaultId, gender));
 		setRefreshing(false);
 	}, []);
 
 	useEffect(() => {
-		getDLeaders(id).then(setDLeaders);
+		getDLeaders(id ?? defaultId, gender).then(setDLeaders);
 	}, [debouncedSearchTerm]);
 
 	const handleSelect = (id: string, fullName: string) => {
@@ -64,32 +67,9 @@ const DleaderScreen = ({ navigation }: any) => {
 				<View style={styles.placeholder} />
 			</View>
 			<View style={styles.sortContainer}>
-				<View style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}>
-					{/* <Text style={[styles.sortText, { color: theme.gray[900] }]}>
-						Sort
-					</Text> */}
-					{/* <DropDownPicker
-						open={open}
-						value={value}
-						items={items}
-						setOpen={setOpen}
-						setValue={setValue}
-						setItems={setItems}
-						style={[
-							styles.dropdown,
-							{ borderColor: theme.gray[200], borderWidth: 2 },
-						]}
-						containerStyle={{
-							zIndex: 1000,
-							width: 164,
-						}}
-						dropDownContainerStyle={{
-							zIndex: 1000,
-							borderColor: theme.gray[200],
-							borderWidth: 2,
-						}}
-					/> */}
-				</View>
+				<View
+					style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}
+				></View>
 				<SearchField
 					onChangeText={(value) => setSearch(value)}
 					value={search}

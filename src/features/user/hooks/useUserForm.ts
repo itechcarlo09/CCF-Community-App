@@ -91,7 +91,6 @@ const staticSchema = Yup.object({
 				return /^\d{3}-\d{3}-\d{4}$/.test(value);
 			},
 		),
-	dGroupLeaderId: Yup.number().nullable(),
 });
 
 export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {

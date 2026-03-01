@@ -6,4 +6,5 @@ export const userRepository = {
 	getUserById: userDataSource.getUserById,
 	addUser: userDataSource.addUser,
 	updateUser: userDataSource.editUser,
+	getDLeaders: userDataSource.dLeadersUsers,
 };

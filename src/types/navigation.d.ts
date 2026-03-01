@@ -1,5 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Gender from "./enums/Gender";
 
 // -----------------------------
 // Root Stack (if you have multiple stacks, like Auth + App)
@@ -46,7 +47,8 @@ export type AppRouteProp<T extends keyof AppStackParamList> = RouteProp<
 export type UserStackParamList = {
 	UserForm: { id?: string; onSuccess?: () => void } | undefined;
 	DleaderScreen: {
-		id?: string;
+		id?: number;
+		gender?: Gender;
 		onSelect: (id: string, fullName: string) => void;
 	}; // make id optional
 };
