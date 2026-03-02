@@ -192,7 +192,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				}
 				onSuccess && onSuccess();
 			} catch (err) {
-				Alert.alert("Error", "Failed to save user");
+				Alert.alert("Error", `Failed to ${userId ? "update" : "add"} user`);
 			} finally {
 				setLoading(false);
 			}
