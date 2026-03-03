@@ -48,19 +48,7 @@ const UserScreen = ({ navigation }: any) => {
 
 	return (
 		<View style={[styles.container, { paddingTop: insets.top }]}>
-			<Text
-				style={{
-					marginHorizontal: 16,
-					color: theme.text,
-					fontWeight: "semibold",
-					fontSize: 20,
-					lineHeight: 32,
-					marginBottom: 5,
-				}}
-			>
-				Records
-			</Text>
-			<View style={[styles.sortContainer, { zIndex: 1 }]}>
+			<View style={styles.sortContainer}>
 				<View style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}>
 					{/* <Text style={[styles.sortText, { color: theme.gray[900] }]}>
 						Sort
@@ -107,7 +95,6 @@ const UserScreen = ({ navigation }: any) => {
 				</TouchableOpacity>
 			</View>
 
-			{/* Important: zIndex must be lower than the dropdown */}
 			{loading ? (
 				<Loading />
 			) : (
@@ -132,7 +119,6 @@ const UserScreen = ({ navigation }: any) => {
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={<View style={{ height: 16 }} />}
 					ItemSeparatorComponent={Separator}
-					contentContainerStyle={{ zIndex: 0 }}
 				/>
 			)}
 		</View>
@@ -145,6 +131,7 @@ const styles = StyleSheet.create({
 	},
 	sortContainer: {
 		marginBottom: 10,
+		marginTop: 12,
 		marginHorizontal: 16,
 		flexDirection: "row",
 		alignItems: "center",

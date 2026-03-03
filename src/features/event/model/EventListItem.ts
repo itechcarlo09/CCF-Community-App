@@ -5,6 +5,7 @@ export interface EventItemUI {
 	location: string;
 	date: Date;
 	speakers: string[] | string;
+	details: { icon: string; description: string[] | string };
 	firstTimeAttendees: number;
 	regularAttendees: number;
 }

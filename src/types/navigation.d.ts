@@ -62,7 +62,23 @@ export type UserRouteProp<T extends keyof UserStackParamList> = RouteProp<
 >;
 
 // -----------------------------
-// Merge UserStack into ReactNavigation Root
+// Event Stack (nested stack for user-related screens)
+// -----------------------------
+export type EventStackParamList = {
+	EventForm: { id?: string; onSuccess?: () => void } | undefined;
+	EventList: undefined;
+};
+
+export type EventNavigationProp<
+	T extends keyof EventStackParamList = keyof EventStackParamList,
+> = NativeStackNavigationProp<EventStackParamList, T>;
+export type EventRouteProp<T extends keyof EventStackParamList> = RouteProp<
+	EventStackParamList,
+	T
+>;
+
+// -----------------------------
+// ReactNavigation Root
 // -----------------------------
 declare global {
 	namespace ReactNavigation {
@@ -70,6 +86,6 @@ declare global {
 			extends RootStackParamList,
 				AppStackParamList,
 				AuthStackParamList,
-				UserStackParamList {}
+				EventStackParamList {}
 	}
 }

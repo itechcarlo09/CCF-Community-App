@@ -1,8 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import CircularImage from "../../../components/CircularImage";
 import { useTheme } from "../../../theme/ThemeProvider";
-import { mdiAccountMultipleOutline, mdiCheckCircleOutline } from "@mdi/js";
+import { mdiMapMarkerOutline, mdiMicrophoneOutline } from "@mdi/js";
 import MdiIcon from "../../../components/MdiIcon";
 import { EventItemUI } from "../model/EventListItem";
 import CircularDate from "../../../components/CircularDate";
@@ -35,6 +34,40 @@ const EventListItem = ({ event, onPress }: Props) => {
 						{event.eventTitle}
 					</Text>
 				</View>
+				{(event.location || event.speakers) && (
+					<View style={styles.detailsContainer}>
+						{event.location && (
+							<View
+								style={[
+									styles.detailsItemContainer,
+									{ backgroundColor: theme.gray[200] },
+								]}
+							>
+								<MdiIcon path={mdiMapMarkerOutline} size={12} color="#323232" />
+								<Text style={[styles.detailsText, { color: theme.text }]}>
+									{event.location}
+								</Text>
+							</View>
+						)}
+						{event.speakers && (
+							<View
+								style={[
+									styles.detailsItemContainer,
+									{ backgroundColor: theme.gray[200] },
+								]}
+							>
+								<MdiIcon
+									path={mdiMicrophoneOutline}
+									size={12}
+									color="#323232"
+								/>
+								<Text style={[styles.detailsText, { color: theme.text }]}>
+									{event.speakers}
+								</Text>
+							</View>
+						)}
+					</View>
+				)}
 			</View>
 		</TouchableOpacity>
 	);
@@ -57,10 +90,27 @@ const styles = StyleSheet.create({
 	body: {
 		paddingHorizontal: 24,
 		paddingVertical: 12,
+		rowGap: 10,
 	},
 	text: { fontSize: 18, fontWeight: "bold" },
 	eventTitle: { fontSize: 24, fontWeight: "bold" },
 	dateAndTitle: { columnGap: 10, flexDirection: "row" },
+	detailsContainer: {
+		gap: 5,
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
+	detailsItemContainer: {
+		borderRadius: 16,
+		flexDirection: "row",
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		columnGap: 2,
+	},
+	detailsText: {
+		fontSize: 12,
+		lineHeight: 16,
+	},
 });
 
 export default EventListItem;
