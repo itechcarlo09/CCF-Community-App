@@ -33,7 +33,6 @@ const EventScreen = () => {
 		<View style={styles.container}>
 			<FlatList
 				data={events}
-				keyExtractor={(item) => item.id}
 				ItemSeparatorComponent={Separator}
 				refreshControl={Refresh()}
 				renderItem={({ item }) => (
@@ -41,7 +40,9 @@ const EventScreen = () => {
 						style={styles.card}
 						onPress={() => console.log(item.id)}
 					>
-						<Text style={styles.text}>🎉 Are you ready for {item.name}!</Text>
+						<Text style={styles.text}>
+							🎉 Are you ready for {item.eventTitle}!
+						</Text>
 					</TouchableOpacity>
 				)}
 			/>

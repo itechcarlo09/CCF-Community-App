@@ -1,3 +1,4 @@
+import apiClient from "../../../services/apiClient";
 import { Event } from "../model/Event";
 import { eventConverter } from "./eventConverter";
 
@@ -11,15 +12,16 @@ export const eventDataSource = {
 	// 		return null;
 	// 	}
 	// },
-	// async getAll(): Promise<Event[]> {
-	// 	try {
-	// 		const snap = await eventCollection.get();
-	// 		return snap.docs.map((doc) => eventConverter.fromFirestore(doc));
-	// 	} catch (error) {
-	// 		console.error("eventDataSource.getAll error:", error);
-	// 		return [];
-	// 	}
-	// },
+	async getEvents(): Promise<Event[]> {
+		try {
+			const res = await apiClient.get<any[]>("/event");
+			return res.data ? res.data : [];
+		} catch (error: any) {
+			console.error("getEvents error:", error.message ?? error);
+			// Optional: You can throw a custom error or handle it gracefully
+			return [];
+		}
+	},
 	// async add(user: Omit<Event, "id">): Promise<void> {
 	// 	try {
 	// 		await eventCollection.doc().set(eventConverter.toFirestore(user));
