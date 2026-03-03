@@ -33,6 +33,7 @@ export const lightColors = {
 			text: "#0D6832",
 		},
 	},
+	white: "#FFFFFF",
 	gray: {
 		200: "#E5E7EB",
 		400: "#9CA3AF",

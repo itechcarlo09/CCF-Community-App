@@ -22,6 +22,19 @@ export const eventDataSource = {
 			return [];
 		}
 	},
+
+	async searchEvents(searchText: string): Promise<any[]> {
+		try {
+			const res = await apiClient.get<any[]>(
+				`/event/search?name=${searchText}`,
+			);
+			return res.data ? res.data : [];
+		} catch (error: any) {
+			console.error("searchEvents error:", error.message ?? error);
+			// Optional: You can throw a custom error or handle it gracefully
+			return [];
+		}
+	},
 	// async add(user: Omit<Event, "id">): Promise<void> {
 	// 	try {
 	// 		await eventCollection.doc().set(eventConverter.toFirestore(user));

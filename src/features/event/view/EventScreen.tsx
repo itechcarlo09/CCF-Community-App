@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -9,15 +9,25 @@ import {
 	RefreshControl,
 } from "react-native";
 import { useEventViewModel } from "../viewModel/useEventViewModel";
+import { useTheme } from "../../../theme/ThemeProvider";
+import EventListItem from "./EventListItem";
+import useDebounce from "../../user/hooks/useDebounce";
 
 const Separator = () => <View style={styles.separator} />;
 
 const EventScreen = () => {
-	const { events, refresh, loading } = useEventViewModel();
+	const { events, refresh, loading, searchEvents } = useEventViewModel();
 	const [refreshing, setRefreshing] = useState(false);
+	const { theme } = useTheme();
 	const Refresh = () => (
 		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 	);
+	const [search, setSearch] = useState("");
+	const debouncedSearchTerm = useDebounce(search, 500);
+
+	useEffect(() => {
+		searchEvents(debouncedSearchTerm);
+	}, [debouncedSearchTerm]);
 
 	const onRefresh = useCallback(async () => {
 		setRefreshing(true);
@@ -36,14 +46,7 @@ const EventScreen = () => {
 				ItemSeparatorComponent={Separator}
 				refreshControl={Refresh()}
 				renderItem={({ item }) => (
-					<TouchableOpacity
-						style={styles.card}
-						onPress={() => console.log(item.id)}
-					>
-						<Text style={styles.text}>
-							🎉 Are you ready for {item.eventTitle}!
-						</Text>
-					</TouchableOpacity>
+					<EventListItem event={item} onPress={() => {}} />
 				)}
 			/>
 		</View>
@@ -64,8 +67,7 @@ const styles = StyleSheet.create({
 	title: { fontSize: 18, fontWeight: "bold" },
 	subtitle: { fontSize: 14, color: "gray" },
 	separator: {
-		height: 1,
-		marginHorizontal: 16,
+		height: 12,
 	},
 });
 

@@ -6,8 +6,8 @@ import { EventItemUI } from "../../event/model/EventListItem";
 
 const mapEventToUI = (event: Event): EventItemUI => {
 	const ministryText = "B1G Singles Ministry";
-	const date = new Date(event.date);
-	const eventTitle = event.eventName;
+	const date = new Date(event.eventDate);
+	const eventTitle = `${event.series.name}: ${event.eventName}`;
 	const location = event.location;
 	const speakers = Array.isArray(event.speaker)
 		? event.speaker
@@ -38,11 +38,26 @@ export const useEventViewModel = () => {
 	const fetchEvents = async () => {
 		try {
 			setLoading(true);
-			console.log("Fetching events...");
 			const result = await eventRepository.getEvents();
 			setEvents(result.map(mapEventToUI));
 		} catch (error) {
 			console.error("Error fetching events:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const searchEvents = async (searchText: string) => {
+		try {
+			setLoading(true);
+			if (searchText.trim() === "") {
+				await fetchEvents();
+				return;
+			}
+			const result = await eventRepository.searchEvents(searchText);
+			setEvents(result.map(mapEventToUI));
+		} catch (error) {
+			console.error("Error searching events:", error);
 		} finally {
 			setLoading(false);
 		}
@@ -53,5 +68,6 @@ export const useEventViewModel = () => {
 		loading,
 		refresh: fetchEvents,
 		fetchEvents,
+		searchEvents,
 	};
 };
