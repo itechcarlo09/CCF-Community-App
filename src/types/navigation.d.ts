@@ -45,11 +45,12 @@ export type AppRouteProp<T extends keyof AppStackParamList> = RouteProp<
 // User Stack (nested stack for user-related screens)
 // -----------------------------
 export type UserStackParamList = {
-	UserForm: { id?: string; onSuccess?: () => void } | undefined;
+	UserForm: { id?: number; onSuccess?: () => void } | undefined;
+	UserDetailsScreen: { id: number };
 	DleaderScreen: {
 		id?: number;
 		gender?: Gender;
-		onSelect: (id: string, fullName: string) => void;
+		onSelect: (id: number, fullName: string) => void;
 	}; // make id optional
 };
 

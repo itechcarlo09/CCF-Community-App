@@ -14,7 +14,7 @@ import {
 } from "../../../utils/stringUtils";
 
 interface UseUserFormProps {
-	userId?: string;
+	userId: number;
 	onSuccess?: () => void;
 }
 
@@ -186,13 +186,16 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				};
 
 				if (userId) {
-					await updateUser(userId, { ...user });
+					await updateUser(userId.toString(), { ...user });
 				} else {
 					await addUser({ ...user });
 				}
 				onSuccess && onSuccess();
 			} catch (err) {
-				Alert.alert("Error", `Failed to ${userId ? "update" : "add"} user`);
+				Alert.alert(
+					"Error",
+					`Failed to ${userId && userId > 0 ? "update" : "add"} user`,
+				);
 			} finally {
 				setLoading(false);
 			}
@@ -327,7 +330,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 			if (!userId) return;
 			try {
 				setLoading(true);
-				const user = await getUser(userId);
+				const user = await getUser(userId.toString());
 				let dLeader: DGroupBasicInfo | null = null;
 				if (user?.dGroupLeaderId) {
 					dLeader = await getUser(String(user.dGroupLeaderId));

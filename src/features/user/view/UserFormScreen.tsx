@@ -1,9 +1,8 @@
-import React, { useRef } from "react";
+import React from "react";
 import { View, StyleSheet, Text, SafeAreaView } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useUserForm } from "../hooks/useUserForm";
 import TextField from "../../../components/TextField";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { UserStackParamList } from "../../../types/navigation";
 import { DatePickerField } from "../../../components/DatePicker";
 import MdiIcon from "../../../components/MdiIcon";
@@ -20,8 +19,10 @@ import SelectField from "../../../components/SelectField";
 import Loading from "../../../components/Loading";
 import topUsers from "../topUsers.json";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
+type NavProp = NativeStackNavigationProp<UserStackParamList>;
 
 const genderOptions: DropdownOption<Gender>[] = [
 	{ label: Gender.Male, value: Gender.Male },
@@ -31,12 +32,12 @@ const genderOptions: DropdownOption<Gender>[] = [
 const noId = 0;
 
 const UserFormScreen = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
 	const { theme } = useTheme();
 	const { id, onSuccess } = route.params || {};
 	const { formik, loading, user } = useUserForm({
-		userId: id,
+		userId: id ? id : noId,
 		onSuccess: () => {
 			if (onSuccess) {
 				onSuccess();
@@ -172,7 +173,7 @@ const UserFormScreen = () => {
 											formik.values.gender === Gender.Male
 												? Gender.Male
 												: Gender.Female,
-										onSelect: (selectedId: string, fullName: string) => {
+										onSelect: (selectedId: number, fullName: string) => {
 											formik.setFieldValue("dLeaderID", selectedId);
 											formik.setFieldValue("leaderName", fullName);
 										},

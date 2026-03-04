@@ -16,6 +16,7 @@ import { useTheme } from "../../../theme/ThemeProvider";
 import Loading from "../../../components/Loading";
 import { SearchField } from "../../../components/SearchField";
 import useDebounce from "../hooks/useDebounce";
+import EventScreen from "../../event/view/EventScreen";
 
 const Separator = () => <View style={styles.separator} />;
 
