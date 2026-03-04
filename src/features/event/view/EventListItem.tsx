@@ -68,6 +68,30 @@ const EventListItem = ({ event, onPress }: Props) => {
 						)}
 					</View>
 				)}
+				{(event.firstTimeAttendees > 0 || event.regularAttendees > 0) && (
+					<View style={styles.countContainer}>
+						{event.firstTimeAttendees > 0 && (
+							<View>
+								<Text style={[styles.countText, { color: theme.gray[500] }]}>
+									First Time Attendees
+								</Text>
+								<Text style={[styles.countNumber, { color: theme.text }]}>
+									{event.firstTimeAttendees}
+								</Text>
+							</View>
+						)}
+						{event.regularAttendees > 0 && (
+							<View>
+								<Text style={[styles.countText, { color: theme.gray[500] }]}>
+									Regular
+								</Text>
+								<Text style={[styles.countNumber, { color: theme.text }]}>
+									{event.regularAttendees}
+								</Text>
+							</View>
+						)}
+					</View>
+				)}
 			</View>
 		</TouchableOpacity>
 	);
@@ -110,6 +134,19 @@ const styles = StyleSheet.create({
 	detailsText: {
 		fontSize: 12,
 		lineHeight: 16,
+	},
+	countContainer: {
+		flexDirection: "row",
+		columnGap: 16,
+	},
+	countText: {
+		fontSize: 12,
+		lineHeight: 16,
+	},
+	countNumber: {
+		fontSize: 18,
+		lineHeight: 28,
+		fontWeight: "bold",
 	},
 });
 
