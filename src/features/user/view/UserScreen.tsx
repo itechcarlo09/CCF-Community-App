@@ -17,6 +17,8 @@ import Loading from "../../../components/Loading";
 import { SearchField } from "../../../components/SearchField";
 import useDebounce from "../hooks/useDebounce";
 import EventScreen from "../../event/view/EventScreen";
+import { ShimmerSkeleton } from "../../../components/ShimmerSkeleton";
+import UserLoader from "./components/UserSkeleton";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -97,7 +99,7 @@ const UserScreen = ({ navigation }: any) => {
 			</View>
 
 			{loading ? (
-				<Loading />
+				<UserLoader />
 			) : (
 				<FlatList
 					data={users}
