@@ -369,7 +369,9 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 									normalizePHNumber(user.emergencyContactNumber),
 							  )
 							: "",
-						dLeaderID: "",
+						dLeaderID: user.dGroupLeader
+							? user.dGroupLeader?.id.toString()
+							: "",
 					});
 				}
 			} catch (err) {
