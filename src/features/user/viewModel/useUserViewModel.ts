@@ -2,13 +2,11 @@ import { useState } from "react";
 import { userRepository } from "../data/userRepository";
 import { User } from "../model/user";
 import { RecordItemUI } from "../model/RecordListItem";
-import { DropdownOption } from "../../../types/dropdownOption";
 import Gender from "../../../types/enums/Gender";
 import { mapUserToUI } from "../data/user.mapper";
 
 export const useUserViewModel = () => {
 	const [users, setUsers] = useState<RecordItemUI[]>([]);
-	const [dLeaderOptions, setDLeaderOptions] = useState<DropdownOption[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const fetchUsers = async () => {
@@ -102,7 +100,6 @@ export const useUserViewModel = () => {
 
 	return {
 		users,
-		dLeaderOptions,
 		loading,
 		addUser,
 		updateUser,

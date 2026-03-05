@@ -34,6 +34,7 @@ const UserListItem = ({
 		<TouchableOpacity
 			style={[styles.card, { backgroundColor: theme.background }, style]}
 			onPress={() => onPress && onPress(user.id)}
+			disabled={isCurrent}
 		>
 			<CircularImage uri={""} size={45} fallbackText={user.fallbackText} />
 			<View style={styles.flex}>

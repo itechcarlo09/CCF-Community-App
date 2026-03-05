@@ -44,7 +44,7 @@ export const mapUserToUI = (
 		user.dGroupMembers &&
 		user.dGroupMembers.length >= MIN_DGROUP_MEMBERS_FOR_TIMOTHY
 	) {
-		membershipType = "Timothy";
+		membershipType = "Facilitator";
 	} else if (user.dGroupLeader) {
 		membershipType = "DMember";
 	} else {

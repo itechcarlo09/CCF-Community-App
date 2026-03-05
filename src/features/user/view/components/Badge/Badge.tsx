@@ -11,7 +11,7 @@ const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 	let textColor;
 	if (type === "DLeader") {
 		textColor = theme.badge.success.text;
-	} else if (type === "Timothy") {
+	} else if (type === "Facilitator") {
 		textColor = theme.badge.primary.text;
 	} else if (dleader) {
 		textColor = theme.badge.secondary.text;
@@ -23,7 +23,7 @@ const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 	let backgroundColor;
 	if (type === "DLeader") {
 		backgroundColor = theme.badge.success.background;
-	} else if (type === "Timothy") {
+	} else if (type === "Facilitator") {
 		backgroundColor = theme.badge.primary.background;
 	} else if (dleader) {
 		backgroundColor = theme.badge.secondary.background;
