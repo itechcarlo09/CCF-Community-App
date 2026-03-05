@@ -1,4 +1,4 @@
-export interface EducationProps {
+interface EducationProps {
 	school: string;
 	degree: string;
 	startYear: string;

@@ -8,21 +8,21 @@ import {
 import { useTheme } from "../../../../../theme/ThemeProvider";
 import MdiIcon from "../../../../../components/MdiIcon";
 import { mdiPencilOutline, mdiPlus } from "@mdi/js";
-import { styles } from "./EducationRO.styles";
-import { EducationROProps } from "./EducationRO.types";
 import Button from "../../../../../components/Button";
+import { WorkROProps } from "./WorkRO.types";
+import { styles } from "./WorkRO.styles";
 
-const Educations: React.FC<EducationROProps> = ({ educations }) => {
+const Works: React.FC<WorkROProps> = ({ works }) => {
 	const { theme } = useTheme();
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.headerContainer}>
 				<Text style={[styles.headerText, { color: theme.text }]}>
-					Education
+					Work/Occupation
 				</Text>
 				<Button
-					title={"Add Education"}
+					title={"Add Works"}
 					icon={<MdiIcon path={mdiPlus} size={24} color="#323232" />}
 					iconPosition="left"
 					style={{ borderWidth: 1, borderColor: theme.border }}
@@ -32,30 +32,30 @@ const Educations: React.FC<EducationROProps> = ({ educations }) => {
 					}}
 				/>
 			</View>
-			{educations.length > 0 &&
-				educations.map((education, index) => (
+			{works.length > 0 &&
+				works.map((work, index) => (
 					<View key={index} style={styles.detailsContainer}>
 						<View style={styles.headerContainer}>
-							<Text style={[styles.educationTitleText, { color: theme.text }]}>
-								{`Education ${index + 1}`}
+							<Text style={[styles.workTitleText, { color: theme.text }]}>
+								{`Work ${index + 1}`}
 							</Text>
 							<MdiIcon path={mdiPencilOutline} size={24} color="#323232" />
 						</View>
 						<View>
 							<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-								School
+								Title/Position
 							</Text>
 							<Text style={[styles.valueText, { color: theme.text }]}>
-								{education.school}
+								{work.position}
 							</Text>
 						</View>
 
 						<View>
 							<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-								Degree/Program
+								Company/Organization
 							</Text>
 							<Text style={[styles.valueText, { color: theme.text }]}>
-								{education.degree}
+								{work.company}
 							</Text>
 						</View>
 
@@ -65,7 +65,7 @@ const Educations: React.FC<EducationROProps> = ({ educations }) => {
 									Start Year
 								</Text>
 								<Text style={[styles.valueText, { color: theme.text }]}>
-									{education.startYear}
+									{work.startYear}
 								</Text>
 							</View>
 
@@ -74,7 +74,7 @@ const Educations: React.FC<EducationROProps> = ({ educations }) => {
 									End Year
 								</Text>
 								<Text style={[styles.valueText, { color: theme.text }]}>
-									{education.endYear}
+									{work.endYear}
 								</Text>
 							</View>
 						</View>
@@ -84,4 +84,4 @@ const Educations: React.FC<EducationROProps> = ({ educations }) => {
 	);
 };
 
-export default Educations;
+export default Works;

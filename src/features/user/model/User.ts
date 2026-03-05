@@ -12,6 +12,19 @@ export interface Education {
 	school: School;
 }
 
+export interface Company {
+	id: number;
+	name: string;
+	address: string;
+}
+
+export interface Employment {
+	position: string;
+	startYear: string;
+	endYear?: string;
+	company: Company;
+}
+
 export interface DGroupBasicInfo {
 	id: number;
 	firstName: string;
@@ -36,4 +49,5 @@ export interface User {
 	emergencyContactName: string;
 	emergencyContactNumber: string;
 	education: Education[];
+	employment: Employment[];
 }

@@ -29,6 +29,7 @@ import { formatFullDate } from "../../../utils/dateFormatter";
 import ContactInformation from "./components/ContactInformationRO";
 import Educations from "./components/EducationRO";
 import dayjs from "dayjs";
+import Works from "./components/WorkRO";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailsScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -120,6 +121,18 @@ const UserDetailsScreen = () => {
 										? user.education.map((e) => ({
 												school: e.school.name,
 												degree: e.course,
+												startYear: dayjs(e.startYear).year().toString(),
+												endYear: dayjs(e.endYear).year().toString(),
+										  }))
+										: []
+								}
+							/>
+							<Works
+								works={
+									user?.employment?.length
+										? user.employment.map((e) => ({
+												position: e.position,
+												company: e.company.name,
 												startYear: dayjs(e.startYear).year().toString(),
 												endYear: dayjs(e.endYear).year().toString(),
 										  }))

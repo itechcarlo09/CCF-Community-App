@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { DGroupBasicInfo, Education, User } from "../model/user";
+import { DGroupBasicInfo, Education, Employment, User } from "../model/user";
 import { EducationEmploymentConfig } from "../../../types/userTypes";
 import {
 	formatFullName,
@@ -32,6 +32,7 @@ const staticInitialValues = {
 	emergencyPerson: "",
 	emergencyNumber: "",
 	education: [] as Education[],
+	employment: [] as Employment[],
 };
 
 const staticSchema = Yup.object({
@@ -185,6 +186,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 					emergencyContactNumber: values.emergencyNumber,
 					dGroupLeaderId: values.dLeaderID ? Number(values.dLeaderID) : null,
 					education: values.education.length > 0 ? values.education : [],
+					employment: values.employment.length > 0 ? values.employment : [],
 				};
 
 				if (userId) {
@@ -376,6 +378,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 							? user.dGroupLeader?.id.toString()
 							: "",
 						education: user.education.length > 0 ? user.education : [],
+						employment: user.employment.length > 0 ? user.employment : [],
 					});
 				}
 			} catch (err) {
