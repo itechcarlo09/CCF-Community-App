@@ -6,6 +6,7 @@ import EventScreen from "../features/event/view/EventScreen";
 import { useTheme } from "../theme/ThemeProvider";
 import MdiIcon from "../components/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
+import DashboardScreen from "../features/dashboard/view/DashboardScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +30,7 @@ function BottomTabNavigator() {
 		>
 			<Tab.Screen
 				name="HomeTab"
-				component={HomeScreen}
+				component={DashboardScreen}
 				options={{ title: "Home" }}
 			/>
 			<Tab.Screen
