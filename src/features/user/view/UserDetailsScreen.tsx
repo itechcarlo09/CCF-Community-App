@@ -24,6 +24,8 @@ import { useTheme } from "../../../theme/ThemeProvider";
 import { ICONSIZE } from "../../../types/globalTypes";
 import { SlidingTabs } from "../../../components/SlidingTabs";
 import ProfileHeader from "./components/ProfileHeader";
+import BasicInformationRO from "./components/BasicInformationRO";
+import { formatFullDate } from "../../../utils/dateFormatter";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailsScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -33,8 +35,8 @@ const UserDetailsScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
 	const { theme } = useTheme();
-	const { id } = route.params;
-	const { loading, user } = useUserForm({ userId: id });
+	const { id, hasEditedUser } = route.params;
+	const { loading, user, refreshUser } = useUserForm({ userId: id });
 	const [mappedUser, setMappedUser] = useState<RecordItemUI>();
 	const [tab, setTab] = useState<number>(0);
 	useEffect(() => {
@@ -76,12 +78,33 @@ const UserDetailsScreen = () => {
 						{ backgroundColor: theme.background, borderColor: theme.border },
 					]}
 				>
-					<ProfileHeader
-						name={mappedUser ? mappedUser.fullName : ""}
-						ministry={mappedUser ? mappedUser.ministryText : ""}
-						uri={""}
-						fallbackText={mappedUser ? mappedUser?.fallbackText : ""}
-					/>
+					<View style={{ rowGap: 24 }}>
+						<ProfileHeader
+							name={mappedUser ? mappedUser.fullName : ""}
+							ministry={mappedUser ? mappedUser.ministryText : ""}
+							uri={""}
+							fallbackText={mappedUser ? mappedUser?.fallbackText : ""}
+						/>
+						<BasicInformationRO
+							firstName={user ? user.firstName : ""}
+							middleName={user?.middleName}
+							lastName={user ? user.lastName : ""}
+							birthDay={user ? formatFullDate(user.birthDate) : ""}
+							gender={user ? user?.gender : ""}
+							dLeaderFullName={mappedUser?.dleaderName}
+							onPress={() => {
+								navigation.navigate("UserForm", {
+									id,
+									onSuccess: () => {
+										if (hasEditedUser) {
+											hasEditedUser();
+										}
+										refreshUser();
+									},
+								});
+							}}
+						/>
+					</View>
 				</View>
 			)}
 		</SafeAreaView>

@@ -8,5 +8,5 @@ export interface RecordItemUI {
 	ministryText: string;
 	status: string;
 	membershipType: MembershipType;
-	dleaderName?: string | null;
+	dleaderName?: string;
 }

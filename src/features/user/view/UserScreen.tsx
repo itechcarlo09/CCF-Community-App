@@ -108,6 +108,7 @@ const UserScreen = ({ navigation }: any) => {
 									screen: "UserDetailsScreen",
 									params: {
 										id,
+										hasEditedUser: refresh,
 									},
 								});
 							}}

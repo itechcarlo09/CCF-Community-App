@@ -324,6 +324,18 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 		[],
 	);
 
+	const refreshUser = useCallback(async () => {
+		try {
+			setLoading(true);
+			const user = await getUser(userId.toString());
+			if (user) {
+				setUser({ ...user });
+			}
+		} finally {
+			setLoading(false);
+		}
+	}, []);
+
 	// Load user if editing
 	useEffect(() => {
 		const load = async () => {
@@ -374,6 +386,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 		formik,
 		loading,
 		user,
+		refreshUser,
 		educationFields,
 		employmentFields,
 		addEducationField,
