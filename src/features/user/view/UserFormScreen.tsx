@@ -21,6 +21,9 @@ import topUsers from "../topUsers.json";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ICONSIZE } from "../../../types/globalTypes";
+import Educations from "./components/EducationRO";
+import Works from "./components/WorkRO";
+import dayjs from "dayjs";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -238,6 +241,30 @@ const UserFormScreen = () => {
 							name={"emergencyNumber"}
 						/>
 					</View>
+					<Educations
+						educations={
+							user?.education?.length
+								? user.education.map((e) => ({
+										school: e.school.name,
+										degree: e.course,
+										startYear: dayjs(e.startYear).year().toString(),
+										endYear: dayjs(e.endYear).year().toString(),
+								  }))
+								: []
+						}
+					/>
+					<Works
+						works={
+							user?.employment?.length
+								? user.employment.map((e) => ({
+										position: e.position,
+										company: e.company.name,
+										startYear: dayjs(e.startYear).year().toString(),
+										endYear: dayjs(e.endYear).year().toString(),
+								  }))
+								: []
+						}
+					/>
 				</KeyboardAwareScrollView>
 			)}
 			<Button

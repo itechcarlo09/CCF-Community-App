@@ -36,6 +36,7 @@ export const lightColors = {
 	white: "#FFFFFF",
 	gray: {
 		200: "#E5E7EB",
+		300: "#D1D5DB",
 		400: "#9CA3AF",
 		500: "#6B7280",
 		900: "#111827",

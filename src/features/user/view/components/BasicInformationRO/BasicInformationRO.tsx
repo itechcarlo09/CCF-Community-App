@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useTheme } from "../../../../../theme/ThemeProvider";
-import CircularImage from "../../../../../components/CircularImage";
 import { BasicInformationROProps } from "./BasicInformationRO.types";
 import MdiIcon from "../../../../../components/MdiIcon";
 import { mdiPencilOutline } from "@mdi/js";
@@ -12,6 +11,7 @@ const BasicInformation: React.FC<BasicInformationROProps> = ({
 	middleName,
 	lastName,
 	birthDay,
+	age,
 	gender,
 	dLeaderFullName,
 	onPress,
@@ -63,6 +63,12 @@ const BasicInformation: React.FC<BasicInformationROProps> = ({
 					<Text style={[styles.valueText, { color: theme.text }]}>
 						{birthDay}
 					</Text>
+				</View>
+				<View>
+					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
+						Age
+					</Text>
+					<Text style={[styles.valueText, { color: theme.text }]}>{age}</Text>
 				</View>
 				<View>
 					<Text style={[styles.labelText, { color: theme.gray[500] }]}>

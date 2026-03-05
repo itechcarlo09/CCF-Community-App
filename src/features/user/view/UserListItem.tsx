@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	ViewStyle,
+	StyleProp,
+} from "react-native";
 import CircularImage from "../../../components/CircularImage";
 import { RecordItemUI } from "../model/RecordListItem";
 import { useTheme } from "../../../theme/ThemeProvider";
@@ -9,61 +16,79 @@ import Badge from "./components/Badge/Badge";
 
 interface Props {
 	user: RecordItemUI;
-	onPress: (id?: number) => void;
+	isForNetwork?: boolean;
+	isCurrent?: boolean;
+	onPress?: (id: number) => void;
+	style?: StyleProp<ViewStyle> | undefined;
 }
 
-const UserListItem = ({ user, onPress }: Props) => {
+const UserListItem = ({
+	user,
+	isForNetwork = false,
+	isCurrent = false,
+	onPress,
+	style,
+}: Props) => {
 	const { theme } = useTheme();
 	return (
 		<TouchableOpacity
-			style={[styles.card, { backgroundColor: theme.background }]}
-			onPress={() => onPress(user.id)}
+			style={[styles.card, { backgroundColor: theme.background }, style]}
+			onPress={() => onPress && onPress(user.id)}
 		>
 			<CircularImage uri={""} size={45} fallbackText={user.fallbackText} />
 			<View style={styles.flex}>
 				<Text style={[styles.text, { color: theme.text }]}>
-					{user.fullName}, {user.age}
+					{`${user.fullName}${!!!isForNetwork ? `, ${user.age}` : ""}`}
 				</Text>
 				<Text style={[styles.detailText, { color: theme.text }]}>
 					{user.ministryText}
 				</Text>
 			</View>
 			<View style={{ alignItems: "flex-end", gap: 8 }}>
-				<Badge type={user.membershipType} dleader={user.dleaderName} />
-				<View style={{ alignItems: "flex-end", gap: 2 }}>
-					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-						<MdiIcon
-							path={mdiAccountMultipleOutline}
-							size={12}
-							color={user.dleaderName ? theme.gray[500] : theme.error}
-						/>
-						<Text
-							style={[
-								styles.detailText,
-								{
-									color: user.dleaderName ? theme.gray[500] : theme.error,
-								},
-							]}
+				{!!!isCurrent && (
+					<Badge type={user.membershipType} dleader={user.dleaderName} />
+				)}
+				{!!!isForNetwork && (
+					<View style={{ alignItems: "flex-end", gap: 2 }}>
+						<View
+							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
 						>
-							{user.dleaderName ? user.dleaderName : "Pending"}
-						</Text>
-					</View>
-					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-						<MdiIcon
-							path={mdiCheckCircleOutline}
-							size={12}
-							color={theme.textPositive.secondary}
-						/>
-						<Text
-							style={[
-								styles.detailText,
-								{ color: theme.textPositive.secondary },
-							]}
+							<MdiIcon
+								path={mdiAccountMultipleOutline}
+								size={12}
+								color={user.dleaderName ? theme.gray[500] : theme.error}
+							/>
+							<Text
+								style={[
+									styles.detailText,
+									{
+										color: user.dleaderName ? theme.gray[500] : theme.error,
+									},
+								]}
+							>
+								{user.dleaderName ? user.dleaderName : "Pending"}
+							</Text>
+						</View>
+
+						<View
+							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
 						>
-							Active Member
-						</Text>
+							<MdiIcon
+								path={mdiCheckCircleOutline}
+								size={12}
+								color={theme.textPositive.secondary}
+							/>
+							<Text
+								style={[
+									styles.detailText,
+									{ color: theme.textPositive.secondary },
+								]}
+							>
+								Active Member
+							</Text>
+						</View>
 					</View>
-				</View>
+				)}
 			</View>
 		</TouchableOpacity>
 	);

@@ -1,35 +1,25 @@
-import {
-	NativeStackNavigationProp,
-	NativeStackScreenProps,
-} from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import {
-	View,
-	Text,
-	StyleSheet,
-	SafeAreaView,
-	ScrollView,
-	ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { UserStackParamList } from "../../../types/navigation";
 import { useUserForm } from "../hooks/useUserForm";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import Loading from "../../../components/Loading";
-import CircularImage from "../../../components/CircularImage";
 import { RecordItemUI } from "../model/RecordListItem";
 import { mapUserToUI } from "../data/user.mapper";
 import MdiIcon from "../../../components/MdiIcon";
-import { mdiArrowLeft } from "@mdi/js";
+import { mdiArrowLeft, mdiStar } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import { ICONSIZE } from "../../../types/globalTypes";
 import { SlidingTabs } from "../../../components/SlidingTabs";
 import ProfileHeader from "./components/ProfileHeader";
 import BasicInformationRO from "./components/BasicInformationRO";
-import { formatFullDate } from "../../../utils/dateFormatter";
+import { ageNow, formatFullDate } from "../../../utils/dateFormatter";
 import ContactInformation from "./components/ContactInformationRO";
 import Educations from "./components/EducationRO";
 import dayjs from "dayjs";
 import Works from "./components/WorkRO";
+import UserListItem from "./UserListItem";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailsScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -41,15 +31,55 @@ const UserDetailsScreen = () => {
 	const { theme } = useTheme();
 	const { id, hasEditedUser } = route.params;
 	const { loading, user, refreshUser } = useUserForm({ userId: id });
+	const [mappedDLeader, setMappedDLeader] = useState<RecordItemUI>();
 	const [mappedUser, setMappedUser] = useState<RecordItemUI>();
+	const [mappedDMembers, setMappedDMembers] = useState<RecordItemUI[]>();
 	const [tab, setTab] = useState<number>(0);
+	const hasMember = user && user.dGroupMembers && user.dGroupMembers.length > 0;
 	useEffect(() => {
 		// Initial logic here (fetch, init, etc.)
 	}, []);
 
 	useEffect(() => {
 		user ? setMappedUser(mapUserToUI(user)) : null;
+		user &&
+			user.dGroupLeader &&
+			setMappedDLeader({
+				...mapUserToUI({
+					id: user.dGroupLeaderId ? user.dGroupLeaderId : 0,
+					firstName: user.dGroupLeader.firstName,
+					lastName: user.dGroupLeader.lastName,
+					middleName: user.dGroupLeader.middleName,
+				}),
+				membershipType: "DLeader",
+			});
+		hasMember &&
+			setMappedDMembers(
+				user.dGroupMembers?.map((e) => {
+					return {
+						...mapUserToUI({
+							id: e.id,
+							firstName: e.firstName,
+							lastName: e.lastName,
+							middleName: e.middleName,
+						}),
+						membershipType: "DMember",
+					};
+				}),
+			);
 	}, [user]);
+
+	const goToUserDetails = (id: number) => {
+		navigation.push("UserDetailsScreen", {
+			id,
+			hasEditedUser: () => {
+				if (hasEditedUser) {
+					hasEditedUser();
+				}
+				refreshUser();
+			},
+		});
+	};
 
 	if (loading) {
 		return <Loading />;
@@ -75,7 +105,7 @@ const UserDetailsScreen = () => {
 				}}
 			/>
 
-			{tab == 0 && (
+			{tab == 0 ? (
 				<ScrollView
 					contentContainerStyle={[
 						styles.body,
@@ -95,6 +125,7 @@ const UserDetailsScreen = () => {
 								middleName={user?.middleName}
 								lastName={user ? user.lastName : ""}
 								birthDay={user ? formatFullDate(user.birthDate) : ""}
+								age={user ? ageNow(user.birthDate) : ""}
 								gender={user ? user?.gender : ""}
 								dLeaderFullName={mappedUser?.dleaderName}
 								onPress={() => {
@@ -142,6 +173,106 @@ const UserDetailsScreen = () => {
 						</View>
 					</View>
 				</ScrollView>
+			) : (
+				<ScrollView>
+					<View style={{ rowGap: 8 }}>
+						{mappedDLeader && (
+							<View style={styles.dgroupAlignment}>
+								<View style={{ alignItems: "center" }}>
+									<View
+										style={[
+											styles.circleIdentifier,
+											{ backgroundColor: theme.gray[300] },
+										]}
+									/>
+									<View
+										style={[styles.line, { backgroundColor: theme.gray[300] }]}
+									/>
+								</View>
+								<View style={{ rowGap: 13, flex: 1 }}>
+									<Text
+										style={[styles.dgroupTitleText, { color: theme.gray[500] }]}
+									>
+										DGroup Upline
+									</Text>
+									{mappedDLeader && (
+										<UserListItem
+											user={mappedDLeader}
+											isForNetwork
+											style={{ marginHorizontal: 0 }}
+											onPress={goToUserDetails}
+										/>
+									)}
+								</View>
+							</View>
+						)}
+						{mappedUser && (
+							<View style={styles.dgroupAlignment}>
+								<View style={{ alignItems: "center", alignSelf: "flex-start" }}>
+									<View
+										style={[
+											styles.circleIdentifier,
+											{
+												backgroundColor: theme.gray[300],
+											},
+										]}
+									>
+										<MdiIcon path={mdiStar} size={18} color={theme.white} />
+									</View>
+									{hasMember && (
+										<View
+											style={[
+												styles.line,
+												{ backgroundColor: theme.gray[300] },
+											]}
+										/>
+									)}
+								</View>
+								<View style={{ rowGap: 13, flex: 1 }}>
+									<Text
+										style={[styles.dgroupTitleText, { color: theme.gray[500] }]}
+									>
+										Me
+									</Text>
+									<UserListItem
+										user={mappedUser}
+										isForNetwork
+										isCurrent
+										style={{ marginHorizontal: 0 }}
+									/>
+								</View>
+							</View>
+						)}
+						{hasMember && (
+							<View style={styles.dgroupAlignment}>
+								<View style={{ alignItems: "center", alignSelf: "flex-start" }}>
+									<View
+										style={[
+											styles.circleIdentifier,
+											{ backgroundColor: theme.gray[300] },
+										]}
+									/>
+								</View>
+								<View style={{ rowGap: 13, flex: 1 }}>
+									<Text
+										style={[styles.dgroupTitleText, { color: theme.gray[500] }]}
+									>
+										{`DGroup Downline (${user?.dGroupMembers?.length})`}
+									</Text>
+									{mappedDMembers?.map((mappedUser) => (
+										<UserListItem
+											key={mappedUser.id}
+											user={mappedUser}
+											isForNetwork
+											style={{ marginHorizontal: 0 }}
+											onPress={goToUserDetails}
+										/>
+									))}
+								</View>
+							</View>
+						)}
+					</View>
+				</ScrollView>
 			)}
 		</SafeAreaView>
 	);
@@ -175,5 +306,26 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderRadius: 8,
 		padding: 24,
+	},
+	dgroupAlignment: {
+		flexDirection: "row",
+		alignItems: "center",
+		columnGap: 8,
+	},
+	dgroupTitleText: {
+		fontSize: 14,
+		lineHeight: 20,
+		fontWeight: 600,
+	},
+	circleIdentifier: {
+		height: 23,
+		width: 23,
+		borderRadius: 23 / 2,
+		justifyContent: "center",
+	},
+	line: {
+		marginTop: 4,
+		flex: 1,
+		width: 1,
 	},
 });
