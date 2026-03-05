@@ -12,6 +12,9 @@ const CircularDate: React.FC<CircularDateProps> = ({ date, size = 100 }) => {
 	return (
 		<View style={styles.container}>
 			<View style={[styles.fallback, { backgroundColor: theme.gray[500] }]}>
+				<Text style={[styles.day, { color: theme.white }]}>
+					{dayjs(date).format("MMM")}
+				</Text>
 				<Text style={[styles.number, { color: theme.white }]}>
 					{dayjs(date).date()}
 				</Text>
