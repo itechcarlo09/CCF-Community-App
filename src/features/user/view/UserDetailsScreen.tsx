@@ -26,6 +26,7 @@ import { SlidingTabs } from "../../../components/SlidingTabs";
 import ProfileHeader from "./components/ProfileHeader";
 import BasicInformationRO from "./components/BasicInformationRO";
 import { formatFullDate } from "../../../utils/dateFormatter";
+import ContactInformation from "./components/ContactInformationRO";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailsScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -72,8 +73,8 @@ const UserDetailsScreen = () => {
 			/>
 
 			{tab == 0 && (
-				<View
-					style={[
+				<ScrollView
+					contentContainerStyle={[
 						styles.body,
 						{ backgroundColor: theme.background, borderColor: theme.border },
 					]}
@@ -85,27 +86,35 @@ const UserDetailsScreen = () => {
 							uri={""}
 							fallbackText={mappedUser ? mappedUser?.fallbackText : ""}
 						/>
-						<BasicInformationRO
-							firstName={user ? user.firstName : ""}
-							middleName={user?.middleName}
-							lastName={user ? user.lastName : ""}
-							birthDay={user ? formatFullDate(user.birthDate) : ""}
-							gender={user ? user?.gender : ""}
-							dLeaderFullName={mappedUser?.dleaderName}
-							onPress={() => {
-								navigation.navigate("UserForm", {
-									id,
-									onSuccess: () => {
-										if (hasEditedUser) {
-											hasEditedUser();
-										}
-										refreshUser();
-									},
-								});
-							}}
-						/>
+						<View style={{ rowGap: 28 }}>
+							<BasicInformationRO
+								firstName={user ? user.firstName : ""}
+								middleName={user?.middleName}
+								lastName={user ? user.lastName : ""}
+								birthDay={user ? formatFullDate(user.birthDate) : ""}
+								gender={user ? user?.gender : ""}
+								dLeaderFullName={mappedUser?.dleaderName}
+								onPress={() => {
+									navigation.navigate("UserForm", {
+										id,
+										onSuccess: () => {
+											if (hasEditedUser) {
+												hasEditedUser();
+											}
+											refreshUser();
+										},
+									});
+								}}
+							/>
+							<ContactInformation
+								email={user ? user.email : ""}
+								facebookLink={user?.facebookLink}
+								emergencyName={user?.emergencyContactName}
+								emergencyContact={user?.emergencyContactNumber}
+							/>
+						</View>
 					</View>
-				</View>
+				</ScrollView>
 			)}
 		</SafeAreaView>
 	);
@@ -135,7 +144,7 @@ const styles = StyleSheet.create({
 		fontWeight: 600,
 	},
 	body: {
-		flex: 1,
+		flexGrow: 1,
 		borderWidth: 1,
 		borderRadius: 8,
 		padding: 24,

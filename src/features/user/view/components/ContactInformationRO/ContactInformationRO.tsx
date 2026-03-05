@@ -2,82 +2,62 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useTheme } from "../../../../../theme/ThemeProvider";
 import CircularImage from "../../../../../components/CircularImage";
-import { BasicInformationROProps } from "./BasicInformationRO.types";
 import MdiIcon from "../../../../../components/MdiIcon";
 import { mdiPencilOutline } from "@mdi/js";
-import { styles } from "./BasicInformationRO.styles";
+import { ContactInformationROProps } from "./ContactInformationRO.types";
+import { styles } from "./ContactInformationRO.styles";
 
-const BasicInformation: React.FC<BasicInformationROProps> = ({
-	firstName,
-	middleName,
-	lastName,
-	birthDay,
-	gender,
-	dLeaderFullName,
-	onPress,
+const ContactInformation: React.FC<ContactInformationROProps> = ({
+	contactNumber,
+	email,
+	facebookLink,
+	emergencyName,
+	emergencyContact,
 }) => {
 	const { theme } = useTheme();
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.headerContainer}>
-				<Text style={[styles.headerText, { color: theme.text }]}>
-					Basic Information
-				</Text>
-				<MdiIcon
-					onPress={onPress}
-					path={mdiPencilOutline}
-					size={24}
-					color="#323232"
-				/>
-			</View>
+			<Text style={[styles.headerText, { color: theme.text }]}>
+				Contact Information
+			</Text>
 			<View style={styles.detailsContainer}>
 				<View>
 					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-						First Name
+						Contact Number
 					</Text>
 					<Text style={[styles.valueText, { color: theme.text }]}>
-						{firstName}
+						{contactNumber ? `+63 ${contactNumber}` : "N/A"}
 					</Text>
 				</View>
 				<View>
 					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-						Middle Name
+						Email Address
+					</Text>
+					<Text style={[styles.valueText, { color: theme.text }]}>{email}</Text>
+				</View>
+				<View>
+					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
+						Facebook Link
 					</Text>
 					<Text style={[styles.valueText, { color: theme.text }]}>
-						{middleName ?? "N/A"}
+						{facebookLink ?? "N/A"}
 					</Text>
 				</View>
 				<View>
 					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-						Last Name
+						Contact Person in case of emergency
 					</Text>
 					<Text style={[styles.valueText, { color: theme.text }]}>
-						{lastName}
+						{emergencyName ?? "N/A"}
 					</Text>
 				</View>
 				<View>
 					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-						Birthday
+						Number of Contact Person
 					</Text>
 					<Text style={[styles.valueText, { color: theme.text }]}>
-						{birthDay}
-					</Text>
-				</View>
-				<View>
-					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-						Gender
-					</Text>
-					<Text style={[styles.valueText, { color: theme.text }]}>
-						{gender}
-					</Text>
-				</View>
-				<View>
-					<Text style={[styles.labelText, { color: theme.gray[500] }]}>
-						Dgroup Leader
-					</Text>
-					<Text style={[styles.valueText, { color: theme.text }]}>
-						{dLeaderFullName ?? "N/A"}
+						{emergencyContact ? `+63 ${emergencyContact}` : "N/A"}
 					</Text>
 				</View>
 			</View>
@@ -85,4 +65,4 @@ const BasicInformation: React.FC<BasicInformationROProps> = ({
 	);
 };
 
-export default BasicInformation;
+export default ContactInformation;
