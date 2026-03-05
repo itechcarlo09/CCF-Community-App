@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { DGroupBasicInfo, User } from "../model/user";
+import { DGroupBasicInfo, Education, User } from "../model/user";
 import { EducationEmploymentConfig } from "../../../types/userTypes";
 import {
 	formatFullName,
@@ -31,6 +31,7 @@ const staticInitialValues = {
 	facebook: "",
 	emergencyPerson: "",
 	emergencyNumber: "",
+	education: [] as Education[],
 };
 
 const staticSchema = Yup.object({
@@ -183,6 +184,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 					emergencyContactName: values.emergencyPerson,
 					emergencyContactNumber: values.emergencyNumber,
 					dGroupLeaderId: values.dLeaderID ? Number(values.dLeaderID) : null,
+					education: values.education.length > 0 ? values.education : [],
 				};
 
 				if (userId) {
@@ -344,6 +346,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				setLoading(true);
 				const user = await getUser(userId.toString());
 				if (user) {
+					console.log(user);
 					setUser({ ...user });
 					formik.setValues({
 						firstName: user.firstName,
@@ -372,6 +375,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 						dLeaderID: user.dGroupLeader
 							? user.dGroupLeader?.id.toString()
 							: "",
+						education: user.education.length > 0 ? user.education : [],
 					});
 				}
 			} catch (err) {

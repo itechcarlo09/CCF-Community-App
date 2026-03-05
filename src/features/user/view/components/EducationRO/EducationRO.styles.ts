@@ -4,6 +4,11 @@ export const styles = StyleSheet.create({
 	container: {
 		rowGap: 8,
 	},
+	headerContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
 	headerText: {
 		fontSize: 16,
 		lineHeight: 24,
@@ -21,5 +26,15 @@ export const styles = StyleSheet.create({
 	},
 	detailsContainer: {
 		rowGap: 12,
+	},
+	yearContainer: {
+		flexDirection: "row",
+		justifyContent: "space-evenly",
+		alignItems: "center",
+	},
+	educationTitleText: {
+		fontSize: 14,
+		lineHeight: 20,
+		fontWeight: 700,
 	},
 });

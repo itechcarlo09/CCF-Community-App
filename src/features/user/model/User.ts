@@ -1,3 +1,17 @@
+export interface School {
+	id: number;
+	address: string;
+	name: string;
+}
+
+export interface Education {
+	gradeYear: string;
+	course: string;
+	startYear: string;
+	endYear: string;
+	school: School;
+}
+
 export interface DGroupBasicInfo {
 	id: number;
 	firstName: string;
@@ -21,4 +35,5 @@ export interface User {
 	userType: string;
 	emergencyContactName: string;
 	emergencyContactNumber: string;
+	education: Education[];
 }

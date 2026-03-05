@@ -13,8 +13,10 @@ import { RecordItemUI } from "../model/RecordListItem";
 import MdiIcon from "../../../components/MdiIcon";
 import { mdiArrowLeft } from "@mdi/js";
 import Gender from "../../../types/enums/Gender";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type UserRouteProp = RouteProp<UserStackParamList, "DleaderScreen">;
+type NavProp = NativeStackNavigationProp<UserStackParamList>;
 const Separator = () => <View style={styles.separator} />;
 const defaultId = 0;
 
@@ -23,12 +25,7 @@ const DleaderScreen = ({ navigation }: any) => {
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const route = useRoute<UserRouteProp>();
-	const { id, gender, onSelect } =
-		(route.params as {
-			id: number;
-			gender: Gender;
-			onSelect: (id: string, fullName: string) => void;
-		}) || {};
+	const { id, gender, onSelect } = route.params;
 	const [Dleaders, setDLeaders] = useState<RecordItemUI[]>([]);
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
@@ -47,7 +44,7 @@ const DleaderScreen = ({ navigation }: any) => {
 		getDLeaders(id ?? defaultId, gender).then(setDLeaders);
 	}, [debouncedSearchTerm]);
 
-	const handleSelect = (id: string, fullName: string) => {
+	const handleSelect = (id: number, fullName: string) => {
 		onSelect(id, fullName);
 		navigation.goBack();
 	};
@@ -87,7 +84,7 @@ const DleaderScreen = ({ navigation }: any) => {
 					renderItem={({ item }) => (
 						<UserListItem
 							user={item}
-							onPress={() => handleSelect(item.id.toString(), item.fullName)}
+							onPress={() => handleSelect(item.id, item.fullName)}
 						/>
 					)}
 					refreshControl={Refresh()}

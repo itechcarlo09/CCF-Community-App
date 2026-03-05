@@ -27,6 +27,8 @@ import ProfileHeader from "./components/ProfileHeader";
 import BasicInformationRO from "./components/BasicInformationRO";
 import { formatFullDate } from "../../../utils/dateFormatter";
 import ContactInformation from "./components/ContactInformationRO";
+import Educations from "./components/EducationRO";
+import dayjs from "dayjs";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailsScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -111,6 +113,18 @@ const UserDetailsScreen = () => {
 								facebookLink={user?.facebookLink}
 								emergencyName={user?.emergencyContactName}
 								emergencyContact={user?.emergencyContactNumber}
+							/>
+							<Educations
+								educations={
+									user?.education?.length
+										? user.education.map((e) => ({
+												school: e.school.name,
+												degree: e.course,
+												startYear: dayjs(e.startYear).year().toString(),
+												endYear: dayjs(e.endYear).year().toString(),
+										  }))
+										: []
+								}
 							/>
 						</View>
 					</View>

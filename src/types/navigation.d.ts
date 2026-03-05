@@ -48,8 +48,8 @@ export type UserStackParamList = {
 	UserForm: { id?: number; onSuccess?: () => void } | undefined;
 	UserDetailsScreen: { id: number; hasEditedUser: () => void };
 	DleaderScreen: {
-		id?: number;
-		gender?: Gender;
+		id: number;
+		gender: Gender;
 		onSelect: (id: number, fullName: string) => void;
 	}; // make id optional
 };
