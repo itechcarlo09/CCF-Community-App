@@ -6,7 +6,7 @@ export interface RecordItemUI {
 	fallbackText: string; // Used for CircularImage fallback
 	age: number;
 	ministryText: string;
-	status: string;
 	membershipType: MembershipType;
 	dleaderName?: string;
+	isActive: boolean;
 }

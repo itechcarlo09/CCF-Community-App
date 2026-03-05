@@ -20,6 +20,7 @@ import Educations from "./components/EducationRO";
 import dayjs from "dayjs";
 import Works from "./components/WorkRO";
 import UserListItem from "./UserListItem";
+import ConfirmationModal from "../../../components/ConfirmationModal";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailsScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -36,9 +37,6 @@ const UserDetailsScreen = () => {
 	const [mappedDMembers, setMappedDMembers] = useState<RecordItemUI[]>();
 	const [tab, setTab] = useState<number>(0);
 	const hasMember = user && user.dGroupMembers && user.dGroupMembers.length > 0;
-	useEffect(() => {
-		// Initial logic here (fetch, init, etc.)
-	}, []);
 
 	useEffect(() => {
 		user ? setMappedUser(mapUserToUI(user)) : null;

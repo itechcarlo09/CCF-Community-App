@@ -15,7 +15,10 @@ const EventListItem = ({ event, onPress }: Props) => {
 	const { theme } = useTheme();
 	return (
 		<TouchableOpacity
-			style={[styles.card, { backgroundColor: theme.background }]}
+			style={[
+				styles.card,
+				{ backgroundColor: theme.background, borderColor: theme.border },
+			]}
 			onPress={() => onPress(event.id)}
 		>
 			<Text
@@ -101,6 +104,7 @@ const styles = StyleSheet.create({
 	flex: { flex: 1 },
 	card: {
 		borderRadius: 8,
+		borderWidth: 1,
 		columnGap: 12,
 		marginHorizontal: 16,
 	},

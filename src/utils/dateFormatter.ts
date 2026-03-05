@@ -114,3 +114,17 @@ export const toDate = (input: any): Date => {
 export const formatLocalized = (date: Date | string | null): string => {
 	return date ? dayjs(date).format("LL") : "";
 };
+
+/**
+ * to check if the date is within 3 months from the current date
+ */
+export const isWithinLastThreeMonths = (date: Date | string): boolean => {
+	const now = dayjs();
+	const threeMonthsAgo = now.subtract(3, "month");
+
+	// Inclusive check: date is between 3 months ago and today
+	return (
+		dayjs(date).isAfter(threeMonthsAgo) &&
+		dayjs(date).isBefore(now.add(1, "day"))
+	);
+};

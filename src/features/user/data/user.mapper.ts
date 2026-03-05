@@ -1,4 +1,7 @@
-import { ageNumber } from "../../../utils/dateFormatter";
+import {
+	ageNumber,
+	isWithinLastThreeMonths,
+} from "../../../utils/dateFormatter";
 import { formatFullName } from "../../../utils/stringUtils";
 import { RecordItemUI } from "../model/RecordListItem";
 import { User } from "../model/user";
@@ -33,6 +36,10 @@ export const mapUserToUI = (
 			  )
 			: undefined);
 
+	const isActive = user.latestAttendance
+		? isWithinLastThreeMonths(user.latestAttendance)
+		: false;
+
 	let membershipType: MembershipType;
 	if (
 		topUser ||
@@ -57,7 +64,7 @@ export const mapUserToUI = (
 		fullName,
 		age,
 		ministryText,
-		status: "Active Member",
+		isActive,
 		dleaderName,
 		membershipType,
 	};

@@ -50,4 +50,5 @@ export interface User {
 	emergencyContactNumber: string;
 	education: Education[];
 	employment: Employment[];
+	latestAttendance?: Date;
 }

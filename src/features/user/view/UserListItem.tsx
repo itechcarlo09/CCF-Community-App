@@ -82,10 +82,14 @@ const UserListItem = ({
 							<Text
 								style={[
 									styles.detailText,
-									{ color: theme.textPositive.secondary },
+									{
+										color: user.isActive
+											? theme.textPositive.secondary
+											: theme.textDanger.onDanger.secondary,
+									},
 								]}
 							>
-								Active Member
+								{`${user.isActive ? "Active" : "Inactive"} Member`}
 							</Text>
 						</View>
 					</View>
