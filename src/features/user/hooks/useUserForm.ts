@@ -331,23 +331,19 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 			try {
 				setLoading(true);
 				const user = await getUser(userId.toString());
-				let dLeader: DGroupBasicInfo | null = null;
-				if (user?.dGroupLeaderId) {
-					dLeader = await getUser(String(user.dGroupLeaderId));
-				}
 				if (user) {
-					setUser({ ...user, dGroupLeader: dLeader ?? undefined });
+					setUser({ ...user });
 					formik.setValues({
 						firstName: user.firstName,
 						middleName: user.middleName ?? "",
 						lastName: user.lastName,
 						birthdate: dayjs(user.birthDate).format("YYYY-MM-DD"),
 						gender: user.gender,
-						leaderName: dLeader
+						leaderName: user.dGroupLeader
 							? formatFullName(
-									dLeader?.firstName,
-									dLeader?.lastName,
-									dLeader?.middleName,
+									user.dGroupLeader.firstName,
+									user.dGroupLeader.lastName,
+									user.dGroupLeader.middleName,
 							  ) ?? ""
 							: "",
 						contactNumber: formatPhoneNumber(

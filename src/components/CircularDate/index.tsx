@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Text } from "react-native";
+import { View, Text } from "react-native";
 import { CircularDateProps } from "./types";
 import { createStyles } from "./styles";
 import { useTheme } from "../../theme/ThemeProvider";

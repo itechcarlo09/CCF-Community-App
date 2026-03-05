@@ -20,6 +20,7 @@ import Loading from "../../../components/Loading";
 import topUsers from "../topUsers.json";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ICONSIZE } from "../../../types/globalTypes";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -81,11 +82,11 @@ const UserFormScreen = () => {
 				</Text>
 				<MdiIcon
 					path={mdiArrowLeft}
-					size={24}
+					size={ICONSIZE}
 					color="#323232"
 					onPress={navigation.goBack}
 				/>
-				<View style={styles.placeholder} />
+				<View style={{ width: ICONSIZE }} />
 			</View>
 			{loading ? (
 				<Loading />
