@@ -5,13 +5,19 @@ import dayjs from "dayjs";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { DGroupBasicInfo, Education, Employment, User } from "../model/user";
+import {
+	DGroupBasicInfoDTO,
+	EducationDTO,
+	EmploymentDTO,
+	UserDTO,
+} from "../model/user";
 import { EducationEmploymentConfig } from "../../../types/userTypes";
 import {
 	formatFullName,
 	formatPhoneNumber,
 	normalizePHNumber,
 } from "../../../utils/stringUtils";
+import UserType from "../../../types/enums/UserType";
 
 interface UseUserFormProps {
 	userId: number;
@@ -31,8 +37,8 @@ const staticInitialValues = {
 	facebook: "",
 	emergencyPerson: "",
 	emergencyNumber: "",
-	education: [] as Education[],
-	employment: [] as Employment[],
+	education: [] as EducationDTO[],
+	employment: [] as EmploymentDTO[],
 };
 
 const staticSchema = Yup.object({
@@ -97,7 +103,7 @@ const staticSchema = Yup.object({
 
 export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<UserDTO | null>(null);
 	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
 	const navigation = useNavigation();
 	const { addUser, getUser, updateUser } = useUserViewModel();
@@ -170,28 +176,72 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 		onSubmit: async (values) => {
 			setLoading(true);
 			try {
-				const user: Omit<User, "id" | "createdAt" | "updatedAt"> = {
-					firstName: values.firstName,
-					...(values.middleName?.trim() && {
-						middleName: values.middleName.trim(),
-					}),
-					lastName: values.lastName,
-					gender: values.gender,
-					contactNumber: values.contactNumber,
-					email: values.email,
-					birthDate: new Date(values.birthdate),
-					facebookLink: values.facebook,
-					userType: "Member",
-					emergencyContactName: values.emergencyPerson,
-					emergencyContactNumber: values.emergencyNumber,
-					dGroupLeaderId: values.dLeaderID ? Number(values.dLeaderID) : null,
-					education: values.education.length > 0 ? values.education : [],
-					employment: values.employment.length > 0 ? values.employment : [],
-				};
-
 				if (userId) {
+					const user: Partial<Omit<UserDTO, "id" | "createdAt" | "updatedAt">> =
+						{
+							...(values.firstName && { firstName: values.firstName }),
+							...(values.lastName && { lastName: values.lastName }),
+							...(values.gender && { gender: values.gender }),
+							...(values.contactNumber && {
+								contactNumber: values.contactNumber,
+							}),
+							...(values.email && { email: values.email }),
+							...(values.birthdate && {
+								birthDate: new Date(values.birthdate),
+							}),
+							...(values.middleName?.trim() && {
+								middleName: values.middleName.trim(),
+							}),
+							...(values.facebook && { facebookLink: values.facebook }),
+							...(values.emergencyPerson && {
+								emergencyContactName: values.emergencyPerson,
+							}),
+							...(values.emergencyNumber && {
+								emergencyContactNumber: values.emergencyNumber,
+							}),
+							...(values.dLeaderID && {
+								dGroupLeaderId: Number(values.dLeaderID),
+							}),
+							...(values.education?.length > 0 && {
+								education: values.education,
+							}),
+							...(values.employment?.length > 0 && {
+								employment: values.employment,
+							}),
+						};
 					await updateUser(userId.toString(), { ...user });
 				} else {
+					const user: Omit<UserDTO, "id" | "createdAt" | "updatedAt"> = {
+						firstName: values.firstName,
+						lastName: values.lastName,
+						gender: values.gender,
+						contactNumber: values.contactNumber,
+						email: values.email,
+						birthDate: new Date(values.birthdate),
+						userType:
+							Object.keys(UserType).find(
+								(key) => UserType[key as keyof typeof UserType] === "Member", // put here the value of userType
+							) ?? Object.keys(UserType)[Object.keys(UserType).length - 1],
+						...(values.middleName?.trim() && {
+							middleName: values.middleName.trim(),
+						}),
+						...(values.facebook && { facebookLink: values.facebook }),
+						...(values.emergencyPerson && {
+							emergencyContactName: values.emergencyPerson,
+						}),
+						...(values.emergencyNumber && {
+							emergencyContactNumber: values.emergencyNumber,
+						}),
+						...(values.dLeaderID && {
+							dGroupLeaderId: Number(values.dLeaderID),
+						}),
+						...(values.education?.length > 0 && {
+							education: values.education,
+						}),
+						...(values.employment?.length > 0 && {
+							employment: values.employment,
+						}),
+					};
 					await addUser({ ...user });
 				}
 				onSuccess && onSuccess();

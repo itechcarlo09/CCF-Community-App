@@ -4,7 +4,7 @@ import {
 } from "../../../utils/dateFormatter";
 import { formatFullName } from "../../../utils/stringUtils";
 import { RecordItemUI } from "../model/RecordListItem";
-import { User } from "../model/user";
+import { UserDTO } from "../model/user";
 import topUsers from "../topUsers.json";
 import { MembershipType } from "../types";
 
@@ -13,7 +13,7 @@ const MIN_DGROUP_MEMBERS_FOR_DLEADER = 3;
 const MIN_DGROUP_MEMBERS_FOR_TIMOTHY = 1;
 
 export const mapUserToUI = (
-	user: Partial<User> & Pick<User, "id" | "firstName" | "lastName">,
+	user: Partial<UserDTO> & Pick<UserDTO, "id" | "firstName" | "lastName">,
 ): RecordItemUI => {
 	const fallbackText = `${user.firstName[0]}${user.lastName[0]}`;
 	const fullName = formatFullName(

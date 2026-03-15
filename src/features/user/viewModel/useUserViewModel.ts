@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { userRepository } from "../data/userRepository";
-import { User } from "../model/user";
+import { UserDTO } from "../model/user";
 import { RecordItemUI } from "../model/RecordListItem";
 import Gender from "../../../types/enums/Gender";
 import { mapUserToUI } from "../data/user.mapper";
@@ -23,7 +23,7 @@ export const useUserViewModel = () => {
 	};
 
 	const addUser = async (
-		user: Omit<User, "id" | "createdAt" | "updatedAt">,
+		user: Omit<UserDTO, "id" | "createdAt" | "updatedAt">,
 	) => {
 		try {
 			setLoading(true);
@@ -37,7 +37,7 @@ export const useUserViewModel = () => {
 		}
 	};
 
-	const getUser = async (id: string): Promise<User | null> => {
+	const getUser = async (id: string): Promise<UserDTO | null> => {
 		try {
 			setLoading(true);
 			return await userRepository.getUserById(id);
@@ -82,7 +82,7 @@ export const useUserViewModel = () => {
 		}
 	};
 
-	const updateUser = async (id: string, data: Partial<User>) => {
+	const updateUser = async (id: string, data: Partial<UserDTO>) => {
 		try {
 			setLoading(true);
 			await userRepository.updateUser(id, { ...data, updatedAt: new Date() });

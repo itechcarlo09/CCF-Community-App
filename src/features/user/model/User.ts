@@ -1,54 +1,54 @@
-export interface School {
+export interface SchoolDTO {
 	id: number;
 	address: string;
 	name: string;
 }
 
-export interface Education {
+export interface EducationDTO {
 	gradeYear: string;
 	course: string;
 	startYear: string;
 	endYear: string;
-	school: School;
+	school: SchoolDTO;
 }
 
-export interface Company {
+export interface CompanyDTO {
 	id: number;
 	name: string;
 	address: string;
 }
 
-export interface Employment {
+export interface EmploymentDTO {
 	position: string;
 	startYear: string;
 	endYear?: string;
-	company: Company;
+	company: CompanyDTO;
 }
 
-export interface DGroupBasicInfo {
+export interface DGroupBasicInfoDTO {
 	id: number;
 	firstName: string;
 	middleName?: string;
 	lastName: string;
 }
 
-export interface User {
+export interface UserDTO {
 	id: number;
 	firstName: string;
 	middleName?: string;
 	lastName: string;
 	birthDate: Date;
 	dGroupLeaderId?: number | null;
-	dGroupLeader?: DGroupBasicInfo;
-	facebookLink: string;
+	dGroupLeader?: DGroupBasicInfoDTO;
+	facebookLink?: string;
 	contactNumber: string;
-	dGroupMembers?: DGroupBasicInfo[];
+	dGroupMembers?: DGroupBasicInfoDTO[];
 	email: string;
 	gender: string;
 	userType: string;
-	emergencyContactName: string;
-	emergencyContactNumber: string;
-	education: Education[];
-	employment: Employment[];
+	emergencyContactName?: string;
+	emergencyContactNumber?: string;
+	education?: EducationDTO[];
+	employment?: EmploymentDTO[];
 	latestAttendance?: Date;
 }

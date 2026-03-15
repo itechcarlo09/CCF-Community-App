@@ -15,6 +15,7 @@ import { useTheme } from "../../../theme/ThemeProvider";
 import { SearchField } from "../../../components/SearchField";
 import useDebounce from "../hooks/useDebounce";
 import UserLoader from "./components/UserSkeleton";
+import UserType from "../../../types/enums/UserType";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -40,6 +41,11 @@ const UserScreen = ({ navigation }: any) => {
 		refresh();
 		setRefreshing(false);
 	}, []);
+
+	const key = Object.keys(UserType).find(
+		(k) => UserType[k as keyof typeof UserType] === "Admins",
+	);
+	console.log(key);
 
 	useEffect(() => {
 		searchUsers(debouncedSearchTerm);

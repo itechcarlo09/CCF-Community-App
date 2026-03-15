@@ -1,6 +1,6 @@
 import apiClient from "../../../services/apiClient";
 import Gender from "../../../types/enums/Gender";
-import { User } from "../model/user";
+import { UserDTO } from "../model/user";
 import records from "../recordsSample.json";
 
 export const userDataSource = {
@@ -66,9 +66,9 @@ export const userDataSource = {
 		}
 	},
 
-	async getUserById(userId: string): Promise<User | null> {
+	async getUserById(userId: string): Promise<UserDTO | null> {
 		try {
-			const res = await apiClient.get<User>(`/account/${userId}`);
+			const res = await apiClient.get<UserDTO>(`/account/${userId}`);
 			return res.data ? res.data : null;
 		} catch (error: any) {
 			throw new Error(error.message);
