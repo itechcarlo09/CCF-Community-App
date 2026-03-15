@@ -10,7 +10,11 @@ import {
 import CircularImage from "../../../components/CircularImage";
 import { RecordItemUI } from "../model/RecordListItem";
 import { useTheme } from "../../../theme/ThemeProvider";
-import { mdiAccountMultipleOutline, mdiCheckCircleOutline } from "@mdi/js";
+import {
+	mdiAccountMultipleOutline,
+	mdiAlertCircleOutline,
+	mdiCheckCircleOutline,
+} from "@mdi/js";
 import MdiIcon from "../../../components/MdiIcon";
 import Badge from "./components/Badge/Badge";
 
@@ -75,9 +79,15 @@ const UserListItem = ({
 							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
 						>
 							<MdiIcon
-								path={mdiCheckCircleOutline}
+								path={
+									user.isActive ? mdiCheckCircleOutline : mdiAlertCircleOutline
+								}
 								size={12}
-								color={theme.textPositive.secondary}
+								color={
+									user.isActive
+										? theme.textPositive.secondary
+										: theme.textDanger.onDanger.secondary
+								}
 							/>
 							<Text
 								style={[

@@ -9,15 +9,7 @@ const mapEventToUI = (event: Event): EventItemUI => {
 	const date = new Date(event.eventDate);
 	const eventTitle = `${event.series.name}: ${event.eventName}`;
 	const location = event.location;
-	const speakers = Array.isArray(event.speaker)
-		? event.speaker
-				.map((s) => formatFullName(s.firstName, s.lastName, s.middleName))
-				.join(", ")
-		: formatFullName(
-				event.speaker.firstName,
-				event.speaker.lastName,
-				event.speaker.middleName,
-		  );
+	const speakers = event.eventSpeakers.map((s) => s.speaker.name).join(", ");
 
 	return {
 		id: event.id,

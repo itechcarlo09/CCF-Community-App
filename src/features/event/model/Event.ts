@@ -1,4 +1,18 @@
-import { User } from "../../user/model/user";
+export interface Speaker {
+	id: number;
+	name: string;
+	accountId: number;
+	updatedBy: Date;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface EventSpeaker {
+	speakerId: number;
+	eventId: number;
+	createdAt: Date;
+	speaker: Speaker;
+}
 
 export interface Series {
 	id: number;
@@ -15,6 +29,6 @@ export interface Event {
 	createdAt: Date;
 	updatedAt?: Date;
 	eventName: string;
-	speaker: User | User[];
+	eventSpeakers: EventSpeaker[];
 	series: Series;
 }
