@@ -1,3 +1,5 @@
+import { PaginatedResponse } from "../../../types/paginationTypes";
+
 export interface SchoolDTO {
 	id: number;
 	address: string;
@@ -52,3 +54,5 @@ export interface UserDTO {
 	employment?: EmploymentDTO[];
 	latestAttendance?: Date;
 }
+
+export type GetUserResponse = PaginatedResponse<UserDTO>;

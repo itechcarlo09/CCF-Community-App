@@ -1,44 +1,61 @@
 import apiClient from "../../../services/apiClient";
 import Gender from "../../../types/enums/Gender";
-import { UserDTO } from "../model/user";
-import records from "../recordsSample.json";
+import { GetUserResponse, UserDTO } from "../model/user";
+
+type GetUsersParams = {
+	page?: number;
+	pageSize?: number;
+	sortOrder?: string;
+	sortBy?: string;
+};
 
 export const userDataSource = {
-	async getUsers(): Promise<any[]> {
+	async getUsers(
+		params?: GetUsersParams,
+	): Promise<GetUserResponse | undefined> {
 		try {
-			const res = await apiClient.get<any[]>("/account/all");
-			return res.data ? res.data : __DEV__ ? records : [];
+			const res = await apiClient.get<GetUserResponse>("/account/all", {
+				params,
+			});
+
+			return res.data ?? undefined;
 		} catch (error: any) {
 			console.error("getUsers error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
-			return __DEV__ ? records : [];
+			return undefined;
 		}
 	},
 
-	async dLeadersUsers(exemptedId: number, gender: Gender): Promise<any[]> {
+	async dLeadersUsers(
+		exemptedId: number,
+		gender: Gender,
+	): Promise<GetUserResponse | undefined> {
 		try {
-			const res = await apiClient.post<any[]>(`/account/dgroup-leaders`, {
-				exemptedAccountId: exemptedId,
-				gender: gender,
-			});
-			return res.data ? res.data : __DEV__ ? records : [];
+			const res = await apiClient.post<GetUserResponse>(
+				`/account/dgroup-leaders`,
+				{
+					exemptedAccountId: exemptedId,
+					gender: gender,
+				},
+			);
+			return res.data ?? undefined;
 		} catch (error: any) {
 			console.error("dLeadersUsers error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
-			return [];
+			return undefined;
 		}
 	},
 
-	async searchUsers(searchText: string): Promise<any[]> {
+	async searchUsers(searchText: string): Promise<GetUserResponse | undefined> {
 		try {
-			const res = await apiClient.get<any[]>(
+			const res = await apiClient.get<GetUserResponse>(
 				`/account/search-by-name?name=${searchText}`,
 			);
-			return res.data ? res.data : __DEV__ ? records : [];
+			return res.data ?? undefined;
 		} catch (error: any) {
 			console.error("searchUsers error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
-			return __DEV__ ? records : [];
+			return undefined;
 		}
 	},
 
@@ -52,17 +69,6 @@ export const userDataSource = {
 			return res.data ?? null;
 		} catch (error: any) {
 			console.error("addUser error:", error.message ?? error);
-
-			// DEV mode: simulate adding to local JSON
-			if (__DEV__) {
-				const newUser = {
-					...data,
-				};
-				records.push(newUser);
-				return newUser;
-			}
-
-			throw new Error("Database error: " + error.message);
 		}
 	},
 
@@ -81,16 +87,6 @@ export const userDataSource = {
 			return res.data ?? null;
 		} catch (error: any) {
 			console.error("editUser error:", error.message ?? error);
-
-			// DEV mode: simulate update in local JSON data
-			if (__DEV__) {
-				const index = records.findIndex((user) => user.id === Number(id));
-				if (index !== -1) {
-					records[index] = { ...records[index], ...data };
-					return records[index];
-				}
-			}
-
 			return null;
 		}
 	},

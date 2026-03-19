@@ -5,6 +5,7 @@ import {
 	FlatList,
 	TouchableOpacity,
 	RefreshControl,
+	ActivityIndicator,
 } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
@@ -20,7 +21,18 @@ import UserType from "../../../types/enums/UserType";
 const Separator = () => <View style={styles.separator} />;
 
 const UserScreen = ({ navigation }: any) => {
-	const { users, refresh, loading, searchUsers } = useUserViewModel();
+	const {
+		users,
+		refresh,
+		loading,
+		activityLoading,
+		searchUsers,
+		loadMoreUsers,
+	} = useUserViewModel();
+	const [
+		onEndReachedCalledDuringMomentum,
+		setOnEndReachedCalledDuringMomentum,
+	] = useState(false);
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const [open, setOpen] = useState(false);
@@ -38,14 +50,9 @@ const UserScreen = ({ navigation }: any) => {
 
 	const onRefresh = useCallback(async () => {
 		setRefreshing(true);
-		refresh();
+		await refresh();
 		setRefreshing(false);
-	}, []);
-
-	const key = Object.keys(UserType).find(
-		(k) => UserType[k as keyof typeof UserType] === "Admins",
-	);
-	console.log(key);
+	}, [refresh]);
 
 	useEffect(() => {
 		searchUsers(debouncedSearchTerm);
@@ -122,8 +129,28 @@ const UserScreen = ({ navigation }: any) => {
 					)}
 					refreshControl={Refresh()}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
-					ListFooterComponent={<View style={{ height: 16 }} />}
+					ListFooterComponent={
+						activityLoading ? (
+							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
+						) : (
+							<View style={{ height: 16 }} />
+						)
+					}
+					onEndReached={() => {
+						if (
+							!onEndReachedCalledDuringMomentum &&
+							!activityLoading &&
+							!loading
+						) {
+							loadMoreUsers();
+							setOnEndReachedCalledDuringMomentum(true);
+						}
+					}}
+					onEndReachedThreshold={0.1}
 					ItemSeparatorComponent={Separator}
+					onMomentumScrollBegin={() => {
+						setOnEndReachedCalledDuringMomentum(false);
+					}}
 				/>
 			)}
 		</View>
