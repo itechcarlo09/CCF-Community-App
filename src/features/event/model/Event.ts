@@ -1,3 +1,5 @@
+import { PaginatedResponse } from "../../../types/paginationTypes";
+
 export interface Speaker {
 	id: number;
 	name: string;
@@ -21,7 +23,7 @@ export interface Series {
 	updatedAt?: Date;
 }
 
-export interface Event {
+export interface EventDTO {
 	id: number;
 	name: string;
 	eventDate: Date;
@@ -32,3 +34,5 @@ export interface Event {
 	eventSpeakers: EventSpeaker[];
 	series: Series;
 }
+
+export type GetEventResponse = PaginatedResponse<EventDTO>;

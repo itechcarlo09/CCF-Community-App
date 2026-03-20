@@ -1,6 +1,6 @@
 import apiClient from "../../../services/apiClient";
-import { Event } from "../model/Event";
-import { eventConverter } from "./eventConverter";
+import { GetEventResponse } from "../model/Event";
+import { GetEventsParams } from "../model/RequestParams";
 
 export const eventDataSource = {
 	// async get(id: string): Promise<Event | null> {
@@ -12,27 +12,33 @@ export const eventDataSource = {
 	// 		return null;
 	// 	}
 	// },
-	async getEvents(): Promise<Event[]> {
+	async getEvents(
+		params?: GetEventsParams,
+	): Promise<GetEventResponse | undefined> {
 		try {
-			const res = await apiClient.get<any[]>("/event");
-			return res.data ? res.data : [];
+			const res = await apiClient.get<GetEventResponse>("/event", {
+				params,
+			});
+			return res.data ?? undefined;
 		} catch (error: any) {
 			console.error("getEvents error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
-			return [];
+			return undefined;
 		}
 	},
 
-	async searchEvents(searchText: string): Promise<any[]> {
+	async searchEvents(
+		params?: GetEventsParams,
+	): Promise<GetEventResponse | undefined> {
 		try {
-			const res = await apiClient.get<any[]>(
-				`/event/search?name=${searchText}`,
-			);
-			return res.data ? res.data : [];
+			const res = await apiClient.get<GetEventResponse>(`/event/search`, {
+				params,
+			});
+			return res.data ?? undefined;
 		} catch (error: any) {
 			console.error("searchEvents error:", error.message ?? error);
 			// Optional: You can throw a custom error or handle it gracefully
-			return [];
+			return undefined;
 		}
 	},
 	// async add(user: Omit<Event, "id">): Promise<void> {

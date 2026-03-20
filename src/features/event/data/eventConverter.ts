@@ -1,4 +1,4 @@
-import { Event } from "../model/Event";
+import { EventDTO } from "../model/Event";
 
 export const eventConverter = {
 	// toFirestore(event: Omit<Event, "id">) {

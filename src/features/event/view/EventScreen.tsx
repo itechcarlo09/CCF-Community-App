@@ -5,6 +5,7 @@ import {
 	FlatList,
 	TouchableOpacity,
 	RefreshControl,
+	ActivityIndicator,
 } from "react-native";
 import { useEventViewModel } from "../viewModel/useEventViewModel";
 import { useTheme } from "../../../theme/ThemeProvider";
@@ -21,7 +22,14 @@ const Separator = () => <View style={styles.separator} />;
 type EventRouteProp = RouteProp<EventStackParamList, "EventForm">;
 
 const EventScreen = () => {
-	const { events, refresh, loading, searchEvents } = useEventViewModel();
+	const {
+		events,
+		refresh,
+		loading,
+		searchEvents,
+		activityLoading,
+		loadMoreEvents,
+	} = useEventViewModel();
 	const navigation = useNavigation();
 	const route = useRoute<EventRouteProp>();
 	const [refreshing, setRefreshing] = useState(false);
@@ -31,6 +39,10 @@ const EventScreen = () => {
 	);
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
+	const [
+		onEndReachedCalledDuringMomentum,
+		setOnEndReachedCalledDuringMomentum,
+	] = useState(false);
 
 	useEffect(() => {
 		searchEvents(debouncedSearchTerm);
@@ -38,9 +50,9 @@ const EventScreen = () => {
 
 	const onRefresh = useCallback(async () => {
 		setRefreshing(true);
-		refresh();
+		await refresh();
 		setRefreshing(false);
-	}, []);
+	}, [refresh]);
 
 	return (
 		<View style={styles.container}>
@@ -101,7 +113,27 @@ const EventScreen = () => {
 						<EventListItem event={item} onPress={() => {}} />
 					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
-					ListFooterComponent={<View style={{ height: 16 }} />}
+					ListFooterComponent={
+						activityLoading ? (
+							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
+						) : (
+							<View style={{ height: 16 }} />
+						)
+					}
+					onEndReached={() => {
+						if (
+							!onEndReachedCalledDuringMomentum &&
+							!activityLoading &&
+							!loading
+						) {
+							loadMoreEvents();
+							setOnEndReachedCalledDuringMomentum(true);
+						}
+					}}
+					onEndReachedThreshold={0.1}
+					onMomentumScrollBegin={() => {
+						setOnEndReachedCalledDuringMomentum(false);
+					}}
 				/>
 			)}
 		</View>
