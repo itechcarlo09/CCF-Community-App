@@ -9,10 +9,20 @@ const apiClient = axios.create({
 
 // Request Interceptor
 apiClient.interceptors.request.use(async (config) => {
-	console.log("Request URL:", config.baseURL + config.url);
-	// Example: load token from storage
-	// const token = await AsyncStorage.getItem('token');
-	// if (token) config.headers.Authorization = `Bearer ${token}`;
+	const baseURL = config.baseURL ?? "";
+	const url = config.url ?? "";
+
+	let fullUrl = baseURL + url;
+
+	if (config.params) {
+		const queryString = new URLSearchParams(config.params).toString();
+		if (queryString) {
+			fullUrl += `?${queryString}`;
+		}
+	}
+
+	console.log("Request URL:", fullUrl);
+
 	return config;
 });
 

@@ -13,23 +13,29 @@ export const useUserViewModel = () => {
 	const [hasMore, setHasMore] = useState(true);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [activityLoading, setActivityLoading] = useState(false);
+	const [search, setSearch] = useState("");
 
 	const fetchUsers = async (nextPage = page) => {
-		if (loading || activityLoading || !hasMore) return;
+		if (activityLoading) return;
+		if (!hasMore && nextPage !== 1) return;
 
 		try {
 			if (nextPage === 1) {
-				setLoading(true); // initial / refresh
+				setLoading(true);
 			} else {
-				setActivityLoading(true); // pagination
+				setActivityLoading(true);
 			}
-
-			const result = await userRepository.getUsers({
+			const isSearching = !!search.trim();
+			const baseParams = {
 				page: nextPage,
 				pageSize: PAGE_SIZE,
 				sortOrder: "asc",
 				sortBy: "lastName",
-			});
+			};
+
+			const result = isSearching
+				? await userRepository.searchUsers({ name: search, ...baseParams })
+				: await userRepository.getUsers(baseParams);
 
 			if (!result) return;
 
@@ -92,27 +98,11 @@ export const useUserViewModel = () => {
 		}
 	};
 
-	const searchUsers = async (searchText: string) => {
-		try {
-			setLoading(true);
-
-			if (searchText.trim() === "") {
-				setPage(1);
-				setHasMore(true);
-				await fetchUsers(1);
-				return;
-			}
-
-			const result = await userRepository.searchUsers(searchText);
-			const mappedUsers = result?.data.map(mapUserToUI);
-
-			setUsers(mappedUsers ?? []);
-			setHasMore(false); // disable pagination during search
-		} catch (error) {
-			console.error("Error searching users:", error);
-		} finally {
-			setLoading(false);
-		}
+	const searchUsers = (text: string) => {
+		setSearch(text);
+		setPage(1);
+		setHasMore(true);
+		setUsers([]);
 	};
 
 	const updateUser = async (id: string, data: Partial<UserDTO>) => {
@@ -127,16 +117,14 @@ export const useUserViewModel = () => {
 	};
 
 	const loadMoreUsers = () => {
-		if (loading || activityLoading || !hasMore || users.length < PAGE_SIZE)
-			return;
+		if (loading || activityLoading || !hasMore) return;
 
 		fetchUsers(page + 1);
 	};
 
 	useEffect(() => {
-		console.log("initial load");
 		fetchUsers(1);
-	}, []);
+	}, [search]);
 
 	// const deleteUser = async (id: string) => {
 	// 	await userRepository.deleteUser(id);

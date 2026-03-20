@@ -1,13 +1,7 @@
 import apiClient from "../../../services/apiClient";
 import Gender from "../../../types/enums/Gender";
+import { GetUsersParams } from "../model/RequestParams";
 import { GetUserResponse, UserDTO } from "../model/user";
-
-type GetUsersParams = {
-	page?: number;
-	pageSize?: number;
-	sortOrder?: string;
-	sortBy?: string;
-};
 
 export const userDataSource = {
 	async getUsers(
@@ -46,10 +40,15 @@ export const userDataSource = {
 		}
 	},
 
-	async searchUsers(searchText: string): Promise<GetUserResponse | undefined> {
+	async searchUsers(
+		params?: GetUsersParams,
+	): Promise<GetUserResponse | undefined> {
 		try {
 			const res = await apiClient.get<GetUserResponse>(
-				`/account/search-by-name?name=${searchText}`,
+				`/account/search-by-name`,
+				{
+					params,
+				},
 			);
 			return res.data ?? undefined;
 		} catch (error: any) {
