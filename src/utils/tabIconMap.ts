@@ -22,7 +22,11 @@ export const tabIconMap = {
 		focused: mdiListBox,
 		unfocused: mdiListBoxOutline,
 	},
-	AccountTab: {
+	DGroupTab: {
+		focused: mdiAccountCircle,
+		unfocused: mdiAccountCircleOutline,
+	},
+	OthersTab: {
 		focused: mdiAccountCircle,
 		unfocused: mdiAccountCircleOutline,
 	},

@@ -41,12 +41,17 @@ function BottomTabNavigator() {
 			<Tab.Screen
 				name="UserTab"
 				component={UserScreen}
-				options={{ title: "Records" }}
+				options={{ title: "Members" }}
 			/>
 			<Tab.Screen
-				name="AccountTab"
+				name="DGroupTab"
 				component={UserScreen}
-				options={{ title: "Account" }}
+				options={{ title: "DGroups" }}
+			/>
+			<Tab.Screen
+				name="OthersTab"
+				component={UserScreen}
+				options={{ title: "Others" }}
 			/>
 		</Tab.Navigator>
 	);
