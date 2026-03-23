@@ -1,21 +1,9 @@
 import React from "react";
-import {
-	View,
-	Text,
-	StyleSheet,
-	TouchableOpacity,
-	GestureResponderEvent,
-} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useTheme } from "../../../theme/ThemeProvider";
-import {
-	mdiArrowRight,
-	mdiMapMarkerOutline,
-	mdiMicrophoneOutline,
-} from "@mdi/js";
-import MdiIcon from "../../../components/MdiIcon";
+import { mdiMapMarkerOutline, mdiMicrophoneOutline } from "@mdi/js";
 import { EventItemUI } from "../model/EventListItem";
 import CircularDate from "../../../components/CircularDate";
-import Button from "../../../components/Button";
 import SeriesButton from "./Components/SeriesButton";
 import AttendanceView from "./Components/AttendanceView";
 import EventDetailView from "./Components/EventDetailView";
