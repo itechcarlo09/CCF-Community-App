@@ -17,6 +17,7 @@ import { EventItemUI } from "../model/EventListItem";
 import CircularDate from "../../../components/CircularDate";
 import Button from "../../../components/Button";
 import SeriesButton from "./Components/SeriesButton";
+import AttendanceView from "./Components/AttendanceView";
 
 interface Props {
 	event: EventItemUI;
@@ -85,26 +86,18 @@ const EventListItem = ({ event, onPress }: Props) => {
 				)}
 				{event.seriesTitle && <SeriesButton name={event.seriesTitle} />}
 				{(event.firstTimeAttendees > 0 || event.regularAttendees > 0) && (
-					<View style={styles.countContainer}>
+					<View style={styles.attendanceContainer}>
 						{event.firstTimeAttendees > 0 && (
-							<View>
-								<Text style={[styles.countText, { color: theme.gray[500] }]}>
-									First Time Attendees
-								</Text>
-								<Text style={[styles.countNumber, { color: theme.text }]}>
-									{event.firstTimeAttendees}
-								</Text>
-							</View>
+							<AttendanceView
+								title={"First Time Attendees"}
+								count={event.firstTimeAttendees}
+							/>
 						)}
 						{event.regularAttendees > 0 && (
-							<View>
-								<Text style={[styles.countText, { color: theme.gray[500] }]}>
-									Regular
-								</Text>
-								<Text style={[styles.countNumber, { color: theme.text }]}>
-									{event.regularAttendees}
-								</Text>
-							</View>
+							<AttendanceView
+								title={"Regular"}
+								count={event.regularAttendees}
+							/>
 						)}
 					</View>
 				)}
@@ -152,18 +145,9 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 		lineHeight: 16,
 	},
-	countContainer: {
+	attendanceContainer: {
 		flexDirection: "row",
 		columnGap: 16,
-	},
-	countText: {
-		fontSize: 12,
-		lineHeight: 16,
-	},
-	countNumber: {
-		fontSize: 18,
-		lineHeight: 28,
-		fontWeight: "bold",
 	},
 });
 
