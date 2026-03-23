@@ -18,6 +18,7 @@ import CircularDate from "../../../components/CircularDate";
 import Button from "../../../components/Button";
 import SeriesButton from "./Components/SeriesButton";
 import AttendanceView from "./Components/AttendanceView";
+import EventDetailView from "./Components/EventDetailView";
 
 interface Props {
 	event: EventItemUI;
@@ -53,34 +54,16 @@ const EventListItem = ({ event, onPress }: Props) => {
 				{(event.location || event.speakers) && (
 					<View style={styles.detailsContainer}>
 						{event.location && (
-							<View
-								style={[
-									styles.detailsItemContainer,
-									{ backgroundColor: theme.gray[200] },
-								]}
-							>
-								<MdiIcon path={mdiMapMarkerOutline} size={12} color="#323232" />
-								<Text style={[styles.detailsText, { color: theme.text }]}>
-									{event.location}
-								</Text>
-							</View>
+							<EventDetailView
+								iconPath={mdiMapMarkerOutline}
+								text={event.location}
+							/>
 						)}
 						{event.speakers && (
-							<View
-								style={[
-									styles.detailsItemContainer,
-									{ backgroundColor: theme.gray[200] },
-								]}
-							>
-								<MdiIcon
-									path={mdiMicrophoneOutline}
-									size={12}
-									color="#323232"
-								/>
-								<Text style={[styles.detailsText, { color: theme.text }]}>
-									{event.speakers}
-								</Text>
-							</View>
+							<EventDetailView
+								iconPath={mdiMicrophoneOutline}
+								text={event.speakers}
+							/>
 						)}
 					</View>
 				)}
@@ -134,17 +117,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		flexWrap: "wrap",
 	},
-	detailsItemContainer: {
-		borderRadius: 16,
-		flexDirection: "row",
-		paddingHorizontal: 8,
-		paddingVertical: 4,
-		columnGap: 2,
-	},
-	detailsText: {
-		fontSize: 12,
-		lineHeight: 16,
-	},
+
 	attendanceContainer: {
 		flexDirection: "row",
 		columnGap: 16,
