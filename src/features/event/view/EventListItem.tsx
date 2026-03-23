@@ -1,10 +1,22 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	GestureResponderEvent,
+} from "react-native";
 import { useTheme } from "../../../theme/ThemeProvider";
-import { mdiMapMarkerOutline, mdiMicrophoneOutline } from "@mdi/js";
+import {
+	mdiArrowRight,
+	mdiMapMarkerOutline,
+	mdiMicrophoneOutline,
+} from "@mdi/js";
 import MdiIcon from "../../../components/MdiIcon";
 import { EventItemUI } from "../model/EventListItem";
 import CircularDate from "../../../components/CircularDate";
+import Button from "../../../components/Button";
+import SeriesButton from "./Components/SeriesButton";
 
 interface Props {
 	event: EventItemUI;
@@ -14,12 +26,12 @@ interface Props {
 const EventListItem = ({ event, onPress }: Props) => {
 	const { theme } = useTheme();
 	return (
-		<TouchableOpacity
+		<View
 			style={[
 				styles.card,
 				{ backgroundColor: theme.background, borderColor: theme.border },
 			]}
-			onPress={() => onPress(event.id)}
+			// onPress={() => onPress(event.id)}
 		>
 			<Text
 				style={[
@@ -71,6 +83,7 @@ const EventListItem = ({ event, onPress }: Props) => {
 						)}
 					</View>
 				)}
+				{event.seriesTitle && <SeriesButton name={event.seriesTitle} />}
 				{(event.firstTimeAttendees > 0 || event.regularAttendees > 0) && (
 					<View style={styles.countContainer}>
 						{event.firstTimeAttendees > 0 && (
@@ -96,7 +109,7 @@ const EventListItem = ({ event, onPress }: Props) => {
 					</View>
 				)}
 			</View>
-		</TouchableOpacity>
+		</View>
 	);
 };
 

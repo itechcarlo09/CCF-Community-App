@@ -8,7 +8,8 @@ const PAGE_SIZE = 10;
 const mapEventToUI = (event: EventDTO): EventItemUI => {
 	const ministryText = "B1G Singles Ministry";
 	const date = new Date(event.eventDate);
-	const eventTitle = `${event.series.name}: ${event.eventName}`;
+	const eventTitle = event.eventName;
+	const seriesTitle = event.series.name;
 	const location = event.location;
 	const speakers = event.eventSpeakers.map((s) => s.speaker.name).join(", ");
 
@@ -16,6 +17,7 @@ const mapEventToUI = (event: EventDTO): EventItemUI => {
 		id: event.id,
 		ministryText,
 		eventTitle,
+		seriesTitle,
 		location,
 		date,
 		speakers,

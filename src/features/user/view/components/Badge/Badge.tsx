@@ -7,7 +7,6 @@ import { useTheme } from "../../../../../theme/ThemeProvider";
 const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 	const { theme } = useTheme();
 
-	// Determine text color based on type and dleader
 	let textColor;
 	if (type === "DLeader") {
 		textColor = theme.badge.success.text;
@@ -19,7 +18,6 @@ const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 		textColor = theme.badge.warning.text;
 	}
 
-	// Determine background color based on type and dleader
 	let backgroundColor;
 	if (type === "DLeader") {
 		backgroundColor = theme.badge.success.background;
