@@ -1,6 +1,6 @@
 export interface EventItemUI {
 	id: number;
-	ministryText: string;
+	ministryText: string[];
 	eventTitle: string;
 	seriesTitle?: string;
 	location: string;

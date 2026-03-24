@@ -1,13 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { EventItemUI } from "../model/EventListItem";
 import MdiIcon from "@components/MdiIcon";
 import { mdiFileChartOutline, mdiPencilOutline } from "@mdi/js";
+import { EventItemUI } from "../model/EventListItem";
+import { useTheme } from "@theme/ThemeProvider";
 
 interface Props {
 	item: EventItemUI;
-	onPress?: () => void;
 	onPressSeries?: () => void;
 	onPressReport?: () => void;
 	onPressEdit?: () => void;
@@ -15,13 +14,56 @@ interface Props {
 
 export const EventItemCard: React.FC<Props> = ({
 	item,
-	onPress,
 	onPressSeries,
 	onPressReport,
 	onPressEdit,
 }) => {
+	const { theme } = useTheme();
+
+	const renderMinistries = () => {
+		if (!item.ministryText || item.ministryText.length === 0) return null;
+
+		if (item.ministryText.length === 1) {
+			return (
+				<Text
+					style={[
+						styles.ministry,
+						{ color: theme.textDanger.onDanger.secondary },
+					]}
+				>
+					{item.ministryText[0]}
+				</Text>
+			);
+		} else if (item.ministryText.length === 2) {
+			return (
+				<Text style={styles.ministry}>
+					{item.ministryText[0]} x {item.ministryText[1]} Event
+				</Text>
+			);
+		} else {
+			const [main, ...partners] = item.ministryText;
+			return (
+				<Text style={styles.ministry}>
+					{main} Event in partnership with {partners.join(", ")}
+				</Text>
+			);
+		}
+	};
+
+	const formatTime = (date: Date) => {
+		const hours = date.getHours();
+		const minutes = date.getMinutes();
+		const ampm = hours >= 12 ? "PM" : "AM";
+		const h = hours % 12 || 12;
+		const m = minutes.toString().padStart(2, "0");
+		return `${h}:${m} ${ampm}`;
+	};
+
 	return (
-		<TouchableOpacity style={styles.card} onPress={onPress}>
+		<View style={styles.card}>
+			{/* MINISTRY */}
+			{renderMinistries()}
+
 			{/* HEADER */}
 			<View style={styles.header}>
 				<Text style={styles.title}>{item.eventTitle}</Text>
@@ -49,7 +91,9 @@ export const EventItemCard: React.FC<Props> = ({
 			{/* DETAILS */}
 			<View style={styles.details}>
 				<Text style={styles.meta}>📍 {item.location}</Text>
-				<Text style={styles.meta}>📅 {item.date.toDateString()}</Text>
+				<Text style={styles.meta}>
+					📅 {item.date.toDateString()} ⏰ {formatTime(item.date)}
+				</Text>
 				<Text style={styles.meta}>🎤 {item.speakers}</Text>
 			</View>
 
@@ -60,7 +104,7 @@ export const EventItemCard: React.FC<Props> = ({
 				</Text>
 				<Text style={styles.attendance}>Regulars: {item.regularAttendees}</Text>
 			</View>
-		</TouchableOpacity>
+		</View>
 	);
 };
 
@@ -72,6 +116,12 @@ const styles = StyleSheet.create({
 		marginVertical: 8,
 		marginHorizontal: 16,
 		elevation: 2,
+	},
+
+	ministry: {
+		fontSize: 14,
+		fontWeight: "600",
+		marginBottom: 6,
 	},
 
 	header: {
@@ -97,7 +147,7 @@ const styles = StyleSheet.create({
 
 	series: {
 		marginTop: 6,
-		color: "#3b82f6",
+		color: "#3b82f6", // blue-500
 		fontWeight: "500",
 	},
 

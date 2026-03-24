@@ -6,7 +6,7 @@ import { EventItemUI } from "../../event/model/EventListItem";
 const PAGE_SIZE = 10;
 
 const mapEventToUI = (event: EventDTO): EventItemUI => {
-	const ministryText = "B1G Singles Ministry";
+	const ministryText = ["B1G Singles Ministry"];
 	const date = new Date(event.eventDate);
 	const eventTitle = event.eventName;
 	const seriesTitle = event.series.name;
