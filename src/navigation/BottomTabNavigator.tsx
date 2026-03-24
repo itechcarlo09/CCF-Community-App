@@ -6,9 +6,9 @@ import EventScreen from "../features/event/view/EventScreen";
 import { useTheme } from "../theme/ThemeProvider";
 import MdiIcon from "../components/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
-import DashboardScreen from "../features/dashboard/view/DashboardScreen";
 import OtherScreen from "src/features/others/view/OtherScreen";
 import EventListScreen from "src/features/event/view/EventListScreen";
+import { DashboardScreen } from "src/features/dashboard/view/DashboardScreen";
 
 const Tab = createBottomTabNavigator();
 

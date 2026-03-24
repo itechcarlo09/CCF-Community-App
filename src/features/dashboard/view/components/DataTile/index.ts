@@ -1,2 +1,2 @@
-export { default } from "./DataTile";
-export * from "./DataTile.types";
+export { default } from "./DashboardCard";
+export * from "./DashboardCard.types";
