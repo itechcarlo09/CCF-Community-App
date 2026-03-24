@@ -29,9 +29,9 @@ function BottomTabNavigator() {
 			})}
 		>
 			<Tab.Screen
-				name="HomeTab"
+				name="DashboardTab"
 				component={DashboardScreen}
-				options={{ title: "Home" }}
+				options={{ title: "Dashboard" }}
 			/>
 			<Tab.Screen
 				name="EventTab"

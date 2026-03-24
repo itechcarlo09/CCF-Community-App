@@ -1,5 +1,5 @@
 const bottomTabNames = [
-	"HomeTab",
+	"DashboardTab",
 	"EventTab",
 	"UserTab",
 	"DGroupTab",

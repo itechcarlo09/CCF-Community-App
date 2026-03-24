@@ -1,33 +1,35 @@
 import {
-	mdiHome,
-	mdiHomeOutline,
-	mdiCalendarBlank,
-	mdiCalendarBlankOutline,
-	mdiListBox,
-	mdiListBoxOutline,
-	mdiAccountCircle,
-	mdiAccountCircleOutline,
+	mdiCog,
+	mdiCogOutline,
+	mdiAccount,
+	mdiAccountGroup,
+	mdiAccountGroupOutline,
+	mdiAccountOutline,
+	mdiCalendar,
+	mdiCalendarOutline,
+	mdiViewDashboard,
+	mdiViewDashboardOutline,
 } from "@mdi/js";
 
 export const tabIconMap = {
-	HomeTab: {
-		focused: mdiHome,
-		unfocused: mdiHomeOutline,
+	DashboardTab: {
+		focused: mdiViewDashboard,
+		unfocused: mdiViewDashboardOutline,
 	},
 	EventTab: {
-		focused: mdiCalendarBlank,
-		unfocused: mdiCalendarBlankOutline,
+		focused: mdiCalendar,
+		unfocused: mdiCalendarOutline,
 	},
 	UserTab: {
-		focused: mdiListBox,
-		unfocused: mdiListBoxOutline,
+		focused: mdiAccount,
+		unfocused: mdiAccountOutline,
 	},
 	DGroupTab: {
-		focused: mdiAccountCircle,
-		unfocused: mdiAccountCircleOutline,
+		focused: mdiAccountGroup,
+		unfocused: mdiAccountGroupOutline,
 	},
 	OthersTab: {
-		focused: mdiAccountCircle,
-		unfocused: mdiAccountCircleOutline,
+		focused: mdiCog,
+		unfocused: mdiCogOutline,
 	},
 };
