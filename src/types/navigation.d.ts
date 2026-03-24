@@ -66,7 +66,7 @@ export type UserRouteProp<T extends keyof UserStackParamList> = RouteProp<
 // Event Stack (nested stack for user-related screens)
 // -----------------------------
 export type EventStackParamList = {
-	EventForm: { id?: string; onSuccess?: () => void } | undefined;
+	EventForm: { id?: number; onSuccess?: () => void } | undefined;
 	EventList: undefined;
 };
 

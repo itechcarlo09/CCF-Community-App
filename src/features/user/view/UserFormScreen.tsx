@@ -11,7 +11,6 @@ import { useTheme } from "../../../theme/ThemeProvider";
 import Button from "../../../components/Button";
 import Gender from "../../../types/enums/Gender";
 import { DropdownOption } from "../../../types/dropdownOption";
-import Title from "./components/Title";
 import InputType from "../../../types/enums/InputType";
 import { formatFullName, formatPhoneNumber } from "../../../utils/stringUtils";
 import ChoiceChip from "../../../components/ChoiceChip";
@@ -20,10 +19,11 @@ import Loading from "../../../components/Loading";
 import topUsers from "../topUsers.json";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { ICONSIZE } from "../../../types/globalTypes";
+import { ICONSIZE, NOID } from "../../../types/globalTypes";
 import Educations from "./components/EducationRO";
 import Works from "./components/WorkRO";
 import dayjs from "dayjs";
+import Title from "../../components/Title";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -33,15 +33,13 @@ const genderOptions: DropdownOption<Gender>[] = [
 	{ label: Gender.Female, value: Gender.Female },
 ];
 
-const noId = 0;
-
 const UserFormScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
 	const { theme } = useTheme();
 	const { id, onSuccess } = route.params || {};
 	const { formik, loading, user } = useUserForm({
-		userId: id ? id : noId,
+		userId: id ? id : NOID,
 		onSuccess: () => {
 			if (onSuccess) {
 				onSuccess();

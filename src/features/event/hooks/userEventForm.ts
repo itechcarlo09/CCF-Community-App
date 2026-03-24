@@ -21,7 +21,7 @@ const staticSchema = Yup.object({
 	firstName: Yup.string().required("Please enter a valid event name"),
 });
 
-export const useUserForm = ({ eventId, onSuccess }: UseEventFormProps) => {
+export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const [event, setEvent] = useState<EventDTO | null>(null);
 	const { getUser } = useEventViewModel();
@@ -90,5 +90,6 @@ export const useUserForm = ({ eventId, onSuccess }: UseEventFormProps) => {
 	return {
 		loading,
 		event,
+		formik,
 	};
 };
