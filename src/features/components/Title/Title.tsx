@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { styles } from "./Title.styles";
 import { TitleProps } from "./Title.types";
-import { useTheme } from "../../../theme/ThemeProvider";
+import { useTheme } from "@theme/ThemeProvider";
 
 const Title: React.FC<TitleProps> = ({ title }) => {
 	const { theme } = useTheme();
