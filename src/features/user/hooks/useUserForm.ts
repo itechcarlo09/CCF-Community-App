@@ -398,7 +398,6 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				setLoading(true);
 				const user = await getUser(userId.toString());
 				if (user) {
-					console.log(user);
 					setUser({ ...user });
 					formik.setValues({
 						firstName: user.firstName,
@@ -417,8 +416,8 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 							normalizePHNumber(user.contactNumber),
 						),
 						email: user.email,
-						facebook: user.facebookLink,
-						emergencyPerson: user.emergencyContactName,
+						facebook: user.facebookLink ?? "",
+						emergencyPerson: user.emergencyContactName ?? "",
 						emergencyNumber: user.emergencyContactNumber
 							? formatPhoneNumber(
 									normalizePHNumber(user.emergencyContactNumber),
@@ -427,8 +426,16 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 						dLeaderID: user.dGroupLeader
 							? user.dGroupLeader?.id.toString()
 							: "",
-						education: user.education.length > 0 ? user.education : [],
-						employment: user.employment.length > 0 ? user.employment : [],
+						education: user.education
+							? user.education.length > 0
+								? user.education
+								: []
+							: [],
+						employment: user.employment
+							? user.employment.length > 0
+								? user.employment
+								: []
+							: [],
 					});
 				}
 			} catch (err) {

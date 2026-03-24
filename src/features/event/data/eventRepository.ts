@@ -1,7 +1,7 @@
 import { eventDataSource } from "./eventDataSource";
 
 export const eventRepository = {
-	// getEventById: eventDataSource.get,
+	getEventById: eventDataSource.getEventById,
 	getEvents: eventDataSource.getEvents,
 	searchEvents: eventDataSource.searchEvents,
 	// addEvent: eventDataSource.add,

@@ -12,16 +12,13 @@ import { useTheme } from "../../../theme/ThemeProvider";
 import EventListItem from "./EventListItem";
 import useDebounce from "../../user/hooks/useDebounce";
 import { SearchField } from "../../../components/SearchField";
-import { EventStackParamList } from "../../../types/navigation";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import MdiIcon from "../../../components/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import Loading from "../../../components/Loading";
 
 const Separator = () => <View style={styles.separator} />;
-type EventRouteProp = RouteProp<EventStackParamList, "EventForm">;
 
-const EventScreen = () => {
+const EventScreen = ({ navigation }: any) => {
 	const {
 		events,
 		refresh,
@@ -30,8 +27,6 @@ const EventScreen = () => {
 		activityLoading,
 		loadMoreEvents,
 	} = useEventViewModel();
-	const navigation = useNavigation();
-	const route = useRoute<EventRouteProp>();
 	const [refreshing, setRefreshing] = useState(false);
 	const { theme } = useTheme();
 	const Refresh = () => (
@@ -90,14 +85,14 @@ const EventScreen = () => {
 				/>
 				<TouchableOpacity
 					style={styles.addButton}
-					// onPress={() =>
-					// 	navigation.navigate("EventNavigator", {
-					// 		screen: "EventForm",
-					// 		params: {
-					// 			onSuccess: onRefresh,
-					// 		},
-					// 	})
-					// }
+					onPress={() =>
+						navigation.navigate("EventNavigator", {
+							screen: "EventForm",
+							params: {
+								onSuccess: onRefresh,
+							},
+						})
+					}
 				>
 					<MdiIcon path={mdiPlusBoxOutline} size={18} color={"#323232"} />
 				</TouchableOpacity>
@@ -110,7 +105,18 @@ const EventScreen = () => {
 					ItemSeparatorComponent={Separator}
 					refreshControl={Refresh()}
 					renderItem={({ item }) => (
-						<EventListItem event={item} onPress={() => {}} />
+						<EventListItem
+							event={item}
+							onPress={(id) =>
+								navigation.navigate("EventNavigator", {
+									screen: "EventForm",
+									params: {
+										id,
+										onSuccess: onRefresh,
+									},
+								})
+							}
+						/>
 					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={

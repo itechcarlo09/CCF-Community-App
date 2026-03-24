@@ -74,6 +74,18 @@ export const useEventViewModel = () => {
 		}
 	};
 
+	const getEvent = async (id: string): Promise<EventDTO | null> => {
+		try {
+			setLoading(true);
+			return await eventRepository.getEventById(id);
+		} catch (error) {
+			console.error("Error fetching event:", error);
+			return null;
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const loadMoreEvents = () => {
 		if (loading || activityLoading || !hasMore) return;
 
@@ -99,5 +111,6 @@ export const useEventViewModel = () => {
 		fetchEvents,
 		searchEvents,
 		loadMoreEvents,
+		getUser: getEvent,
 	};
 };

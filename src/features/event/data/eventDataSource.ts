@@ -1,17 +1,16 @@
 import apiClient from "../../../services/apiClient";
-import { GetEventResponse } from "../model/Event";
+import { EventDTO, GetEventResponse } from "../model/Event";
 import { GetEventsParams } from "../model/RequestParams";
 
 export const eventDataSource = {
-	// async get(id: string): Promise<Event | null> {
-	// 	try {
-	// 		const snap = await eventCollection.doc(id).get();
-	// 		return snap.exists() ? eventConverter.fromFirestore(snap) : null;
-	// 	} catch (error) {
-	// 		console.error("eventDataSource.get error:", error);
-	// 		return null;
-	// 	}
-	// },
+	async getEventById(id: string): Promise<EventDTO | null> {
+		try {
+			const res = await apiClient.get<EventDTO>(`/event/${id}`);
+			return res.data ? res.data : null;
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	},
 	async getEvents(
 		params?: GetEventsParams,
 	): Promise<GetEventResponse | undefined> {

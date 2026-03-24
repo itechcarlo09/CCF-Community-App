@@ -25,7 +25,6 @@ export interface Series {
 
 export interface EventDTO {
 	id: number;
-	name: string;
 	eventDate: Date;
 	location: string;
 	createdAt: Date;
@@ -33,6 +32,14 @@ export interface EventDTO {
 	eventName: string;
 	eventSpeakers: EventSpeaker[];
 	series: Series;
+}
+
+export interface CreateEventDTO {
+	eventName: string;
+	eventDate: Date;
+	location: string;
+	seriesId: number;
+	ministryId: number;
 }
 
 export type GetEventResponse = PaginatedResponse<EventDTO>;

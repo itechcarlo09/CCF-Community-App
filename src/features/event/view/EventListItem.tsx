@@ -1,12 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useTheme } from "../../../theme/ThemeProvider";
-import { mdiMapMarkerOutline, mdiMicrophoneOutline } from "@mdi/js";
+import {
+	mdiMapMarkerOutline,
+	mdiMicrophoneOutline,
+	mdiPencilOutline,
+} from "@mdi/js";
 import { EventItemUI } from "../model/EventListItem";
 import CircularDate from "../../../components/CircularDate";
 import SeriesButton from "./Components/SeriesButton";
 import AttendanceView from "./Components/AttendanceView";
 import EventDetailView from "./Components/EventDetailView";
+import MdiIcon from "../../../components/MdiIcon";
 
 interface Props {
 	event: EventItemUI;
@@ -38,6 +43,12 @@ const EventListItem = ({ event, onPress }: Props) => {
 					<Text style={[styles.eventTitle, styles.flex, { color: theme.text }]}>
 						{event.eventTitle}
 					</Text>
+					<MdiIcon
+						onPress={onPress}
+						path={mdiPencilOutline}
+						size={24}
+						color="#323232"
+					/>
 				</View>
 				{(event.location || event.speakers) && (
 					<View style={styles.detailsContainer}>

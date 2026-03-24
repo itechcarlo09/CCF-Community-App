@@ -1,6 +1,6 @@
 import React from "react";
 import Svg, { Path } from "react-native-svg";
-import { Pressable, View } from "react-native";
+import { Pressable, TouchableOpacity, View } from "react-native";
 import { styles } from "./MdiIcon.styles";
 import { MdiIconProps } from "./MdiIcon.types";
 
@@ -20,9 +20,9 @@ const MdiIcon: React.FC<MdiIconProps> = ({
 	);
 
 	return onPress ? (
-		<Pressable onPress={onPress} hitSlop={8}>
+		<TouchableOpacity onPress={onPress} hitSlop={8}>
 			{Content}
-		</Pressable>
+		</TouchableOpacity>
 	) : (
 		Content
 	);
