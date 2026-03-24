@@ -32,7 +32,7 @@ export type AppStackParamList = {
 	Login: undefined;
 	BottomNavigator: undefined;
 	EventNavigator: undefined;
-	UserNavigator: undefined; // This links to UserStack
+	UserNavigator: undefined;
 };
 
 export type AppNavigationProp = NativeStackNavigationProp<AppStackParamList>;
@@ -79,6 +79,21 @@ export type EventRouteProp<T extends keyof EventStackParamList> = RouteProp<
 >;
 
 // -----------------------------
+// Other Stack (nested stack for user-related screens)
+// -----------------------------
+export type OtherStackParamList = {
+	// EventForm: { id?: number; onSuccess?: () => void } | undefined;
+};
+
+export type OtherNavigationProp<
+	T extends keyof OtherStackParamList = keyof OtherStackParamList,
+> = NativeStackNavigationProp<OtherStackParamList, T>;
+export type OtherRouteProp<T extends keyof OtherStackParamList> = RouteProp<
+	OtherStackParamList,
+	T
+>;
+
+// -----------------------------
 // ReactNavigation Root
 // -----------------------------
 declare global {
@@ -87,6 +102,8 @@ declare global {
 			extends RootStackParamList,
 				AppStackParamList,
 				AuthStackParamList,
-				EventStackParamList {}
+				UserStackParamList,
+				EventStackParamList,
+				OtherStackParamList {}
 	}
 }

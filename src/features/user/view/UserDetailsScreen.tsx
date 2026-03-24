@@ -20,7 +20,6 @@ import Educations from "./components/EducationRO";
 import dayjs from "dayjs";
 import Works from "./components/WorkRO";
 import UserListItem from "./UserListItem";
-import ConfirmationModal from "../../../components/ConfirmationModal";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailsScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;

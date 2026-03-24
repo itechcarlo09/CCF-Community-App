@@ -35,11 +35,16 @@ export const lightColors = {
 	},
 	white: "#FFFFFF",
 	gray: {
-		200: "#E5E7EB",
-		300: "#D1D5DB",
-		400: "#9CA3AF",
-		500: "#6B7280",
-		900: "#111827",
+		50: "#F9FAFB", // background for screens
+		100: "#F3F4F6", // SearchField background
+		200: "#E5E7EB", // light boxes / cards background
+		300: "#D1D5DB", // borders
+		400: "#9CA3AF", // placeholder text / icons
+		500: "#6B7280", // medium gray text / icons
+		600: "#4B5563", // darker gray text
+		700: "#374151", // headings / titles
+		800: "#1F2937", // primary text color
+		900: "#111827", // bold / main text
 	},
 	blue: {
 		50: "#EFF6FF",

@@ -20,10 +20,6 @@ import Title from "../../components/Title";
 type UserRouteProp = RouteProp<EventStackParamList, "EventForm">;
 type NavProp = NativeStackNavigationProp<EventStackParamList>;
 
-const EventSchema = Yup.object().shape({
-	name: Yup.string().required("Required"),
-});
-
 const EventFormScreen = () => {
 	const insets = useSafeAreaInsets();
 	const navigation = useNavigation<NavProp>();

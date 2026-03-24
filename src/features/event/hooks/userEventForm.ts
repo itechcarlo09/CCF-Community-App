@@ -17,8 +17,8 @@ const staticInitialValues = {
 	date: "",
 };
 
-const staticSchema = Yup.object({
-	firstName: Yup.string().required("Please enter a valid event name"),
+const staticSchema = Yup.object().shape({
+	name: Yup.string().required("Required"),
 });
 
 export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {

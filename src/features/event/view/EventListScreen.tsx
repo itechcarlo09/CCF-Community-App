@@ -9,17 +9,16 @@ import {
 } from "react-native";
 import { useEventViewModel } from "../viewModel/useEventViewModel";
 import { useTheme } from "../../../theme/ThemeProvider";
-import EventListItem from "./EventListItem";
-import useDebounce from "../../user/hooks/useDebounce";
-import { SearchField } from "../../../components/SearchField";
 import MdiIcon from "../../../components/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import Loading from "../../../components/Loading";
 import { EventItemCard } from "./EventItemCard";
+import { SearchField } from "../../../components/SearchField";
+import useDebounce from "../../user/hooks/useDebounce";
 
 const Separator = () => <View style={styles.separator} />;
 
-const EventScreen = ({ navigation }: any) => {
+const EventListScreen = ({ navigation }: any) => {
 	const {
 		events,
 		refresh,
@@ -28,11 +27,9 @@ const EventScreen = ({ navigation }: any) => {
 		activityLoading,
 		loadMoreEvents,
 	} = useEventViewModel();
-	const [refreshing, setRefreshing] = useState(false);
+
 	const { theme } = useTheme();
-	const Refresh = () => (
-		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-	);
+	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
 	const [
@@ -50,62 +47,61 @@ const EventScreen = ({ navigation }: any) => {
 		setRefreshing(false);
 	}, [refresh]);
 
+	const handleEdit = (item: any) => {
+		navigation.navigate("EventNavigator", {
+			screen: "EventForm",
+			params: { eventId: item.id, onSuccess: onRefresh },
+		});
+	};
+
+	const handleSeries = (item: any) => {
+		navigation.navigate("EventNavigator", {
+			screen: "SeriesEvents",
+			params: { seriesId: item.seriesId },
+		});
+	};
+
 	return (
-		<View style={styles.container}>
-			<View style={styles.sortContainer}>
-				<View style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}>
-					{/* <Text style={[styles.sortText, { color: theme.gray[900] }]}>
-						Sort
-					</Text> */}
-					{/* <DropDownPicker
-						open={open}
-						value={value}
-						items={items}
-						setOpen={setOpen}
-						setValue={setValue}
-						setItems={setItems}
-						style={[
-							styles.dropdown,
-							{ borderColor: theme.gray[200], borderWidth: 2 },
-						]}
-						containerStyle={{
-							zIndex: 1000,
-							width: 164,
-						}}
-						dropDownContainerStyle={{
-							zIndex: 1000,
-							borderColor: theme.gray[200],
-							borderWidth: 2,
-						}}
-					/> */}
-				</View>
+		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
+			{/* Top Controls */}
+			<View style={styles.topControls}>
 				<SearchField
-					onChangeText={(value) => setSearch(value)}
 					value={search}
+					onChangeText={setSearch}
 					onCancel={() => setSearch("")}
 				/>
+
+				{/* Add Event Button */}
 				<TouchableOpacity
 					style={styles.addButton}
 					onPress={() =>
 						navigation.navigate("EventNavigator", {
 							screen: "EventForm",
-							params: {
-								onSuccess: onRefresh,
-							},
+							params: { onSuccess: onRefresh },
 						})
 					}
 				>
-					<MdiIcon path={mdiPlusBoxOutline} size={18} color={"#323232"} />
+					<MdiIcon path={mdiPlusBoxOutline} size={22} color={theme.gray[800]} />
 				</TouchableOpacity>
 			</View>
+
+			{/* Event List */}
 			{loading ? (
 				<Loading />
 			) : (
 				<FlatList
 					data={events}
 					ItemSeparatorComponent={Separator}
-					refreshControl={Refresh()}
-					renderItem={({ item }) => <EventItemCard item={item} />}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+					renderItem={({ item }) => (
+						<EventItemCard
+							item={item}
+							onPressEdit={() => handleEdit(item)}
+							onPressSeries={() => handleSeries(item)}
+						/>
+					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
 						activityLoading ? (
@@ -135,41 +131,22 @@ const EventScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-	container: { flex: 1, justifyContent: "center" },
-	text: { fontSize: 18, fontWeight: "bold", color: "#fff" },
-	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
-	card: {
-		elevation: 6,
-		padding: 16,
-		marginVertical: 8,
-		backgroundColor: "#c00b0bff",
-		borderRadius: 8,
-	},
-	title: { fontSize: 18, fontWeight: "bold" },
-	subtitle: { fontSize: 14, color: "gray" },
-	separator: {
-		height: 12,
-	},
-	sortContainer: {
-		marginBottom: 10,
-		marginTop: 12,
+	container: { flex: 1 },
+	separator: { height: 12 },
+	topControls: {
+		flexDirection: "row",
+		alignItems: "center",
 		marginHorizontal: 16,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	sortBox: {
-		height: 40,
-		borderRadius: 6,
-		alignItems: "center",
-		justifyContent: "center",
-		flexDirection: "row",
+		marginTop: 12,
+		marginBottom: 10,
 	},
 	addButton: {
 		height: 42,
 		width: 42,
 		justifyContent: "center",
+		alignItems: "center",
 		marginLeft: 10,
 	},
 });
 
-export default EventScreen;
+export default EventListScreen;
