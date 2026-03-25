@@ -27,6 +27,7 @@ export const mapUserToUI = (
 		user.lastName,
 	);
 	const age = ageNumber(user.birthDate);
+	const url = user.profilePicture;
 
 	const ministryText =
 		age <= MAX_AGE_FOR_ELEVATE ? "ELEVATE Youth" : "B1G Singles";
@@ -65,6 +66,7 @@ export const mapUserToUI = (
 
 	return {
 		id: user.id,
+		url,
 		fallbackText,
 		fullName,
 		completeName,

@@ -2,6 +2,7 @@ import { MembershipType } from "../types";
 
 export interface RecordItemUI {
 	id: number;
+	url?: string;
 	fullName: string;
 	completeName: string;
 	fallbackText: string;

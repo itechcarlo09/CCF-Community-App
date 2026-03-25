@@ -1,14 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../../views/HomeScreen";
 import UserScreen from "../features/user/view/UserScreen";
-import EventScreen from "../features/event/view/EventScreen";
 import { useTheme } from "../theme/ThemeProvider";
 import MdiIcon from "../components/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
 import OtherScreen from "src/features/others/view/OtherScreen";
 import EventListScreen from "src/features/event/view/EventListScreen";
 import { DashboardScreen } from "src/features/dashboard/view/DashboardScreen";
+import UserListScreen from "src/features/user/view/UserListScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,7 +41,7 @@ function BottomTabNavigator() {
 			/>
 			<Tab.Screen
 				name="UserTab"
-				component={UserScreen}
+				component={UserListScreen}
 				options={{ title: "Members" }}
 			/>
 			<Tab.Screen
