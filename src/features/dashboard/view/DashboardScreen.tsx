@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useDashboardViewModel } from "../viewModel/useDashboardViewModel";
 import Loading from "@components/Loading";
 import DashboardCard from "./components/DataTile";
+import { useTheme } from "@theme/ThemeProvider";
 
 export const DashboardScreen = () => {
+	const { theme } = useTheme();
 	const { loading, dashboard } = useDashboardViewModel();
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
-			<Text style={styles.header}>Dashboard</Text>
+			<Text style={[styles.header, { color: theme.text }]}>Dashboard</Text>
 			{loading ? (
 				<Loading />
 			) : (
