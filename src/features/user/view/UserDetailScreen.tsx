@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -34,6 +34,8 @@ import {
 import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
 import { EducationDTO, EmploymentDTO } from "../model/user";
+import { NOID } from "src/types/globalTypes";
+import { normalizeGender } from "src/utils/stringUtils";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -61,7 +63,7 @@ const UserDetailScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
 	const { id, hasEditedUser } = route.params;
-	const { loading, user, refreshUser } = useUserForm({ userId: id });
+	const { loading, user, refreshUser, formik } = useUserForm({ userId: id });
 	const [mappedUser, setMappedUser] = useState<RecordItemUI>();
 	const [mappedDMembers, setMappedDMembers] = useState<RecordItemUI[]>();
 	const hasMember = user && user.dGroupMembers && user.dGroupMembers.length > 0;
@@ -92,6 +94,22 @@ const UserDetailScreen = () => {
 			);
 	}, [user]);
 
+	const handleAssignDLeader = useCallback(() => {
+		const gender = normalizeGender(user?.gender);
+		const parsedId = Number(id);
+		const safeId = !isNaN(parsedId) ? parsedId : NOID;
+
+		if (!gender) return; // optionally show Toast
+
+		navigation.navigate("DleaderScreen", {
+			id: safeId,
+			gender,
+			onSelect: (selectedId: number) => {
+				formik.setFieldValue("dLeaderID", selectedId);
+			},
+		});
+	}, [user?.gender, id, navigation, formik]);
+
 	if (loading) {
 		return <Loading />;
 	}
@@ -102,7 +120,7 @@ const UserDetailScreen = () => {
 			<View style={styles.header}>
 				<View style={styles.profileContainer}>
 					<CircularImage
-						uri={""}
+						uri={user?.profilePicture}
 						size={48}
 						fallbackText={mappedUser?.fallbackText}
 					/>
@@ -145,9 +163,7 @@ const UserDetailScreen = () => {
 
 					<View style={styles.row}>
 						<MdiIcon path={mdiCalendarOutline} size={18} />
-						<Text style={styles.text}>
-							{user ? formatFullDate(user.birthDate) : ""}
-						</Text>
+						<Text style={styles.text}>{formatFullDate(user?.birthDate)}</Text>
 					</View>
 				</View>
 
@@ -181,11 +197,20 @@ const UserDetailScreen = () => {
 						<Text style={styles.sectionTitle}>DGroup Network</Text>
 						<MdiIcon path={mdiAccountGroupOutline} size={18} />
 					</View>
-					{/* LEADER */}
 					<Text style={styles.subSectionTitle}>Leader</Text>
+
 					<View style={styles.listItem}>
 						<MdiIcon path={mdiArrowUpBoldCircleOutline} size={18} />
-						<Text style={styles.textBold}>{mappedUser?.dleaderName}</Text>
+						<View style={{ flex: 1 }}>
+							<Text style={styles.textBold}>
+								{mappedUser?.dleaderName ?? "No leader assigned"}
+							</Text>
+						</View>
+						<TouchableOpacity onPress={handleAssignDLeader}>
+							<Text style={styles.actionText}>
+								{mappedUser?.dleaderName ? "Change" : "Assign"}
+							</Text>
+						</TouchableOpacity>
 					</View>
 					{/* // TODO: Implement Members Lazy Load */}
 					{/* MEMBERS */}
@@ -243,10 +268,7 @@ const UserDetailScreen = () => {
 								<Text style={styles.subText}>{edu.school.name}</Text>
 
 								<Text style={styles.yearText}>
-									{formatDateRangeFromDate(
-										new Date(edu.startDate),
-										edu.endDate ? new Date(edu.endDate) : undefined,
-									)}
+									{formatDateRangeFromDate(edu.startDate, edu.endDate)}
 								</Text>
 							</View>
 						</View>
@@ -271,10 +293,7 @@ const UserDetailScreen = () => {
 								<Text style={styles.subText}>{job.company.name}</Text>
 
 								<Text style={styles.yearText}>
-									{formatDateRangeFromDate(
-										new Date(job.startDate),
-										job.endDate ? new Date(job.endDate) : undefined,
-									)}
+									{formatDateRangeFromDate(job.startDate, job.endDate)}
 								</Text>
 							</View>
 						</View>
@@ -293,6 +312,33 @@ export default UserDetailScreen;
    STYLES
 ======================= */
 const styles = StyleSheet.create({
+	actionText: {
+		fontSize: 13,
+		fontWeight: "600",
+		color: "#2563EB",
+	},
+	emptyLeaderContainer: {
+		paddingVertical: 8,
+	},
+
+	emptyText: {
+		fontSize: 13,
+		color: "#9CA3AF",
+		marginBottom: 6,
+	},
+
+	assignBtn: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 6,
+	},
+
+	assignText: {
+		fontSize: 13,
+		fontWeight: "600",
+		color: "#2563EB",
+	},
+
 	profileContainer: {
 		flexDirection: "row",
 		alignItems: "center",

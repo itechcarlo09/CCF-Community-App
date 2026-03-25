@@ -1,3 +1,5 @@
+import Gender from "src/types/enums/Gender";
+
 /**
  * Capitalize the first letter of a string
  * "hello world" → "Hello world"
@@ -123,4 +125,17 @@ export const normalizePHNumber = (number: string): string => {
 	} else {
 		return number; // Already normalized
 	}
+};
+
+export const normalizeGender = (gender?: string): Gender | undefined => {
+	if (!gender) return undefined;
+
+	const normalized =
+		gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase();
+
+	if (normalized === Gender.Male || normalized === Gender.Female) {
+		return normalized as Gender;
+	}
+
+	return undefined;
 };

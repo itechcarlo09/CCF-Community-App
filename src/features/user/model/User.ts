@@ -42,6 +42,7 @@ export interface UserDTO {
 	birthDate: Date;
 	dGroupLeaderId?: number | null;
 	dGroupLeader?: DGroupBasicInfoDTO;
+	profilePicture?: string;
 	facebookLink?: string;
 	contactNumber: string;
 	dGroupMembers?: DGroupBasicInfoDTO[];

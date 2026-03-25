@@ -92,13 +92,6 @@ export const formatYearRange = (start?: number, end?: number): string => {
 };
 
 /**
- * Format full readable date: January 5, 2025
- */
-export const formatFullDate = (date: Date | string | null): string => {
-	return date ? dayjs(date).format("MMMM D, YYYY") : "";
-};
-
-/**
  * Format short date: 05 Jan 2025
  */
 export const formatShortDate = (date: Date | string | null): string => {
@@ -152,20 +145,6 @@ export const formatMonthYearFromDate = (date?: Date): string => {
 	return `${month} ${year}`;
 };
 
-export const formatDateRangeFromDate = (
-	startDate?: Date,
-	endDate?: Date,
-): string => {
-	if (!startDate && !endDate) return "";
-
-	const start = formatMonthYearFromDate(startDate);
-	const end = endDate ? formatMonthYearFromDate(endDate) : "Present";
-
-	if (start && !endDate) return `${start} – Present`;
-
-	return `${start} – ${end}`;
-};
-
 export const formatDateForDisplay = (dateString: string) => {
 	if (!dateString) return "";
 	const date = new Date(dateString);
@@ -194,4 +173,61 @@ export const formatPHNumber = (text: string) => {
 	if (part3) formatted += "-" + part3;
 
 	return formatted;
+};
+
+// src/utils/dateFormatter.ts
+export const normalizeDate = (
+	date?: string | null | Date,
+): Date | undefined => {
+	if (!date) return undefined;
+	if (date instanceof Date) return date;
+	const parsed = new Date(date);
+	return isNaN(parsed.getTime()) ? undefined : parsed;
+};
+
+/**
+ * Format a range of dates nicely.
+ * Examples:
+ *  - start: 2020-05-10, end: 2023-03-20 → May 2020 – Mar 2023
+ *  - start: 2022-08-01, end: undefined → Aug 2022 – Present
+ */
+export const formatDateRangeFromDate = (
+	start?: string | null | Date,
+	end?: string | null | Date,
+	includeDay: boolean = false,
+): string => {
+	const startDate = normalizeDate(start);
+	const endDate = normalizeDate(end);
+
+	const options: Intl.DateTimeFormatOptions = includeDay
+		? { year: "numeric", month: "short", day: "numeric" }
+		: { year: "numeric", month: "short" };
+
+	if (!startDate && !endDate) return "N/A";
+	if (!startDate)
+		return endDate?.toLocaleDateString(undefined, options) ?? "N/A";
+	if (!endDate)
+		return `${startDate.toLocaleDateString(undefined, options)} – Present`;
+
+	return `${startDate.toLocaleDateString(
+		undefined,
+		options,
+	)} – ${endDate.toLocaleDateString(undefined, options)}`;
+};
+
+/**
+ * Format a single date nicely
+ */
+export const formatFullDate = (
+	date?: string | null | Date,
+	includeDay: boolean = true,
+) => {
+	const d = normalizeDate(date);
+	if (!d) return "N/A";
+
+	const options: Intl.DateTimeFormatOptions = includeDay
+		? { year: "numeric", month: "short", day: "numeric" }
+		: { year: "numeric", month: "short" };
+
+	return d.toLocaleDateString(undefined, options);
 };
