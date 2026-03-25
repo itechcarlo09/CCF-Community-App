@@ -3,6 +3,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { MONTHS } from "src/types/globalTypes";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -78,6 +79,19 @@ export const formatYear = (date: Date | string | null): string => {
 };
 
 /**
+ * Format Year Range
+ */
+export const formatYearRange = (start?: number, end?: number): string => {
+	if (!start && !end) return "";
+
+	if (start && !end) return `${start} - Present`;
+
+	if (start && end) return `${start} - ${end}`;
+
+	return `${end}`; // fallback (rare)
+};
+
+/**
  * Format full readable date: January 5, 2025
  */
 export const formatFullDate = (date: Date | string | null): string => {
@@ -127,4 +141,57 @@ export const isWithinLastThreeMonths = (date: Date | string): boolean => {
 		dayjs(date).isAfter(threeMonthsAgo) &&
 		dayjs(date).isBefore(now.add(1, "day"))
 	);
+};
+
+export const formatMonthYearFromDate = (date?: Date): string => {
+	if (!date) return "";
+
+	const month = MONTHS[date.getMonth()];
+	const year = date.getFullYear();
+
+	return `${month} ${year}`;
+};
+
+export const formatDateRangeFromDate = (
+	startDate?: Date,
+	endDate?: Date,
+): string => {
+	if (!startDate && !endDate) return "";
+
+	const start = formatMonthYearFromDate(startDate);
+	const end = endDate ? formatMonthYearFromDate(endDate) : "Present";
+
+	if (start && !endDate) return `${start} – Present`;
+
+	return `${start} – ${end}`;
+};
+
+export const formatDateForDisplay = (dateString: string) => {
+	if (!dateString) return "";
+	const date = new Date(dateString);
+	return new Intl.DateTimeFormat("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	}).format(date); // → "January 1, 2000"
+};
+
+export const formatPHNumber = (text: string) => {
+	// remove non-digit
+	let digits = text.replace(/\D/g, "");
+
+	// only allow max 10 digits
+	if (digits.length > 10) digits = digits.slice(0, 10);
+
+	// format XXX-XXX-XXXX
+	const part1 = digits.slice(0, 3);
+	const part2 = digits.slice(3, 6);
+	const part3 = digits.slice(6, 10);
+
+	let formatted = "";
+	if (part1) formatted += part1;
+	if (part2) formatted += "-" + part2;
+	if (part3) formatted += "-" + part3;
+
+	return formatted;
 };

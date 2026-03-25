@@ -3,7 +3,8 @@ import { MembershipType } from "../types";
 export interface RecordItemUI {
 	id: number;
 	fullName: string;
-	fallbackText: string; // Used for CircularImage fallback
+	completeName: string;
+	fallbackText: string;
 	age: number;
 	ministryText: string;
 	membershipType: MembershipType;

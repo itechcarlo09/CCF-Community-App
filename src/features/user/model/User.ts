@@ -9,8 +9,8 @@ export interface SchoolDTO {
 export interface EducationDTO {
 	gradeYear: string;
 	course: string;
-	startYear: string;
-	endYear: string;
+	startDate: string;
+	endDate?: string;
 	school: SchoolDTO;
 }
 
@@ -22,8 +22,8 @@ export interface CompanyDTO {
 
 export interface EmploymentDTO {
 	position: string;
-	startYear: string;
-	endYear?: string;
+	startDate: string;
+	endDate?: string;
 	company: CompanyDTO;
 }
 

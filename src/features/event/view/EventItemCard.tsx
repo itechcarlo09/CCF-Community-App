@@ -66,7 +66,9 @@ export const EventItemCard: React.FC<Props> = ({
 
 			{/* HEADER */}
 			<View style={styles.header}>
-				<Text style={styles.title}>{item.eventTitle}</Text>
+				<Text style={[styles.title, { color: theme.text }]}>
+					{item.eventTitle}
+				</Text>
 
 				<View style={styles.actions}>
 					{/* REPORT ICON */}
@@ -99,10 +101,12 @@ export const EventItemCard: React.FC<Props> = ({
 
 			{/* ATTENDANCE */}
 			<View style={styles.footer}>
-				<Text style={styles.attendance}>
+				<Text style={[styles.attendance, { color: theme.text }]}>
 					First Timers: {item.firstTimeAttendees}
 				</Text>
-				<Text style={styles.attendance}>Regulars: {item.regularAttendees}</Text>
+				<Text style={[styles.attendance, { color: theme.text }]}>
+					Regulars: {item.regularAttendees}
+				</Text>
 			</View>
 		</View>
 	);

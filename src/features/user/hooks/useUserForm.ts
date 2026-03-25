@@ -37,8 +37,6 @@ const staticInitialValues = {
 	facebook: "",
 	emergencyPerson: "",
 	emergencyNumber: "",
-	education: [] as EducationDTO[],
-	employment: [] as EmploymentDTO[],
 };
 
 const staticSchema = Yup.object({
@@ -202,12 +200,12 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 							...(values.dLeaderID && {
 								dGroupLeaderId: Number(values.dLeaderID),
 							}),
-							...(values.education?.length > 0 && {
-								education: values.education,
-							}),
-							...(values.employment?.length > 0 && {
-								employment: values.employment,
-							}),
+							// ...(values.education?.length > 0 && {
+							// 	education: values.education,
+							// }),
+							// ...(values.employment?.length > 0 && {
+							// 	employment: values.employment,
+							// }),
 						};
 					await updateUser(userId.toString(), { ...user });
 				} else {
@@ -235,12 +233,12 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 						...(values.dLeaderID && {
 							dGroupLeaderId: Number(values.dLeaderID),
 						}),
-						...(values.education?.length > 0 && {
-							education: values.education,
-						}),
-						...(values.employment?.length > 0 && {
-							employment: values.employment,
-						}),
+						// ...(values.education?.length > 0 && {
+						// 	education: values.education,
+						// }),
+						// ...(values.employment?.length > 0 && {
+						// 	employment: values.employment,
+						// }),
 					};
 					await addUser({ ...user });
 				}

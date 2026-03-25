@@ -2,7 +2,7 @@ import {
 	ageNumber,
 	isWithinLastThreeMonths,
 } from "../../../utils/dateFormatter";
-import { formatFullName } from "../../../utils/stringUtils";
+import { formatCompleteName, formatFullName } from "../../../utils/stringUtils";
 import { RecordItemUI } from "../model/RecordListItem";
 import { UserDTO } from "../model/user";
 import topUsers from "../topUsers.json";
@@ -20,6 +20,11 @@ export const mapUserToUI = (
 		user.firstName,
 		user.lastName,
 		user.middleName,
+	);
+	const completeName = formatCompleteName(
+		user.firstName,
+		user.middleName,
+		user.lastName,
 	);
 	const age = ageNumber(user.birthDate);
 
@@ -62,6 +67,7 @@ export const mapUserToUI = (
 		id: user.id,
 		fallbackText,
 		fullName,
+		completeName,
 		age,
 		ministryText,
 		isActive,

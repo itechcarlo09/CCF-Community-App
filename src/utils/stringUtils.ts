@@ -62,6 +62,26 @@ export const formatFullName = (
 };
 
 /**
+ * Format full name as:
+ * "First Middle Last"
+ */
+export const formatCompleteName = (
+	first?: string,
+	middle?: string,
+	last?: string,
+): string => {
+	const safeFirst = first ?? "";
+	const safeMiddle = middle ?? "";
+	const safeLast = last ?? "";
+
+	const formattedFirst = capitalizeWords(safeFirst);
+	const formattedMiddle = safeMiddle ? ` ${capitalizeWords(safeMiddle)}` : "";
+	const formattedLast = safeLast ? ` ${capitalizeWords(safeLast)}` : "";
+
+	return `${formattedFirst}${formattedMiddle}${formattedLast}`.trim();
+};
+
+/**
  * Formats a phone number into XXX-XXX-XXXX.
  * Non-numeric characters are removed automatically.
  */

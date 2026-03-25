@@ -245,8 +245,8 @@ const UserFormScreen = () => {
 								? user.education.map((e) => ({
 										school: e.school.name,
 										degree: e.course,
-										startYear: dayjs(e.startYear).year().toString(),
-										endYear: dayjs(e.endYear).year().toString(),
+										startYear: dayjs(e.startDate).year().toString(),
+										endYear: dayjs(e.endDate).year().toString(),
 								  }))
 								: []
 						}
@@ -257,8 +257,8 @@ const UserFormScreen = () => {
 								? user.employment.map((e) => ({
 										position: e.position,
 										company: e.company.name,
-										startYear: dayjs(e.startYear).year().toString(),
-										endYear: dayjs(e.endYear).year().toString(),
+										startYear: dayjs(e.startDate).year().toString(),
+										endYear: dayjs(e.endDate).year().toString(),
 								  }))
 								: []
 						}
