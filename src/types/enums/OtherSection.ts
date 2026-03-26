@@ -28,7 +28,7 @@ export const OTHERS_SECTIONS: OthersSection[] = [
 				label: "Ministries",
 				description: "Manage church ministries",
 				icon: mdiDomain,
-				screen: "MinistryListScreen",
+				screen: "MinistryPage",
 			},
 			{
 				key: OthersItemKey.MinistryRoles,

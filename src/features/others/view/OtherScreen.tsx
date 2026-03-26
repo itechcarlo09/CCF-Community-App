@@ -12,7 +12,7 @@ import {
 import { OTHERS_SECTIONS } from "src/types/enums/OtherSection";
 import { ICONSIZE } from "src/types/globalTypes";
 
-const OtherScreen = () => {
+const OtherScreen = ({ navigation }: any) => {
 	const { theme } = useTheme();
 
 	return (
@@ -29,7 +29,10 @@ const OtherScreen = () => {
 
 						<View style={{ flexDirection: "row", gap: 12 }}>
 							{section.data.map((item) => (
-								<TouchableOpacity style={styles.itemContainer}>
+								<TouchableOpacity
+									style={styles.itemContainer}
+									onPress={() => navigation.navigate("OthersNavigator")}
+								>
 									<View style={styles.iconContainer}>
 										<MdiIcon
 											path={item.icon ?? ""}

@@ -82,7 +82,7 @@ export type EventRouteProp<T extends keyof EventStackParamList> = RouteProp<
 // Other Stack (nested stack for user-related screens)
 // -----------------------------
 export type OtherStackParamList = {
-	// EventForm: { id?: number; onSuccess?: () => void } | undefined;
+	MinistryPage: undefined;
 };
 
 export type OtherNavigationProp<
