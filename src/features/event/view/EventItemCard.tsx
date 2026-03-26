@@ -1,12 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import MdiIcon from "@components/MdiIcon";
-import { mdiFileChartOutline, mdiPencilOutline } from "@mdi/js";
+import {
+	mdiFileChartOutline,
+	mdiPencilOutline,
+	mdiMapMarkerOutline,
+	mdiCalendarClockOutline,
+	mdiAccountVoice,
+	mdiChevronRight,
+} from "@mdi/js";
 import { EventItemUI } from "../model/EventListItem";
 import { useTheme } from "@theme/ThemeProvider";
 
 interface Props {
 	item: EventItemUI;
+	onPress?: () => void;
 	onPressSeries?: () => void;
 	onPressReport?: () => void;
 	onPressEdit?: () => void;
@@ -14,160 +22,177 @@ interface Props {
 
 export const EventItemCard: React.FC<Props> = ({
 	item,
+	onPress,
 	onPressSeries,
 	onPressReport,
 	onPressEdit,
 }) => {
 	const { theme } = useTheme();
 
-	const renderMinistries = () => {
-		if (!item.ministryText || item.ministryText.length === 0) return null;
-
-		if (item.ministryText.length === 1) {
-			return (
-				<Text
-					style={[
-						styles.ministry,
-						{ color: theme.textDanger.onDanger.secondary },
-					]}
-				>
-					{item.ministryText[0]}
-				</Text>
-			);
-		} else if (item.ministryText.length === 2) {
-			return (
-				<Text style={styles.ministry}>
-					{item.ministryText[0]} x {item.ministryText[1]} Event
-				</Text>
-			);
-		} else {
-			const [main, ...partners] = item.ministryText;
-			return (
-				<Text style={styles.ministry}>
-					{main} Event in partnership with {partners.join(", ")}
-				</Text>
-			);
-		}
+	const formatTime = (date: Date) => {
+		const h = date.getHours();
+		const m = date.getMinutes().toString().padStart(2, "0");
+		const ampm = h >= 12 ? "PM" : "AM";
+		return `${h % 12 || 12}:${m} ${ampm}`;
 	};
 
-	const formatTime = (date: Date) => {
-		const hours = date.getHours();
-		const minutes = date.getMinutes();
-		const ampm = hours >= 12 ? "PM" : "AM";
-		const h = hours % 12 || 12;
-		const m = minutes.toString().padStart(2, "0");
-		return `${h}:${m} ${ampm}`;
+	const renderMinistry = () => {
+		if (!item.ministryText?.length) return null;
+
+		if (item.ministryText.length === 1) {
+			return item.ministryText[0];
+		}
+
+		if (item.ministryText.length === 2) {
+			return `${item.ministryText[0]} × ${item.ministryText[1]}`;
+		}
+
+		const [main, ...rest] = item.ministryText;
+		return `${main} +${rest.length}`;
 	};
 
 	return (
-		<View style={styles.card}>
-			{/* MINISTRY */}
-			{renderMinistries()}
+		<TouchableOpacity style={styles.card} onPress={onPress}>
+			{/* TOP ROW */}
+			<View style={styles.topRow}>
+				{/* Ministry Chip */}
+				<View style={styles.ministryChip}>
+					<Text style={styles.ministryText}>{renderMinistry()}</Text>
+				</View>
 
-			{/* HEADER */}
-			<View style={styles.header}>
-				<Text style={[styles.title, { color: theme.text }]}>
-					{item.eventTitle}
-				</Text>
-
+				{/* Actions */}
 				<View style={styles.actions}>
-					{/* REPORT ICON */}
 					<TouchableOpacity onPress={onPressReport} style={styles.iconBtn}>
-						<MdiIcon path={mdiFileChartOutline} size={18} color={"#555"} />
+						<MdiIcon path={mdiFileChartOutline} size={18} color="#666" />
 					</TouchableOpacity>
 
-					{/* EDIT ICON */}
 					<TouchableOpacity onPress={onPressEdit} style={styles.iconBtn}>
-						<MdiIcon path={mdiPencilOutline} size={18} color={"#555"} />
+						<MdiIcon path={mdiPencilOutline} size={18} color="#666" />
 					</TouchableOpacity>
 				</View>
 			</View>
 
-			{/* SERIES */}
+			{/* TITLE */}
+			<Text style={styles.title}>{item.eventTitle}</Text>
+
+			{/* SERIES CHIP */}
 			{item.seriesTitle && (
-				<TouchableOpacity onPress={onPressSeries}>
-					<Text style={styles.series}>{item.seriesTitle}</Text>
+				<TouchableOpacity style={styles.seriesChip} onPress={onPressSeries}>
+					<Text style={styles.seriesText}>{item.seriesTitle}</Text>
+
+					<MdiIcon
+						path={mdiChevronRight}
+						size={16}
+						color="#0284c7"
+						style={styles.seriesIcon}
+					/>
 				</TouchableOpacity>
 			)}
 
 			{/* DETAILS */}
 			<View style={styles.details}>
-				<Text style={styles.meta}>📍 {item.location}</Text>
-				<Text style={styles.meta}>
-					📅 {item.date.toDateString()} ⏰ {formatTime(item.date)}
-				</Text>
-				<Text style={styles.meta}>🎤 {item.speakers}</Text>
+				<View style={styles.row}>
+					<MdiIcon path={mdiMapMarkerOutline} size={16} color="#888" />
+					<Text style={styles.meta}>{item.location}</Text>
+				</View>
+
+				<View style={styles.row}>
+					<MdiIcon path={mdiCalendarClockOutline} size={16} color="#888" />
+					<Text style={styles.meta}>
+						{item.date.toDateString()} • {formatTime(item.date)}
+					</Text>
+				</View>
+
+				<View style={styles.row}>
+					<MdiIcon path={mdiAccountVoice} size={16} color="#888" />
+					<Text style={[styles.meta, { color: theme.text }]}>
+						{item.speakers}
+					</Text>
+				</View>
 			</View>
 
-			{/* ATTENDANCE */}
+			{/* FOOTER */}
 			<View style={styles.footer}>
-				<Text style={[styles.attendance, { color: theme.text }]}>
-					First Timers: {item.firstTimeAttendees}
-				</Text>
-				<Text style={[styles.attendance, { color: theme.text }]}>
-					Regulars: {item.regularAttendees}
-				</Text>
+				<Text style={styles.attendance}>👋 {item.firstTimeAttendees}</Text>
+				<Text style={styles.attendance}>🙋 {item.regularAttendees}</Text>
 			</View>
-		</View>
+		</TouchableOpacity>
 	);
 };
 
 const styles = StyleSheet.create({
 	card: {
 		backgroundColor: "#fff",
-		borderRadius: 12,
+		borderRadius: 16,
 		padding: 16,
-		marginVertical: 8,
+		marginVertical: 10,
 		marginHorizontal: 16,
-		elevation: 2,
+		elevation: 3,
 	},
 
-	ministry: {
-		fontSize: 14,
-		fontWeight: "600",
-		marginBottom: 6,
-	},
-
-	header: {
+	topRow: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 	},
 
-	title: {
-		fontSize: 16,
+	ministryChip: {
+		backgroundColor: "#f1f5f9",
+		paddingHorizontal: 10,
+		paddingVertical: 4,
+		borderRadius: 20,
+	},
+
+	ministryText: {
+		fontSize: 12,
 		fontWeight: "600",
-		flex: 1,
-		marginRight: 8,
+		color: "#334155",
 	},
 
 	actions: {
 		flexDirection: "row",
+		backgroundColor: "#f8fafc",
+		borderRadius: 10,
+		paddingHorizontal: 6,
+		paddingVertical: 4,
 	},
 
 	iconBtn: {
-		marginLeft: 10,
+		marginHorizontal: 4,
 	},
 
-	series: {
-		marginTop: 6,
-		color: "#3b82f6", // blue-500
-		fontWeight: "500",
+	title: {
+		fontSize: 17,
+		fontWeight: "700",
+		marginTop: 10,
+		color: "#111",
+	},
+
+	seriesText: {
+		fontSize: 12,
+		color: "#0284c7",
+		fontWeight: "600",
 	},
 
 	details: {
-		marginTop: 10,
+		marginTop: 12,
+	},
+
+	row: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: 6,
 	},
 
 	meta: {
+		marginLeft: 6,
 		fontSize: 13,
-		color: "#666",
-		marginBottom: 2,
+		color: "#555",
 	},
 
 	footer: {
 		flexDirection: "row",
-		justifyContent: "space-between",
+		justifyContent: "flex-end",
 		marginTop: 12,
 		borderTopWidth: 0.5,
 		borderTopColor: "#eee",
@@ -175,7 +200,24 @@ const styles = StyleSheet.create({
 	},
 
 	attendance: {
+		marginLeft: 12,
 		fontSize: 13,
-		fontWeight: "500",
+		fontWeight: "600",
+		color: "#222",
+	},
+
+	seriesChip: {
+		flexDirection: "row",
+		alignItems: "center",
+		alignSelf: "flex-start",
+		marginTop: 8,
+		backgroundColor: "#e0f2fe",
+		paddingHorizontal: 10,
+		paddingVertical: 4,
+		borderRadius: 20,
+	},
+
+	seriesIcon: {
+		marginLeft: 4,
 	},
 });
