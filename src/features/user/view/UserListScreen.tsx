@@ -95,8 +95,6 @@ const UserListScreen = ({ navigation }: any) => {
 		);
 	};
 
-	if (loading) return <Loading />;
-
 	return (
 		<View style={{ flex: 1 }}>
 			{/* Header with Search and Add Button */}
@@ -127,35 +125,39 @@ const UserListScreen = ({ navigation }: any) => {
 			</View>
 
 			{/* User List */}
-			<FlatList
-				data={users}
-				keyExtractor={(item) => item.id.toString()}
-				renderItem={renderItem}
-				refreshControl={Refresh()}
-				contentContainerStyle={styles.listContainer}
-				ItemSeparatorComponent={() => <View style={styles.separator} />}
-				onEndReached={() => {
-					if (
-						!onEndReachedCalledDuringMomentum &&
-						!activityLoading &&
-						!loading
-					) {
-						loadMoreUsers();
-						setOnEndReachedCalledDuringMomentum(true);
+			{loading ? (
+				<Loading />
+			) : (
+				<FlatList
+					data={users}
+					keyExtractor={(item) => item.id.toString()}
+					renderItem={renderItem}
+					refreshControl={Refresh()}
+					contentContainerStyle={styles.listContainer}
+					ItemSeparatorComponent={() => <View style={styles.separator} />}
+					onEndReached={() => {
+						if (
+							!onEndReachedCalledDuringMomentum &&
+							!activityLoading &&
+							!loading
+						) {
+							loadMoreUsers();
+							setOnEndReachedCalledDuringMomentum(true);
+						}
+					}}
+					onEndReachedThreshold={0.1}
+					ListFooterComponent={() =>
+						activityLoading ? (
+							<View style={{ padding: 12 }}>
+								<ActivityIndicator size="small" color="#2563EB" />
+							</View>
+						) : null
 					}
-				}}
-				onEndReachedThreshold={0.1}
-				ListFooterComponent={() =>
-					activityLoading ? (
-						<View style={{ padding: 12 }}>
-							<ActivityIndicator size="small" color="#2563EB" />
-						</View>
-					) : null
-				}
-				onMomentumScrollBegin={() => {
-					setOnEndReachedCalledDuringMomentum(false);
-				}}
-			/>
+					onMomentumScrollBegin={() => {
+						setOnEndReachedCalledDuringMomentum(false);
+					}}
+				/>
+			)}
 		</View>
 	);
 };
