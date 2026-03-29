@@ -106,6 +106,9 @@ const UserDetailScreen = () => {
 			gender,
 			onSelect: (selectedId: number) => {
 				formik.setFieldValue("dLeaderID", selectedId);
+				formik.submitForm().then(() => {
+					refreshUser();
+				});
 			},
 		});
 	}, [user?.gender, id, navigation, formik]);

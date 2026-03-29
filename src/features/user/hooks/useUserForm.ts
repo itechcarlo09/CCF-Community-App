@@ -424,16 +424,16 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 						dLeaderID: user.dGroupLeader
 							? user.dGroupLeader?.id.toString()
 							: "",
-						education: user.education
-							? user.education.length > 0
-								? user.education
-								: []
-							: [],
-						employment: user.employment
-							? user.employment.length > 0
-								? user.employment
-								: []
-							: [],
+						// education: user.education
+						// 	? user.education.length > 0
+						// 		? user.education
+						// 		: []
+						// 	: [],
+						// employment: user.employment
+						// 	? user.employment.length > 0
+						// 		? user.employment
+						// 		: []
+						// 	: [],
 					});
 				}
 			} catch (err) {
