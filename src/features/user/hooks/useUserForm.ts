@@ -78,25 +78,25 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 
 				if (userId) {
 					// 🔽 UPDATE
-					await updateUser(userId.toString(), {
-						firstName: values.firstName,
-						lastName: values.lastName,
-						gender: values.gender,
-						email: values.email,
-						contactNumber: values.contactNumber,
-						birthDate: new Date(values.birthdate),
-						...(values.middleName && { middleName: values.middleName }),
-						...(values.facebook && { facebookLink: values.facebook }),
-						...(values.emergencyPerson && {
-							emergencyContactName: values.emergencyPerson,
-						}),
-						...(values.emergencyNumber && {
-							emergencyContactNumber: values.emergencyNumber,
-						}),
-						...(values.dLeaderID && {
-							dGroupLeaderId: Number(values.dLeaderID),
-						}),
-					});
+					const payload: Partial<UserDTO> = {};
+
+					if (values.firstName) payload.firstName = values.firstName;
+					if (values.lastName) payload.lastName = values.lastName;
+					if (values.middleName) payload.middleName = values.middleName;
+					if (values.gender) payload.gender = values.gender;
+					if (values.email) payload.email = values.email;
+					if (values.contactNumber)
+						payload.contactNumber = values.contactNumber;
+					if (values.birthdate) payload.birthDate = new Date(values.birthdate);
+					if (values.facebook) payload.facebookLink = values.facebook;
+					if (values.emergencyPerson)
+						payload.emergencyContactName = values.emergencyPerson;
+					if (values.emergencyNumber)
+						payload.emergencyContactNumber = values.emergencyNumber;
+					if (values.dLeaderID)
+						payload.dGroupLeaderId = Number(values.dLeaderID);
+
+					await updateUser(userId.toString(), payload);
 				} else {
 					// 🔽 CREATE
 					await addUser({
