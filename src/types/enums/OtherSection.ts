@@ -30,13 +30,13 @@ export const OTHERS_SECTIONS: OthersSection[] = [
 				icon: mdiDomain,
 				screen: "MinistryPage",
 			},
-			{
-				key: OthersItemKey.MinistryRoles,
-				label: "Ministry Roles",
-				description: "Manage roles per ministry",
-				icon: mdiBadgeAccountOutline,
-				screen: "MinistryRoleScreen",
-			},
+			// {
+			// 	key: OthersItemKey.MinistryRoles,
+			// 	label: "Ministry Roles",
+			// 	description: "Manage roles per ministry",
+			// 	icon: mdiBadgeAccountOutline,
+			// 	screen: "MinistryRoleScreen",
+			// },
 		],
 	},
 	{

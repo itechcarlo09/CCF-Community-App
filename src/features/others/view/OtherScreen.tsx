@@ -3,14 +3,12 @@ import { useTheme } from "@theme/ThemeProvider";
 import React from "react";
 import {
 	View,
-	ActivityIndicator,
 	StyleSheet,
 	Text,
 	SectionList,
 	TouchableOpacity,
 } from "react-native";
 import { OTHERS_SECTIONS } from "src/types/enums/OtherSection";
-import { ICONSIZE } from "src/types/globalTypes";
 
 const OtherScreen = ({ navigation }: any) => {
 	const { theme } = useTheme();
