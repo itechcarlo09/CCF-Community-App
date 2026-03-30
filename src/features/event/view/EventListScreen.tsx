@@ -15,6 +15,7 @@ import Loading from "../../../components/Loading";
 import { EventItemCard } from "./EventItemCard";
 import { SearchField } from "../../../components/SearchField";
 import useDebounce from "../../user/hooks/useDebounce";
+import Header from "@components/Header";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -63,27 +64,16 @@ const EventListScreen = ({ navigation }: any) => {
 
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
-			{/* Top Controls */}
-			<View style={styles.topControls}>
-				<SearchField
-					value={search}
-					onChangeText={setSearch}
-					onCancel={() => setSearch("")}
-				/>
-
-				{/* Add Event Button */}
-				<TouchableOpacity
-					style={styles.addButton}
-					onPress={() =>
-						navigation.navigate("EventNavigator", {
-							screen: "EventForm",
-							params: { onSuccess: onRefresh },
-						})
-					}
-				>
-					<MdiIcon path={mdiPlusBoxOutline} size={22} color={theme.gray[800]} />
-				</TouchableOpacity>
-			</View>
+			<Header
+				placeholder="Search event..."
+				onAdd={() =>
+					navigation.navigate("EventNavigator", {
+						screen: "EventForm",
+						params: { onSuccess: onRefresh },
+					})
+				}
+				onSearch={setSearch}
+			/>
 
 			{/* Event List */}
 			{loading ? (

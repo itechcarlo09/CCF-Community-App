@@ -5,21 +5,15 @@ import {
 	FlatList,
 	StyleSheet,
 	TouchableOpacity,
-	TextInput,
 	ActivityIndicator,
 	RefreshControl,
 } from "react-native";
-import MdiIcon from "@components/MdiIcon";
-import {
-	mdiCheckCircleOutline,
-	mdiCloseCircleOutline,
-	mdiPlus,
-	mdiMagnify,
-} from "@mdi/js";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { RecordItemUI } from "../model/RecordListItem";
 import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
+import Header from "@components/Header";
+import { useTheme } from "@theme/ThemeProvider";
 
 const UserListScreen = ({ navigation }: any) => {
 	const {
@@ -31,6 +25,7 @@ const UserListScreen = ({ navigation }: any) => {
 		loadMoreUsers,
 	} = useUserViewModel();
 	const [searchText, setSearchText] = useState("");
+	const { theme } = useTheme();
 	const [
 		onEndReachedCalledDuringMomentum,
 		setOnEndReachedCalledDuringMomentum,
@@ -57,7 +52,10 @@ const UserListScreen = ({ navigation }: any) => {
 	const renderItem = ({ item }: { item: RecordItemUI }) => {
 		return (
 			<TouchableOpacity
-				style={styles.card}
+				style={[
+					styles.card,
+					{ borderLeftColor: item.isActive ? "#22C55E" : "#EF4444" },
+				]}
 				onPress={() => {
 					navigation.navigate("UserNavigator", {
 						screen: "UserDetailsScreen",
@@ -71,59 +69,50 @@ const UserListScreen = ({ navigation }: any) => {
 				<View style={styles.left}>
 					<CircularImage
 						uri={item?.url}
-						size={48}
+						size={56}
 						fallbackText={item?.fallbackText}
 					/>
+					{/* Active status dot */}
+					{item.isActive && <View style={styles.activeDot} />}
 				</View>
+
 				<View style={styles.middle}>
 					<Text style={styles.name}>{item.fullName}</Text>
-					<Text style={styles.details}>
-						{item.age} yrs • {item.ministryText}
-					</Text>
-					<Text style={styles.membershipType}>{item.membershipType}</Text>
+					<Text style={styles.details}>{item.age} yrs</Text>
+
+					{/* Membership type badge */}
+					<View style={styles.badgeContainer}>
+						<Text style={styles.badgeText}>{item.membershipType}</Text>
+					</View>
+
+					{/* Ministry info */}
+					<Text style={styles.ministryText}>{item.ministryText}</Text>
+
+					{/* Leader info */}
 					{item.dleaderName && (
-						<Text style={styles.details}>Leader: {item.dleaderName}</Text>
+						<View style={styles.leaderBadge}>
+							<Text style={styles.leaderText}>Leader: {item.dleaderName}</Text>
+						</View>
 					)}
-				</View>
-				<View style={styles.right}>
-					<MdiIcon
-						path={item.isActive ? mdiCheckCircleOutline : mdiCloseCircleOutline}
-						size={24}
-						color={item.isActive ? "#22C55E" : "#EF4444"}
-					/>
 				</View>
 			</TouchableOpacity>
 		);
 	};
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 1, backgroundColor: theme.gray[50] }}>
 			{/* Header with Search and Add Button */}
-			<View style={styles.header}>
-				<View style={styles.searchContainer}>
-					<MdiIcon path={mdiMagnify} size={20} color="#6B7280" />
-					<TextInput
-						style={styles.searchInput}
-						value={searchText}
-						onChangeText={setSearchText}
-						placeholder={"Search record..."}
-						placeholderTextColor="#9CA3AF"
-					/>
-				</View>
-				<TouchableOpacity
-					style={styles.addButton}
-					onPress={() =>
-						navigation.navigate("UserNavigator", {
-							screen: "UserForm",
-							params: {
-								onSuccess: onRefresh,
-							},
-						})
-					}
-				>
-					<MdiIcon path={mdiPlus} size={24} color="#fff" />
-				</TouchableOpacity>
-			</View>
+			<Header
+				onSearch={setSearchText}
+				onAdd={() =>
+					navigation.navigate("UserNavigator", {
+						screen: "UserForm",
+						params: {
+							onSuccess: onRefresh,
+						},
+					})
+				}
+			/>
 
 			{/* User List */}
 			{loading ? (
@@ -164,12 +153,6 @@ const UserListScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-	header: {
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 12,
-		backgroundColor: "#fff",
-	},
 	searchContainer: {
 		flex: 1,
 		flexDirection: "row",
@@ -178,12 +161,6 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		paddingHorizontal: 8,
 		height: 40,
-	},
-	searchInput: {
-		flex: 1,
-		marginLeft: 8,
-		fontSize: 14,
-		color: "#111827",
 	},
 	addButton: {
 		backgroundColor: "#2563EB",
@@ -196,30 +173,8 @@ const styles = StyleSheet.create({
 	listContainer: {
 		padding: 12,
 	},
-	card: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#F9FAFB",
-		borderRadius: 8,
-		padding: 12,
-	},
-	left: {
-		marginRight: 12,
-	},
-	middle: {
-		flex: 1,
-	},
 	right: {
 		marginLeft: 12,
-	},
-	name: {
-		fontSize: 16,
-		fontWeight: "600",
-		color: "#111827",
-	},
-	details: {
-		fontSize: 14,
-		color: "#6B7280",
 	},
 	membershipType: {
 		fontSize: 14,
@@ -229,6 +184,116 @@ const styles = StyleSheet.create({
 	},
 	separator: {
 		height: 8,
+	},
+	header: {
+		padding: 12,
+		backgroundColor: "#F9FAFB",
+	},
+	searchCard: {
+		flexDirection: "row",
+		alignItems: "center",
+		backgroundColor: "#fff",
+		borderRadius: 12,
+		paddingHorizontal: 12,
+		height: 44,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.1,
+		shadowRadius: 2,
+		elevation: 2,
+	},
+	searchInput: {
+		flex: 1,
+		marginLeft: 8,
+		fontSize: 14,
+		color: "#111827",
+	},
+	addButtonFloating: {
+		backgroundColor: "#2563EB",
+		width: 36,
+		height: 36,
+		borderRadius: 18,
+		justifyContent: "center",
+		alignItems: "center",
+		marginLeft: 8,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 3,
+	},
+	card: {
+		flexDirection: "row",
+		alignItems: "flex-start",
+		backgroundColor: "#fff",
+		borderRadius: 12,
+		padding: 16,
+		marginVertical: 6,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		elevation: 3,
+		borderLeftWidth: 4, // colored indicator for active/inactive
+	},
+	left: {
+		marginRight: 12,
+		position: "relative",
+	},
+	activeDot: {
+		position: "absolute",
+		bottom: 0,
+		right: 0,
+		width: 14,
+		height: 14,
+		borderRadius: 7,
+		backgroundColor: "#22C55E",
+		borderWidth: 2,
+		borderColor: "#fff",
+	},
+	middle: {
+		flex: 1,
+	},
+	name: {
+		fontSize: 16,
+		fontWeight: "700",
+		color: "#111827",
+	},
+	details: {
+		fontSize: 14,
+		color: "#6B7280",
+		marginVertical: 2,
+	},
+	ministryText: {
+		fontSize: 14,
+		color: "#374151",
+		marginTop: 4,
+	},
+	badgeContainer: {
+		alignSelf: "flex-start",
+		backgroundColor: "#2563EB20", // subtle blue background
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		borderRadius: 8,
+		marginTop: 4,
+	},
+	badgeText: {
+		color: "#2563EB",
+		fontSize: 12,
+		fontWeight: "600",
+	},
+	leaderBadge: {
+		marginTop: 6,
+		backgroundColor: "#FBBF2420",
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		borderRadius: 8,
+		alignSelf: "flex-start",
+	},
+	leaderText: {
+		color: "#B45309",
+		fontSize: 12,
+		fontWeight: "600",
 	},
 });
 
