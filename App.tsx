@@ -5,29 +5,23 @@
  * @format
  */
 
-import { StyleSheet, useColorScheme } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { ThemeProvider } from "./src/theme/ThemeProvider";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const Stack = createNativeStackNavigator();
+const queryClient = new QueryClient();
 
 function App() {
 	return (
-		<KeyboardProvider>
-			<ThemeProvider>
-				<RootNavigator />
-			</ThemeProvider>
-		</KeyboardProvider>
+		<QueryClientProvider client={queryClient}>
+			<KeyboardProvider>
+				<ThemeProvider>
+					<RootNavigator />
+				</ThemeProvider>
+			</KeyboardProvider>
+		</QueryClientProvider>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-});
 
 export default App;

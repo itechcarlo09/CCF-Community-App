@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import MdiIcon from "@components/MdiIcon";
 import {
-	mdiAccountOutline,
 	mdiCheckCircleOutline,
 	mdiCloseCircleOutline,
 	mdiPlus,
@@ -21,7 +20,6 @@ import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { RecordItemUI } from "../model/RecordListItem";
 import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
-import useDebounce from "../hooks/useDebounce";
 
 const UserListScreen = ({ navigation }: any) => {
 	const {
@@ -33,7 +31,6 @@ const UserListScreen = ({ navigation }: any) => {
 		loadMoreUsers,
 	} = useUserViewModel();
 	const [searchText, setSearchText] = useState("");
-	const debouncedSearchTerm = useDebounce(searchText, 500);
 	const [
 		onEndReachedCalledDuringMomentum,
 		setOnEndReachedCalledDuringMomentum,
@@ -50,8 +47,12 @@ const UserListScreen = ({ navigation }: any) => {
 	}, [refresh]);
 
 	useEffect(() => {
-		searchUsers(debouncedSearchTerm);
-	}, [debouncedSearchTerm]);
+		const delay = setTimeout(() => {
+			searchUsers(searchText);
+		}, 300);
+
+		return () => clearTimeout(delay);
+	}, [searchText]);
 
 	const renderItem = ({ item }: { item: RecordItemUI }) => {
 		return (

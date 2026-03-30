@@ -1,36 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
+import { UserDTO } from "../model/user";
 import {
-	DGroupBasicInfoDTO,
-	EducationDTO,
-	EmploymentDTO,
-	UserDTO,
-} from "../model/user";
-import { EducationEmploymentConfig } from "../../../types/userTypes";
-import {
-	formatFullName,
 	formatPhoneNumber,
 	normalizePHNumber,
 } from "../../../utils/stringUtils";
 import UserType from "../../../types/enums/UserType";
 
 interface UseUserFormProps {
-	userId: number;
+	userId?: number;
 	onSuccess?: () => void;
 }
 
-const staticInitialValues = {
+// 🔽 Initial Values
+const initialValues = {
 	firstName: "",
 	middleName: "",
 	lastName: "",
 	birthdate: "",
 	gender: "",
-	leaderName: "",
 	dLeaderID: "",
 	contactNumber: "",
 	email: "",
@@ -39,190 +32,60 @@ const staticInitialValues = {
 	emergencyNumber: "",
 };
 
-const staticSchema = Yup.object({
-	firstName: Yup.string().required("Please enter a valid first name"),
-	lastName: Yup.string().required("Please enter a valid last name"),
+// 🔽 Validation
+const validationSchema = Yup.object({
+	firstName: Yup.string().required("First name is required"),
+	lastName: Yup.string().required("Last name is required"),
 	birthdate: Yup.date().required("Birthdate is required"),
-	gender: Yup.string().required("Please select a gender"),
+	gender: Yup.string().required("Gender is required"),
+	email: Yup.string().email("Invalid email").required("Email is required"),
+
 	contactNumber: Yup.string()
 		.nullable()
 		.notRequired()
-		.test("starts-with-9", "Contact number must start with 9", (value) => {
-			if (!value || value.trim() === "") return true;
-			const digitsOnly = value.replace(/\D/g, "");
-			return digitsOnly.startsWith("9");
-		})
-		.test(
-			"length-check",
-			"Contact number must have exactly 10 digits",
-			(value) => {
-				if (!value || value.trim() === "") return true;
-				const digitsOnly = value.replace(/\D/g, "");
-				return digitsOnly.length === 10;
-			},
-		)
-		.test(
-			"dash-format",
-			"Contact number must be in the format 999-999-9999",
-			(value) => {
-				if (!value || value.trim() === "") return true;
-				return /^\d{3}-\d{3}-\d{4}$/.test(value);
-			},
-		),
-	email: Yup.string()
-		.email("Please enter a valid email address")
-		.required("Email is required"),
+		.matches(/^\d{3}-\d{3}-\d{4}$/, "Format: 999-999-9999")
+		.test("starts-with-9", "Must start with 9", (value) => {
+			if (!value) return true;
+			return value.replace(/\D/g, "").startsWith("9");
+		}),
+
 	emergencyNumber: Yup.string()
 		.nullable()
 		.notRequired()
-		.test("starts-with-9", "Contact number must start with 9", (value) => {
-			if (!value || value.trim() === "") return true;
-			const digitsOnly = value.replace(/\D/g, "");
-			return digitsOnly.startsWith("9");
-		})
-		.test(
-			"length-check",
-			"Contact number must have exactly 10 digits",
-			(value) => {
-				if (!value || value.trim() === "") return true;
-				const digitsOnly = value.replace(/\D/g, "");
-				return digitsOnly.length === 10;
-			},
-		)
-		.test(
-			"dash-format",
-			"Contact number must be in the format 999-999-9999",
-			(value) => {
-				if (!value || value.trim() === "") return true;
-				return /^\d{3}-\d{3}-\d{4}$/.test(value);
-			},
-		),
+		.matches(/^\d{3}-\d{3}-\d{4}$/, "Format: 999-999-9999")
+		.test("starts-with-9", "Must start with 9", (value) => {
+			if (!value) return true;
+			return value.replace(/\D/g, "").startsWith("9");
+		}),
 });
 
 export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
+	const navigation = useNavigation();
+	const { addUser, updateUser, getUser } = useUserViewModel();
+
 	const [loading, setLoading] = useState(false);
 	const [user, setUser] = useState<UserDTO | null>(null);
-	const dynamicInitialValues: Record<string, EducationEmploymentConfig> = {};
-	const navigation = useNavigation();
-	const { addUser, getUser, updateUser } = useUserViewModel();
 
-	const [educationFields, setEducationFields] = useState<
-		EducationEmploymentConfig[]
-	>([]);
-	const [employmentFields, setEmploymentFields] = useState<
-		EducationEmploymentConfig[]
-	>([]);
-	const [nextEduId, setNextEduId] = useState(1);
-	const [nextEmpId, setNextEmpId] = useState(1);
-
-	const getYearsNowMinus99 = useCallback(() => {
-		const currentYear = new Date().getFullYear();
-		return Array.from({ length: 100 }, (_, i) => ({
-			label: String(currentYear - i),
-			value: String(currentYear - i),
-		}));
-	}, []);
-
-	const buildDynamicSchema = (
-		educationArray: EducationEmploymentConfig[],
-		employmentArray: EducationEmploymentConfig[],
-	) => {
-		const shape: Record<string, any> = {};
-
-		// Education schema
-		educationArray.forEach((group) => {
-			shape[group.title] = Yup.object().shape({
-				school: Yup.string().required("School is required"),
-				degree: Yup.string().required("Degree is required"),
-				startdate: Yup.string().required("Start date is required"),
-				enddate: Yup.string().required("End date is required"),
-			});
-		});
-
-		// Employment schema
-		employmentArray.forEach((group) => {
-			shape[group.title] = Yup.object().shape({
-				company: Yup.string().required("Company is required"),
-				position: Yup.string().required("Position is required"),
-				startdate: Yup.string().required("Start date is required"),
-				enddate: Yup.string().required("End date is required"),
-			});
-		});
-
-		return Yup.object().required().shape(shape);
-	};
-
-	const validationSchema = useMemo(
-		() =>
-			staticSchema.concat(
-				buildDynamicSchema(educationFields ?? [], employmentFields ?? []),
-			),
-		[educationFields, employmentFields],
-	);
-
-	useEffect(() => {
-		setValidationSchemaOptions(validationSchema);
-	}, [validationSchema]);
-
-	const [validationSchemaOptions, setValidationSchemaOptions] =
-		useState(validationSchema);
-
+	// 🔽 Formik
 	const formik = useFormik({
-		initialValues: { ...staticInitialValues, ...dynamicInitialValues },
-		validationSchema: validationSchemaOptions,
+		initialValues,
+		validationSchema,
 		enableReinitialize: true,
+
 		onSubmit: async (values) => {
-			setLoading(true);
 			try {
+				setLoading(true);
+
 				if (userId) {
-					const user: Partial<Omit<UserDTO, "id" | "createdAt" | "updatedAt">> =
-						{
-							...(values.firstName && { firstName: values.firstName }),
-							...(values.lastName && { lastName: values.lastName }),
-							...(values.gender && { gender: values.gender }),
-							...(values.contactNumber && {
-								contactNumber: values.contactNumber,
-							}),
-							...(values.email && { email: values.email }),
-							...(values.birthdate && {
-								birthDate: new Date(values.birthdate),
-							}),
-							...(values.middleName?.trim() && {
-								middleName: values.middleName.trim(),
-							}),
-							...(values.facebook && { facebookLink: values.facebook }),
-							...(values.emergencyPerson && {
-								emergencyContactName: values.emergencyPerson,
-							}),
-							...(values.emergencyNumber && {
-								emergencyContactNumber: values.emergencyNumber,
-							}),
-							...(values.dLeaderID && {
-								dGroupLeaderId: Number(values.dLeaderID),
-							}),
-							// ...(values.education?.length > 0 && {
-							// 	education: values.education,
-							// }),
-							// ...(values.employment?.length > 0 && {
-							// 	employment: values.employment,
-							// }),
-						};
-					await updateUser(userId.toString(), { ...user });
-				} else {
-					const user: Omit<UserDTO, "id" | "createdAt" | "updatedAt"> = {
+					// 🔽 UPDATE
+					await updateUser(userId.toString(), {
 						firstName: values.firstName,
 						lastName: values.lastName,
 						gender: values.gender,
-						contactNumber: values.contactNumber,
 						email: values.email,
+						contactNumber: values.contactNumber,
 						birthDate: new Date(values.birthdate),
-						userType:
-							Object.keys(UserType).find(
-								(key) => UserType[key as keyof typeof UserType] === "Member", // put here the value of userType
-							) ?? Object.keys(UserType)[Object.keys(UserType).length - 1],
-						...(values.middleName?.trim() && {
-							middleName: values.middleName.trim(),
-						}),
+						...(values.middleName && { middleName: values.middleName }),
 						...(values.facebook && { facebookLink: values.facebook }),
 						...(values.emergencyPerson && {
 							emergencyContactName: values.emergencyPerson,
@@ -233,231 +96,97 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 						...(values.dLeaderID && {
 							dGroupLeaderId: Number(values.dLeaderID),
 						}),
-						// ...(values.education?.length > 0 && {
-						// 	education: values.education,
-						// }),
-						// ...(values.employment?.length > 0 && {
-						// 	employment: values.employment,
-						// }),
-					};
-					await addUser({ ...user });
+					});
+				} else {
+					// 🔽 CREATE
+					await addUser({
+						firstName: values.firstName,
+						lastName: values.lastName,
+						gender: values.gender,
+						email: values.email,
+						contactNumber: values.contactNumber,
+						birthDate: new Date(values.birthdate),
+
+						userType:
+							Object.keys(UserType).find(
+								(key) => UserType[key as keyof typeof UserType] === "Member",
+							) ?? Object.keys(UserType)[0],
+
+						...(values.middleName && { middleName: values.middleName }),
+						...(values.facebook && { facebookLink: values.facebook }),
+						...(values.emergencyPerson && {
+							emergencyContactName: values.emergencyPerson,
+						}),
+						...(values.emergencyNumber && {
+							emergencyContactNumber: values.emergencyNumber,
+						}),
+						...(values.dLeaderID && {
+							dGroupLeaderId: Number(values.dLeaderID),
+						}),
+					});
 				}
-				onSuccess && onSuccess();
-			} catch (err) {
-				Alert.alert(
-					"Error",
-					`Failed to ${userId && userId > 0 ? "update" : "add"} user`,
-				);
+
+				onSuccess?.();
+			} catch (error) {
+				Alert.alert("Error", `Failed to ${userId ? "update" : "create"} user`);
 			} finally {
 				setLoading(false);
 			}
 		},
 	});
 
-	const addEducationField = useCallback(() => {
-		const groupKey = `education${nextEduId}`;
-
-		setEducationFields((prev) => [
-			...prev,
-			{
-				title: groupKey,
-				startYears: getYearsNowMinus99(),
-			},
-		]);
-
-		formik.setFieldValue(groupKey, {
-			school: "",
-			degree: "",
-			startdate: "",
-			enddate: "",
-		});
-
-		formik.validateForm();
-		setNextEduId((id) => id + 1);
-	}, [nextEduId, formik, getYearsNowMinus99]);
-
-	const addEmploymentField = useCallback(() => {
-		const groupKey = `employment${nextEmpId}`;
-
-		setEmploymentFields((prev) => [
-			...prev,
-			{
-				title: groupKey,
-				startYears: getYearsNowMinus99(),
-			},
-		]);
-
-		formik.setFieldValue(groupKey, {
-			company: "",
-			position: "",
-			startdate: "",
-			enddate: "",
-		});
-
-		formik.validateForm();
-		setNextEmpId((id) => id + 1);
-	}, [nextEmpId, formik, getYearsNowMinus99]);
-
-	const removeEducationField = useCallback(
-		(groupKey: string) => {
-			setEducationFields((prev) => prev.filter((g) => g.title !== groupKey));
-			formik.setFieldValue(groupKey, undefined);
-			formik.validateForm();
-		},
-		[formik],
-	);
-
-	const removeEmploymentField = useCallback(
-		(groupKey: string) => {
-			setEmploymentFields((prev) => prev.filter((g) => g.title !== groupKey));
-			formik.setFieldValue(groupKey, undefined);
-			formik.validateForm();
-		},
-		[formik],
-	);
-
-	const updateEducationEndYears = useCallback(
-		(groupKey: string, startYearValue: string) => {
-			setEducationFields((prev) => {
-				if (!prev) return prev;
-
-				return prev.map((field) => {
-					if (field.title !== groupKey) return field;
-
-					const start = Number(startYearValue);
-					const currentYear = new Date().getFullYear();
-
-					if (isNaN(start) || start > currentYear) {
-						return { ...field, endYears: [] };
-					}
-
-					const years = Array.from(
-						{ length: currentYear - start + 1 },
-						(_, i) => ({
-							label: String(start + i),
-							value: String(start + i),
-						}),
-					);
-
-					return { ...field, endYears: years };
-				});
-			});
-		},
-		[],
-	);
-
-	const updateEmploymentEndYears = useCallback(
-		(groupKey: string, startYearValue: string) => {
-			setEmploymentFields((prev) => {
-				if (!prev) return prev;
-
-				return prev.map((field) => {
-					if (field.title !== groupKey) return field;
-
-					const start = Number(startYearValue);
-					const currentYear = new Date().getFullYear();
-
-					if (isNaN(start) || start > currentYear) {
-						return { ...field, endYears: [] };
-					}
-
-					const years = Array.from(
-						{ length: currentYear - start + 1 },
-						(_, i) => ({
-							label: String(start + i),
-							value: String(start + i),
-						}),
-					);
-
-					return { ...field, endYears: years };
-				});
-			});
-		},
-		[],
-	);
-
-	const refreshUser = useCallback(async () => {
-		try {
-			setLoading(true);
-			const user = await getUser(userId.toString());
-			if (user) {
-				setUser({ ...user });
-			}
-		} finally {
-			setLoading(false);
-		}
-	}, []);
-
-	// Load user if editing
+	// 🔽 Load user (Edit mode)
 	useEffect(() => {
-		const load = async () => {
-			if (!userId) return;
+		if (!userId) return;
+
+		const loadUser = async () => {
 			try {
 				setLoading(true);
-				const user = await getUser(userId.toString());
-				if (user) {
-					setUser({ ...user });
-					formik.setValues({
-						firstName: user.firstName,
-						middleName: user.middleName ?? "",
-						lastName: user.lastName,
-						birthdate: dayjs(user.birthDate).format("YYYY-MM-DD"),
-						gender: user.gender,
-						leaderName: user.dGroupLeader
-							? formatFullName(
-									user.dGroupLeader.firstName,
-									user.dGroupLeader.lastName,
-									user.dGroupLeader.middleName,
-							  ) ?? ""
-							: "",
-						contactNumber: formatPhoneNumber(
-							normalizePHNumber(user.contactNumber),
-						),
-						email: user.email,
-						facebook: user.facebookLink ?? "",
-						emergencyPerson: user.emergencyContactName ?? "",
-						emergencyNumber: user.emergencyContactNumber
-							? formatPhoneNumber(
-									normalizePHNumber(user.emergencyContactNumber),
-							  )
-							: "",
-						dLeaderID: user.dGroupLeader
-							? user.dGroupLeader?.id.toString()
-							: "",
-						// education: user.education
-						// 	? user.education.length > 0
-						// 		? user.education
-						// 		: []
-						// 	: [],
-						// employment: user.employment
-						// 	? user.employment.length > 0
-						// 		? user.employment
-						// 		: []
-						// 	: [],
-					});
-				}
-			} catch (err) {
-				Alert.alert("Error", "Failed to fetch the user");
+				const data = await getUser(userId.toString());
+
+				if (!data) return;
+
+				setUser(data);
+
+				formik.setValues({
+					firstName: data.firstName,
+					middleName: data.middleName ?? "",
+					lastName: data.lastName,
+					birthdate: dayjs(data.birthDate).format("YYYY-MM-DD"),
+					gender: data.gender,
+					dLeaderID: data.dGroupLeader?.id?.toString() ?? "",
+					contactNumber: formatPhoneNumber(
+						normalizePHNumber(data.contactNumber),
+					),
+					email: data.email,
+					facebook: data.facebookLink ?? "",
+					emergencyPerson: data.emergencyContactName ?? "",
+					emergencyNumber: data.emergencyContactNumber
+						? formatPhoneNumber(normalizePHNumber(data.emergencyContactNumber))
+						: "",
+				});
+			} catch {
+				Alert.alert("Error", "Failed to load user");
 				navigation.goBack();
 			} finally {
 				setLoading(false);
 			}
 		};
-		load();
+
+		loadUser();
 	}, [userId]);
+
+	// 🔽 Refresh (optional)
+	const refreshUser = async () => {
+		if (!userId) return;
+		const data = await getUser(userId.toString());
+		if (data) setUser(data);
+	};
 
 	return {
 		formik,
 		loading,
 		user,
 		refreshUser,
-		educationFields,
-		employmentFields,
-		addEducationField,
-		removeEducationField,
-		addEmploymentField,
-		removeEmploymentField,
-		updateEducationEndYears,
-		updateEmploymentEndYears,
 	};
 };
