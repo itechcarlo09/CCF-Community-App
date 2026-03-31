@@ -14,7 +14,6 @@ import { useTheme } from "@theme/ThemeProvider";
 
 interface Props {
 	item: EventItemUI;
-	onPress?: () => void;
 	onPressSeries?: () => void;
 	onPressReport?: () => void;
 	onPressEdit?: () => void;
@@ -22,7 +21,6 @@ interface Props {
 
 export const EventItemCard: React.FC<Props> = ({
 	item,
-	onPress,
 	onPressSeries,
 	onPressReport,
 	onPressEdit,
@@ -52,7 +50,7 @@ export const EventItemCard: React.FC<Props> = ({
 	};
 
 	return (
-		<TouchableOpacity style={styles.card} onPress={onPress}>
+		<View style={styles.card}>
 			{/* TOP ROW */}
 			<View style={styles.topRow}>
 				{/* Ministry Chip */}
@@ -116,7 +114,7 @@ export const EventItemCard: React.FC<Props> = ({
 				<Text style={styles.attendance}>👋 {item.firstTimeAttendees}</Text>
 				<Text style={styles.attendance}>🙋 {item.regularAttendees}</Text>
 			</View>
-		</TouchableOpacity>
+		</View>
 	);
 };
 
