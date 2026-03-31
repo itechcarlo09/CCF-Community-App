@@ -1,147 +1,345 @@
-import React from "react";
-import { View, StyleSheet, SafeAreaView, Text } from "react-native";
+import React, { useMemo, useState } from "react";
+import {
+	View,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	StyleSheet,
+	ScrollView,
+	Platform,
+} from "react-native";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Formik } from "formik";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import TextField from "../../../components/TextField";
+import dayjs from "dayjs";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { useEventForm } from "../hooks/userEventForm";
+import { NOID } from "src/types/globalTypes";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { EventStackParamList } from "../../../types/navigation";
-import { useEventForm } from "../hooks/userEventForm";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import MdiIcon from "../../../components/MdiIcon";
-import { mdiArrowLeft } from "@mdi/js";
-import { ICONSIZE, NOID } from "../../../types/globalTypes";
-import Loading from "../../../components/Loading";
-import { useTheme } from "../../../theme/ThemeProvider";
-import Button from "../../../components/Button";
-import Title from "../../components/Title";
+import { EventStackParamList, UserStackParamList } from "src/types/navigation";
+import Input from "@components/Inputs";
+import Loading from "@components/Loading";
+import { formatDateForDisplay } from "src/utils/dateFormatter";
+import DateTimePicker, {
+	DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+
+interface EventFormValues {
+	name: string;
+	date: string;
+	location: string;
+	seriesId?: string;
+	ministryId: string;
+}
+
+interface Props {
+	initialData?: Partial<EventFormValues>;
+	onSubmit: (values: EventFormValues) => void;
+	onCancel?: () => void;
+	seriesOptions: { label: string; value: string }[];
+	ministryOptions: { label: string; value: string }[];
+}
 
 type UserRouteProp = RouteProp<EventStackParamList, "EventForm">;
 type NavProp = NativeStackNavigationProp<EventStackParamList>;
 
-const EventFormScreen = () => {
-	const insets = useSafeAreaInsets();
+export const seriesOptions = [
+	{ label: "Faith Foundations", value: "series_faith_foundations" },
+	{ label: "Purpose Driven Life", value: "series_purpose_driven" },
+	{ label: "Relationships & Love", value: "series_relationships" },
+	{ label: "Leadership 101", value: "series_leadership_101" },
+	{ label: "Spiritual Growth", value: "series_spiritual_growth" },
+];
+
+export const ministryOptions = [
+	{ label: "Youth Ministry", value: "ministry_youth" },
+	{ label: "Singles Ministry", value: "ministry_singles" },
+	{ label: "Couples Ministry", value: "ministry_couples" },
+	{ label: "Music Ministry", value: "ministry_music" },
+	{ label: "Kids Ministry", value: "ministry_kids" },
+	{ label: "Outreach Ministry", value: "ministry_outreach" },
+];
+
+const CreateEventScreen: React.FC<Props> = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
-	const { theme } = useTheme();
 	const { id, onSuccess } = route.params || {};
-	const { formik, loading, event } = useEventForm({
+	const [showDatePicker, setShowDatePicker] = useState(false);
+	const { formik, loading } = useEventForm({
 		eventId: id ? id : NOID,
 		onSuccess: () => {
-			if (onSuccess) {
-				onSuccess();
-			}
+			if (onSuccess) onSuccess();
 			navigation.goBack();
 		},
 	});
 
+	// const renderError = (field: keyof EventFormValues) => {
+	// 	if (formik.touched[field] && formik.errors[field]) {
+	// 		return <Text style={styles.error}>{formik.errors[field]}</Text>;
+	// 	}
+	// 	return null;
+	// };
+
+	const handleDateChange = (
+		event: DateTimePickerEvent,
+		selectedDate?: Date,
+	) => {
+		if (Platform.OS === "android") {
+			setShowDatePicker(false);
+		}
+
+		if (event.type === "dismissed") return;
+
+		if (selectedDate) {
+			formik.setFieldValue("date", selectedDate);
+		}
+	};
+
+	if (loading) return <Loading />;
+
 	return (
-		<SafeAreaView style={[styles.container]}>
-			<View style={styles.headerRow}>
-				<Text style={[styles.title, { color: theme.text }]}>
-					{id ? "Edit Event Record" : "Add Event Record"}
-				</Text>
-				<MdiIcon
-					path={mdiArrowLeft}
-					size={ICONSIZE}
-					color="#323232"
-					onPress={navigation.goBack}
-				/>
-				<View style={{ width: ICONSIZE }} />
-			</View>
-			{loading ? (
-				<Loading />
-			) : (
-				<KeyboardAwareScrollView
-					keyboardShouldPersistTaps="handled"
-					contentContainerStyle={[
-						styles.fieldsContainer,
-						{
-							backgroundColor: theme.background,
-							borderColor: theme.gray[200],
-						},
-					]}
-				>
-					<View style={styles.fieldGap}>
-						<Title title={"Event Information"} />
-						<TextField
-							placeholder="Enter Event Name"
-							label="Event Name"
-							required
-							value={formik.values.name}
-							onChangeText={formik.handleChange("name")}
-							error={formik.errors.name}
-							touched={formik.touched.name}
-							name={"name"}
-						/>
-					</View>
-				</KeyboardAwareScrollView>
-			)}
-			<Button
-				title="Submit"
-				style={{ backgroundColor: theme.blue[500] }}
-				onPress={formik.handleSubmit as any}
-				disabled={loading}
+		<KeyboardAwareScrollView
+			keyboardShouldPersistTaps="handled"
+			contentContainerStyle={styles.container}
+		>
+			<Text style={styles.title}>{id ? "Edit Event" : "Create Event"}</Text>
+
+			<Text style={styles.section}>Basic Information</Text>
+			<Input
+				label="Event Name"
+				placeholder="Enter Event Name"
+				value={formik.values.name}
+				onChangeText={formik.handleChange("name")}
+				onBlur={() => formik.setFieldTouched("name")}
+				error={formik.touched.name ? formik.errors.name : undefined}
+				required
 			/>
-		</SafeAreaView>
+
+			{/* Event Date */}
+			<View style={{ marginBottom: 12 }}>
+				<View style={styles.labelRow}>
+					<Text style={styles.label}>Event Date</Text>
+					<Text style={styles.required}> *</Text>
+				</View>
+
+				<TouchableOpacity
+					style={styles.birthDateTouchable}
+					onPress={() => setShowDatePicker(true)}
+				>
+					<Text
+						style={{
+							color: formik.values.date ? "#111827" : "#9CA3AF",
+						}}
+					>
+						{formik.values.date
+							? formatDateForDisplay(formik.values.date)
+							: "Select Event Date"}
+					</Text>
+				</TouchableOpacity>
+
+				{formik.touched.date && formik.errors.date && (
+					<Text style={styles.errorText}>{formik.errors.date}</Text>
+				)}
+			</View>
+
+			{showDatePicker && (
+				<DateTimePicker
+					value={formik.values.date ? new Date(formik.values.date) : new Date()}
+					mode="date"
+					display={Platform.OS === "ios" ? "spinner" : "default"}
+					onChange={handleDateChange}
+				/>
+			)}
+
+			<Input
+				label="Location"
+				placeholder="Enter Location"
+				value={formik.values.location}
+				onChangeText={formik.handleChange("location")}
+				onBlur={() => formik.setFieldTouched("location")}
+				error={formik.touched.location ? formik.errors.location : undefined}
+				required
+			/>
+
+			{/* Series (Optional) */}
+			{seriesOptions && (
+				<View style={styles.field}>
+					<Text style={styles.label}>Series (Optional)</Text>
+					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+						{seriesOptions.map((item) => {
+							const isSelected = formik.values.seriesId === item.value;
+							return (
+								<TouchableOpacity
+									key={item.value}
+									style={[styles.chip, isSelected && styles.chipSelected]}
+									onPress={() =>
+										formik.setFieldValue(
+											"seriesId",
+											isSelected ? undefined : item.value,
+										)
+									}
+								>
+									<Text
+										style={[
+											styles.chipText,
+											isSelected && styles.chipTextSelected,
+										]}
+									>
+										{item.label}
+									</Text>
+								</TouchableOpacity>
+							);
+						})}
+					</ScrollView>
+				</View>
+			)}
+
+			{/* Ministry */}
+			{ministryOptions && (
+				<View style={styles.field}>
+					<Text style={styles.label}>Ministry</Text>
+					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+						{ministryOptions.map((item) => {
+							const isSelected = formik.values.ministryId === item.value;
+							return (
+								<TouchableOpacity
+									key={item.value}
+									style={[styles.chip, isSelected && styles.chipSelected]}
+									onPress={() => formik.setFieldValue("ministryId", item.value)}
+								>
+									<Text
+										style={[
+											styles.chipText,
+											isSelected && styles.chipTextSelected,
+										]}
+									>
+										{item.label}
+									</Text>
+								</TouchableOpacity>
+							);
+						})}
+					</ScrollView>
+				</View>
+			)}
+
+			{/* SUBMIT */}
+			<TouchableOpacity
+				style={styles.submitButton}
+				onPress={formik.handleSubmit as any}
+			>
+				<Text style={styles.submitText}>
+					{id ? "Update Event" : "Create Event"}
+				</Text>
+			</TouchableOpacity>
+		</KeyboardAwareScrollView>
 	);
 };
 
+export default CreateEventScreen;
+
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		paddingHorizontal: 16,
-		rowGap: 17,
-		paddingVertical: 12,
+	section: {
+		fontSize: 16,
+		fontWeight: "600",
+		marginTop: 16,
+		marginBottom: 8,
+		color: "#374151",
 	},
-	fieldsContainer: {
-		borderRadius: 6,
-		paddingHorizontal: 16,
-		rowGap: 32,
+	submitButton: {
+		backgroundColor: "#4F46E5",
+		padding: 14,
+		borderRadius: 10,
+		alignItems: "center",
+		marginTop: 24,
 	},
-	text: { fontSize: 18, fontWeight: "bold" },
-	loader: { flex: 1, justifyContent: "center", alignItems: "center" },
-	headerRow: {
+	labelRow: {
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "space-between",
-	},
-	icon: {
-		width: 16,
-	},
-	genderContainer: {
-		width: 130,
-		zIndex: 1000,
+		marginBottom: 6,
 	},
 	title: {
-		position: "absolute",
-		left: 0,
-		right: 0,
-		textAlign: "center",
-		fontSize: 20,
-		lineHeight: 32,
-		fontWeight: 600,
+		fontSize: 24,
+		fontWeight: "700",
+		marginBottom: 16,
+		color: "#111827",
 	},
-	subTitle: {
-		fontSize: 16,
-		lineHeight: 24,
-		fontWeight: 600,
+	container: {
+		padding: 16,
+		paddingBottom: 32,
 	},
-	placeholder: {
-		width: 24,
+	field: {
+		marginBottom: 16,
 	},
-	dualFields: {
-		columnGap: 12,
+	label: {
+		fontSize: 14,
+		marginBottom: 6,
+		fontWeight: "600",
+	},
+	input: {
+		borderWidth: 1,
+		borderColor: "#ddd",
+		borderRadius: 8,
+		padding: 12,
+		fontSize: 14,
+	},
+	error: {
+		color: "red",
+		fontSize: 12,
+		marginTop: 4,
+	},
+	errorText: { color: "#DC2626", fontSize: 12, marginTop: 4 },
+	chip: {
+		paddingVertical: 8,
+		paddingHorizontal: 14,
+		borderRadius: 20,
+		borderWidth: 1,
+		borderColor: "#ccc",
+		marginRight: 8,
+	},
+	chipSelected: {
+		backgroundColor: "#007bff",
+		borderColor: "#007bff",
+	},
+	chipText: {
+		fontSize: 13,
+	},
+	chipTextSelected: {
+		color: "#fff",
+		fontWeight: "600",
+	},
+	actions: {
 		flexDirection: "row",
+		justifyContent: "space-between",
+		marginTop: 24,
 	},
-	dropdown: {
-		minHeight: 40,
-		borderRadius: 6,
-		borderStartStartRadius: 0,
-		borderStartEndRadius: 0,
+	cancelBtn: {
+		padding: 12,
 	},
-	fieldGap: { rowGap: 8 },
+	cancelText: {
+		color: "#666",
+	},
+	submitBtn: {
+		paddingVertical: 12,
+		paddingHorizontal: 20,
+		borderRadius: 8,
+		backgroundColor: "#007bff",
+	},
+	submitText: {
+		color: "#fff",
+		fontWeight: "600",
+	},
+	required: {
+		color: "#EF4444",
+		fontSize: 14,
+		fontWeight: "600",
+	},
+	birthDateTouchable: {
+		borderWidth: 1,
+		borderColor: "#D1D5DB",
+		borderRadius: 8,
+		padding: 12,
+		justifyContent: "center",
+		marginBottom: 12,
+		backgroundColor: "#FFFFFF",
+	},
 });
-
-export default EventFormScreen;

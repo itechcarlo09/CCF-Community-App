@@ -16,6 +16,7 @@ import { UserStackParamList } from "src/types/navigation";
 import Loading from "@components/Loading";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDateForDisplay, formatPHNumber } from "src/utils/dateFormatter";
+import Input from "@components/Inputs";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -80,7 +81,7 @@ const UserDetailFormScreen = () => {
 				label="First Name"
 				placeholder="Enter First Name"
 				value={formik.values.firstName}
-				onChange={formik.handleChange("firstName")}
+				onChangeText={formik.handleChange("firstName")}
 				onBlur={() => formik.setFieldTouched("firstName")}
 				error={formik.touched.firstName ? formik.errors.firstName : undefined}
 				required
@@ -89,7 +90,7 @@ const UserDetailFormScreen = () => {
 				label="Middle Name"
 				placeholder="Enter Middle Name"
 				value={formik.values.middleName}
-				onChange={formik.handleChange("middleName")}
+				onChangeText={formik.handleChange("middleName")}
 				onBlur={() => formik.setFieldTouched("middleName")}
 				error={formik.touched.middleName ? formik.errors.middleName : undefined}
 			/>
@@ -97,7 +98,7 @@ const UserDetailFormScreen = () => {
 				label="Last Name"
 				placeholder="Enter Last Name"
 				value={formik.values.lastName}
-				onChange={formik.handleChange("lastName")}
+				onChangeText={formik.handleChange("lastName")}
 				onBlur={() => formik.setFieldTouched("lastName")}
 				error={formik.touched.lastName ? formik.errors.lastName : undefined}
 				required
@@ -197,7 +198,7 @@ const UserDetailFormScreen = () => {
 				label="Email"
 				placeholder="Enter Email"
 				value={formik.values.email}
-				onChange={formik.handleChange("email")}
+				onChangeText={formik.handleChange("email")}
 				onBlur={() => formik.setFieldTouched("email")}
 				error={formik.touched.email ? formik.errors.email : undefined}
 				required
@@ -206,7 +207,7 @@ const UserDetailFormScreen = () => {
 				label="Facebook"
 				placeholder="Enter Facebook Link"
 				value={formik.values.facebook}
-				onChange={formik.handleChange("facebook")}
+				onChangeText={formik.handleChange("facebook")}
 				onBlur={() => formik.setFieldTouched("facebook")}
 				error={formik.touched.facebook ? formik.errors.facebook : undefined}
 			/>
@@ -217,7 +218,7 @@ const UserDetailFormScreen = () => {
 				label="Person"
 				placeholder="Enter Person's Fullname"
 				value={formik.values.emergencyPerson}
-				onChange={formik.handleChange("emergencyPerson")}
+				onChangeText={formik.handleChange("emergencyPerson")}
 				onBlur={() => formik.setFieldTouched("emergencyPerson")}
 				error={
 					formik.touched.emergencyPerson
@@ -269,43 +270,6 @@ const UserDetailFormScreen = () => {
 
 export default UserDetailFormScreen;
 
-// 🔹 Reusable Input
-const Input = ({
-	label,
-	value,
-	onChange,
-	onBlur,
-	error,
-	placeholder,
-	required,
-}: {
-	label: string;
-	value: string;
-	onChange: (text: string) => void;
-	onBlur?: () => void;
-	error?: string;
-	placeholder?: string;
-	required?: boolean;
-}) => (
-	<View style={styles.inputContainer}>
-		<View style={styles.labelRow}>
-			<Text style={styles.label}>{label}</Text>
-			{required && <Text style={styles.required}> *</Text>}
-		</View>
-
-		<TextInput
-			style={[styles.input, error && styles.inputError]}
-			value={value}
-			onChangeText={onChange}
-			onBlur={onBlur}
-			placeholder={placeholder}
-			placeholderTextColor="#9CA3AF"
-		/>
-
-		{error && <Text style={styles.errorText}>{error}</Text>}
-	</View>
-);
-
 // 🎨 Styles
 const styles = StyleSheet.create({
 	container: { padding: 16, backgroundColor: "#F9FAFB" },
@@ -315,11 +279,6 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 		color: "#111827",
 	},
-	labelRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 6,
-	},
 	section: {
 		fontSize: 16,
 		fontWeight: "600",
@@ -327,22 +286,18 @@ const styles = StyleSheet.create({
 		marginBottom: 8,
 		color: "#374151",
 	},
+	labelRow: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: 6,
+	},
 	required: {
 		color: "#EF4444",
 		fontSize: 14,
 		fontWeight: "600",
 	},
-	inputContainer: { marginBottom: 12 },
 	label: { fontSize: 12, color: "#6B7280", marginBottom: 4 },
-	input: {
-		borderWidth: 1,
-		borderColor: "#D1D5DB",
-		borderRadius: 8,
-		padding: 10,
-		color: "#111827",
-		backgroundColor: "#FFFFFF",
-	},
-	inputError: { borderColor: "#DC2626" },
+	inputContainer: { marginBottom: 12 },
 	errorText: { color: "#DC2626", fontSize: 12, marginTop: 4 },
 	birthDateTouchable: {
 		borderWidth: 1,

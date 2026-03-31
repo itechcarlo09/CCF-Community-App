@@ -15,10 +15,12 @@ interface UseEventFormProps {
 const staticInitialValues = {
 	name: "",
 	date: "",
+	location: "",
 };
 
 const staticSchema = Yup.object().shape({
 	name: Yup.string().required("Required"),
+	location: Yup.string().required("Required"),
 });
 
 export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {
