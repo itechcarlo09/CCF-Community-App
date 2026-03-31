@@ -102,7 +102,7 @@ const CreateEventScreen: React.FC<Props> = () => {
 			keyboardShouldPersistTaps="handled"
 			contentContainerStyle={styles.container}
 		>
-			<Text style={styles.title}>{id ? "Edit Event" : "Create Event"}</Text>
+			<Text style={styles.title}>{`${id ? "Edit" : "Create"} Event`}</Text>
 
 			<Text style={styles.section}>Basic Information</Text>
 			<Input
@@ -228,7 +228,7 @@ const CreateEventScreen: React.FC<Props> = () => {
 				onPress={formik.handleSubmit as any}
 			>
 				<Text style={styles.submitText}>
-					{id ? "Update Event" : "Create Event"}
+					{`${id ? "Edit" : "Create"} Event`}
 				</Text>
 			</TouchableOpacity>
 		</KeyboardAwareScrollView>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	View,
 	Text,
@@ -17,6 +17,7 @@ import Loading from "@components/Loading";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDateForDisplay, formatPHNumber } from "src/utils/dateFormatter";
 import Input from "@components/Inputs";
+import { normalizeGender } from "src/utils/stringUtils";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -58,13 +59,30 @@ const UserDetailFormScreen = () => {
 	const { id, onSuccess } = route.params || {};
 	const [showDatePicker, setShowDatePicker] = useState(false);
 
-	const { formik, loading } = useUserForm({
+	const { formik, loading, user } = useUserForm({
 		userId: id ? id : NOID,
 		onSuccess: () => {
 			if (onSuccess) onSuccess();
 			navigation.goBack();
 		},
 	});
+
+	const handleAssignDLeader = useCallback(() => {
+		const gender = normalizeGender(user?.gender);
+		const parsedId = Number(id);
+		const safeId = !isNaN(parsedId) ? parsedId : NOID;
+
+		if (!gender) return;
+
+		navigation.navigate("DleaderScreen", {
+			id: safeId,
+			gender,
+			onSelect: (selectedId: number, fullName: string) => {
+				formik.setFieldValue("dLeaderID", selectedId);
+				formik.setFieldValue("dLeaderName", fullName);
+			},
+		});
+	}, [user?.gender, id, navigation, formik]);
 
 	if (loading) return <Loading />;
 
@@ -73,7 +91,7 @@ const UserDetailFormScreen = () => {
 			keyboardShouldPersistTaps="handled"
 			contentContainerStyle={styles.container}
 		>
-			<Text style={styles.title}>{id ? "Edit User" : "Create User"}</Text>
+			<Text style={styles.title}>{`${id ? "Edit" : "Create"} User`}</Text>
 
 			{/* BASIC INFO */}
 			<Text style={styles.section}>Basic Information</Text>
@@ -243,14 +261,11 @@ const UserDetailFormScreen = () => {
 			<Text style={styles.section}>Discipleship</Text>
 			<TouchableOpacity
 				style={styles.leaderButton}
-				onPress={() => {
-					// TODO: navigate to LeaderSelectionScreen
-					// onSelect should update formik.values.dLeaderID
-				}}
+				onPress={handleAssignDLeader}
 			>
 				<Text style={styles.leaderButtonText}>
-					{formik.values.dLeaderID
-						? `Leader Selected: ${formik.values.dLeaderID}`
+					{formik.values.dLeadersName
+						? `Leader: ${formik.values.dLeadersName}`
 						: "Select Leader"}
 				</Text>
 			</TouchableOpacity>
@@ -261,7 +276,7 @@ const UserDetailFormScreen = () => {
 				onPress={formik.handleSubmit as any}
 			>
 				<Text style={styles.submitText}>
-					{id ? "Update User" : "Create User"}
+					{`${id ? "Edit" : "Create"} User`}
 				</Text>
 			</TouchableOpacity>
 		</KeyboardAwareScrollView>

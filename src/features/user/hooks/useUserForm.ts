@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
@@ -7,10 +7,12 @@ import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { UserDTO } from "../model/user";
 import {
+	formatFullName,
 	formatPhoneNumber,
 	normalizePHNumber,
 } from "../../../utils/stringUtils";
 import UserType from "../../../types/enums/UserType";
+import topUsers from "../topUsers.json";
 
 interface UseUserFormProps {
 	userId?: number;
@@ -30,6 +32,7 @@ const initialValues = {
 	facebook: "",
 	emergencyPerson: "",
 	emergencyNumber: "",
+	dLeaderName: "",
 };
 
 // 🔽 Validation
@@ -147,6 +150,9 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				if (!data) return;
 
 				setUser(data);
+				const topUser = topUsers.find(
+					(topUser) => topUser.email === data.email,
+				);
 
 				formik.setValues({
 					firstName: data.firstName,
@@ -155,6 +161,15 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 					birthdate: dayjs(data.birthDate).format("YYYY-MM-DD"),
 					gender: data.gender,
 					dLeaderID: data.dGroupLeader?.id?.toString() ?? "",
+					dLeaderName:
+						topUser?.dleaderName ??
+						(data.dGroupLeader
+							? formatFullName(
+									data.dGroupLeader.firstName,
+									data.dGroupLeader.lastName,
+									data.dGroupLeader.middleName,
+							  )
+							: ""),
 					contactNumber: formatPhoneNumber(
 						normalizePHNumber(data.contactNumber),
 					),

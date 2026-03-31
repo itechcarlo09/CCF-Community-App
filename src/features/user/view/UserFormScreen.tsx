@@ -58,7 +58,7 @@ const UserFormScreen = () => {
 	) => {
 		formik.setFieldValue("gender", value);
 		formik.setFieldValue(
-			"leaderName",
+			"dLeaderName",
 			value === user?.gender
 				? user?.dGroupLeader
 					? formatFullName(
@@ -158,13 +158,13 @@ const UserFormScreen = () => {
 						{!topUser && (
 							<SelectField
 								label="Discipleship Leader"
-								name="leaderName"
-								value={formik.values.leaderName}
-								error={formik.errors.leaderName}
+								name="dLeadersName"
+								value={formik.values.dLeaderName}
+								error={formik.errors.dLeaderName}
 								onPress={() => {
 									if (!formik.values.gender) {
 										formik.setFieldError(
-											"leaderName",
+											"dLeaderName",
 											"Please select gender first",
 										);
 										return;
@@ -177,7 +177,7 @@ const UserFormScreen = () => {
 												: Gender.Female,
 										onSelect: (selectedId: number, fullName: string) => {
 											formik.setFieldValue("dLeaderID", selectedId);
-											formik.setFieldValue("leaderName", fullName);
+											formik.setFieldValue("dLeaderName", fullName);
 										},
 									});
 								}}
