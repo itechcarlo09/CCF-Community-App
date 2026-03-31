@@ -106,7 +106,7 @@ export const MinistryPage = ({ navigation }: any) => {
 			<Header
 				title="Ministries"
 				onBack={() => navigation.goBack()}
-				onAdd={() => navigation.navigate("CreateMinistry")}
+				onAdd={() => navigation.navigate("CreateMinistryScreen")}
 			/>
 
 			<FlatList
