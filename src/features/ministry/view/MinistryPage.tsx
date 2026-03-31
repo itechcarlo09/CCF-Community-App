@@ -1,61 +1,42 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	View,
 	Text,
 	FlatList,
 	TouchableOpacity,
 	StyleSheet,
+	RefreshControl,
+	ActivityIndicator,
 } from "react-native";
 import MdiIcon from "@components/MdiIcon";
 import { mdiAccountGroupOutline, mdiPencil, mdiDelete } from "@mdi/js";
-import MinistryPageHeader from "./components/MinistryPageHeader";
 import Header from "@components/Header";
-
-interface Ministry {
-	id: string;
-	name: string;
-	icon?: string;
-	vision?: string;
-	mission?: string;
-	description?: string;
-	head?: string;
-	activeMembers?: number;
-	priorityCount?: number;
-}
-
-const initialMinistries: Ministry[] = [
-	{
-		id: "1",
-		name: "B1G Ministry",
-		icon: mdiAccountGroupOutline,
-		vision: "Transform the next generation",
-		mission: "To disciple youth and young adults",
-		description: "Dedicated to reaching and discipling young adults",
-		head: "Pastor Mark",
-		activeMembers: 25,
-		priorityCount: 12,
-	},
-	{
-		id: "2",
-		name: "Elevate Ministry",
-		icon: mdiAccountGroupOutline,
-		vision: "Empower youth",
-		mission: "Spiritual growth",
-		description: "Focused on young adult ministry",
-		head: "Pastor Lisa",
-		activeMembers: 30,
-		priorityCount: 15,
-	},
-];
+import Loading from "@components/Loading";
+import { useMinistryViewModel } from "../viewModel/useMinistryViewModel";
+import { MinistryItemUI } from "../model/MinistryListItem";
+import { useTheme } from "@theme/ThemeProvider";
 
 export const MinistryPage = ({ navigation }: any) => {
-	const [ministries, setMinistries] = useState<Ministry[]>(initialMinistries);
+	const { ministries, refresh, loading, activityLoading, loadMoreMinistries } =
+		useMinistryViewModel();
 
-	const deleteMinistry = (id: string) => {
-		setMinistries((prev) => prev.filter((m) => m.id !== id));
-	};
+	// const deleteMinistry = (id: string) => {
+	// 	setMinistries((prev) => prev.filter((m) => m.id !== id));
+	// };
 
-	const renderItem = ({ item }: { item: Ministry }) => (
+	const { theme } = useTheme();
+	const [refreshing, setRefreshing] = useState(false);
+	const [
+		onEndReachedCalledDuringMomentum,
+		setOnEndReachedCalledDuringMomentum,
+	] = useState(false);
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await refresh();
+		setRefreshing(false);
+	}, [refresh]);
+
+	const renderItem = ({ item }: { item: MinistryItemUI }) => (
 		<View style={styles.card}>
 			{/* Edit/Delete buttons */}
 			<View style={styles.topActions}>
@@ -66,17 +47,21 @@ export const MinistryPage = ({ navigation }: any) => {
 				>
 					<MdiIcon path={mdiPencil} size={22} color="#4f46e5" />
 				</TouchableOpacity>
-				<TouchableOpacity onPress={() => deleteMinistry(item.id)}>
+				{/* <TouchableOpacity onPress={() => deleteMinistry(item.id)}>
 					<MdiIcon path={mdiDelete} size={22} color="#e74c3c" />
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 			</View>
 
 			{/* Header: Icon + Name */}
 			<View style={styles.header}>
-				{item.icon && <MdiIcon path={item.icon} size={36} color="#4f46e5" />}
+				<MdiIcon
+					path={item.icon ? item.icon : mdiAccountGroupOutline}
+					size={36}
+					color="#4f46e5"
+				/>
 				<View style={{ marginLeft: 12, flex: 1 }}>
 					<Text style={styles.name}>{item.name}</Text>
-					<Text style={styles.head}>Head: {item.head}</Text>
+					<Text style={styles.head}>Head: {item.ministryHead}</Text>
 				</View>
 			</View>
 
@@ -92,39 +77,70 @@ export const MinistryPage = ({ navigation }: any) => {
 			{/* Stats badges */}
 			<View style={styles.statsRow}>
 				<View style={[styles.badge, { backgroundColor: "#4f46e5" }]}>
-					<Text style={styles.badgeText}>Active: {item.activeMembers}</Text>
+					<Text style={styles.badgeText}>Active: {item.activeVolunteer}</Text>
 				</View>
 				<View style={[styles.badge, { backgroundColor: "#22c55e" }]}>
-					<Text style={styles.badgeText}>Priority: {item.priorityCount}</Text>
+					<Text style={styles.badgeText}>
+						Priority: {item.priorityVolunteer}
+					</Text>
 				</View>
 			</View>
 		</View>
 	);
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
 				title="Ministries"
 				onBack={() => navigation.goBack()}
 				onAdd={() => navigation.navigate("CreateMinistryScreen")}
 			/>
 
-			<FlatList
-				data={ministries}
-				keyExtractor={(item) => item.id}
-				renderItem={renderItem}
-				contentContainerStyle={{ padding: 12 }}
-			/>
+			{loading ? (
+				<Loading />
+			) : (
+				<FlatList
+					data={ministries}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+					renderItem={renderItem}
+					ListHeaderComponent={<View style={{ height: 6 }} />}
+					ListFooterComponent={
+						activityLoading ? (
+							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
+						) : (
+							<View style={{ height: 16 }} />
+						)
+					}
+					onEndReached={() => {
+						if (
+							!onEndReachedCalledDuringMomentum &&
+							!activityLoading &&
+							!loading
+						) {
+							loadMoreMinistries();
+							setOnEndReachedCalledDuringMomentum(true);
+						}
+					}}
+					onEndReachedThreshold={0.1}
+					onMomentumScrollBegin={() => {
+						setOnEndReachedCalledDuringMomentum(false);
+					}}
+				/>
+			)}
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	container: { flex: 1 },
 	card: {
 		backgroundColor: "#fff",
 		padding: 16,
 		borderRadius: 12,
-		marginBottom: 16,
+		marginVertical: 10,
+		marginHorizontal: 16,
 		elevation: 3,
 		position: "relative",
 	},

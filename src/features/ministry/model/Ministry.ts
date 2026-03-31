@@ -40,4 +40,4 @@ export interface CreateMinistryDTO {
 	description?: string;
 }
 
-export type GetEventResponse = PaginatedResponse<MinistryDTO>;
+export type GetMinistryResponse = PaginatedResponse<MinistryDTO>;

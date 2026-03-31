@@ -73,7 +73,7 @@ const UserListScreen = ({ navigation }: any) => {
 						fallbackText={item?.fallbackText}
 					/>
 					{/* Active status dot */}
-					{item.isActive && <View style={styles.activeDot} />}
+					{/* {item.isActive && <View style={styles.activeDot} />} */}
 				</View>
 
 				<View style={styles.middle}>
@@ -92,7 +92,7 @@ const UserListScreen = ({ navigation }: any) => {
 					{/* Leader info */}
 					{item.dleaderName && (
 						<View style={styles.leaderBadge}>
-							<Text style={styles.leaderText}>Leader: {item.dleaderName}</Text>
+							<Text style={styles.leaderText}>{item.dleaderName}</Text>
 						</View>
 					)}
 				</View>

@@ -79,7 +79,7 @@ const CreateMinistryScreen = () => {
 				onPress={formik.handleSubmit as any}
 			>
 				<Text style={styles.submitText}>
-					{id ? "Update Event" : "Create Event"}
+					{`${id ? "Edit" : "Create"} Ministry`}
 				</Text>
 			</TouchableOpacity>
 		</KeyboardAwareScrollView>
