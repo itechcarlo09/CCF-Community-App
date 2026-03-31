@@ -8,6 +8,7 @@ import OtherScreen from "src/features/others/view/OtherScreen";
 import EventListScreen from "src/features/event/view/EventListScreen";
 import { DashboardScreen } from "src/features/dashboard/view/DashboardScreen";
 import UserListScreen from "src/features/user/view/UserListScreen";
+import DGroupListScreen from "src/features/dgroup/view/DGroupListScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ function BottomTabNavigator() {
 			/>
 			<Tab.Screen
 				name="DGroupTab"
-				component={UserScreen}
+				component={DGroupListScreen}
 				options={{ title: "DGroups" }}
 			/>
 			<Tab.Screen

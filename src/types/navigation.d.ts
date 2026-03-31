@@ -79,6 +79,22 @@ export type EventRouteProp<T extends keyof EventStackParamList> = RouteProp<
 >;
 
 // -----------------------------
+// DGroup Stack (nested stack for user-related screens)
+// -----------------------------
+export type DgroupStackParamList = {
+	DGroupForm: { id?: number; onSuccess?: () => void } | undefined;
+	DGroupListScreen: undefined;
+};
+
+export type DgrouptNavigationProp<
+	T extends keyof DgroupStackParamList = keyof DgroupStackParamList,
+> = NativeStackNavigationProp<DgroupStackParamList, T>;
+export type DgroupRouteProp<T extends keyof DgroupStackParamList> = RouteProp<
+	DgroupStackParamList,
+	T
+>;
+
+// -----------------------------
 // Other Stack (nested stack for user-related screens)
 // -----------------------------
 export type OtherStackParamList = {
