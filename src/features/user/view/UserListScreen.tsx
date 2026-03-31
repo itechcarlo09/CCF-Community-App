@@ -84,7 +84,8 @@ const UserListScreen = ({ navigation }: any) => {
 					<View style={styles.badgeContainer}>
 						<Text style={styles.badgeText}>{item.membershipType}</Text>
 					</View>
-
+				</View>
+				<View style={styles.ministryDetails}>
 					{/* Ministry info */}
 					<Text style={styles.ministryText}>{item.ministryText}</Text>
 
@@ -124,7 +125,6 @@ const UserListScreen = ({ navigation }: any) => {
 					renderItem={renderItem}
 					refreshControl={Refresh()}
 					contentContainerStyle={styles.listContainer}
-					ItemSeparatorComponent={() => <View style={styles.separator} />}
 					onEndReached={() => {
 						if (
 							!onEndReachedCalledDuringMomentum &&
@@ -181,9 +181,6 @@ const styles = StyleSheet.create({
 		fontWeight: "500",
 		color: "#2563EB",
 		marginTop: 2,
-	},
-	separator: {
-		height: 8,
 	},
 	header: {
 		padding: 12,
@@ -254,6 +251,11 @@ const styles = StyleSheet.create({
 	middle: {
 		flex: 1,
 	},
+	ministryDetails: {
+		flex: 1,
+		alignItems: "flex-end",
+		justifyContent: "center",
+	},
 	name: {
 		fontSize: 16,
 		fontWeight: "700",
@@ -288,7 +290,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 8,
 		paddingVertical: 2,
 		borderRadius: 8,
-		alignSelf: "flex-start",
 	},
 	leaderText: {
 		color: "#B45309",

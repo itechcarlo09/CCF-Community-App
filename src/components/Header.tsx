@@ -32,23 +32,47 @@ const Header: React.FC<Props> = ({
 	};
 
 	return (
-		<View style={styles.container}>
-			{/* Left: Back Button */}
-			{onBack && (
-				<TouchableOpacity style={styles.sideButton} onPress={onBack}>
-					<MdiIcon path={mdiArrowLeft} size={24} color="#111827" />
+		<View>
+			<View style={styles.container}>
+				{/* Left: Back Button */}
+				<TouchableOpacity
+					style={styles.sideButton}
+					onPress={onBack}
+					disabled={!onBack}
+				>
+					{onBack && <MdiIcon path={mdiArrowLeft} size={24} color="#111827" />}
 				</TouchableOpacity>
-			)}
 
-			{/* Center */}
-			{title ? (
-				<View style={styles.center}>
-					<Text numberOfLines={1} style={styles.title}>
-						{title}
-					</Text>
-				</View>
-			) : (
-				<View style={styles.searchCard}>
+				{/* Center */}
+				{title ? (
+					<View style={styles.center}>
+						<Text numberOfLines={1} style={styles.title}>
+							{title}
+						</Text>
+					</View>
+				) : (
+					<View style={styles.searchCard}>
+						<MdiIcon path={mdiMagnify} size={20} color="#9CA3AF" />
+						<TextInput
+							style={styles.input}
+							placeholder={placeholder}
+							placeholderTextColor="#9CA3AF"
+							value={searchText}
+							onChangeText={handleChange}
+						/>
+					</View>
+				)}
+				{/* Right: Add Button */}
+				<TouchableOpacity
+					style={styles.sideButton}
+					onPress={onAdd}
+					disabled={!onAdd}
+				>
+					{onAdd && <MdiIcon path={mdiPlus} size={24} color="#4f46e5" />}
+				</TouchableOpacity>
+			</View>
+			{title && onSearch && (
+				<View style={styles.searchMainCard}>
 					<MdiIcon path={mdiMagnify} size={20} color="#9CA3AF" />
 					<TextInput
 						style={styles.input}
@@ -59,12 +83,6 @@ const Header: React.FC<Props> = ({
 					/>
 				</View>
 			)}
-			{/* Right: Add Button */}
-			{onAdd && (
-				<TouchableOpacity style={styles.sideButton} onPress={onAdd}>
-					<MdiIcon path={mdiPlus} size={24} color="#4f46e5" />
-				</TouchableOpacity>
-			)}
 		</View>
 	);
 };
@@ -72,6 +90,21 @@ const Header: React.FC<Props> = ({
 export default Header;
 
 const styles = StyleSheet.create({
+	searchMainCard: {
+		flexDirection: "row",
+		alignItems: "center",
+		backgroundColor: "#fff",
+		borderRadius: 12,
+		paddingHorizontal: 12,
+		marginHorizontal: 12,
+		marginBottom: 12,
+		height: 48,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.1,
+		shadowRadius: 2,
+		elevation: 2,
+	},
 	container: {
 		padding: 12,
 		flexDirection: "row",
@@ -80,6 +113,7 @@ const styles = StyleSheet.create({
 	center: {
 		flex: 1,
 		alignItems: "center",
+		justifyContent: "center",
 	},
 	sideButton: {
 		width: 44,

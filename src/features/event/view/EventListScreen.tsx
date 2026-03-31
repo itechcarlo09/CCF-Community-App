@@ -3,17 +3,13 @@ import {
 	View,
 	StyleSheet,
 	FlatList,
-	TouchableOpacity,
 	RefreshControl,
 	ActivityIndicator,
 } from "react-native";
 import { useEventViewModel } from "../viewModel/useEventViewModel";
 import { useTheme } from "../../../theme/ThemeProvider";
-import MdiIcon from "../../../components/MdiIcon";
-import { mdiPlusBoxOutline } from "@mdi/js";
 import Loading from "../../../components/Loading";
 import { EventItemCard } from "./EventItemCard";
-import { SearchField } from "../../../components/SearchField";
 import useDebounce from "../../user/hooks/useDebounce";
 import Header from "@components/Header";
 
