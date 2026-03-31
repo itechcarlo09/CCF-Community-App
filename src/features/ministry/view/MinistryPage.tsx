@@ -9,6 +9,7 @@ import {
 import MdiIcon from "@components/MdiIcon";
 import { mdiAccountGroupOutline, mdiPencil, mdiDelete } from "@mdi/js";
 import MinistryPageHeader from "./components/MinistryPageHeader";
+import Header from "@components/Header";
 
 interface Ministry {
 	id: string;
@@ -102,7 +103,7 @@ export const MinistryPage = ({ navigation }: any) => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<MinistryPageHeader
+			<Header
 				title="Ministries"
 				onBack={() => navigation.goBack()}
 				onAdd={() => navigation.navigate("CreateMinistry")}
