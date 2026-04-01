@@ -8,6 +8,7 @@ import {
 	Linking,
 } from "react-native";
 import { DGroupItemUI } from "../../model/DGroupItemUI";
+import { useTheme } from "@theme/ThemeProvider";
 
 const DGroupCard: React.FC<DGroupItemUI> = ({
 	groupName,
@@ -18,6 +19,7 @@ const DGroupCard: React.FC<DGroupItemUI> = ({
 	memberTypes,
 	id,
 }) => {
+	const { theme } = useTheme();
 	return (
 		<View style={styles.card} key={id}>
 			{/* LEFT SIDE */}
@@ -27,7 +29,10 @@ const DGroupCard: React.FC<DGroupItemUI> = ({
 				</View>
 
 				<View style={styles.textContainer}>
-					<Text style={styles.groupName} numberOfLines={1}>
+					<Text
+						style={[styles.groupName, { color: theme.text }]}
+						numberOfLines={1}
+					>
 						{groupName}
 					</Text>
 
@@ -43,7 +48,9 @@ const DGroupCard: React.FC<DGroupItemUI> = ({
 
 			{/* RIGHT SIDE */}
 			<View style={styles.right}>
-				<Text style={styles.memberCount}>{memberCount}</Text>
+				<Text style={[styles.memberCount, { color: theme.text }]}>
+					{memberCount}
+				</Text>
 				<Text style={styles.memberLabel}>Members</Text>
 
 				<View style={styles.tags}>
