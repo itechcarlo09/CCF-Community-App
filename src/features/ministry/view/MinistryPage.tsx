@@ -15,6 +15,7 @@ import Loading from "@components/Loading";
 import { useMinistryViewModel } from "../viewModel/useMinistryViewModel";
 import { MinistryItemUI } from "../model/MinistryListItem";
 import { useTheme } from "@theme/ThemeProvider";
+import { Separator } from "@components/Separator";
 
 export const MinistryPage = ({ navigation }: any) => {
 	const { ministries, refresh, loading, activityLoading, loadMoreMinistries } =
@@ -101,6 +102,7 @@ export const MinistryPage = ({ navigation }: any) => {
 			) : (
 				<FlatList
 					data={ministries}
+					ItemSeparatorComponent={Separator}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
@@ -139,7 +141,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		padding: 16,
 		borderRadius: 12,
-		marginVertical: 10,
 		marginHorizontal: 16,
 		elevation: 3,
 		position: "relative",

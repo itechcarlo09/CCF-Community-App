@@ -12,8 +12,7 @@ import Loading from "../../../components/Loading";
 import { EventItemCard } from "./EventItemCard";
 import useDebounce from "../../user/hooks/useDebounce";
 import Header from "@components/Header";
-
-const Separator = () => <View style={styles.separator} />;
+import { Separator } from "@components/Separator";
 
 const EventListScreen = ({ navigation }: any) => {
 	const {
@@ -118,7 +117,6 @@ const EventListScreen = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
 	container: { flex: 1 },
-	separator: { height: 12 },
 	topControls: {
 		flexDirection: "row",
 		alignItems: "center",

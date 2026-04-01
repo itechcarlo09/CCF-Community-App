@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		padding: 14,
 		borderRadius: 18,
-		marginVertical: 10,
 		marginHorizontal: 16,
 
 		// modern shadow

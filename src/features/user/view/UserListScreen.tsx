@@ -14,6 +14,7 @@ import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
 import Header from "@components/Header";
 import { useTheme } from "@theme/ThemeProvider";
+import { Separator } from "@components/Separator";
 
 const UserListScreen = ({ navigation }: any) => {
 	const {
@@ -121,6 +122,7 @@ const UserListScreen = ({ navigation }: any) => {
 			) : (
 				<FlatList
 					data={users}
+					ItemSeparatorComponent={Separator}
 					keyExtractor={(item) => item.id.toString()}
 					renderItem={renderItem}
 					refreshControl={Refresh()}
@@ -225,7 +227,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		borderRadius: 12,
 		padding: 16,
-		marginVertical: 6,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.1,

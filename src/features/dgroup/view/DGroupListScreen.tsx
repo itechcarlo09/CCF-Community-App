@@ -12,6 +12,7 @@ import useDebounce from "../../user/hooks/useDebounce";
 import Header from "@components/Header";
 import DGroupListCard from "./components/DGroupListCard";
 import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
+import { Separator } from "@components/Separator";
 
 const DGroupListScreen = ({ navigation }: any) => {
 	const {
@@ -75,6 +76,7 @@ const DGroupListScreen = ({ navigation }: any) => {
 			) : (
 				<FlatList
 					data={dgroups}
+					ItemSeparatorComponent={Separator}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
