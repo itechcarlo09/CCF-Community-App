@@ -1,5 +1,5 @@
-import { Dashboard } from "../features/dashboard/model/Dashboard";
-import { DashboardUI } from "../features/dashboard/model/DashboardUI";
+import { Dashboard } from "../model/Dashboard";
+import { DashboardUI } from "../model/DashboardUI";
 
 export const mapDashboardResponseToDashboard = (
 	data: Dashboard,

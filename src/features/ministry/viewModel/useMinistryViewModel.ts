@@ -8,6 +8,7 @@ import {
 import { MinistryItemUI } from "../model/MinistryListItem";
 import { MinistryDTO } from "../model/Ministry";
 import { ministryRepository } from "../data/MinistryRepository";
+import { mapMinistryToUI } from "../data/ministry.mapper";
 
 const PAGE_SIZE = 10;
 
@@ -20,21 +21,6 @@ type MinistriesPage = {
 type InfiniteMinistriesData = {
 	pages: MinistriesPage[];
 	pageParams: number[];
-};
-
-// 🔽 Mapper
-const mapMinistryToUI = (ministry: MinistryDTO): MinistryItemUI => {
-	return {
-		id: ministry.id,
-		name: ministry.name,
-		icon: "",
-		ministryHead: "Carlo Renoria", // TODO: dynamic
-		mission: ministry.mission,
-		vision: ministry.vision,
-		description: ministry.description,
-		activeVolunteer: 25, // TODO
-		priorityVolunteer: 10, // TODO
-	};
 };
 
 export const useMinistryViewModel = () => {
