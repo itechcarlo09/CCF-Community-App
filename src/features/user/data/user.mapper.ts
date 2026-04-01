@@ -15,6 +15,7 @@ const MIN_DGROUP_MEMBERS_FOR_TIMOTHY = 1;
 export const mapUserToUI = (
 	user: Partial<UserDTO> & Pick<UserDTO, "id" | "firstName" | "lastName">,
 ): RecordItemUI => {
+	const id = user.id;
 	const fallbackText = `${user.firstName[0]}${user.lastName[0]}`;
 	const fullName = formatFullName(
 		user.firstName,
@@ -65,7 +66,7 @@ export const mapUserToUI = (
 	}
 
 	return {
-		id: user.id,
+		id,
 		url,
 		fallbackText,
 		fullName,

@@ -1,116 +1,193 @@
-import { useEffect, useState } from "react";
-import { EventDTO } from "../../event/model/Event";
-import { eventRepository } from "../../event/data/eventRepository";
-import { EventItemUI } from "../../event/model/EventListItem";
+import { useState, useMemo } from "react";
+import {
+	InfiniteData,
+	useInfiniteQuery,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
+import { eventRepository } from "../data/eventRepository";
+import { EventDTO } from "../model/Event";
+import { EventItemUI } from "../model/EventListItem";
+
+// 🔥 Types
+type EventsPage = {
+	data: EventItemUI[];
+	hasMore: boolean;
+};
+
+type InfiniteEventsData = {
+	pages: EventsPage[];
+	pageParams: number[];
+};
 
 const PAGE_SIZE = 10;
 
+// 🔽 Mapper
 const mapEventToUI = (event: EventDTO): EventItemUI => {
-	const ministryText = ["B1G Singles Ministry"];
-	const date = new Date(event.eventDate);
-	const eventTitle = event.eventName;
-	const seriesTitle = event.series.name;
-	const location = event.location;
-	const speakers = event.eventSpeakers.map((s) => s.speaker.name).join(", ");
-
 	return {
 		id: event.id,
-		ministryText,
-		eventTitle,
-		seriesTitle,
-		location,
-		date,
-		speakers,
+		ministryText: ["B1G Singles Ministry"],
+		eventTitle: event.eventName,
+		seriesTitle: event.series.name,
+		location: event.location,
+		date: new Date(event.eventDate),
+		speakers: event.eventSpeakers.map((s) => s.speaker.name).join(", "),
 		firstTimeAttendees: 1,
 		regularAttendees: 1,
 	};
 };
 
 export const useEventViewModel = () => {
-	const [events, setEvents] = useState<EventItemUI[]>([]);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [activityLoading, setActivityLoading] = useState(false);
+	const queryClient = useQueryClient();
 	const [search, setSearch] = useState("");
 
-	const fetchEvents = async (nextPage = page) => {
-		if (activityLoading) return;
-		if (!hasMore && nextPage !== 1) return;
+	// 🔽 EVENTS QUERY (Infinite + Search)
+	const query = useInfiniteQuery<
+		EventsPage,
+		Error,
+		InfiniteData<EventsPage>,
+		["events", string],
+		number
+	>({
+		queryKey: ["events", search],
 
-		try {
-			if (nextPage === 1) {
-				setLoading(true);
-			} else {
-				setActivityLoading(true);
-			}
+		queryFn: async ({ pageParam }): Promise<EventsPage> => {
 			const isSearching = !!search.trim();
+
 			const baseParams = {
-				page: nextPage,
+				page: pageParam,
 				pageSize: PAGE_SIZE,
 				sortOrder: "asc",
 				sortBy: "date",
 			};
 
 			const result = isSearching
-				? await eventRepository.searchEvents({ name: search, ...baseParams })
+				? await eventRepository.searchEvents({
+						name: search,
+						...baseParams,
+				  })
 				: await eventRepository.getEvents(baseParams);
 
-			if (!result) return;
+			return {
+				data: result?.data.map(mapEventToUI) ?? [],
+				hasMore: result?.meta?.hasMore ?? false,
+			};
+		},
 
-			const mappedEvents = result.data.map(mapEventToUI);
+		initialPageParam: 1,
 
-			setEvents((prev) =>
-				nextPage === 1 ? mappedEvents : [...prev, ...mappedEvents],
+		getNextPageParam: (lastPage, pages) =>
+			lastPage.hasMore ? pages.length + 1 : undefined,
+
+		staleTime: 1000 * 60 * 5,
+	});
+
+	// 🔽 Flatten pages
+	const events = useMemo<EventItemUI[]>(() => {
+		return query.data?.pages.flatMap((page) => page.data) ?? [];
+	}, [query.data]);
+
+	// 🔽 ADD EVENT
+	const addEventMutation = useMutation({
+		mutationFn: (event: Omit<EventDTO, "id">) =>
+			eventRepository.addEvent(event),
+
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["events"] });
+		},
+	});
+
+	// 🔽 UPDATE EVENT (Optimistic)
+	const updateEventMutation = useMutation<
+		void,
+		Error,
+		{ id: string; data: Partial<EventDTO> },
+		{ previous?: InfiniteEventsData }
+	>({
+		mutationFn: ({ id, data }) => eventRepository.updateEvent(id, data),
+
+		onMutate: async ({ id, data }) => {
+			await queryClient.cancelQueries({ queryKey: ["events", search] });
+
+			const previous = queryClient.getQueryData<InfiniteEventsData>([
+				"events",
+				search,
+			]);
+
+			queryClient.setQueryData<InfiniteEventsData>(
+				["events", search],
+				(old) => {
+					if (!old) return old;
+
+					return {
+						...old,
+						pages: old.pages.map((page) => ({
+							...page,
+							data: page.data.map((e) =>
+								e.id.toString() === id ? { ...e, ...data } : e,
+							),
+						})),
+					};
+				},
 			);
 
-			setPage(nextPage);
-			setHasMore(result.meta.hasMore);
-		} catch (error) {
-			console.error("Error fetching events:", error);
-		} finally {
-			setLoading(false);
-			setActivityLoading(false);
-		}
-	};
+			return { previous };
+		},
 
+		onError: (_err, _vars, context) => {
+			if (context?.previous) {
+				queryClient.setQueryData(["events", search], context.previous);
+			}
+		},
+
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["events"] });
+		},
+	});
+
+	// 🔽 GET SINGLE EVENT
 	const getEvent = async (id: string): Promise<EventDTO | null> => {
 		try {
-			setLoading(true);
 			return await eventRepository.getEventById(id);
 		} catch (error) {
 			console.error("Error fetching event:", error);
 			return null;
-		} finally {
-			setLoading(false);
 		}
 	};
 
+	// 🔍 SEARCH
+	const searchEvents = (text: string) => {
+		setSearch(text);
+	};
+
+	// 📄 LOAD MORE
 	const loadMoreEvents = () => {
-		if (loading || activityLoading || !hasMore) return;
-
-		fetchEvents(page + 1);
+		if (query.hasNextPage) {
+			query.fetchNextPage();
+		}
 	};
 
-	const searchEvents = async (searchText: string) => {
-		setSearch(searchText);
-		setPage(1);
-		setHasMore(true);
-		setEvents([]);
+	// 🔄 REFRESH
+	const refreshEvents = () => {
+		query.refetch();
 	};
-
-	useEffect(() => {
-		fetchEvents(1);
-	}, [search]);
 
 	return {
 		events,
-		loading,
-		activityLoading,
-		refresh: fetchEvents,
-		fetchEvents,
+
+		// loading states
+		loading: query.isLoading,
+		activityLoading: query.isFetching,
+
+		// actions
+		addEvent: addEventMutation.mutateAsync,
+		updateEvent: (id: string, data: Partial<EventDTO>) =>
+			updateEventMutation.mutateAsync({ id, data }),
+
 		searchEvents,
+		getEvent,
+		refresh: refreshEvents,
 		loadMoreEvents,
-		getUser: getEvent,
+		hasMore: query.hasNextPage,
 	};
 };
