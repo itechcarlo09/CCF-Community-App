@@ -17,6 +17,11 @@ const staticInitialValues = {
 	date: "", // YYYY-MM-DD
 	time: "", // HH:mm
 	location: "",
+	seriesId: "",
+	ministries: [] as {
+		ministryId: string;
+		role: "Organizer" | "Co-organizer" | "Partner";
+	}[],
 };
 
 const staticSchema = Yup.object().shape({
@@ -24,6 +29,33 @@ const staticSchema = Yup.object().shape({
 	location: Yup.string().required("Required"),
 	date: Yup.string().required("Required"),
 	time: Yup.string().required("Required"),
+	ministries: Yup.array()
+		.of(
+			Yup.object().shape({
+				ministryId: Yup.string().required(),
+				role: Yup.mixed<"Organizer" | "Co-organizer" | "Partner">()
+					.oneOf(["Organizer", "Co-organizer", "Partner"])
+					.required(),
+			}),
+		)
+		.test("single-organizer", function (ministries) {
+			if (!ministries) return true;
+			const organizerIndexes = ministries
+				.map((m, i) => (m.role === "Organizer" ? i : -1))
+				.filter((i) => i !== -1);
+
+			if (organizerIndexes.length <= 1) return true;
+
+			// Set error on all ministries that are "Organizer" except the first one
+			organizerIndexes.slice(1).forEach((i) => {
+				this.createError({
+					path: `ministries[${i}].role`,
+					message: "Only one ministry can be Organizer",
+				});
+			});
+
+			return organizerIndexes.length <= 1; // still return boolean for Yup
+		}),
 });
 
 export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {
@@ -95,6 +127,8 @@ export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {
 						date: dayjs(event.eventDate).format("YYYY-MM-DD"),
 						time: dayjs(event.eventDate).format("HH:mm"),
 						location: event.location,
+						seriesId: event.series?.id ? event.series.id.toString() : "",
+						ministries: [],
 					});
 				}
 			} catch (err) {

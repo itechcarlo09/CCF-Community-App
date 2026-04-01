@@ -4,3 +4,5 @@ enum UserType {
 }
 
 export default UserType;
+
+export const roles = ["Organizer", "Co-organizer", "Partner"] as const;
