@@ -11,17 +11,17 @@ import Loading from "../../../components/Loading";
 import useDebounce from "../../user/hooks/useDebounce";
 import Header from "@components/Header";
 import DGroupListCard from "./components/DGroupListCard";
-import { useEventViewModel } from "src/features/event/viewModel/useEventViewModel";
+import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
 
 const DGroupListScreen = ({ navigation }: any) => {
 	const {
-		events,
+		dgroups,
 		refresh,
 		loading,
-		searchEvents,
 		activityLoading,
-		loadMoreEvents,
-	} = useEventViewModel();
+		searchDGroups,
+		loadMoreDGroups,
+	} = useDGroupViewModel();
 
 	const { theme } = useTheme();
 	const [refreshing, setRefreshing] = useState(false);
@@ -33,7 +33,7 @@ const DGroupListScreen = ({ navigation }: any) => {
 	] = useState(false);
 
 	useEffect(() => {
-		searchEvents(debouncedSearchTerm);
+		searchDGroups(debouncedSearchTerm);
 	}, [debouncedSearchTerm]);
 
 	const onRefresh = useCallback(async () => {
@@ -74,16 +74,17 @@ const DGroupListScreen = ({ navigation }: any) => {
 				<Loading />
 			) : (
 				<FlatList
-					data={events}
+					data={dgroups}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
 					renderItem={({ item }) => (
 						<DGroupListCard
-							groupName={"DGroup Name"}
-							leaderName={"DLeaders Name"}
-							memberCount={12}
-							memberTypes={["Elevate", "B1G"]}
+							groupName={item.groupName}
+							leaderName={item.leaderName}
+							memberCount={item.memberCount}
+							memberTypes={item.memberTypes}
+							id={item.id}
 						/>
 					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
@@ -100,7 +101,7 @@ const DGroupListScreen = ({ navigation }: any) => {
 							!activityLoading &&
 							!loading
 						) {
-							loadMoreEvents();
+							loadMoreDGroups();
 							setOnEndReachedCalledDuringMomentum(true);
 						}
 					}}

@@ -7,26 +7,19 @@ import {
 	TouchableOpacity,
 	Linking,
 } from "react-native";
+import { DGroupItemUI } from "../../model/DGroupItemUI";
 
-interface Props {
-	groupName: string;
-	leaderName: string;
-	memberCount: number;
-	leaderImageUrl?: string;
-	leaderProfileUrl?: string;
-	memberTypes: string[];
-}
-
-const DGroupCard: React.FC<Props> = ({
+const DGroupCard: React.FC<DGroupItemUI> = ({
 	groupName,
 	leaderName,
 	memberCount,
 	leaderImageUrl,
 	leaderProfileUrl,
 	memberTypes,
+	id,
 }) => {
 	return (
-		<View style={styles.card}>
+		<View style={styles.card} key={id}>
 			{/* LEFT SIDE */}
 			<View style={styles.left}>
 				<View style={styles.avatar}>
