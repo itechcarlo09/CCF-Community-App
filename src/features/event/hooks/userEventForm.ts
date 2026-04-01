@@ -14,19 +14,22 @@ interface UseEventFormProps {
 
 const staticInitialValues = {
 	name: "",
-	date: "",
+	date: "", // YYYY-MM-DD
+	time: "", // HH:mm
 	location: "",
 };
 
 const staticSchema = Yup.object().shape({
 	name: Yup.string().required("Required"),
 	location: Yup.string().required("Required"),
+	date: Yup.string().required("Required"),
+	time: Yup.string().required("Required"),
 });
 
 export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const [event, setEvent] = useState<EventDTO | null>(null);
-	const { getUser } = useEventViewModel();
+	const { getEvent, addEvent, updateEvent } = useEventViewModel();
 	const navigation = useNavigation();
 
 	const formik = useFormik({
@@ -36,29 +39,42 @@ export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {
 		onSubmit: async (values) => {
 			setLoading(true);
 			try {
-				if (eventId) {
-					const event: Partial<
+				// Combine date + time into a single Date object
+				const combinedDate = dayjs(
+					`${values.date} ${values.time}`,
+					"YYYY-MM-DD HH:mm",
+				).toDate();
+
+				if (eventId && eventId > 0) {
+					// Update existing event
+					const updatedEvent: Partial<
 						Omit<EventDTO, "id" | "createdAt" | "updatedAt">
 					> = {
-						...(values.name && { eventName: values.name }),
+						eventName: values.name,
+						eventDate: combinedDate,
+						location: values.location,
 					};
-					// await updateUser(userId.toString(), { ...user });
+					await updateEvent(eventId.toString(), updatedEvent);
 				} else {
-					const event: Omit<CreateEventDTO, "id" | "createdAt" | "updatedAt"> =
-						{
-							eventName: values.name,
-							eventDate: new Date(values.date),
-							location: "",
-							seriesId: 0,
-							ministryId: 0,
-						};
-					// await addUser({ ...user });
+					// Create new event
+					const newEvent: Omit<
+						CreateEventDTO,
+						"id" | "createdAt" | "updatedAt"
+					> = {
+						eventName: values.name,
+						eventDate: combinedDate,
+						location: values.location,
+						seriesId: 1,
+						ministryId: 1,
+					};
+					await addEvent(newEvent);
 				}
+
 				onSuccess && onSuccess();
 			} catch (err) {
 				Alert.alert(
 					"Error",
-					`Failed to ${eventId && eventId > 0 ? "update" : "add"} user`,
+					`Failed to ${eventId && eventId > 0 ? "update" : "add"} event`,
 				);
 			} finally {
 				setLoading(false);
@@ -71,17 +87,18 @@ export const useEventForm = ({ eventId, onSuccess }: UseEventFormProps) => {
 			if (!eventId) return;
 			try {
 				setLoading(true);
-				const event = await getUser(eventId.toString());
+				const event = await getEvent(eventId.toString());
 				if (event) {
 					setEvent({ ...event });
 					formik.setValues({
 						name: event.eventName,
 						date: dayjs(event.eventDate).format("YYYY-MM-DD"),
+						time: dayjs(event.eventDate).format("HH:mm"),
 						location: event.location,
 					});
 				}
 			} catch (err) {
-				Alert.alert("Error", "Failed to fetch the user");
+				Alert.alert("Error", "Failed to fetch the event");
 				navigation.goBack();
 			} finally {
 				setLoading(false);

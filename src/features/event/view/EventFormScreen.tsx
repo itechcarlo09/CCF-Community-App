@@ -65,6 +65,7 @@ const CreateEventScreen: React.FC<Props> = () => {
 	const route = useRoute<UserRouteProp>();
 	const { id, onSuccess } = route.params || {};
 	const [showDatePicker, setShowDatePicker] = useState(false);
+	const [showTimePicker, setShowTimePicker] = useState(false);
 	const { formik, loading } = useEventForm({
 		eventId: id ? id : NOID,
 		onSuccess: () => {
@@ -72,6 +73,18 @@ const CreateEventScreen: React.FC<Props> = () => {
 			navigation.goBack();
 		},
 	});
+
+	const handleTimeChange = (
+		event: DateTimePickerEvent,
+		selectedTime?: Date,
+	) => {
+		if (Platform.OS === "android") setShowTimePicker(false);
+		if (event.type === "dismissed") return;
+
+		if (selectedTime) {
+			formik.setFieldValue("time", selectedTime);
+		}
+	};
 
 	// const renderError = (field: keyof EventFormValues) => {
 	// 	if (formik.touched[field] && formik.errors[field]) {
@@ -148,6 +161,39 @@ const CreateEventScreen: React.FC<Props> = () => {
 					mode="date"
 					display={Platform.OS === "ios" ? "spinner" : "default"}
 					onChange={handleDateChange}
+				/>
+			)}
+
+			{/* Event Time */}
+			<View style={{ marginBottom: 12 }}>
+				<View style={styles.labelRow}>
+					<Text style={styles.label}>Event Time</Text>
+					<Text style={styles.required}> *</Text>
+				</View>
+
+				<TouchableOpacity
+					style={styles.birthDateTouchable}
+					onPress={() => setShowTimePicker(true)}
+				>
+					<Text style={{ color: formik.values.time ? "#111827" : "#9CA3AF" }}>
+						{formik.values.time
+							? dayjs(formik.values.time).format("hh:mm A")
+							: "Select Event Time"}
+					</Text>
+				</TouchableOpacity>
+
+				{formik.touched.time && formik.errors.time && (
+					<Text style={styles.errorText}>{formik.errors.time}</Text>
+				)}
+			</View>
+
+			{showTimePicker && (
+				<DateTimePicker
+					value={formik.values.time ? new Date(formik.values.time) : new Date()}
+					mode="time"
+					is24Hour={false}
+					display={Platform.OS === "ios" ? "spinner" : "default"}
+					onChange={handleTimeChange}
 				/>
 			)}
 
