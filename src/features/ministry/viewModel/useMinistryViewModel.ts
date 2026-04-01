@@ -1,122 +1,195 @@
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
+import {
+	InfiniteData,
+	useInfiniteQuery,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { MinistryItemUI } from "../model/MinistryListItem";
 import { MinistryDTO } from "../model/Ministry";
 import { ministryRepository } from "../data/MinistryRepository";
 
 const PAGE_SIZE = 10;
 
-const mapMinistryToUI = (ministry: MinistryDTO): MinistryItemUI => {
-	const id = ministry.id;
-	const name = ministry.name;
-	const icon = "";
-	const ministryHead = "Carlo Renoria";
-	const mission = ministry.mission;
-	const vision = ministry.vision;
-	const description = ministry.description;
-	const activeVolunteer = 25;
-	const priorityVolunteer = 10;
+// 🔥 Types
+type MinistriesPage = {
+	data: MinistryItemUI[];
+	hasMore: boolean;
+};
 
+type InfiniteMinistriesData = {
+	pages: MinistriesPage[];
+	pageParams: number[];
+};
+
+// 🔽 Mapper
+const mapMinistryToUI = (ministry: MinistryDTO): MinistryItemUI => {
 	return {
-		id,
-		name,
-		icon,
-		ministryHead,
-		mission,
-		vision,
-		description,
-		activeVolunteer,
-		priorityVolunteer,
+		id: ministry.id,
+		name: ministry.name,
+		icon: "",
+		ministryHead: "Carlo Renoria", // TODO: dynamic
+		mission: ministry.mission,
+		vision: ministry.vision,
+		description: ministry.description,
+		activeVolunteer: 25, // TODO
+		priorityVolunteer: 10, // TODO
 	};
 };
 
 export const useMinistryViewModel = () => {
-	const [ministries, setMinistries] = useState<MinistryItemUI[]>([]);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [activityLoading, setActivityLoading] = useState(false);
+	const queryClient = useQueryClient();
 	const [search, setSearch] = useState("");
 
-	const fetchMinistries = async (nextPage = page) => {
-		if (activityLoading) return;
-		if (!hasMore && nextPage !== 1) return;
+	// 🔽 QUERY (Infinite + Search)
+	const query = useInfiniteQuery<
+		MinistriesPage,
+		Error,
+		InfiniteData<MinistriesPage>,
+		["ministries", string],
+		number
+	>({
+		queryKey: ["ministries", search],
 
-		try {
-			if (nextPage === 1) {
-				setLoading(true);
-			} else {
-				setActivityLoading(true);
-			}
+		queryFn: async ({ pageParam }): Promise<MinistriesPage> => {
 			const isSearching = !!search.trim();
+
 			const baseParams = {
-				page: nextPage,
+				page: pageParam,
 				pageSize: PAGE_SIZE,
 				sortOrder: "asc",
-				sortBy: "date",
+				sortBy: "name",
 			};
 
-			// const result = isSearching
-			// 	? await ministryRepository.searchMinistries({ name: search, ...baseParams })
-			// 	: await ministryRepository.getMinistries(baseParams);
+			const result = isSearching
+				? await ministryRepository.searchMinistries?.({
+						name: search,
+						...baseParams,
+				  })
+				: await ministryRepository.getMinistries(baseParams);
 
-			const result = await ministryRepository.getMinistries(baseParams);
+			return {
+				data: result?.data.map(mapMinistryToUI) ?? [],
+				hasMore: result?.meta?.hasMore ?? false,
+			};
+		},
 
-			if (!result) return;
+		initialPageParam: 1,
 
-			const mappedMinistries = result.data.map(mapMinistryToUI);
+		getNextPageParam: (lastPage, pages) =>
+			lastPage.hasMore ? pages.length + 1 : undefined,
 
-			setMinistries((prev) =>
-				nextPage === 1 ? mappedMinistries : [...prev, ...mappedMinistries],
+		staleTime: 1000 * 60 * 5,
+	});
+
+	// 🔽 Flatten
+	const ministries = useMemo<MinistryItemUI[]>(() => {
+		return query.data?.pages.flatMap((page) => page.data) ?? [];
+	}, [query.data]);
+
+	// 🔽 ADD
+	const addMinistryMutation = useMutation({
+		mutationFn: (data: Omit<MinistryDTO, "id">) =>
+			ministryRepository.addMinistry?.(data),
+
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["ministries"] });
+		},
+	});
+
+	// 🔽 UPDATE (Optimistic)
+	const updateMinistryMutation = useMutation<
+		void,
+		Error,
+		{ id: string; data: Partial<MinistryDTO> },
+		{ previous?: InfiniteMinistriesData }
+	>({
+		mutationFn: ({ id, data }) => ministryRepository.updateMinistry?.(id, data),
+
+		onMutate: async ({ id, data }) => {
+			await queryClient.cancelQueries({
+				queryKey: ["ministries", search],
+			});
+
+			const previous = queryClient.getQueryData<InfiniteMinistriesData>([
+				"ministries",
+				search,
+			]);
+
+			queryClient.setQueryData<InfiniteMinistriesData>(
+				["ministries", search],
+				(old) => {
+					if (!old) return old;
+
+					return {
+						...old,
+						pages: old.pages.map((page) => ({
+							...page,
+							data: page.data.map((m) =>
+								m.id.toString() === id ? { ...m, ...data } : m,
+							),
+						})),
+					};
+				},
 			);
 
-			setPage(nextPage);
-			setHasMore(result.meta.hasMore);
-		} catch (error) {
-			console.error("Error fetching ministries:", error);
-		} finally {
-			setLoading(false);
-			setActivityLoading(false);
-		}
-	};
+			return { previous };
+		},
 
+		onError: (_err, _vars, context) => {
+			if (context?.previous) {
+				queryClient.setQueryData(["ministries", search], context.previous);
+			}
+		},
+
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["ministries"] });
+		},
+	});
+
+	// 🔽 GET SINGLE
 	const getMinistry = async (id: string): Promise<MinistryDTO | null> => {
 		try {
-			setLoading(true);
-			// return await ministryRepository.getMinistryById(id);
-			return null;
+			return await ministryRepository.getMinistryById?.(id);
 		} catch (error) {
 			console.error("Error fetching ministry:", error);
 			return null;
-		} finally {
-			setLoading(false);
 		}
 	};
 
+	// 🔍 SEARCH
+	const searchMinistries = (text: string) => {
+		setSearch(text);
+	};
+
+	// 📄 LOAD MORE
 	const loadMoreMinistries = () => {
-		if (loading || activityLoading || !hasMore) return;
-
-		fetchMinistries(page + 1);
+		if (query.hasNextPage) {
+			query.fetchNextPage();
+		}
 	};
 
-	const searchMinistries = async (searchText: string) => {
-		setSearch(searchText);
-		setPage(1);
-		setHasMore(true);
-		setMinistries([]);
+	// 🔄 REFRESH
+	const refreshMinistries = () => {
+		query.refetch();
 	};
-
-	useEffect(() => {
-		fetchMinistries(1);
-	}, [search]);
 
 	return {
 		ministries,
-		loading,
-		activityLoading,
-		refresh: fetchMinistries,
-		fetchMinistries,
+
+		// loading states
+		loading: query.isLoading,
+		activityLoading: query.isFetching,
+
+		// actions
+		addMinistry: addMinistryMutation.mutateAsync,
+		updateMinistry: (id: string, data: Partial<MinistryDTO>) =>
+			updateMinistryMutation.mutateAsync({ id, data }),
+
 		searchMinistries,
-		loadMoreMinistries,
 		getMinistry,
+		refresh: refreshMinistries,
+		loadMoreMinistries,
+		hasMore: query.hasNextPage,
 	};
 };

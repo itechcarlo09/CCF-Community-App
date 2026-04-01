@@ -20,7 +20,7 @@ const OtherScreen = ({ navigation }: any) => {
 				keyExtractor={(item) => item.key}
 				renderItem={() => null}
 				renderSectionHeader={({ section }) => (
-					<View style={{ rowGap: 8, marginTop: 16 }}>
+					<View style={{ rowGap: 8, marginTop: 16 }} key={section.title}>
 						<Text style={[styles.title, { color: theme.text }]}>
 							{section.title}
 						</Text>
@@ -30,6 +30,7 @@ const OtherScreen = ({ navigation }: any) => {
 								<TouchableOpacity
 									style={styles.itemContainer}
 									onPress={() => navigation.navigate("OthersNavigator")}
+									key={item.key}
 								>
 									<View style={styles.iconContainer}>
 										<MdiIcon
