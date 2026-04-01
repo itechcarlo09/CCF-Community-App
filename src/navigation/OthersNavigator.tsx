@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MinistryPage } from "src/features/ministry/view/MinistryPage";
 import CreateMinistryScreen from "src/features/ministry/view/MinistryFormScreem";
 import { SchoolListScreen } from "src/features/schools/view/SchoolListScreen";
+import { CompanyListScreen } from "src/features/company/view/CompanyListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ export default function OthersNavigator() {
 				component={CreateMinistryScreen}
 			/>
 			<Stack.Screen name="SchoolListScreen" component={SchoolListScreen} />
+			<Stack.Screen name="CompanyListScreen" component={CompanyListScreen} />
 		</Stack.Navigator>
 	);
 }

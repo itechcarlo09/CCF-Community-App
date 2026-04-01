@@ -33,15 +33,8 @@ export const OTHERS_SECTIONS: OthersSection[] = [
 		],
 	},
 	{
-		title: "People & Assignments",
+		title: "Speakers",
 		data: [
-			{
-				key: OthersItemKey.Volunteers,
-				label: "Volunteer Assignments",
-				description: "Assign roles to volunteers",
-				icon: mdiAccountGroupOutline,
-				screen: "VolunteerAssignmentScreen",
-			},
 			{
 				key: OthersItemKey.GuestSpeakers,
 				label: "Guest Speakers",
@@ -64,7 +57,7 @@ export const OTHERS_SECTIONS: OthersSection[] = [
 				key: OthersItemKey.Companies,
 				label: "Companies",
 				icon: mdiBriefcaseOutline,
-				screen: "CompanyScreen",
+				screen: "CompanyListScreen",
 			},
 		],
 	},
