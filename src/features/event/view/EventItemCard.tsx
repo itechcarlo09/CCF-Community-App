@@ -111,8 +111,24 @@ export const EventItemCard: React.FC<Props> = ({
 
 			{/* FOOTER */}
 			<View style={styles.footer}>
-				<Text style={styles.attendance}>👋 {item.firstTimeAttendees}</Text>
-				<Text style={styles.attendance}>🙋 {item.regularAttendees}</Text>
+				<View style={styles.countItem}>
+					<Text style={styles.countLabel}>1st Time Attendees:</Text>
+					<Text style={styles.countNumber}>{item.firstTimeAttendees}</Text>
+				</View>
+				<View style={styles.countItem}>
+					<Text style={styles.countLabel}>Volunteers:</Text>
+					<Text style={styles.countNumber}>{item.volunteers}</Text>
+				</View>
+				<View style={styles.countItem}>
+					<Text style={styles.countLabel}>Regular:</Text>
+					<Text style={styles.countNumber}>{item.regularAttendees}</Text>
+				</View>
+				<View style={styles.countItem}>
+					<Text style={styles.countLabel}>Total:</Text>
+					<Text style={styles.countNumber}>
+						{item.firstTimeAttendees + item.volunteers + item.regularAttendees}
+					</Text>
+				</View>
 			</View>
 		</View>
 	);
@@ -187,15 +203,6 @@ const styles = StyleSheet.create({
 		color: "#555",
 	},
 
-	footer: {
-		flexDirection: "row",
-		justifyContent: "flex-end",
-		marginTop: 12,
-		borderTopWidth: 0.5,
-		borderTopColor: "#eee",
-		paddingTop: 8,
-	},
-
 	attendance: {
 		marginLeft: 12,
 		fontSize: 13,
@@ -216,5 +223,34 @@ const styles = StyleSheet.create({
 
 	seriesIcon: {
 		marginLeft: 4,
+	},
+
+	footer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginTop: 12,
+		borderTopWidth: 0.5,
+		borderTopColor: "#eee",
+		paddingTop: 8,
+		flexWrap: "wrap",
+	},
+
+	countItem: {
+		flexDirection: "row",
+		marginRight: 16,
+		marginBottom: 4,
+	},
+
+	countLabel: {
+		fontSize: 13,
+		fontWeight: "600",
+		color: "#333",
+		marginRight: 4,
+	},
+
+	countNumber: {
+		fontSize: 13,
+		fontWeight: "700",
+		color: "#111",
 	},
 });

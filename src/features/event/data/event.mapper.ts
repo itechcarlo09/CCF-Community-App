@@ -11,6 +11,7 @@ export const mapEventToUI = (event: EventDTO): EventItemUI => {
 		date: new Date(event.eventDate),
 		speakers: event.eventSpeakers.map((s) => s.speaker.name).join(", "),
 		firstTimeAttendees: 1,
+		volunteers: 12,
 		regularAttendees: 1,
 	};
 };

@@ -7,5 +7,6 @@ export interface EventItemUI {
 	date: Date;
 	speakers: string;
 	firstTimeAttendees: number;
+	volunteers: number;
 	regularAttendees: number;
 }
