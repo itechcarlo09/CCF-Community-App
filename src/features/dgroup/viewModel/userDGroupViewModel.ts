@@ -1,127 +1,180 @@
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
+import {
+	InfiniteData,
+	useInfiniteQuery,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { DGroupDTO } from "../model/DGroup";
 import { DGroupItemUI } from "../model/DGroupItemUI";
 import { dgroupRepository } from "../data/dgroupRepository";
+import { mapDGroupToUI } from "../data/dgroup.mapper";
 
 const PAGE_SIZE = 10;
 
-const mapDGroupToUI = (dgroup: DGroupDTO): DGroupItemUI => {
-	const id = dgroup.id;
-	const groupName = dgroup.name;
-	const leaderName = "DLeaders Name";
-	const memberCount = 0;
-	const leaderImageUrl = "";
-	const leaderProfileUrl = "";
+// 🔥 Types
+type DGroupsPage = {
+	data: DGroupItemUI[];
+	hasMore: boolean;
+};
 
-	const getMemberTypes = (count: number) => {
-		if (count % 2 !== 0) {
-			return ["Couple"];
-		} else {
-			return ["Elevate", "B1G"];
-		}
-	};
-
-	const memberTypes = getMemberTypes(dgroup.id);
-
-	return {
-		id,
-		groupName,
-		leaderName,
-		memberCount,
-		leaderImageUrl,
-		leaderProfileUrl,
-		memberTypes,
-	};
+type InfiniteDGroupsData = {
+	pages: DGroupsPage[];
+	pageParams: number[];
 };
 
 export const useDGroupViewModel = () => {
-	const [dgroups, setDGroups] = useState<DGroupItemUI[]>([]);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [activityLoading, setActivityLoading] = useState(false);
+	const queryClient = useQueryClient();
 	const [search, setSearch] = useState("");
 
-	const fetchDGroups = async (nextPage = page) => {
-		if (activityLoading) return;
-		if (!hasMore && nextPage !== 1) return;
+	// 🔽 QUERY (Infinite + Search ready)
+	const query = useInfiniteQuery<
+		DGroupsPage,
+		Error,
+		InfiniteData<DGroupsPage>,
+		["dgroups", string],
+		number
+	>({
+		queryKey: ["dgroups", search],
 
-		try {
-			if (nextPage === 1) {
-				setLoading(true);
-			} else {
-				setActivityLoading(true);
-			}
+		queryFn: async ({ pageParam }): Promise<DGroupsPage> => {
 			const isSearching = !!search.trim();
+
 			const baseParams = {
-				page: nextPage,
+				page: pageParam,
 				pageSize: PAGE_SIZE,
 				sortOrder: "asc",
-				sortBy: "date",
+				sortBy: "name",
 			};
 
-			// const result = isSearching
-			// 	? await ministryRepository.searchMinistries({ name: search, ...baseParams })
-			// 	: await ministryRepository.getMinistries(baseParams);
+			// 🔥 Replace when search API is ready
+			const result = isSearching
+				? await dgroupRepository.searchDGroups?.({
+						name: search,
+						...baseParams,
+				  })
+				: await dgroupRepository.getDGroups(baseParams);
 
-			const result = await dgroupRepository.getDGroups();
+			return {
+				data: result?.data.map(mapDGroupToUI) ?? [],
+				hasMore: result?.meta?.hasMore ?? false,
+			};
+		},
 
-			if (!result) return;
+		initialPageParam: 1,
 
-			const mappedMinistries = result.data.map(mapDGroupToUI);
+		getNextPageParam: (lastPage, pages) =>
+			lastPage.hasMore ? pages.length + 1 : undefined,
 
-			setDGroups((prev) =>
-				nextPage === 1 ? mappedMinistries : [...prev, ...mappedMinistries],
+		staleTime: 1000 * 60 * 5,
+	});
+
+	// 🔽 Flatten
+	const dgroups = useMemo<DGroupItemUI[]>(() => {
+		return query.data?.pages.flatMap((page) => page.data) ?? [];
+	}, [query.data]);
+
+	// 🔽 ADD (optional, future-proof)
+	const addDGroupMutation = useMutation({
+		mutationFn: (data: Omit<DGroupDTO, "id">) =>
+			dgroupRepository.addDGroup?.(data),
+
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["dgroups"] });
+		},
+	});
+
+	// 🔽 UPDATE (Optimistic ready)
+	const updateDGroupMutation = useMutation<
+		void,
+		Error,
+		{ id: string; data: Partial<DGroupDTO> },
+		{ previous?: InfiniteDGroupsData }
+	>({
+		mutationFn: ({ id, data }) => dgroupRepository.updateDGroup?.(id, data),
+
+		onMutate: async ({ id, data }) => {
+			await queryClient.cancelQueries({ queryKey: ["dgroups", search] });
+
+			const previous = queryClient.getQueryData<InfiniteDGroupsData>([
+				"dgroups",
+				search,
+			]);
+
+			queryClient.setQueryData<InfiniteDGroupsData>(
+				["dgroups", search],
+				(old) => {
+					if (!old) return old;
+
+					return {
+						...old,
+						pages: old.pages.map((page) => ({
+							...page,
+							data: page.data.map((d) =>
+								d.id.toString() === id ? { ...d, ...data } : d,
+							),
+						})),
+					};
+				},
 			);
 
-			setPage(nextPage);
-			setHasMore(result.meta.hasMore);
-		} catch (error) {
-			console.error("Error fetching ministries:", error);
-		} finally {
-			setLoading(false);
-			setActivityLoading(false);
-		}
-	};
+			return { previous };
+		},
 
-	const getDGroups = async (id: string): Promise<DGroupDTO | null> => {
+		onError: (_err, _vars, context) => {
+			if (context?.previous) {
+				queryClient.setQueryData(["dgroups", search], context.previous);
+			}
+		},
+
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["dgroups"] });
+		},
+	});
+
+	// 🔽 GET SINGLE
+	const getDGroup = async (id: string): Promise<DGroupDTO | null> => {
 		try {
-			setLoading(true);
-			// return await ministryRepository.getMinistryById(id);
-			return null;
+			return await dgroupRepository.getDGroupById?.(id);
 		} catch (error) {
-			console.error("Error fetching ministry:", error);
+			console.error("Error fetching dgroup:", error);
 			return null;
-		} finally {
-			setLoading(false);
 		}
 	};
 
+	// 🔍 SEARCH
+	const searchDGroups = (text: string) => {
+		setSearch(text);
+	};
+
+	// 📄 LOAD MORE
 	const loadMoreDGroups = () => {
-		if (loading || activityLoading || !hasMore) return;
-
-		fetchDGroups(page + 1);
+		if (query.hasNextPage) {
+			query.fetchNextPage();
+		}
 	};
 
-	const searchDGroups = async (searchText: string) => {
-		setSearch(searchText);
-		setPage(1);
-		setHasMore(true);
-		setDGroups([]);
+	// 🔄 REFRESH
+	const refreshDGroups = () => {
+		query.refetch();
 	};
-
-	useEffect(() => {
-		fetchDGroups(1);
-	}, [search]);
 
 	return {
 		dgroups,
-		loading,
-		activityLoading,
-		refresh: fetchDGroups,
-		fetchDGroups,
+
+		// loading states
+		loading: query.isLoading,
+		activityLoading: query.isFetching,
+
+		// actions
+		addDGroup: addDGroupMutation.mutateAsync,
+		updateDGroup: (id: string, data: Partial<DGroupDTO>) =>
+			updateDGroupMutation.mutateAsync({ id, data }),
+
 		searchDGroups,
+		getDGroup,
+		refresh: refreshDGroups,
 		loadMoreDGroups,
-		getDGroups,
+		hasMore: query.hasNextPage,
 	};
 };

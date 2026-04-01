@@ -8,6 +8,7 @@ import {
 import { eventRepository } from "../data/eventRepository";
 import { EventDTO } from "../model/Event";
 import { EventItemUI } from "../model/EventListItem";
+import { mapEventToUI } from "../data/event.mapper";
 
 // 🔥 Types
 type EventsPage = {
@@ -21,21 +22,6 @@ type InfiniteEventsData = {
 };
 
 const PAGE_SIZE = 10;
-
-// 🔽 Mapper
-const mapEventToUI = (event: EventDTO): EventItemUI => {
-	return {
-		id: event.id,
-		ministryText: ["B1G Singles Ministry"],
-		eventTitle: event.eventName,
-		seriesTitle: event.series.name,
-		location: event.location,
-		date: new Date(event.eventDate),
-		speakers: event.eventSpeakers.map((s) => s.speaker.name).join(", "),
-		firstTimeAttendees: 1,
-		regularAttendees: 1,
-	};
-};
 
 export const useEventViewModel = () => {
 	const queryClient = useQueryClient();
