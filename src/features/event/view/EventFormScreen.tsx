@@ -270,11 +270,7 @@ const styles = StyleSheet.create({
 	field: {
 		marginBottom: 16,
 	},
-	label: {
-		fontSize: 14,
-		marginBottom: 6,
-		fontWeight: "600",
-	},
+	label: { fontSize: 12, color: "#6B7280", marginBottom: 4 },
 	input: {
 		borderWidth: 1,
 		borderColor: "#ddd",
