@@ -29,7 +29,11 @@ const OtherScreen = ({ navigation }: any) => {
 							{section.data.map((item) => (
 								<TouchableOpacity
 									style={styles.itemContainer}
-									onPress={() => navigation.navigate("OthersNavigator")}
+									onPress={() =>
+										navigation.navigate("OthersNavigator", {
+											screen: item.screen,
+										})
+									}
 									key={item.key}
 								>
 									<View style={styles.iconContainer}>

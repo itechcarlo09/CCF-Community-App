@@ -30,13 +30,6 @@ export const OTHERS_SECTIONS: OthersSection[] = [
 				icon: mdiDomain,
 				screen: "MinistryPage",
 			},
-			// {
-			// 	key: OthersItemKey.MinistryRoles,
-			// 	label: "Ministry Roles",
-			// 	description: "Manage roles per ministry",
-			// 	icon: mdiBadgeAccountOutline,
-			// 	screen: "MinistryRoleScreen",
-			// },
 		],
 	},
 	{
@@ -65,7 +58,7 @@ export const OTHERS_SECTIONS: OthersSection[] = [
 				key: OthersItemKey.Schools,
 				label: "Schools",
 				icon: mdiSchoolOutline,
-				screen: "SchoolScreen",
+				screen: "SchoolListScreen",
 			},
 			{
 				key: OthersItemKey.Companies,
