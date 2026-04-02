@@ -37,10 +37,10 @@ export const OTHERS_SECTIONS: OthersSection[] = [
 		data: [
 			{
 				key: OthersItemKey.GuestSpeakers,
-				label: "Guest Speakers",
-				description: "Manage external speakers",
+				label: "Speakers",
+				description: "Manage speakers",
 				icon: mdiMicrophoneOutline,
-				screen: "GuestSpeakerListScreen",
+				screen: "SpeakerListScreen",
 			},
 		],
 	},

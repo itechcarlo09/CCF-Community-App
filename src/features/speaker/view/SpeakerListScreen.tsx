@@ -5,28 +5,34 @@ import {
 	StyleSheet,
 	RefreshControl,
 	ActivityIndicator,
+	Dimensions,
 } from "react-native";
 import Header from "@components/Header";
 import Loading from "@components/Loading";
 import { useTheme } from "@theme/ThemeProvider";
-import { Separator } from "@components/Separator";
 import useDebounce from "src/features/user/hooks/useDebounce";
-import { SeriesCard } from "./components/SeriesListItem";
-import { useSeriesViewModel } from "../viewModel/userSeriesViewModel";
+import { useSpeakerViewModel } from "../viewModel/useSpeakerViewModel";
+import SpeakerCard from "./components/SpeakerListItem";
 
-export const SeriesListScreen = ({ navigation }: any) => {
+const numColumns = 2;
+const { width } = Dimensions.get("window");
+const tileSize = width / numColumns - 24; // padding adjustment
+
+export const SpeakerListScreen = ({ navigation }: any) => {
 	const {
-		series,
+		speakers,
 		refresh,
 		loading,
 		activityLoading,
-		loadMoreSeries,
-		searchSeries,
-	} = useSeriesViewModel();
+		loadMoreSpeakers,
+		searchSpeakers,
+	} = useSpeakerViewModel();
+
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
+
 	useEffect(() => {
-		searchSeries(debouncedSearchTerm);
+		searchSpeakers(debouncedSearchTerm);
 	}, [debouncedSearchTerm]);
 
 	const { theme } = useTheme();
@@ -35,6 +41,7 @@ export const SeriesListScreen = ({ navigation }: any) => {
 		onEndReachedCalledDuringMomentum,
 		setOnEndReachedCalledDuringMomentum,
 	] = useState(false);
+
 	const onRefresh = useCallback(async () => {
 		setRefreshing(true);
 		await refresh();
@@ -44,24 +51,30 @@ export const SeriesListScreen = ({ navigation }: any) => {
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
-				title="Series"
-				placeholder="Search series..."
+				title="Speakers"
+				placeholder="Search speakers..."
 				onSearch={setSearch}
 				onBack={() => navigation.goBack()}
-				onAdd={() => navigation.navigate("CreateMinistryScreen")}
+				onAdd={() => navigation.navigate("CreateSpeakerScreen")}
 			/>
 
 			{loading ? (
 				<Loading />
 			) : (
 				<FlatList
-					data={series}
-					keyExtractor={(item) => String(item.id)}
-					ItemSeparatorComponent={Separator}
+					data={speakers}
+					keyExtractor={(item) => item.id}
+					numColumns={numColumns}
+					columnWrapperStyle={{
+						justifyContent: "space-between",
+						marginBottom: 12,
+					}}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
-					renderItem={({ item }) => <SeriesCard item={item} />}
+					renderItem={({ item }) => (
+						<SpeakerCard item={item} style={{ width: tileSize }} />
+					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
 						activityLoading ? (
@@ -76,7 +89,7 @@ export const SeriesListScreen = ({ navigation }: any) => {
 							!activityLoading &&
 							!loading
 						) {
-							loadMoreSeries();
+							loadMoreSpeakers();
 							setOnEndReachedCalledDuringMomentum(true);
 						}
 					}}
@@ -91,38 +104,5 @@ export const SeriesListScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-	container: { flex: 1 },
-	card: {
-		backgroundColor: "#fff",
-		padding: 16,
-		borderRadius: 12,
-		marginHorizontal: 16,
-		elevation: 3,
-		position: "relative",
-	},
-	topActions: {
-		position: "absolute",
-		right: 12,
-		top: 12,
-		flexDirection: "row",
-		gap: 12,
-	},
-	header: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 8,
-	},
-	name: { fontSize: 18, fontWeight: "bold", color: "#111827" },
-	head: { fontSize: 14, color: "#6B7280", marginTop: 2 },
-	missionVision: { marginBottom: 8 },
-	mission: { fontSize: 14, color: "#374151" },
-	vision: { fontSize: 14, color: "#374151" },
-	description: { color: "#4B5563", marginBottom: 12 },
-	statsRow: { flexDirection: "row", gap: 8 },
-	badge: {
-		paddingVertical: 4,
-		paddingHorizontal: 8,
-		borderRadius: 12,
-	},
-	badgeText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
+	container: { flex: 1, paddingHorizontal: 12 },
 });

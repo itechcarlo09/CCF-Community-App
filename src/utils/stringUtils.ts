@@ -139,3 +139,18 @@ export const normalizeGender = (gender?: string): Gender | undefined => {
 
 	return undefined;
 };
+
+export const getAcronym = (acronym?: string, name?: string) => {
+	if (acronym && acronym.trim().length > 0) {
+		return acronym.toUpperCase();
+	}
+
+	if (!name) return "";
+
+	return name
+		.split(" ")
+		.filter((word) => word.length > 0)
+		.map((word) => word[0])
+		.join("")
+		.toUpperCase();
+};

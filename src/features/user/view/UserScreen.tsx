@@ -35,14 +35,8 @@ const UserScreen = ({ navigation }: any) => {
 	] = useState(false);
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
-	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState("Asc");
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
-	const [items, setItems] = useState([
-		{ label: "Name A to Z", value: "Asc" },
-		{ label: "Name Z to A", value: "Desc" },
-	]);
 	const [refreshing, setRefreshing] = useState(false);
 	const Refresh = () => (
 		<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
