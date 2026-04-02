@@ -13,8 +13,12 @@ import DashboardCard from "./components/DataTile";
 import { useTheme } from "@theme/ThemeProvider";
 import MdiIcon from "@components/MdiIcon";
 import {
+	mdiAccountGroupOutline,
+	mdiAccountTieOutline,
+	mdiAccountVoice,
 	mdiEmailOutline,
 	mdiFacebookMessenger,
+	mdiHandHeartOutline,
 	mdiMessageTextOutline,
 } from "@mdi/js";
 
@@ -104,21 +108,47 @@ export const DashboardScreen = () => {
 				<Loading />
 			) : (
 				<View style={styles.cardsContainer}>
-					<DashboardCard
-						title="Total Accounts"
-						value={dashboard?.totalAccounts ?? 0}
-						color="#4F8EF7"
-					/>
-					<DashboardCard
-						title="Facilitators"
-						value={dashboard?.facilitators ?? 0}
-						color="#34C759"
-					/>
-					<DashboardCard
-						title="DLeaders"
-						value={dashboard?.dLeaders ?? 0}
-						color="#FF9500"
-					/>
+					{[
+						{
+							title: "Members",
+							value: dashboard?.totalAccounts ?? 0,
+							icon: mdiAccountGroupOutline,
+							color: "#4F8EF7",
+						},
+						{
+							title: "Volunteers",
+							value: 0,
+							icon: mdiHandHeartOutline,
+							color: "#34C759",
+						},
+						{
+							title: "Facilitators",
+							value: dashboard?.facilitators ?? 0,
+							icon: mdiAccountVoice,
+							color: "#34C759",
+						},
+						{
+							title: "DLeaders",
+							value: dashboard?.dLeaders ?? 0,
+							icon: mdiAccountTieOutline,
+							color: "#FF9500",
+						},
+					].map((item, index, arr) => {
+						const isLast = index === arr.length - 1;
+						const isOdd = arr.length % 2 !== 0;
+
+						// If last item and odd → full width
+						const isFullWidth = isLast && isOdd;
+
+						return (
+							<View
+								key={item.title}
+								style={[styles.cardWrapper, isFullWidth && styles.fullWidth]}
+							>
+								<DashboardCard {...item} />
+							</View>
+						);
+					})}
 				</View>
 			)}
 		</ScrollView>
@@ -134,6 +164,14 @@ const styles = StyleSheet.create({
 		fontSize: 28,
 		fontWeight: "bold",
 		marginBottom: 16,
+	},
+
+	cardWrapper: {
+		width: "48%",
+	},
+
+	fullWidth: {
+		width: "100%",
 	},
 
 	// CTA
