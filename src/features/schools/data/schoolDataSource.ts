@@ -1,7 +1,12 @@
 import { handleApiError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
 import { GetSchoolParams } from "../model/RequestParams";
-import { CreateSchoolDTO, GetSchoolResponse, SchoolDTO } from "../model/School";
+import {
+	CreateSchoolDTO,
+	GetSchoolResponse,
+	GetStudentsResponse,
+	SchoolDTO,
+} from "../model/School";
 import { PAGE_SIZE } from "src/types/globalTypes";
 
 export const schoolDataSource = {
@@ -68,6 +73,41 @@ export const schoolDataSource = {
 			await apiClient.put(`/school/${id}`, data);
 		} catch (error: any) {
 			throw new Error(error.message);
+		}
+	},
+
+	async getStudents(
+		params?: GetSchoolParams,
+		isEnrolled: boolean = true,
+		schoolId: number = 0,
+	): Promise<GetStudentsResponse> {
+		try {
+			const res = await apiClient.get<GetStudentsResponse>(
+				`/school${isEnrolled ? "/enrolled" : "/graduates"}/${schoolId}`,
+				{
+					params,
+				},
+			);
+
+			return {
+				data: res.data?.data ?? [], // always array
+				meta: res.data?.meta ?? {
+					page: 0,
+					limit: PAGE_SIZE,
+					hasMore: false,
+				},
+			};
+		} catch (error: any) {
+			handleApiError(error);
+
+			return {
+				data: [], // fallback safe value
+				meta: {
+					page: 0,
+					limit: PAGE_SIZE,
+					hasMore: false,
+				},
+			};
 		}
 	},
 	// async delete(id: string): Promise<void> {

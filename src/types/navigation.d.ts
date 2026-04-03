@@ -100,6 +100,11 @@ export type DgroupRouteProp<T extends keyof DgroupStackParamList> = RouteProp<
 export type OtherStackParamList = {
 	MinistryPage: undefined;
 	SchoolListScreen: undefined;
+	SchoolDetailsScreen: {
+		id: number;
+		enrolledCount: number;
+		graduatesCount: number;
+	};
 	SchoolFormScreen: { id?: number } | undefined;
 };
 

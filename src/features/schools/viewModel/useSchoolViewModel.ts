@@ -1,52 +1,54 @@
 import { useState, useMemo } from "react";
 import {
-	InfiniteData,
 	useInfiniteQuery,
 	useMutation,
+	useQuery,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { CreateSchoolDTO, SchoolDTO, SchoolListItemDTO } from "../model/School";
-import { SchoolItemUI } from "../model/SchoolListItem";
+import { CreateSchoolDTO } from "../model/School";
 import { schoolRepository } from "../data/schoolRepository";
-import { mapSchoolToUI } from "../data/school.mapper";
+import { mapSchoolToUI, mapStudentsToUI } from "../data/school.mapper";
 import { PAGE_SIZE } from "src/types/globalTypes";
 
-// 🔥 Types
-type SchoolsPage = {
-	data: SchoolItemUI[];
-	hasMore: boolean;
+const STUDENTS_PAGE_SIZE = 20;
+
+interface UseSchoolViewModelProps {
+	schoolId?: number;
+	enableEnrolled?: boolean;
+	enableGraduates?: boolean;
+}
+
+const schoolKeys = {
+	all: ["schools"] as const,
+	lists: (search: string) => ["schools", search] as const,
+	detail: (id?: number) => ["school", id] as const,
+	students: {
+		enrolled: (id?: number, search?: string) =>
+			["students", "enrolled", id, search] as const,
+		graduates: (id?: number, search?: string) =>
+			["students", "graduates", id, search] as const,
+	},
 };
 
-type InfiniteSchoolsData = {
-	pages: SchoolsPage[];
-	pageParams: number[];
-};
-
-export const useSchoolViewModel = () => {
+export const useSchoolViewModel = ({
+	schoolId,
+	enableEnrolled = false,
+	enableGraduates = false,
+}: UseSchoolViewModelProps = {}) => {
 	const queryClient = useQueryClient();
 	const [search, setSearch] = useState("");
 
-	// 🔽 QUERY (Infinite + Search)
-	const query = useInfiniteQuery<
-		SchoolsPage,
-		Error,
-		InfiniteData<SchoolsPage>,
-		["schools", string],
-		number
-	>({
-		queryKey: ["schools", search],
+	// =========================
+	// 🏫 SCHOOLS LIST
+	// =========================
+	const schoolsQuery = useInfiniteQuery({
+		queryKey: schoolKeys.lists(search),
 
-		queryFn: async ({ pageParam }): Promise<SchoolsPage> => {
-			const isSearching = !!search.trim();
-
-			const baseParams = {
+		queryFn: async ({ pageParam = 1 }) => {
+			const result = await schoolRepository.getSchools?.({
+				...(search.trim() && { search }),
 				skip: (pageParam - 1) * PAGE_SIZE,
 				take: PAGE_SIZE,
-			};
-
-			const result = await schoolRepository.getSchools?.({
-				...(isSearching && { search }),
-				...baseParams,
 			});
 
 			return {
@@ -55,120 +57,192 @@ export const useSchoolViewModel = () => {
 			};
 		},
 
-		initialPageParam: 1,
-
 		getNextPageParam: (lastPage, pages) =>
 			lastPage.hasMore ? pages.length + 1 : undefined,
 
 		staleTime: 1000 * 60 * 5,
+		initialPageParam: 1,
 	});
 
-	// 🔽 Flatten
-	const schools = useMemo<SchoolItemUI[]>(() => {
-		return query.data?.pages.flatMap((page) => page.data) ?? [];
-	}, [query.data]);
+	// =========================
+	// 📄 SCHOOL DETAIL
+	// =========================
+	const schoolDetailQuery = useQuery({
+		queryKey: schoolKeys.detail(schoolId),
+		queryFn: () => schoolRepository.getSchoolById?.(schoolId!),
+		enabled: !!schoolId,
+		staleTime: 1000 * 60 * 5,
+	});
 
-	// 🔽 ADD
+	// =========================
+	// 🎓 ENROLLED STUDENTS
+	// =========================
+	const enrolledQuery = useInfiniteQuery({
+		queryKey: schoolKeys.students.enrolled(schoolId, search),
+
+		queryFn: async ({ pageParam = 1 }) => {
+			const result = await schoolRepository.getStudents?.(
+				{
+					...(search.trim() && { search }),
+					skip: (pageParam - 1) * STUDENTS_PAGE_SIZE,
+					take: STUDENTS_PAGE_SIZE,
+				},
+				true,
+				schoolId,
+			);
+
+			return {
+				data: result?.data.map(mapStudentsToUI) ?? [],
+				hasMore: result?.meta?.hasMore ?? false,
+			};
+		},
+
+		enabled: !!schoolId && enableEnrolled, // ✅ no manual toggle needed
+		getNextPageParam: (lastPage, pages) =>
+			lastPage.hasMore ? pages.length + 1 : undefined,
+
+		staleTime: 1000 * 60 * 5,
+		initialPageParam: 1,
+	});
+
+	// =========================
+	// 🎓 GRADUATES
+	// =========================
+	const graduatesQuery = useInfiniteQuery({
+		queryKey: schoolKeys.students.graduates(schoolId, search),
+
+		queryFn: async ({ pageParam = 1 }) => {
+			const result = await schoolRepository.getStudents?.(
+				{
+					...(search.trim() && { search }),
+					skip: (pageParam - 1) * STUDENTS_PAGE_SIZE,
+					take: STUDENTS_PAGE_SIZE,
+				},
+				false,
+				schoolId,
+			);
+
+			return {
+				data: result?.data.map(mapStudentsToUI) ?? [],
+				hasMore: result?.meta?.hasMore ?? false,
+			};
+		},
+
+		enabled: !!schoolId && enableGraduates, // ✅ no manual toggle needed
+		getNextPageParam: (lastPage, pages) =>
+			lastPage.hasMore ? pages.length + 1 : undefined,
+
+		staleTime: 1000 * 60 * 5,
+		initialPageParam: 1,
+	});
+
+	// =========================
+	// 🧠 MEMOIZED DATA
+	// =========================
+	const schools = useMemo(
+		() => schoolsQuery.data?.pages.flatMap((p) => p.data) ?? [],
+		[schoolsQuery.data],
+	);
+
+	const enrolled = useMemo(
+		() => enrolledQuery.data?.pages.flatMap((p) => p.data) ?? [],
+		[enrolledQuery.data],
+	);
+
+	const graduates = useMemo(
+		() => graduatesQuery.data?.pages.flatMap((p) => p.data) ?? [],
+		[graduatesQuery.data],
+	);
+
+	// =========================
+	// ➕ ADD
+	// =========================
 	const addSchoolMutation = useMutation({
-		mutationFn: (data: CreateSchoolDTO) => schoolRepository.addSchool(data),
+		mutationFn: schoolRepository.addSchool,
 
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["schools"] });
+			queryClient.invalidateQueries({ queryKey: schoolKeys.all });
 		},
 	});
 
-	// 🔽 UPDATE (Optimistic)
-	const updateSchoolMutation = useMutation<
-		void,
-		Error,
-		{ id: number; data: Partial<SchoolListItemDTO> },
-		{ previous?: InfiniteSchoolsData }
-	>({
-		mutationFn: ({ id, data }) => schoolRepository.updateSchool?.(id, data),
+	// =========================
+	// ✏️ UPDATE (Optimistic)
+	// =========================
+	const updateSchoolMutation = useMutation({
+		mutationFn: ({
+			id,
+			data,
+		}: {
+			id: number;
+			data: Partial<CreateSchoolDTO>;
+		}) => schoolRepository.updateSchool?.(id, data),
 
 		onMutate: async ({ id, data }) => {
-			await queryClient.cancelQueries({ queryKey: ["schools", search] });
+			await queryClient.cancelQueries({ queryKey: schoolKeys.all });
 
-			const previous = queryClient.getQueryData<InfiniteSchoolsData>([
-				"schools",
-				search,
-			]);
+			const previous = queryClient.getQueriesData({
+				queryKey: schoolKeys.all,
+			});
 
-			queryClient.setQueryData<InfiniteSchoolsData>(
-				["schools", search],
-				(old) => {
-					if (!old) return old;
+			queryClient.setQueriesData({ queryKey: schoolKeys.all }, (old: any) => {
+				if (!old?.pages) return old;
 
-					return {
-						...old,
-						pages: old.pages.map((page) => ({
-							...page,
-							data: page.data.map((s) =>
-								s.id === id ? ({ ...s, ...data } as SchoolItemUI) : s,
-							),
-						})),
-					};
-				},
-			);
+				return {
+					...old,
+					pages: old.pages.map((page: any) => ({
+						...page,
+						data: page.data.map((s: any) =>
+							s.id === id ? { ...s, ...data } : s,
+						),
+					})),
+				};
+			});
 
 			return { previous };
 		},
 
 		onError: (_err, _vars, context) => {
-			if (context?.previous) {
-				queryClient.setQueryData(["schools", search], context.previous);
-			}
+			context?.previous?.forEach(([key, data]) => {
+				queryClient.setQueryData(key, data);
+			});
 		},
 
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ["schools"] });
+			queryClient.invalidateQueries({ queryKey: schoolKeys.all });
 		},
 	});
 
-	// 🔽 GET SINGLE
-	const getSchool = async (id: number): Promise<SchoolDTO | null> => {
-		try {
-			const school = await schoolRepository.getSchoolById?.(id);
-			return school ?? null;
-		} catch (error) {
-			console.error("Error fetching school:", error);
-			return null;
-		}
-	};
-
-	// 🔍 SEARCH
-	const searchSchools = (text: string) => {
-		setSearch(text);
-	};
-
-	// 📄 LOAD MORE
-	const loadMoreSchools = () => {
-		if (query.hasNextPage) {
-			query.fetchNextPage();
-		}
-	};
-
-	// 🔄 REFRESH
-	const refreshSchools = () => {
-		query.refetch();
-	};
-
+	// =========================
+	// 🎯 ACTIONS
+	// =========================
 	return {
+		// data
 		schools,
+		school: schoolDetailQuery.data ?? null,
+		enrolled,
+		graduates,
 
-		// loading states
-		loading: query.isLoading,
-		activityLoading: query.isFetching,
+		// loading
+		loading: schoolsQuery.isLoading,
+		fetching: schoolsQuery.isFetching,
+		detailLoading: schoolDetailQuery.isLoading,
+		enrolledLoading: enrolledQuery.isLoading,
+		graduatesLoading: graduatesQuery.isLoading,
 
 		// actions
 		addSchool: addSchoolMutation.mutateAsync,
 		updateSchool: (id: number, data: Partial<CreateSchoolDTO>) =>
 			updateSchoolMutation.mutateAsync({ id, data }),
 
-		searchSchools,
-		getSchool,
-		refresh: refreshSchools,
-		loadMoreSchools,
-		hasMore: query.hasNextPage,
+		searchSchools: setSearch,
+
+		loadMoreSchools: () =>
+			schoolsQuery.hasNextPage && schoolsQuery.fetchNextPage(),
+		fetchMoreEnrolled: () =>
+			enrolledQuery.hasNextPage && enrolledQuery.fetchNextPage(),
+		fetchMoreGraduates: () =>
+			graduatesQuery.hasNextPage && graduatesQuery.fetchNextPage(),
+
+		refresh: schoolsQuery.refetch,
 	};
 };

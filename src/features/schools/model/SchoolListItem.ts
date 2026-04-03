@@ -7,3 +7,8 @@ export interface SchoolItemUI {
 	currentCount: number;
 	alumniCount: number;
 }
+
+export interface StudentItemUI {
+	id: number;
+	fullName: string;
+}

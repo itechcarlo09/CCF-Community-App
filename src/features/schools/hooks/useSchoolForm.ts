@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { SchoolDTO, CreateSchoolDTO } from "../model/School";
+import { schoolRepository } from "../data/schoolRepository";
 import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
 
 interface UseSchoolFormProps {
@@ -23,74 +25,72 @@ const staticSchema = Yup.object().shape({
 });
 
 export const useSchoolForm = ({ schoolId, onSuccess }: UseSchoolFormProps) => {
-	const [loading, setLoading] = useState(false);
-	const [school, setSchool] = useState<SchoolDTO | null>(null);
-	const { getSchool, addSchool, updateSchool } = useSchoolViewModel();
 	const navigation = useNavigation();
+	const queryClient = useQueryClient();
 
-	const formik = useFormik({
-		initialValues: staticInitialValues,
-		validationSchema: staticSchema,
-		enableReinitialize: true,
-		onSubmit: async (values) => {
-			setLoading(true);
-			try {
-				if (schoolId && schoolId > 0) {
-					const payload: Partial<CreateSchoolDTO> = {};
+	const { addSchool, updateSchool } = useSchoolViewModel();
 
-					if (values.name) payload.name = values.name;
-					payload.acronym = values.acronym?.trim() ? values.acronym : null;
-					if (values.address) payload.address = values.address;
+	// ✅ Fetch school (EDIT mode)
+	const { data: school, isLoading: isFetching } = useQuery<SchoolDTO | null>({
+		queryKey: ["school", schoolId],
+		queryFn: () => schoolRepository.getSchoolById?.(schoolId!),
+		enabled: !!schoolId,
+		staleTime: 1000 * 60 * 5,
+	});
 
-					await updateSchool(schoolId, payload);
-				} else {
-					// Create new school
-					const newSchool: CreateSchoolDTO = {
-						name: values.name,
-						acronym: values.acronym,
-						address: values.address,
-					};
-					await addSchool(newSchool);
-				}
-
-				onSuccess && onSuccess();
-			} catch (err) {
-				Alert.alert(
-					"Error",
-					`Failed to ${schoolId && schoolId > 0 ? "update" : "add"} school`,
-				);
-			} finally {
-				setLoading(false);
+	// ✅ Mutation (CREATE / UPDATE)
+	const mutation = useMutation({
+		mutationFn: async (values: typeof staticInitialValues) => {
+			if (schoolId && schoolId > 0) {
+				return updateSchool(schoolId, {
+					name: values.name,
+					acronym: values.acronym?.trim() ? values.acronym : null,
+					address: values.address,
+				});
 			}
+
+			return addSchool({
+				name: values.name,
+				acronym: values.acronym,
+				address: values.address,
+			});
+		},
+
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["schools"] });
+			queryClient.invalidateQueries({ queryKey: ["school", schoolId] });
+
+			onSuccess?.();
+			navigation.goBack(); // ✅ usually expected UX
+		},
+
+		onError: () => {
+			Alert.alert("Error", `Failed to ${schoolId ? "update" : "add"} school`);
 		},
 	});
 
-	useEffect(() => {
-		const load = async () => {
-			if (!schoolId) return;
-			console.log("Loading school with ID:", schoolId);
-			try {
-				setLoading(true);
-				const school = await getSchool(schoolId);
-				if (school) {
-					setSchool({ ...school });
-					formik.setValues({
-						name: school.name,
-						acronym: school.acronym ?? "",
-						address: school.address,
-					});
-				}
-			} catch (err) {
-				navigation.goBack();
-			} finally {
-				setLoading(false);
-			}
-		};
-		load();
-	}, [schoolId]);
+	// ✅ Derive initial values safely
+	const initialValues = school
+		? {
+				name: school.name,
+				acronym: school.acronym ?? "",
+				address: school.address,
+		  }
+		: staticInitialValues;
+
+	// ✅ Formik
+	const formik = useFormik({
+		initialValues,
+		validationSchema: staticSchema,
+		enableReinitialize: true,
+
+		onSubmit: async (values) => {
+			await mutation.mutateAsync(values);
+		},
+	});
 
 	return {
-		loading,
+		loading: isFetching || mutation.isPending,
 		school,
 		formik,
 	};

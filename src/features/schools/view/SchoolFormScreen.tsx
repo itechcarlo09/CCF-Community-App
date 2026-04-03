@@ -9,12 +9,12 @@ import Input from "@components/Inputs";
 import Loading from "@components/Loading";
 import { useSchoolForm } from "../hooks/useSchoolForm";
 
-type UserRouteProp = RouteProp<OtherStackParamList, "SchoolFormScreen">;
+type SchoolRouteProp = RouteProp<OtherStackParamList, "SchoolFormScreen">;
 type NavProp = NativeStackNavigationProp<OtherStackParamList>;
 
 const SchoolFormScreen = () => {
 	const navigation = useNavigation<NavProp>();
-	const route = useRoute<UserRouteProp>();
+	const route = useRoute<SchoolRouteProp>();
 	const { id } = route.params || {};
 
 	const { formik, loading } = useSchoolForm({

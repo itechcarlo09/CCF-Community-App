@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SchoolItemUI } from "../../model/SchoolListItem";
+import { getAcronym } from "src/utils/stringUtils";
 
 interface Props {
 	item: SchoolItemUI;
@@ -8,21 +9,6 @@ interface Props {
 }
 
 const SchoolCard: React.FC<Props> = ({ item, onPress }) => {
-	const getAcronym = (acronym?: string, name?: string) => {
-		if (acronym && acronym.trim().length > 0) {
-			return acronym.toUpperCase();
-		}
-
-		if (!name) return "";
-
-		return name
-			.split(" ")
-			.filter((word) => word.length > 0)
-			.map((word) => word[0])
-			.join("")
-			.toUpperCase();
-	};
-
 	return (
 		<TouchableOpacity
 			style={styles.card}

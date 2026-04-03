@@ -25,7 +25,7 @@ export const SchoolListScreen = () => {
 		schools,
 		refresh,
 		loading,
-		activityLoading,
+		fetching,
 		loadMoreSchools,
 		searchSchools,
 	} = useSchoolViewModel();
@@ -71,22 +71,27 @@ export const SchoolListScreen = () => {
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
 					renderItem={({ item }) => (
-						<SchoolCard item={item} onPress={goToSchoolForm} />
+						<SchoolCard
+							item={item}
+							onPress={() =>
+								navigation.navigate("SchoolDetailsScreen", {
+									id: item.id,
+									enrolledCount: item.currentCount,
+									graduatesCount: item.alumniCount,
+								})
+							}
+						/>
 					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
-						activityLoading ? (
+						fetching ? (
 							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
 						) : (
 							<View style={{ height: 16 }} />
 						)
 					}
 					onEndReached={() => {
-						if (
-							!onEndReachedCalledDuringMomentum &&
-							!activityLoading &&
-							!loading
-						) {
+						if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
 							loadMoreSchools();
 							setOnEndReachedCalledDuringMomentum(true);
 						}

@@ -23,6 +23,14 @@ import { PaginatedResponse } from "../../../types/paginationTypes";
 // 	updatedAt?: Date;
 // }
 
+export interface StudentListItemDTO {
+	id: number;
+	firstName: string;
+	middleName: string | null;
+	lastName: string;
+	profilePicture: string | null;
+}
+
 export interface SchoolListItemDTO {
 	id: number;
 	name: string;
@@ -50,3 +58,4 @@ export interface CreateSchoolDTO {
 }
 
 export type GetSchoolResponse = PaginatedResponse<SchoolListItemDTO>;
+export type GetStudentsResponse = PaginatedResponse<StudentListItemDTO>;
