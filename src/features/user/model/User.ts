@@ -49,6 +49,7 @@ export interface UserDTO {
 	email: string;
 	gender: string;
 	userType: string;
+	isActive: boolean;
 	emergencyContactName?: string;
 	emergencyContactNumber?: string;
 	education?: EducationDTO[];

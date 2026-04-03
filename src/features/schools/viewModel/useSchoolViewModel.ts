@@ -47,12 +47,10 @@ export const useSchoolViewModel = () => {
 				sortBy: "name",
 			};
 
-			const result = isSearching
-				? await schoolRepository.searchSchools?.({
-						name: search,
-						...baseParams,
-				  })
-				: await schoolRepository.getSchools(baseParams);
+			const result = await schoolRepository.getSchools?.({
+				...(isSearching && { name: search }),
+				...baseParams,
+			});
 
 			return {
 				data: result?.data.map(mapSchoolToUI) ?? [],

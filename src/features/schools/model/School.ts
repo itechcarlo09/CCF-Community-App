@@ -30,6 +30,8 @@ export interface SchoolDTO {
 	address: string;
 	createdAt: Date;
 	updatedAt: Date;
+	activeEducationCount: number;
+	completedEducationCount: number;
 }
 
 // export interface CreateMinistryDTO {

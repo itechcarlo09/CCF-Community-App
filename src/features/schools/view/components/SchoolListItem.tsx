@@ -47,7 +47,7 @@ const SchoolCard: React.FC<Props> = ({ item, onPress }) => {
 				<Text style={styles.name} numberOfLines={1}>
 					{item.name}
 				</Text>
-				<Text style={styles.acronym}>{item.acronym}</Text>
+				{item.acronym && <Text style={styles.acronym}>{item.acronym}</Text>}
 				<Text style={styles.location} numberOfLines={1}>
 					{item.location}
 				</Text>

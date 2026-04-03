@@ -43,9 +43,7 @@ export const mapUserToUI = (
 			  )
 			: undefined);
 
-	const isActive = user.latestAttendance
-		? isWithinLastThreeMonths(user.latestAttendance)
-		: false;
+	const isActive = user.isActive;
 
 	let membershipType: MembershipType;
 	if (

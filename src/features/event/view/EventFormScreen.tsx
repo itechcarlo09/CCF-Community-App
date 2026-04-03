@@ -203,13 +203,13 @@ const CreateEventScreen: React.FC = () => {
 				error={formik.touched.location ? formik.errors.location : undefined}
 				required
 			/>
-			{/* LEADER */}
+			{/* SERIES */}
 			<Text style={styles.label}>Series</Text>
 			<TouchableOpacity
 				style={styles.seriesButton}
 				onPress={handleAssignSeries}
 			>
-				<Text style={styles.leaderButtonText}>
+				<Text style={styles.seriesButtonText}>
 					{seriesName ? `${seriesName}` : "Select Series"}
 				</Text>
 			</TouchableOpacity>
@@ -448,9 +448,9 @@ const styles = StyleSheet.create({
 		padding: 12,
 		borderRadius: 8,
 		alignItems: "center",
-		marginTop: 8,
+		marginVertical: 8,
 	},
-	leaderButtonText: { color: "#0284C7", fontWeight: "600" },
+	seriesButtonText: { color: "#0284C7", fontWeight: "600" },
 	roleChip: {
 		paddingVertical: 4,
 		paddingHorizontal: 8,
