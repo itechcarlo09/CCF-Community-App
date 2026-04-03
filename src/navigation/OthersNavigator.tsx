@@ -6,6 +6,7 @@ import { SchoolListScreen } from "src/features/schools/view/SchoolListScreen";
 import { CompanyListScreen } from "src/features/company/view/CompanyListScreen";
 import { SeriesListScreen } from "src/features/series/view/SeriesListScreen";
 import { SpeakerListScreen } from "src/features/speaker/view/SpeakerListScreen";
+import SchoolFormScreen from "src/features/schools/view/SchoolFormScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export default function OthersNavigator() {
 				component={CreateMinistryScreen}
 			/>
 			<Stack.Screen name="SchoolListScreen" component={SchoolListScreen} />
+			<Stack.Screen name="SchoolFormScreen" component={SchoolFormScreen} />
 			<Stack.Screen name="CompanyListScreen" component={CompanyListScreen} />
 			<Stack.Screen name="SeriesListScreen" component={SeriesListScreen} />
 			<Stack.Screen name="SpeakerListScreen" component={SpeakerListScreen} />

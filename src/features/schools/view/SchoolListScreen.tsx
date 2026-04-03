@@ -13,8 +13,14 @@ import { Separator } from "@components/Separator";
 import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
 import SchoolCard from "./components/SchoolListItem";
 import useDebounce from "src/features/user/hooks/useDebounce";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { OtherStackParamList } from "src/types/navigation";
 
-export const SchoolListScreen = ({ navigation }: any) => {
+type NavProp = NativeStackNavigationProp<OtherStackParamList>;
+
+export const SchoolListScreen = () => {
+	const navigation = useNavigation<NavProp>();
 	const {
 		schools,
 		refresh,
@@ -41,14 +47,18 @@ export const SchoolListScreen = ({ navigation }: any) => {
 		setRefreshing(false);
 	}, [refresh]);
 
+	const goToSchoolForm = (id?: number) => {
+		navigation.navigate("SchoolFormScreen", id ? { id } : undefined);
+	};
+
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
 				title="Schools"
 				placeholder="Search school..."
 				onSearch={setSearch}
-				onBack={() => navigation.goBack()}
-				onAdd={() => navigation.navigate("CreateMinistryScreen")}
+				onBack={navigation.goBack}
+				onAdd={() => goToSchoolForm()}
 			/>
 
 			{loading ? (
@@ -60,7 +70,9 @@ export const SchoolListScreen = ({ navigation }: any) => {
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
-					renderItem={({ item }) => <SchoolCard item={item} />}
+					renderItem={({ item }) => (
+						<SchoolCard item={item} onPress={goToSchoolForm} />
+					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
 						activityLoading ? (

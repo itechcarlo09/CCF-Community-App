@@ -23,10 +23,10 @@ import { PaginatedResponse } from "../../../types/paginationTypes";
 // 	updatedAt?: Date;
 // }
 
-export interface SchoolDTO {
+export interface SchoolListItemDTO {
 	id: number;
 	name: string;
-	acronym: string;
+	acronym: string | null;
 	address: string;
 	createdAt: Date;
 	updatedAt: Date;
@@ -34,11 +34,19 @@ export interface SchoolDTO {
 	completedEducationCount: number;
 }
 
-// export interface CreateMinistryDTO {
-// 	name: string;
-// 	mission?: string;
-// 	vision?: string;
-// 	description?: string;
-// }
+export interface SchoolDTO {
+	id: number;
+	name: string;
+	acronym: string | null;
+	address: string;
+	createdAt: Date;
+	updatedAt: Date;
+}
 
-export type GetSchoolResponse = PaginatedResponse<SchoolDTO>;
+export interface CreateSchoolDTO {
+	name: string;
+	acronym: string | null;
+	address: string;
+}
+
+export type GetSchoolResponse = PaginatedResponse<SchoolListItemDTO>;

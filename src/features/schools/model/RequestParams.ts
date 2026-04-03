@@ -1,7 +1,7 @@
 export type GetSchoolParams = {
-	page?: number;
-	pageSize?: number;
+	skip?: number;
+	take?: number;
 	sortOrder?: string;
 	sortBy?: string;
-	name?: string;
+	search?: string;
 };

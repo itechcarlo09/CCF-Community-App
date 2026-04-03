@@ -4,7 +4,7 @@ import { SchoolItemUI } from "../../model/SchoolListItem";
 
 interface Props {
 	item: SchoolItemUI;
-	onPress?: (item: SchoolItemUI) => void;
+	onPress?: (id: number) => void;
 }
 
 const SchoolCard: React.FC<Props> = ({ item, onPress }) => {
@@ -27,7 +27,7 @@ const SchoolCard: React.FC<Props> = ({ item, onPress }) => {
 		<TouchableOpacity
 			style={styles.card}
 			activeOpacity={0.8}
-			onPress={() => onPress?.(item)}
+			onPress={() => onPress && onPress(item.id)}
 		>
 			{/* Logo */}
 			<View style={styles.logoContainer}>

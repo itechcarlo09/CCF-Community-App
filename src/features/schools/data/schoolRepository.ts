@@ -1,10 +1,10 @@
 import { schoolDataSource } from "./schoolDataSource";
 
 export const schoolRepository = {
-	// getEventById: ministryDataSource.getEventById,
 	getSchools: schoolDataSource.getSchools,
+	getSchoolById: schoolDataSource.getSchoolById,
 	// searchEvents: eventDataSource.searchEvents,
-	// addEvent: eventDataSource.add,
-	// updateEvent: eventDataSource.update,
+	addSchool: schoolDataSource.addSchool,
+	updateSchool: schoolDataSource.updateSchool,
 	// deleteEvent: eventDataSource.delete,
 };

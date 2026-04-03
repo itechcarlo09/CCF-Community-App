@@ -99,6 +99,8 @@ export type DgroupRouteProp<T extends keyof DgroupStackParamList> = RouteProp<
 // -----------------------------
 export type OtherStackParamList = {
 	MinistryPage: undefined;
+	SchoolListScreen: undefined;
+	SchoolFormScreen: { id?: number } | undefined;
 };
 
 export type OtherNavigationProp<

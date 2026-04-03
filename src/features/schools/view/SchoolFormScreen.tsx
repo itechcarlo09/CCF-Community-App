@@ -4,23 +4,22 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { NOID } from "src/types/globalTypes";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { EventStackParamList } from "src/types/navigation";
+import { OtherStackParamList } from "src/types/navigation";
 import Input from "@components/Inputs";
 import Loading from "@components/Loading";
 import { useSchoolForm } from "../hooks/useSchoolForm";
 
-type UserRouteProp = RouteProp<EventStackParamList, "SchoolForm">;
-type NavProp = NativeStackNavigationProp<EventStackParamList>;
+type UserRouteProp = RouteProp<OtherStackParamList, "SchoolFormScreen">;
+type NavProp = NativeStackNavigationProp<OtherStackParamList>;
 
 const SchoolFormScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
-	const { id, onSuccess } = route.params || {};
+	const { id } = route.params || {};
 
 	const { formik, loading } = useSchoolForm({
 		schoolId: id ? id : NOID,
 		onSuccess: () => {
-			if (onSuccess) onSuccess();
 			navigation.goBack();
 		},
 	});

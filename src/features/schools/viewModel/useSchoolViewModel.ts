@@ -5,12 +5,11 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { SchoolDTO } from "../model/School";
+import { CreateSchoolDTO, SchoolDTO, SchoolListItemDTO } from "../model/School";
 import { SchoolItemUI } from "../model/SchoolListItem";
 import { schoolRepository } from "../data/schoolRepository";
 import { mapSchoolToUI } from "../data/school.mapper";
-
-const PAGE_SIZE = 10;
+import { PAGE_SIZE } from "src/types/globalTypes";
 
 // 🔥 Types
 type SchoolsPage = {
@@ -41,14 +40,12 @@ export const useSchoolViewModel = () => {
 			const isSearching = !!search.trim();
 
 			const baseParams = {
-				page: pageParam,
-				pageSize: PAGE_SIZE,
-				sortOrder: "asc",
-				sortBy: "name",
+				skip: (pageParam - 1) * PAGE_SIZE,
+				take: PAGE_SIZE,
 			};
 
 			const result = await schoolRepository.getSchools?.({
-				...(isSearching && { name: search }),
+				...(isSearching && { search }),
 				...baseParams,
 			});
 
@@ -73,8 +70,7 @@ export const useSchoolViewModel = () => {
 
 	// 🔽 ADD
 	const addSchoolMutation = useMutation({
-		mutationFn: (data: Omit<SchoolDTO, "id">) =>
-			schoolRepository.addSchool?.(data),
+		mutationFn: (data: CreateSchoolDTO) => schoolRepository.addSchool(data),
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["schools"] });
@@ -85,7 +81,7 @@ export const useSchoolViewModel = () => {
 	const updateSchoolMutation = useMutation<
 		void,
 		Error,
-		{ id: string; data: Partial<SchoolDTO> },
+		{ id: number; data: Partial<SchoolListItemDTO> },
 		{ previous?: InfiniteSchoolsData }
 	>({
 		mutationFn: ({ id, data }) => schoolRepository.updateSchool?.(id, data),
@@ -108,7 +104,7 @@ export const useSchoolViewModel = () => {
 						pages: old.pages.map((page) => ({
 							...page,
 							data: page.data.map((s) =>
-								s.id.toString() === id ? { ...s, ...data } : s,
+								s.id === id ? ({ ...s, ...data } as SchoolItemUI) : s,
 							),
 						})),
 					};
@@ -130,9 +126,10 @@ export const useSchoolViewModel = () => {
 	});
 
 	// 🔽 GET SINGLE
-	const getSchool = async (id: string): Promise<SchoolDTO | null> => {
+	const getSchool = async (id: number): Promise<SchoolDTO | null> => {
 		try {
-			return await schoolRepository.getSchoolById?.(id);
+			const school = await schoolRepository.getSchoolById?.(id);
+			return school ?? null;
 		} catch (error) {
 			console.error("Error fetching school:", error);
 			return null;
@@ -165,7 +162,7 @@ export const useSchoolViewModel = () => {
 
 		// actions
 		addSchool: addSchoolMutation.mutateAsync,
-		updateSchool: (id: string, data: Partial<SchoolDTO>) =>
+		updateSchool: (id: number, data: Partial<CreateSchoolDTO>) =>
 			updateSchoolMutation.mutateAsync({ id, data }),
 
 		searchSchools,

@@ -1,7 +1,7 @@
-import { SchoolDTO } from "../model/School";
+import { SchoolListItemDTO } from "../model/School";
 import { SchoolItemUI } from "../model/SchoolListItem";
 
-export const mapSchoolToUI = (school: SchoolDTO): SchoolItemUI => {
+export const mapSchoolToUI = (school: SchoolListItemDTO): SchoolItemUI => {
 	return {
 		id: school.id,
 		name: school.name,

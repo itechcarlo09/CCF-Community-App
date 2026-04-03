@@ -73,8 +73,9 @@ export const useUserViewModel = () => {
 
 	// 🔽 ADD USER
 	const addUserMutation = useMutation({
-		mutationFn: (user: Omit<UserDTO, "id" | "createdAt" | "updatedAt">) =>
-			userRepository.addUser(user),
+		mutationFn: (
+			user: Omit<UserDTO, "id" | "createdAt" | "updatedAt" | "isActive">,
+		) => userRepository.addUser(user),
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["users"] });
