@@ -12,9 +12,7 @@ const MAX_AGE_FOR_ELEVATE = 22;
 const MIN_DGROUP_MEMBERS_FOR_DLEADER = 3;
 const MIN_DGROUP_MEMBERS_FOR_TIMOTHY = 1;
 
-export const mapUserToUI = (
-	user: Partial<UserDTO> & Pick<UserDTO, "id" | "firstName" | "lastName">,
-): RecordItemUI => {
+export const mapUserToUI = (user: UserDTO): RecordItemUI => {
 	const id = user.id;
 	const fallbackText = `${user.firstName[0]}${user.lastName[0]}`;
 	const fullName = formatFullName(
@@ -43,7 +41,7 @@ export const mapUserToUI = (
 			  )
 			: undefined);
 
-	const isActive = user.isActive;
+	const isActive = user.isActive ?? false;
 
 	let membershipType: MembershipType;
 	if (

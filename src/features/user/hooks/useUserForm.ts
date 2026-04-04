@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { UserDTO } from "../model/user";
+import { CreateAccountBasicInfoDTO, UserDTO } from "../model/user";
 import {
 	formatFullName,
 	formatPhoneNumber,
@@ -13,6 +13,7 @@ import {
 } from "../../../utils/stringUtils";
 import UserType from "../../../types/enums/UserType";
 import topUsers from "../topUsers.json";
+import { Gender } from "src/types/enums/Gender";
 
 interface UseUserFormProps {
 	userId?: number;
@@ -24,15 +25,15 @@ const initialValues = {
 	firstName: "",
 	middleName: "",
 	lastName: "",
+	nickname: "",
+	profilePicture: "",
 	birthdate: "",
 	gender: "",
-	dLeaderID: "",
 	contactNumber: "",
 	email: "",
 	facebook: "",
 	emergencyPerson: "",
 	emergencyNumber: "",
-	dLeaderName: "",
 };
 
 // 🔽 Validation
@@ -69,7 +70,6 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const [user, setUser] = useState<UserDTO | null>(null);
 
-	// 🔽 Formik
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
@@ -81,51 +81,50 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 			try {
 				setLoading(true);
 				if (userId) {
-					// 🔽 UPDATE
-					const payload: Partial<UserDTO> = {};
+					const payload: Partial<CreateAccountBasicInfoDTO> = {};
 
 					if (values.firstName) payload.firstName = values.firstName;
-					if (values.lastName) payload.lastName = values.lastName;
 					if (values.middleName) payload.middleName = values.middleName;
-					if (values.gender) payload.gender = values.gender;
-					if (values.email) payload.email = values.email;
+					if (values.lastName) payload.lastName = values.lastName;
+					if (values.nickname) payload.nickName = values.nickname;
+					if (values.profilePicture)
+						payload.profilePicture = values.profilePicture;
+					if (values.facebook) payload.facebookLink = values.facebook;
 					if (values.contactNumber)
 						payload.contactNumber = values.contactNumber;
-					if (values.birthdate) payload.birthDate = new Date(values.birthdate);
-					if (values.facebook) payload.facebookLink = values.facebook;
+					if (values.email) payload.email = values.email;
+					if (values.gender) payload.gender = values.gender as Gender;
+					if (values.birthdate)
+						payload.birthDate = dayjs(values.birthdate).toDate();
 					if (values.emergencyPerson)
 						payload.emergencyContactName = values.emergencyPerson;
 					if (values.emergencyNumber)
 						payload.emergencyContactNumber = values.emergencyNumber;
-					if (values.dLeaderID)
-						payload.dGroupLeaderId = Number(values.dLeaderID);
 
-					await updateUser(userId.toString(), payload);
+					await updateUser(userId, payload);
 				} else {
-					// 🔽 CREATE
 					await addUser({
 						firstName: values.firstName,
 						lastName: values.lastName,
-						gender: values.gender,
 						email: values.email,
-						contactNumber: values.contactNumber,
+						gender: values.gender as Gender,
 						birthDate: new Date(values.birthdate),
-
-						userType:
-							Object.keys(UserType).find(
-								(key) => UserType[key as keyof typeof UserType] === "Member",
-							) ?? Object.keys(UserType)[0],
+						userType: UserType.Member,
 
 						...(values.middleName && { middleName: values.middleName }),
+						...(values.nickname && { nickName: values.nickname }),
+						...(values.profilePicture && {
+							profilePicture: values.profilePicture,
+						}),
+						...(values.contactNumber && {
+							contactNumber: values.contactNumber,
+						}),
 						...(values.facebook && { facebookLink: values.facebook }),
 						...(values.emergencyPerson && {
 							emergencyContactName: values.emergencyPerson,
 						}),
 						...(values.emergencyNumber && {
 							emergencyContactNumber: values.emergencyNumber,
-						}),
-						...(values.dLeaderID && {
-							dGroupLeaderId: Number(values.dLeaderID),
 						}),
 					});
 				}
@@ -156,30 +155,20 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				);
 
 				formik.setValues({
-					firstName: data.firstName,
-					middleName: data.middleName ?? "",
-					lastName: data.lastName,
-					birthdate: dayjs(data.birthDate).format("YYYY-MM-DD"),
-					gender: data.gender,
-					dLeaderID: data.dGroupLeader?.id?.toString() ?? "",
-					dLeaderName:
-						topUser?.dleaderName ??
-						(data.dGroupLeader
-							? formatFullName(
-									data.dGroupLeader.firstName,
-									data.dGroupLeader.lastName,
-									data.dGroupLeader.middleName,
-							  )
-							: ""),
-					contactNumber: formatPhoneNumber(
-						normalizePHNumber(data.contactNumber),
-					),
-					email: data.email,
-					facebook: data.facebookLink ?? "",
-					emergencyPerson: data.emergencyContactName ?? "",
-					emergencyNumber: data.emergencyContactNumber
-						? formatPhoneNumber(normalizePHNumber(data.emergencyContactNumber))
+					firstName: data.firstName || "",
+					middleName: data.middleName || "",
+					lastName: data.lastName || "",
+					nickname: data.nickname || "",
+					profilePicture: data.profilePicture || "",
+					birthdate: data.birthDate
+						? dayjs(data.birthDate).format("YYYY-MM-DD")
 						: "",
+					gender: data.gender || "",
+					contactNumber: data.contactNumber || "",
+					email: data.email || "",
+					facebook: data.facebookLink || "",
+					emergencyPerson: data.emergencyContactName || "",
+					emergencyNumber: data.emergencyContactNumber || "",
 				});
 			} catch {
 				Alert.alert("Error", "Failed to load user");

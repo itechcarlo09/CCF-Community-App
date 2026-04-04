@@ -6,10 +6,10 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { userRepository } from "../data/userRepository";
-import { UserDTO } from "../model/user";
+import { CreateAccountBasicInfoDTO, UserDTO } from "../model/user";
 import { RecordItemUI } from "../model/RecordListItem";
-import Gender from "../../../types/enums/Gender";
 import { mapUserToUI } from "../data/user.mapper";
+import { Gender } from "src/types/enums/Gender";
 
 const PAGE_SIZE = 10;
 
@@ -73,9 +73,9 @@ export const useUserViewModel = () => {
 
 	// 🔽 ADD USER
 	const addUserMutation = useMutation({
-		mutationFn: (
-			user: Omit<UserDTO, "id" | "createdAt" | "updatedAt" | "isActive">,
-		) => userRepository.addUser(user),
+		mutationFn: (user: CreateAccountBasicInfoDTO) => {
+			return userRepository.addUser(user);
+		},
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -86,7 +86,7 @@ export const useUserViewModel = () => {
 	const updateUserMutation = useMutation<
 		void,
 		Error,
-		{ id: string; data: Partial<UserDTO> },
+		{ id: number; data: Partial<UserDTO> },
 		{ previous?: InfiniteUsersData }
 	>({
 		mutationFn: ({ id, data }) =>
@@ -111,9 +111,7 @@ export const useUserViewModel = () => {
 					...old,
 					pages: old.pages.map((page) => ({
 						...page,
-						data: page.data.map((u) =>
-							u.id.toString() === id ? { ...u, ...data } : u,
-						),
+						data: page.data.map((u) => (u.id === id ? { ...u, ...data } : u)),
 					})),
 				};
 			});
@@ -182,7 +180,7 @@ export const useUserViewModel = () => {
 
 		// actions
 		addUser: addUserMutation.mutateAsync,
-		updateUser: (id: string, data: Partial<UserDTO>) =>
+		updateUser: (id: number, data: Partial<UserDTO>) =>
 			updateUserMutation.mutateAsync({ id, data }),
 
 		searchUsers,

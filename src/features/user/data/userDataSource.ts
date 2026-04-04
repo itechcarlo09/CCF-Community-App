@@ -1,7 +1,12 @@
 import { Gender } from "src/types/enums/Gender";
 import apiClient from "../../../services/apiClient";
 import { GetUsersParams } from "../model/RequestParams";
-import { GetUserResponse, UserDTO } from "../model/user";
+import {
+	CreateAccountBasicInfoDTO,
+	CreateAccountDTO,
+	GetUserResponse,
+	UserDTO,
+} from "../model/user";
 
 export const userDataSource = {
 	async getUsers(
@@ -58,16 +63,18 @@ export const userDataSource = {
 		}
 	},
 
-	async addUser(data: any): Promise<any | null> {
+	async addUser(data: CreateAccountBasicInfoDTO): Promise<UserDTO | undefined> {
 		try {
-			const res = await apiClient.post<any>("/account", {
+			console.log("addUser error DataSource:");
+			const res = await apiClient.post<UserDTO>("/account", {
 				basicInfo: {
 					...data,
 				},
 			});
-			return res.data ?? null;
+			return res.data;
 		} catch (error: any) {
 			console.error("addUser error:", error.message ?? error);
+			return undefined;
 		}
 	},
 
@@ -89,7 +96,7 @@ export const userDataSource = {
 		}
 	},
 
-	async editUser(id: string, data: Partial<any>): Promise<any | null> {
+	async editUser(id: number, data: Partial<any>): Promise<any | null> {
 		try {
 			const res = await apiClient.patch<any>(`/account/${id}`, data);
 			return res.data ?? null;

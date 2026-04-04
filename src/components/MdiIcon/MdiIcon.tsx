@@ -16,7 +16,7 @@ const MdiIcon: React.FC<MdiIconProps> = ({
 		width: circleSize,
 		height: circleSize,
 		borderRadius: circleSize / 2,
-		backgroundColor: "#E5E7EB",
+		backgroundColor: "#EAF3FF",
 		alignItems: "center",
 		justifyContent: "center",
 	};
@@ -24,7 +24,7 @@ const MdiIcon: React.FC<MdiIconProps> = ({
 	const Content = (
 		<View style={[styles.container, onPress && circleStyle, style]}>
 			<Svg width={size} height={size} viewBox="0 0 24 24">
-				<Path d={path} fill={color} />
+				<Path d={path} fill={onPress ? "#007AFF" : color} />
 			</Svg>
 		</View>
 	);

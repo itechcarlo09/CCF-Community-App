@@ -1,5 +1,9 @@
 enum UserType {
-	Admin = "Admin",
+	Admin = "SuperAdmin",
+	OIC = "Office In Charge",
+	COS = "Council of Servant",
+	MH = "Ministry Head",
+	Core = "Core Leader",
 	Member = "Member",
 }
 

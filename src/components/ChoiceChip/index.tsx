@@ -29,8 +29,9 @@ const ChoiceChip: React.FC<ChoiceChipProps> = ({
 				</View>
 			)}
 			<View style={styles.dualFields}>
-				{options.map((option) => (
+				{options.map((option, index) => (
 					<TouchableOpacity
+						key={index}
 						style={[
 							styles.button,
 							disabled && styles.disabled,

@@ -20,6 +20,8 @@ import {
 	mdiPlusCircleOutline,
 	mdiAccountGroupOutline,
 	mdiArrowUpBoldCircleOutline,
+	mdiAccountSwitch,
+	mdiAccountPlus,
 } from "@mdi/js";
 import { useUserForm } from "../hooks/useUserForm";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -75,23 +77,23 @@ const UserDetailScreen = () => {
 			? sortByEndDate(user.employment)
 			: [];
 
-	useEffect(() => {
-		user ? setMappedUser(mapUserToUI(user)) : null;
-		hasMember &&
-			setMappedDMembers(
-				user.dGroupMembers?.map((e) => {
-					return {
-						...mapUserToUI({
-							id: e.id,
-							firstName: e.firstName,
-							lastName: e.lastName,
-							middleName: e.middleName,
-						}),
-						membershipType: "DMember",
-					};
-				}),
-			);
-	}, [user]);
+	// useEffect(() => {
+	// 	user ? setMappedUser(mapUserToUI(user)) : null;
+	// 	hasMember &&
+	// 		setMappedDMembers(
+	// 			user.dGroupMembers?.map((e) => {
+	// 				return {
+	// 					...mapUserToUI({
+	// 						id: e.id,
+	// 						firstName: e.firstName,
+	// 						lastName: e.lastName,
+	// 						middleName: e.middleName,
+	// 					}),
+	// 					membershipType: "DMember",
+	// 				};
+	// 			}),
+	// 		);
+	// }, [user]);
 
 	const handleAssignDLeader = useCallback(() => {
 		const gender = normalizeGender(user?.gender);
@@ -133,8 +135,9 @@ const UserDetailScreen = () => {
 					</View>
 				</View>
 
-				<TouchableOpacity
-					style={styles.iconBtn}
+				<MdiIcon
+					path={mdiPencil}
+					size={22}
 					onPress={() => {
 						navigation.navigate("UserForm", {
 							id,
@@ -146,9 +149,7 @@ const UserDetailScreen = () => {
 							},
 						});
 					}}
-				>
-					<MdiIcon path={mdiPencil} size={22} />
-				</TouchableOpacity>
+				/>
 			</View>
 
 			<ScrollView showsVerticalScrollIndicator={false}>
@@ -208,11 +209,11 @@ const UserDetailScreen = () => {
 								{mappedUser?.dleaderName ?? "No leader assigned"}
 							</Text>
 						</View>
-						<TouchableOpacity onPress={handleAssignDLeader}>
-							<Text style={styles.actionText}>
-								{mappedUser?.dleaderName ? "Change" : "Assign"}
-							</Text>
-						</TouchableOpacity>
+						<MdiIcon
+							path={mappedUser?.dleaderName ? mdiAccountSwitch : mdiAccountPlus}
+							size={18}
+							onPress={handleAssignDLeader}
+						/>
 					</View>
 					{/* // TODO: Implement Members Lazy Load */}
 					{/* MEMBERS */}

@@ -40,9 +40,7 @@ const Header: React.FC<Props> = ({
 						{/* Left: Back Button placeholder */}
 						<View style={styles.sideButton}>
 							{onBack && (
-								<TouchableOpacity onPress={onBack} hitSlop={10}>
-									<MdiIcon path={mdiArrowLeft} size={24} color="#111827" />
-								</TouchableOpacity>
+								<MdiIcon path={mdiArrowLeft} size={24} onPress={onBack} />
 							)}
 						</View>
 
@@ -55,23 +53,15 @@ const Header: React.FC<Props> = ({
 
 						{/* Right: Add Button placeholder */}
 						<View style={styles.sideButton}>
-							{onAdd && (
-								<TouchableOpacity onPress={onAdd} hitSlop={10}>
-									<MdiIcon path={mdiPlus} size={24} color="#4f46e5" />
-								</TouchableOpacity>
-							)}
+							{onAdd && <MdiIcon path={mdiPlus} size={24} onPress={onAdd} />}
 						</View>
 					</>
 				) : (
 					<>
 						{onBack && (
-							<TouchableOpacity
-								style={styles.sideButton}
-								onPress={onBack}
-								hitSlop={10}
-							>
-								<MdiIcon path={mdiArrowLeft} size={24} color="#111827" />
-							</TouchableOpacity>
+							<View style={styles.sideButton}>
+								<MdiIcon path={mdiArrowLeft} size={24} onPress={onBack} />
+							</View>
 						)}
 						<View style={styles.searchCard}>
 							<MdiIcon path={mdiMagnify} size={20} color="#9CA3AF" />
@@ -84,13 +74,9 @@ const Header: React.FC<Props> = ({
 							/>
 						</View>
 						{onAdd && (
-							<TouchableOpacity
-								style={styles.sideButton}
-								onPress={onAdd}
-								hitSlop={10}
-							>
-								<MdiIcon path={mdiPlus} size={24} color="#4f46e5" />
-							</TouchableOpacity>
+							<View style={styles.sideButton}>
+								<MdiIcon path={mdiPlus} size={24} onPress={onAdd} />
+							</View>
 						)}
 					</>
 				)}

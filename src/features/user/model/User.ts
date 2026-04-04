@@ -1,4 +1,6 @@
+import UserType from "src/types/enums/UserType";
 import { PaginatedResponse } from "../../../types/paginationTypes";
+import { Gender } from "src/types/enums/Gender";
 
 export interface SchoolDTO {
 	id: number;
@@ -39,6 +41,7 @@ export interface UserDTO {
 	firstName: string;
 	middleName?: string;
 	lastName: string;
+	nickname?: string;
 	birthDate: Date;
 	dGroupLeaderId?: number | null;
 	dGroupLeader?: DGroupBasicInfoDTO;
@@ -54,7 +57,26 @@ export interface UserDTO {
 	emergencyContactNumber?: string;
 	education?: EducationDTO[];
 	employment?: EmploymentDTO[];
-	latestAttendance?: Date;
+}
+
+export interface CreateAccountDTO {
+	basicInfo: CreateAccountBasicInfoDTO;
+}
+
+export interface CreateAccountBasicInfoDTO {
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	nickName?: string;
+	profilePicture?: string;
+	facebookLink?: string;
+	contactNumber?: string;
+	email: string;
+	gender: Gender;
+	birthDate: Date;
+	userType: UserType;
+	emergencyContactName?: string;
+	emergencyContactNumber?: string;
 }
 
 export type GetUserResponse = PaginatedResponse<UserDTO>;
