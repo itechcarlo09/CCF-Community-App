@@ -1,5 +1,5 @@
 import { ViewStyle } from "react-native";
-import { DropdownOption } from "../../types/dropdownOption";
+import { SelectionProps } from "../../types/dropdownOption";
 
 export interface ElementDropdownProps<T = any> {
 	name: string;
@@ -11,7 +11,7 @@ export interface ElementDropdownProps<T = any> {
 	required?: boolean;
 	containerStyle?: ViewStyle;
 	onChange: (field: string, value: string) => void;
-	options: DropdownOption<string>[];
+	options: SelectionProps<string>[];
 	searchable?: boolean;
 	placeholder?: string;
 }

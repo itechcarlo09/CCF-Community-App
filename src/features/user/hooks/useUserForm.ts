@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
 import { useNavigation } from "@react-navigation/native";
@@ -74,11 +74,12 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 		initialValues,
 		validationSchema,
 		enableReinitialize: true,
+		validateOnBlur: true,
+		validateOnChange: false,
 
 		onSubmit: async (values) => {
 			try {
 				setLoading(true);
-
 				if (userId) {
 					// 🔽 UPDATE
 					const payload: Partial<UserDTO> = {};

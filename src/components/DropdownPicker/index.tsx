@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { styles } from "./styles";
 import { ElementDropdownProps } from "./types";
 import { useTheme } from "../../theme/ThemeProvider";
-import { DropdownOption } from "../../types/dropdownOption";
+import { SelectionProps } from "../../types/dropdownOption";
 import { Dropdown } from "react-native-element-dropdown";
 
 export const DropdownPickerField: React.FC<ElementDropdownProps> = ({
@@ -22,7 +22,7 @@ export const DropdownPickerField: React.FC<ElementDropdownProps> = ({
 	const { theme } = useTheme();
 	const [open, setOpen] = useState(false);
 	const [isFocus, setIsFocus] = useState(false);
-	const [items, setItems] = useState<DropdownOption<string>[]>(options);
+	const [items, setItems] = useState<SelectionProps<string>[]>(options);
 
 	const setState: React.Dispatch<(prevState: any) => any> = (updater) => {
 		const prevState = {};

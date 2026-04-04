@@ -10,7 +10,7 @@ import { mdiArrowLeft } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import Button from "../../../components/Button";
 import Gender from "../../../types/enums/Gender";
-import { DropdownOption } from "../../../types/dropdownOption";
+import { SelectionProps } from "../../../types/dropdownOption";
 import InputType from "../../../types/enums/InputType";
 import { formatFullName, formatPhoneNumber } from "../../../utils/stringUtils";
 import ChoiceChip from "../../../components/ChoiceChip";
@@ -28,7 +28,7 @@ import Title from "../../components/Title";
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
 
-const genderOptions: DropdownOption<Gender>[] = [
+const genderOptions: SelectionProps<Gender>[] = [
 	{ label: Gender.Male, value: Gender.Male },
 	{ label: Gender.Female, value: Gender.Female },
 ];

@@ -19,7 +19,7 @@ export const DatePicker: React.FC<BirthDatePickerProps> = ({
 	error,
 	touched,
 	label = "Date",
-	required = true,
+	required = false,
 }) => {
 	const [showPicker, setShowPicker] = useState(false);
 
@@ -31,14 +31,17 @@ export const DatePicker: React.FC<BirthDatePickerProps> = ({
 	};
 
 	return (
-		<View style={{ marginBottom: 12 }}>
+		<View>
 			<View style={styles.labelRow}>
 				<Text style={styles.label}>{label}</Text>
 				{required && <Text style={styles.required}> *</Text>}
 			</View>
 
 			<TouchableOpacity
-				style={styles.dateTouchable}
+				style={[
+					styles.dateTouchable,
+					touched && error && { borderColor: "red" },
+				]}
 				onPress={() => setShowPicker(true)}
 			>
 				<Text style={{ color: value ? "#111827" : "#9CA3AF" }}>
@@ -73,11 +76,12 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 	},
 	dateTouchable: {
+		justifyContent: "center",
 		borderWidth: 1,
 		borderColor: "#D1D5DB",
 		borderRadius: 8,
-		padding: 10,
-		height: 44,
+		paddingStart: 10,
+		height: 48,
 		backgroundColor: "#FFFFFF",
 	},
 	errorText: { color: "red", marginTop: 4, fontSize: 12 },

@@ -2,23 +2,15 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
 	button: {
-		paddingVertical: 8,
-		paddingHorizontal: 12,
+		flex: 1,
+		borderWidth: 1,
+		borderColor: "#D1D5DB",
 		borderRadius: 8,
 		alignItems: "center",
 		justifyContent: "center",
-		flex: 1,
+		paddingVertical: 10,
 	},
-	label: {
-		fontSize: 16,
-		fontWeight: 500,
-		marginBottom: 6,
-	},
-	text: {
-		color: "#000",
-		fontSize: 16,
-		fontWeight: "600",
-	},
+	text: { color: "#111827", fontWeight: "500" },
 	disabled: {
 		backgroundColor: "#A0A0A0",
 	},
@@ -40,9 +32,15 @@ export const styles = StyleSheet.create({
 		columnGap: 12,
 		flexDirection: "row",
 	},
-	error: {
-		color: "#FF0000",
-		marginTop: 8,
+	error: { color: "red", marginTop: 4, fontSize: 12 },
+	label: { fontSize: 12, color: "#6B7280", marginBottom: 4 },
+	labelRow: {
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	required: {
+		color: "#EF4444",
 		fontSize: 14,
+		fontWeight: "600",
 	},
 });

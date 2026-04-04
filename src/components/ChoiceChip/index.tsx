@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ChoiceChipProps } from "./types";
 import { styles } from "./styles";
-import { DropdownOption } from "../../types/dropdownOption";
-import { useTheme } from "../../theme/ThemeProvider";
+import { SelectionProps } from "src/types/selectionTypes";
 
-const Button: React.FC<ChoiceChipProps> = ({
+const ChoiceChip: React.FC<ChoiceChipProps> = ({
 	required,
 	label,
 	disabled = false,
@@ -17,19 +16,17 @@ const Button: React.FC<ChoiceChipProps> = ({
 	touched,
 	error,
 }) => {
-	const { theme } = useTheme();
-
-	const handleChange = (selectedItem: DropdownOption<string>) => {
+	const handleChange = (selectedItem: SelectionProps<string>) => {
 		onChange(name, selectedItem.value);
 	};
 
 	return (
 		<View>
 			{label && (
-				<Text style={[styles.label, { color: theme.slate[700] }]}>
-					{label}
-					{required && <Text style={{ color: theme.blue[500] }}> *</Text>}
-				</Text>
+				<View style={styles.labelRow}>
+					<Text style={styles.label}>{label}</Text>
+					{required && <Text style={styles.required}> *</Text>}
+				</View>
 			)}
 			<View style={styles.dualFields}>
 				{options.map((option) => (
@@ -38,13 +35,13 @@ const Button: React.FC<ChoiceChipProps> = ({
 							styles.button,
 							disabled && styles.disabled,
 							{
-								backgroundColor: value === option.value ? "#007AFF" : "#E0E0E0",
-								borderColor: value === option.value ? "#007AFF" : "#E0E0E0",
+								backgroundColor: value === option.value ? "#4F46E5" : "#FFF",
+								borderColor: value === option.value ? "#4F46E5" : "#E0E0E0",
 							},
 							touched && error && styles.errorButton,
 						]}
 						onPress={() => {
-							const newItem = option; // For simplicity, just select the first item
+							const newItem = option;
 							handleChange(newItem);
 						}}
 						activeOpacity={0.7}
@@ -70,4 +67,4 @@ const Button: React.FC<ChoiceChipProps> = ({
 	);
 };
 
-export default Button;
+export default ChoiceChip;
