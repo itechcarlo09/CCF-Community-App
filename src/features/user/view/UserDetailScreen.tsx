@@ -256,12 +256,11 @@ const UserDetailScreen = () => {
 					<View style={styles.sectionHeader}>
 						<Text style={styles.sectionTitle}>Education</Text>
 
-						<TouchableOpacity
-							style={styles.addBtn}
+						<MdiIcon
+							path={mdiPlusCircleOutline}
+							size={20}
 							onPress={() => navigation.navigate("EducationFormScreen")}
-						>
-							<MdiIcon path={mdiPlusCircleOutline} size={20} />
-						</TouchableOpacity>
+						/>
 					</View>
 
 					{educations.map((edu, index) => (
@@ -269,13 +268,18 @@ const UserDetailScreen = () => {
 							<MdiIcon path={mdiSchoolOutline} size={18} />
 
 							<View style={{ flex: 1 }}>
-								<Text style={styles.textBold}>{edu.course}</Text>
-								<Text style={styles.subText}>{edu.school.name}</Text>
+								<Text style={styles.textBold}>{edu.school.name}</Text>
+								{edu.course && <Text style={styles.subText}>{edu.course}</Text>}
 
 								<Text style={styles.yearText}>
 									{formatDateRangeFromDate(edu.startDate, edu.endDate)}
 								</Text>
 							</View>
+							<MdiIcon
+								path={mdiPencil}
+								size={18}
+								onPress={() => navigation.navigate("EducationFormScreen")}
+							/>
 						</View>
 					))}
 				</View>
@@ -454,6 +458,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		gap: 10,
 		marginBottom: 10,
+		alignItems: "center",
 	},
 
 	addBtn: {
