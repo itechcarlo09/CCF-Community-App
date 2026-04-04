@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+	View,
+	Text,
+	TouchableOpacity,
+	StyleSheet,
+	Platform,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDateForDisplay } from "src/utils/dateFormatter";
 import dayjs from "dayjs";
 
-interface BirthDatePickerProps {
+interface DatePickerProps {
 	value: Date | string | null;
 	onChange: (date: Date) => void;
 	error?: string;
@@ -13,7 +19,7 @@ interface BirthDatePickerProps {
 	required?: boolean;
 }
 
-export const DatePicker: React.FC<BirthDatePickerProps> = ({
+export const DatePicker: React.FC<DatePickerProps> = ({
 	value,
 	onChange,
 	error,
@@ -24,9 +30,16 @@ export const DatePicker: React.FC<BirthDatePickerProps> = ({
 	const [showPicker, setShowPicker] = useState(false);
 
 	const handleChange = (_event: any, selectedDate?: Date) => {
-		setShowPicker(false);
-		if (selectedDate) {
-			onChange(selectedDate);
+		if (Platform.OS === "android") setShowPicker(false);
+
+		if (Platform.OS === "android") {
+			if (_event.type === "set" && selectedDate) {
+				onChange(selectedDate);
+			}
+		} else {
+			if (selectedDate) {
+				onChange(selectedDate);
+			}
 		}
 	};
 
@@ -57,7 +70,7 @@ export const DatePicker: React.FC<BirthDatePickerProps> = ({
 					mode="date"
 					display="default"
 					onChange={handleChange}
-					maximumDate={new Date()} // optional: prevent future dates
+					maximumDate={new Date()}
 				/>
 			)}
 		</View>
