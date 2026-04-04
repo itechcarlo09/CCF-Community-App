@@ -26,3 +26,8 @@ enum GradeYear {
 }
 
 export default GradeYear;
+
+export const gradeYearOptions = Object.values(GradeYear).map((v) => ({
+	label: v.replace(/([A-Z])/g, " $1").trim(),
+	value: v,
+}));

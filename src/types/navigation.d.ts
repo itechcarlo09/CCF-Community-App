@@ -46,6 +46,7 @@ export type AppRouteProp<T extends keyof AppStackParamList> = RouteProp<
 // -----------------------------
 export type UserStackParamList = {
 	UserForm: { id?: number; onSuccess?: () => void } | undefined;
+	EducationFormScreen: { id: number; onSuccess?: () => void } | undefined;
 	UserDetailScreen: { id: number; hasEditedUser: () => void };
 	DleaderScreen: {
 		id: number;

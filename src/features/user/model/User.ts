@@ -8,7 +8,7 @@ export interface SchoolDTO {
 
 export interface EducationDTO {
 	gradeYear: string;
-	course: string;
+	course: string | null;
 	startDate: string;
 	endDate?: string;
 	school: SchoolDTO;

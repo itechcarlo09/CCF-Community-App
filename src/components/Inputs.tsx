@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
 	...rest
 }) => {
 	return (
-		<View style={styles.inputContainer}>
+		<View>
 			<View style={styles.labelRow}>
 				<Text style={styles.label}>{label}</Text>
 				{required && <Text style={styles.required}> *</Text>}
@@ -49,12 +49,10 @@ const Input: React.FC<InputProps> = ({
 export default Input;
 
 const styles = StyleSheet.create({
-	inputContainer: { marginBottom: 12 },
 	label: { fontSize: 12, color: "#6B7280", marginBottom: 4 },
 	labelRow: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 6,
 	},
 	required: {
 		color: "#EF4444",

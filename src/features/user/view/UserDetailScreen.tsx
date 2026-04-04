@@ -33,7 +33,6 @@ import {
 } from "src/utils/dateFormatter";
 import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
-import { EducationDTO, EmploymentDTO } from "../model/user";
 import { NOID } from "src/types/globalTypes";
 import { normalizeGender } from "src/utils/stringUtils";
 
@@ -257,7 +256,10 @@ const UserDetailScreen = () => {
 					<View style={styles.sectionHeader}>
 						<Text style={styles.sectionTitle}>Education</Text>
 
-						<TouchableOpacity style={styles.addBtn}>
+						<TouchableOpacity
+							style={styles.addBtn}
+							onPress={() => navigation.navigate("EducationFormScreen")}
+						>
 							<MdiIcon path={mdiPlusCircleOutline} size={20} />
 						</TouchableOpacity>
 					</View>

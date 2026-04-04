@@ -71,6 +71,15 @@ export const userDataSource = {
 		}
 	},
 
+	async addEducation(data: any): Promise<any | null> {
+		try {
+			const res = await apiClient.post<any>("/education", data);
+			return res.data ?? null;
+		} catch (error: any) {
+			console.error("addEducation error:", error.message ?? error);
+		}
+	},
+
 	async getUserById(userId: string): Promise<UserDTO | null> {
 		try {
 			const res = await apiClient.get<UserDTO>(`/account/${userId}`);

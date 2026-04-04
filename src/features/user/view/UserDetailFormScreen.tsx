@@ -18,6 +18,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDateForDisplay, formatPHNumber } from "src/utils/dateFormatter";
 import Input from "@components/Inputs";
 import { normalizeGender } from "src/utils/stringUtils";
+import { DatePicker } from "@components/DatePicker";
+import Header from "@components/Header";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -87,189 +89,157 @@ const UserDetailFormScreen = () => {
 	if (loading) return <Loading />;
 
 	return (
-		<KeyboardAwareScrollView
-			keyboardShouldPersistTaps="handled"
-			contentContainerStyle={styles.container}
-		>
-			<Text style={styles.title}>{`${id ? "Edit" : "Create"} User`}</Text>
+		<View style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
+			<Header
+				title={`${id ? "Edit" : "Create"} User`}
+				onBack={navigation.goBack}
+			/>
+			<KeyboardAwareScrollView
+				keyboardShouldPersistTaps="handled"
+				contentContainerStyle={styles.container}
+			>
+				{/* BASIC INFO */}
+				<Text style={styles.section}>Basic Information</Text>
+				<Input
+					label="First Name"
+					placeholder="Enter First Name"
+					value={formik.values.firstName}
+					onChangeText={formik.handleChange("firstName")}
+					onBlur={() => formik.setFieldTouched("firstName")}
+					error={formik.touched.firstName ? formik.errors.firstName : undefined}
+					required
+				/>
+				<Input
+					label="Middle Name"
+					placeholder="Enter Middle Name"
+					value={formik.values.middleName}
+					onChangeText={formik.handleChange("middleName")}
+					onBlur={() => formik.setFieldTouched("middleName")}
+					error={
+						formik.touched.middleName ? formik.errors.middleName : undefined
+					}
+				/>
+				<Input
+					label="Last Name"
+					placeholder="Enter Last Name"
+					value={formik.values.lastName}
+					onChangeText={formik.handleChange("lastName")}
+					onBlur={() => formik.setFieldTouched("lastName")}
+					error={formik.touched.lastName ? formik.errors.lastName : undefined}
+					required
+				/>
 
-			{/* BASIC INFO */}
-			<Text style={styles.section}>Basic Information</Text>
-			<Input
-				label="First Name"
-				placeholder="Enter First Name"
-				value={formik.values.firstName}
-				onChangeText={formik.handleChange("firstName")}
-				onBlur={() => formik.setFieldTouched("firstName")}
-				error={formik.touched.firstName ? formik.errors.firstName : undefined}
-				required
-			/>
-			<Input
-				label="Middle Name"
-				placeholder="Enter Middle Name"
-				value={formik.values.middleName}
-				onChangeText={formik.handleChange("middleName")}
-				onBlur={() => formik.setFieldTouched("middleName")}
-				error={formik.touched.middleName ? formik.errors.middleName : undefined}
-			/>
-			<Input
-				label="Last Name"
-				placeholder="Enter Last Name"
-				value={formik.values.lastName}
-				onChangeText={formik.handleChange("lastName")}
-				onBlur={() => formik.setFieldTouched("lastName")}
-				error={formik.touched.lastName ? formik.errors.lastName : undefined}
-				required
-			/>
+				<DatePicker
+					value={formik.values.birthdate}
+					onChange={(date) => formik.setFieldValue("birthdate", date)}
+					touched={formik.touched.birthdate}
+					error={formik.errors.birthdate}
+					label="Birth Date"
+				/>
 
-			{/* Birth Date */}
-			<View style={{ marginBottom: 12 }}>
-				<View style={styles.labelRow}>
-					<Text style={styles.label}>Birth Date</Text>
-					<Text style={styles.required}> *</Text>
+				{/* Gender */}
+				<View style={{ marginBottom: 12 }}>
+					<Text style={styles.label}>Gender</Text>
+					<View style={styles.genderContainer}>
+						{["Male", "Female"].map((option) => (
+							<TouchableOpacity
+								key={option}
+								style={[
+									styles.genderButton,
+									formik.values.gender === option &&
+										styles.genderButtonSelected,
+								]}
+								onPress={() => formik.setFieldValue("gender", option)}
+							>
+								<Text
+									style={[
+										styles.genderButtonText,
+										formik.values.gender === option &&
+											styles.genderButtonTextSelected,
+									]}
+								>
+									{option}
+								</Text>
+							</TouchableOpacity>
+						))}
+					</View>
+					{formik.touched.gender && formik.errors.gender && (
+						<Text style={styles.errorText}>{formik.errors.gender}</Text>
+					)}
 				</View>
 
+				{/* CONTACT */}
+				<Text style={styles.section}>Contact</Text>
+				<PHContactInput
+					label="Contact Number"
+					value={formik.values.contactNumber}
+					onChange={(formatted) =>
+						formik.setFieldValue("contactNumber", formatted)
+					}
+					error={
+						formik.touched.contactNumber
+							? formik.errors.contactNumber
+							: undefined
+					}
+				/>
+				<Input
+					label="Email"
+					placeholder="Enter Email"
+					value={formik.values.email}
+					onChangeText={formik.handleChange("email")}
+					onBlur={() => formik.setFieldTouched("email")}
+					error={formik.touched.email ? formik.errors.email : undefined}
+					required
+				/>
+				<Input
+					label="Facebook"
+					placeholder="Enter Facebook Link"
+					value={formik.values.facebook}
+					onChangeText={formik.handleChange("facebook")}
+					onBlur={() => formik.setFieldTouched("facebook")}
+					error={formik.touched.facebook ? formik.errors.facebook : undefined}
+				/>
+
+				{/* EMERGENCY CONTACT */}
+				<Text style={styles.section}>Emergency Contact</Text>
+				<Input
+					label="Person"
+					placeholder="Enter Person's Fullname"
+					value={formik.values.emergencyPerson}
+					onChangeText={formik.handleChange("emergencyPerson")}
+					onBlur={() => formik.setFieldTouched("emergencyPerson")}
+					error={
+						formik.touched.emergencyPerson
+							? formik.errors.emergencyPerson
+							: undefined
+					}
+				/>
+				<PHContactInput
+					label="Emergency Number"
+					value={formik.values.emergencyNumber}
+					onChange={(formatted) =>
+						formik.setFieldValue("emergencyNumber", formatted)
+					}
+					error={
+						formik.touched.emergencyNumber
+							? formik.errors.emergencyNumber
+							: undefined
+					}
+				/>
+
+				{/* LEADER */}
+				<Text style={styles.section}>Discipleship</Text>
 				<TouchableOpacity
-					style={styles.birthDateTouchable}
-					onPress={() => setShowDatePicker(true)}
+					style={styles.leaderButton}
+					onPress={handleAssignDLeader}
 				>
-					<Text
-						style={{
-							color: formik.values.birthdate ? "#111827" : "#9CA3AF",
-						}}
-					>
-						{formik.values.birthdate
-							? formatDateForDisplay(formik.values.birthdate)
-							: "Select Birth Date"}
+					<Text style={styles.leaderButtonText}>
+						{formik.values.dLeadersName
+							? `Leader: ${formik.values.dLeadersName}`
+							: "Select Leader"}
 					</Text>
 				</TouchableOpacity>
-
-				{formik.touched.birthdate && formik.errors.birthdate && (
-					<Text style={styles.errorText}>{formik.errors.birthdate}</Text>
-				)}
-			</View>
-
-			{showDatePicker && (
-				<DateTimePicker
-					value={
-						formik.values.birthdate
-							? new Date(formik.values.birthdate)
-							: new Date(1990, 0, 1)
-					}
-					mode="date"
-					display={Platform.OS === "ios" ? "spinner" : "default"}
-					onChange={(event, selectedDate) => {
-						setShowDatePicker(Platform.OS === "ios");
-						if (selectedDate) {
-							formik.setFieldValue(
-								"birthdate",
-								selectedDate.toISOString().split("T")[0],
-							);
-						}
-					}}
-				/>
-			)}
-
-			{/* Gender */}
-			<View style={{ marginBottom: 12 }}>
-				<Text style={styles.label}>Gender</Text>
-				<View style={styles.genderContainer}>
-					{["Male", "Female"].map((option) => (
-						<TouchableOpacity
-							key={option}
-							style={[
-								styles.genderButton,
-								formik.values.gender === option && styles.genderButtonSelected,
-							]}
-							onPress={() => formik.setFieldValue("gender", option)}
-						>
-							<Text
-								style={[
-									styles.genderButtonText,
-									formik.values.gender === option &&
-										styles.genderButtonTextSelected,
-								]}
-							>
-								{option}
-							</Text>
-						</TouchableOpacity>
-					))}
-				</View>
-				{formik.touched.gender && formik.errors.gender && (
-					<Text style={styles.errorText}>{formik.errors.gender}</Text>
-				)}
-			</View>
-
-			{/* CONTACT */}
-			<Text style={styles.section}>Contact</Text>
-			<PHContactInput
-				label="Contact Number"
-				value={formik.values.contactNumber}
-				onChange={(formatted) =>
-					formik.setFieldValue("contactNumber", formatted)
-				}
-				error={
-					formik.touched.contactNumber ? formik.errors.contactNumber : undefined
-				}
-			/>
-			<Input
-				label="Email"
-				placeholder="Enter Email"
-				value={formik.values.email}
-				onChangeText={formik.handleChange("email")}
-				onBlur={() => formik.setFieldTouched("email")}
-				error={formik.touched.email ? formik.errors.email : undefined}
-				required
-			/>
-			<Input
-				label="Facebook"
-				placeholder="Enter Facebook Link"
-				value={formik.values.facebook}
-				onChangeText={formik.handleChange("facebook")}
-				onBlur={() => formik.setFieldTouched("facebook")}
-				error={formik.touched.facebook ? formik.errors.facebook : undefined}
-			/>
-
-			{/* EMERGENCY CONTACT */}
-			<Text style={styles.section}>Emergency Contact</Text>
-			<Input
-				label="Person"
-				placeholder="Enter Person's Fullname"
-				value={formik.values.emergencyPerson}
-				onChangeText={formik.handleChange("emergencyPerson")}
-				onBlur={() => formik.setFieldTouched("emergencyPerson")}
-				error={
-					formik.touched.emergencyPerson
-						? formik.errors.emergencyPerson
-						: undefined
-				}
-			/>
-			<PHContactInput
-				label="Emergency Number"
-				value={formik.values.emergencyNumber}
-				onChange={(formatted) =>
-					formik.setFieldValue("emergencyNumber", formatted)
-				}
-				error={
-					formik.touched.emergencyNumber
-						? formik.errors.emergencyNumber
-						: undefined
-				}
-			/>
-
-			{/* LEADER */}
-			<Text style={styles.section}>Discipleship</Text>
-			<TouchableOpacity
-				style={styles.leaderButton}
-				onPress={handleAssignDLeader}
-			>
-				<Text style={styles.leaderButtonText}>
-					{formik.values.dLeadersName
-						? `Leader: ${formik.values.dLeadersName}`
-						: "Select Leader"}
-				</Text>
-			</TouchableOpacity>
-
+			</KeyboardAwareScrollView>
 			{/* SUBMIT */}
 			<TouchableOpacity
 				style={styles.submitButton}
@@ -279,7 +249,7 @@ const UserDetailFormScreen = () => {
 					{`${id ? "Edit" : "Create"} User`}
 				</Text>
 			</TouchableOpacity>
-		</KeyboardAwareScrollView>
+		</View>
 	);
 };
 
@@ -287,7 +257,7 @@ export default UserDetailFormScreen;
 
 // 🎨 Styles
 const styles = StyleSheet.create({
-	container: { padding: 16, backgroundColor: "#F9FAFB" },
+	container: { padding: 16, backgroundColor: "#F9FAFB", rowGap: 10 },
 	title: {
 		fontSize: 24,
 		fontWeight: "700",
@@ -337,6 +307,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		alignItems: "center",
 		marginTop: 24,
+		marginHorizontal: 16,
 	},
 	submitText: { color: "#FFFFFF", fontWeight: "700", fontSize: 16 },
 	genderContainer: { flexDirection: "row", gap: 12, marginBottom: 12 },

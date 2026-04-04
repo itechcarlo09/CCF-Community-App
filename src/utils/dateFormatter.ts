@@ -145,14 +145,13 @@ export const formatMonthYearFromDate = (date?: Date): string => {
 	return `${month} ${year}`;
 };
 
-export const formatDateForDisplay = (dateString: string) => {
-	if (!dateString) return "";
-	const date = new Date(dateString);
-	return new Intl.DateTimeFormat("en-US", {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	}).format(date); // → "January 1, 2000"
+/**
+ * * Expected: string
+ * * Return: Date
+ * * Format Date: January 1, 2000
+ */
+export const formatDateForDisplay = (date: Date | string | null): string => {
+	return date ? dayjs(date).format("MMMM D, YYYY") : "";
 };
 
 export const formatPHNumber = (text: string) => {
