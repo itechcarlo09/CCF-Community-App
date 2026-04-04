@@ -17,6 +17,7 @@ interface DatePickerProps {
 	touched?: boolean;
 	label?: string;
 	required?: boolean;
+	maximumDate?: Date;
 }
 
 export const DatePicker: React.FC<DatePickerProps> = ({
@@ -26,6 +27,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 	touched,
 	label = "Date",
 	required = false,
+	maximumDate = new Date(),
 }) => {
 	const [showPicker, setShowPicker] = useState(false);
 
@@ -66,11 +68,11 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
 			{showPicker && (
 				<DateTimePicker
-					value={value instanceof Date ? dayjs(value).toDate() : new Date()}
+					value={value ? dayjs(value).toDate() : new Date()}
 					mode="date"
 					display="default"
 					onChange={handleChange}
-					maximumDate={new Date()}
+					maximumDate={maximumDate}
 				/>
 			)}
 		</View>

@@ -25,6 +25,9 @@ const UserDetailFormScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
 	const { id, onSuccess } = route.params || {};
+	const minus10YearsForCurrentDate = new Date(
+		new Date().setFullYear(new Date().getFullYear() - 10),
+	);
 
 	const { formik, loading, user } = useUserForm({
 		userId: id ? id : NOID,
@@ -107,6 +110,7 @@ const UserDetailFormScreen = () => {
 							error={formik.errors.birthdate}
 							label="Birth Date"
 							required
+							maximumDate={minus10YearsForCurrentDate}
 						/>
 
 						<ChoiceChip
