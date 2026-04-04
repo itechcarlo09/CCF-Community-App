@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import GradeYear, { gradeYearOptions } from "src/types/enums/GradeYear";
 import { useEducationViewModel } from "../viewModel/useEducationViewModel";
 import { EducationDTO, SchoolDTO } from "../model/user";
-import { CreateEducationDTO } from "../model/Education";
+import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
 
 interface UseEducationFormProps {
 	educationId?: number;
@@ -21,8 +21,8 @@ const initialValues = {
 	schoolId: -1,
 	gradeYear: "" as GradeYear | "",
 	course: "",
-	startYear: "",
-	endYear: "",
+	startDate: "",
+	endDate: "",
 	isCurrent: false,
 	gradeOpen: false,
 	gradeItems: gradeYearOptions,
@@ -52,17 +52,18 @@ export const validationSchema = Yup.object({
 		then: (schema) => schema.required("Course is required"),
 		otherwise: (schema) => schema.notRequired(),
 	}),
-	startYear: Yup.number()
-		.required("Start Year is required")
-		.min(1900, "Invalid year")
-		.max(new Date().getFullYear(), "Invalid year"),
-	endYear: Yup.number().when("isCurrent", {
+	startDate: Yup.date()
+		.required("Start date is required")
+		.min(new Date(1900, 0, 1), "Invalid date")
+		.max(new Date(), "Start date cannot be in the future"),
+
+	endDate: Yup.date().when("isCurrent", {
 		is: false,
 		then: (schema) =>
 			schema
-				.required("End Year is required")
-				.min(Yup.ref("startYear"), "End Year cannot be before Start Year")
-				.max(new Date().getFullYear(), "Invalid year"),
+				.required("End date is required")
+				.min(Yup.ref("startDate"), "End date cannot be before Start date")
+				.max(new Date(), "End date cannot be in the future"),
 		otherwise: (schema) => schema.notRequired(),
 	}),
 	isCurrent: Yup.boolean(),
@@ -93,10 +94,11 @@ export const useEducationForm = ({
 					await updateEducation(educationId.toString(), payload);
 				} else {
 					const payload: CreateEducationDTO = {
-						accountId: values,
 						schoolId: 0,
 						gradeYear: GradeYear.PreSchool,
 						startYear: 0,
+						...(values.course && { course: values.course }),
+						...(values.endDate && { endYear: parseInt(values.endDate) }),
 					};
 					await addEducation(payload);
 				}

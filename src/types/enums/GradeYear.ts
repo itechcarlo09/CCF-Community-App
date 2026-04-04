@@ -1,4 +1,4 @@
-enum GradeYear {
+export enum GradeYear {
 	PreSchool = "Pre-School",
 	Kindergarten = "Kindergarten",
 	Grade1 = "Grade 1",
@@ -20,9 +20,8 @@ enum GradeYear {
 	FifthYearCollege = "Fifth Year College",
 	UnderGraduate = "Undergraduate",
 	Graduated = "Graduated",
-	// for additional soon if needed
-	// Masteral = "Masteral",
-	// Others = "Others",
+	Masteral = "Masteral",
+	Others = "Others",
 }
 
 export default GradeYear;

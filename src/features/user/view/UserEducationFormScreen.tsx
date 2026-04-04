@@ -8,10 +8,16 @@ import Input from "@components/Inputs";
 import Loading from "@components/Loading";
 
 import { useEducationForm } from "../hooks/useEducationForm";
+import { DatePicker } from "@components/DatePicker";
+import dayjs from "dayjs";
+import { Dropdown, MonthYearPicker } from "@components/MonthYearPicker";
+import { ModernSwitch } from "@components/ModernSwitch";
 
 const EducationFormScreen = () => {
 	const navigation = useNavigation();
 	const [isCurrent, setIsCurrent] = useState(false);
+	const [selectedMonth, setSelectedMonth] = useState();
+	const currentDate = dayjs().toDate();
 
 	const { formik, loading } = useEducationForm({
 		onSuccess: () => navigation.goBack(),
@@ -78,32 +84,36 @@ const EducationFormScreen = () => {
 					/>
 				)}
 
-				{/* START YEAR */}
-				<Input
-					label="Start Year *"
-					placeholder="e.g. 2018"
-					keyboardType="numeric"
-					value={formik.values.startYear}
-					onChangeText={formik.handleChange("startYear")}
+				<MonthYearPicker
+					label="Start Date"
+					value={formik.values.startDate}
+					onChange={(date) => formik.setFieldValue("startDate", date)}
+					touched={formik.touched.startDate}
+					error={formik.errors.startDate}
+					maxDate={currentDate}
+					required
 				/>
 
 				{/* CURRENTLY STUDYING */}
 				<View style={styles.rowBetween}>
 					<Text style={styles.label}>Currently Studying</Text>
-					<Switch
+					<ModernSwitch
 						value={isCurrent}
 						onValueChange={(val) => setIsCurrent(val)}
 					/>
 				</View>
 
-				{/* END YEAR */}
+				{/* END DATE */}
 				{!isCurrent && (
-					<Input
-						label="End Year"
-						placeholder="e.g. 2022"
-						keyboardType="numeric"
-						value={formik.values.endYear}
-						onChangeText={formik.handleChange("endYear")}
+					<MonthYearPicker
+						label="End Date"
+						value={formik.values.endDate}
+						onChange={(date) => formik.setFieldValue("endDate", date)}
+						touched={formik.touched.endDate}
+						error={formik.errors.endDate}
+						minDate={dayjs(formik.values.startDate).toDate()}
+						maxDate={currentDate}
+						required
 					/>
 				)}
 			</KeyboardAwareScrollView>

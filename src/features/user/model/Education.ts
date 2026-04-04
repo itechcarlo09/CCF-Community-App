@@ -1,5 +1,4 @@
 export interface CreateEducationDTO {
-	accountId: number;
 	schoolId: number;
 	gradeYear: string;
 	course?: string | null;

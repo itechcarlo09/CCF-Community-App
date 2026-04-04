@@ -17,6 +17,7 @@ interface DatePickerProps {
 	touched?: boolean;
 	label?: string;
 	required?: boolean;
+	minimumDate?: Date;
 	maximumDate?: Date;
 }
 
@@ -27,6 +28,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 	touched,
 	label = "Date",
 	required = false,
+	minimumDate,
 	maximumDate = new Date(),
 }) => {
 	const [showPicker, setShowPicker] = useState(false);
@@ -73,6 +75,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 					display="default"
 					onChange={handleChange}
 					maximumDate={maximumDate}
+					minimumDate={minimumDate}
 				/>
 			)}
 		</View>
