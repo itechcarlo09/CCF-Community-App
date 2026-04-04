@@ -1,5 +1,5 @@
+import { Gender } from "src/types/enums/Gender";
 import apiClient from "../../../services/apiClient";
-import Gender from "../../../types/enums/Gender";
 import { GetUsersParams } from "../model/RequestParams";
 import { GetUserResponse, UserDTO } from "../model/user";
 
