@@ -77,23 +77,23 @@ const UserDetailScreen = () => {
 			? sortByEndDate(user.employment)
 			: [];
 
-	// useEffect(() => {
-	// 	user ? setMappedUser(mapUserToUI(user)) : null;
-	// 	hasMember &&
-	// 		setMappedDMembers(
-	// 			user.dGroupMembers?.map((e) => {
-	// 				return {
-	// 					...mapUserToUI({
-	// 						id: e.id,
-	// 						firstName: e.firstName,
-	// 						lastName: e.lastName,
-	// 						middleName: e.middleName,
-	// 					}),
-	// 					membershipType: "DMember",
-	// 				};
-	// 			}),
-	// 		);
-	// }, [user]);
+	useEffect(() => {
+		user ? setMappedUser(mapUserToUI(user)) : null;
+		// hasMember &&
+		// 	setMappedDMembers(
+		// 		user.dGroupMembers?.map((e) => {
+		// 			return {
+		// 				...mapUserToUI({
+		// 					id: e.id,
+		// 					firstName: e.firstName,
+		// 					lastName: e.lastName,
+		// 					middleName: e.middleName,
+		// 				}),
+		// 				membershipType: "DMember",
+		// 			};
+		// 		}),
+		// 	);
+	}, [user]);
 
 	const handleAssignDLeader = useCallback(() => {
 		const gender = normalizeGender(user?.gender);
