@@ -1,9 +1,11 @@
+import EducationLevel from "src/types/enums/EducationLevel";
+
 export interface CreateEducationDTO {
 	schoolId: number;
-	gradeYear: string;
-	course?: string | null;
-	startYear: number;
-	endYear?: number | null;
+	educationLevel: EducationLevel;
+	course?: string;
+	startDate: Date;
+	endDate?: Date;
 }
 
 export interface CreateEducationListDTO {

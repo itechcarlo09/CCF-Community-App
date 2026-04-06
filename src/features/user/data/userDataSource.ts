@@ -2,11 +2,12 @@ import { Gender } from "src/types/enums/Gender";
 import apiClient from "../../../services/apiClient";
 import { GetUsersParams } from "../model/RequestParams";
 import {
+	AddEducationDTO,
 	CreateAccountBasicInfoDTO,
-	CreateAccountDTO,
 	GetUserResponse,
 	UserDTO,
 } from "../model/user";
+import { CreateEducationListDTO } from "../model/Education";
 
 export const userDataSource = {
 	async getUsers(
@@ -60,19 +61,20 @@ export const userDataSource = {
 		}
 	},
 
-	async addEducation(data: any): Promise<any | null> {
+	async addEducation(data: CreateEducationListDTO): Promise<AddEducationDTO> {
 		try {
-			const res = await apiClient.post<any>("/education", data);
-			return res.data ?? null;
+			const res = await apiClient.post<AddEducationDTO>("/education", data);
+			return res.data;
 		} catch (error: any) {
 			console.error("addEducation error:", error.message ?? error);
+			return { accountId: -1 };
 		}
 	},
 
-	async getUserById(userId: string): Promise<UserDTO | null> {
+	async getUserById(userId: string): Promise<UserDTO | undefined> {
 		try {
 			const res = await apiClient.get<UserDTO>(`/account/${userId}`);
-			return res.data ? res.data : null;
+			return res.data ? res.data : undefined;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 
 import Header from "@components/Header";
 import Input from "@components/Inputs";
@@ -13,33 +13,45 @@ import { MonthYearPicker } from "@components/MonthYearPicker";
 import { ModernSwitch } from "@components/ModernSwitch";
 import { Dropdown } from "@components/Dropdown";
 import { SelectionProps } from "src/types/selectionTypes";
-import EducationLevel from "src/types/enums/GradeYear";
 import SelectButton from "@components/SelectButton";
+import { NOID } from "src/types/globalTypes";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserStackParamList } from "src/types/navigation";
+import EducationLevel from "src/types/enums/EducationLevel";
+
+type UserRouteProp = RouteProp<UserStackParamList, "EducationFormScreen">;
+type NavProp = NativeStackNavigationProp<UserStackParamList>;
 
 const EducationFormScreen = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<NavProp>();
+	const route = useRoute<UserRouteProp>();
+	const { accountId } = route.params || {};
 	const currentDate = dayjs().toDate();
+	const [selectedSchool, setSelectedSchool] = useState("");
 
 	const { formik, loading } = useEducationForm({
+		accountId: accountId ?? NOID,
 		onSuccess: () => navigation.goBack(),
 	});
 
 	const isCollegeOrSenior = useMemo(() => {
-		const val = formik.values.gradeYear;
+		const val = formik.values.educationLevel;
 		if (!val) return false;
 
-		return (
-			val.includes("Junior High") ||
-			val.includes("Senior High") ||
+		if (
+			val.includes("SeniorHigh") ||
 			val.includes("College") ||
 			val.includes("Masteral") ||
 			val.includes("Doctoral")
-		);
-	}, [formik.values.gradeYear]);
+		) {
+			return true;
+		} else {
+			formik.setFieldValue("course", "");
+			return false;
+		}
+	}, [formik.values.educationLevel]);
 
-	console.log("Formik error:", formik.errors);
-
-	const gradeYearOptions: SelectionProps<keyof typeof EducationLevel>[] =
+	const educationLevelOptions: SelectionProps<keyof typeof EducationLevel>[] =
 		Object.entries(EducationLevel).map(([key, value]) => ({
 			label: value,
 			value: key as keyof typeof EducationLevel,
@@ -56,42 +68,31 @@ const EducationFormScreen = () => {
 				<SelectButton
 					label="School"
 					required
-					value={
-						formik.values.schoolId > 0 ? formik.values.schoolId.toString() : ""
-					}
+					value={formik.values.schoolId > 0 ? selectedSchool : ""}
 					placeholder="Select School"
-					onPress={() => {}}
-					error={
-						formik.touched.schoolId
-							? (formik.errors.schoolId as string)
-							: undefined
+					onPress={() =>
+						navigation.navigate("SchoolListScreen", {
+							onSelect: (selectedId: number, schoolName: string) => {
+								formik.setFieldValue("schoolId", selectedId);
+								setSelectedSchool(schoolName);
+							},
+						})
 					}
+					error={formik.errors.schoolId}
 				/>
 
+				{/* EDUCATION LEVEL */}
 				<Dropdown
 					title="Education Level"
-					items={gradeYearOptions}
-					value={formik.values.gradeYear}
-					onChange={formik.handleChange("gradeYear")}
+					items={educationLevelOptions}
+					value={formik.values.educationLevel}
+					onChange={formik.handleChange("educationLevel")}
 					placeholder="Education Level"
 					label="Education Level"
-					touched={formik.touched.gradeYear}
-					error={formik.errors.gradeYear}
+					touched={formik.touched.educationLevel}
+					error={formik.errors.educationLevel}
 					required
 				/>
-
-				{/* GRADE YEAR */}
-				{/* <Text style={styles.label}>Grade Year *</Text>
-				<DropDownPicker
-					open={formik.values.gradeOpen}
-					value={formik.values.gradeYear}
-					items={formik.values.gradeItems}
-					setOpen={(open) => formik.setFieldValue("gradeOpen", open)}
-					setValue={(callback) =>
-						formik.setFieldValue("gradeYear", callback(formik.values.gradeYear))
-					}
-					style={styles.dropdown}
-				/> */}
 
 				{/* COURSE */}
 				{isCollegeOrSenior && (
@@ -100,6 +101,9 @@ const EducationFormScreen = () => {
 						placeholder="Enter Course"
 						value={formik.values.course}
 						onChangeText={formik.handleChange("course")}
+						onBlur={() => formik.setFieldTouched("course")}
+						error={formik.errors.course}
+						required
 					/>
 				)}
 
@@ -119,7 +123,10 @@ const EducationFormScreen = () => {
 					</Text>
 					<ModernSwitch
 						value={formik.values.isCurrent}
-						onValueChange={(val) => formik.setFieldValue("isCurrent", val)}
+						onValueChange={(val) => {
+							if (val) formik.setFieldValue("endDate", "");
+							formik.setFieldValue("isCurrent", val);
+						}}
 					/>
 				</View>
 

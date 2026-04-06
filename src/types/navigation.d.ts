@@ -46,8 +46,14 @@ export type AppRouteProp<T extends keyof AppStackParamList> = RouteProp<
 // -----------------------------
 export type UserStackParamList = {
 	UserForm: { id?: number; onSuccess?: () => void } | undefined;
-	EducationFormScreen: { id: number; onSuccess?: () => void } | undefined;
+	EducationFormScreen:
+		| { accountId: number; schoolId?: number; onSuccess?: () => void }
+		| undefined;
 	UserDetailScreen: { id: number; hasEditedUser: () => void };
+	SchoolListScreen: {
+		onSelect: (id: number, fullName: string) => void;
+	};
+	SchoolFormScreen: { id: number } | undefined;
 	DleaderScreen: {
 		id: number;
 		gender: Gender;
@@ -106,7 +112,7 @@ export type OtherStackParamList = {
 		enrolledCount: number;
 		graduatesCount: number;
 	};
-	SchoolFormScreen: { id?: number } | undefined;
+	SchoolFormScreen: { id: number } | undefined;
 };
 
 export type OtherNavigationProp<

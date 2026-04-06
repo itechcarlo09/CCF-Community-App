@@ -5,15 +5,20 @@ import { getAcronym } from "src/utils/stringUtils";
 
 interface Props {
 	item: SchoolItemUI;
-	onPress?: (id: number) => void;
+	onPress?: (item: SchoolItemUI) => void;
+	isCountsShown: boolean;
 }
 
-const SchoolCard: React.FC<Props> = ({ item, onPress }) => {
+const SchoolCard: React.FC<Props> = ({
+	item,
+	onPress,
+	isCountsShown = true,
+}) => {
 	return (
 		<TouchableOpacity
 			style={styles.card}
 			activeOpacity={0.8}
-			onPress={() => onPress && onPress(item.id)}
+			onPress={() => onPress && onPress(item)}
 		>
 			{/* Logo */}
 			<View style={styles.logoContainer}>
@@ -40,19 +45,21 @@ const SchoolCard: React.FC<Props> = ({ item, onPress }) => {
 			</View>
 
 			{/* Right Stats */}
-			<View style={styles.stats}>
-				<View style={styles.statItem}>
-					<Text style={styles.statValue}>{item.currentCount}</Text>
-					<Text style={styles.statLabel}>Students</Text>
-				</View>
+			{isCountsShown && (
+				<View style={styles.stats}>
+					<View style={styles.statItem}>
+						<Text style={styles.statValue}>{item.currentCount}</Text>
+						<Text style={styles.statLabel}>Students</Text>
+					</View>
 
-				<View style={styles.divider} />
+					<View style={styles.divider} />
 
-				<View style={styles.statItem}>
-					<Text style={styles.statValue}>{item.alumniCount}</Text>
-					<Text style={styles.statLabel}>Alumni</Text>
+					<View style={styles.statItem}>
+						<Text style={styles.statValue}>{item.alumniCount}</Text>
+						<Text style={styles.statLabel}>Alumni</Text>
+					</View>
 				</View>
-			</View>
+			)}
 		</TouchableOpacity>
 	);
 };

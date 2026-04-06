@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import {
 	View,
 	Text,
@@ -64,59 +64,34 @@ const UserDetailScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
 	const { id, hasEditedUser } = route.params;
-	const { loading, user, refreshUser, formik } = useUserForm({ userId: id });
-	const [mappedUser, setMappedUser] = useState<RecordItemUI>();
-	const [mappedDMembers, setMappedDMembers] = useState<RecordItemUI[]>();
-	const hasMember = user && user.dGroupMembers && user.dGroupMembers.length > 0;
-	const educations =
-		user && user.education && user.education.length > 0
-			? sortByEndDate(user.education)
-			: [];
-	const employments =
-		user && user.employment && user.employment.length > 0
-			? sortByEndDate(user.employment)
-			: [];
 
-	useEffect(() => {
-		user ? setMappedUser(mapUserToUI(user)) : null;
-		// hasMember &&
-		// 	setMappedDMembers(
-		// 		user.dGroupMembers?.map((e) => {
-		// 			return {
-		// 				...mapUserToUI({
-		// 					id: e.id,
-		// 					firstName: e.firstName,
-		// 					lastName: e.lastName,
-		// 					middleName: e.middleName,
-		// 				}),
-		// 				membershipType: "DMember",
-		// 			};
-		// 		}),
-		// 	);
-	}, [user]);
+	// Load user & refresh
+	const { loading, user, refreshUser, formik } = useUserForm({ userId: id });
+
+	// Map user to UI
+	const mappedUser = user ? mapUserToUI(user) : undefined;
+
+	// Derive educations and employments directly
+	const educations = user?.education ? sortByEndDate(user.education) : [];
+	const employments = user?.employment ? sortByEndDate(user.employment) : [];
 
 	const handleAssignDLeader = useCallback(() => {
 		const gender = normalizeGender(user?.gender);
-		const parsedId = Number(id);
-		const safeId = !isNaN(parsedId) ? parsedId : NOID;
-
-		if (!gender) return; // optionally show Toast
+		const safeId = Number(id) || NOID;
+		if (!gender) return;
 
 		navigation.navigate("DleaderScreen", {
 			id: safeId,
 			gender,
-			onSelect: (selectedId: number) => {
+			onSelect: async (selectedId: number) => {
 				formik.setFieldValue("dLeaderID", selectedId);
-				formik.submitForm().then(() => {
-					refreshUser();
-				});
+				await formik.submitForm();
+				await refreshUser(); // refresh user to get updated leader
 			},
 		});
-	}, [user?.gender, id, navigation, formik]);
+	}, [user?.gender, id, navigation, formik, refreshUser]);
 
-	if (loading) {
-		return <Loading />;
-	}
+	if (loading) return <Loading />;
 
 	return (
 		<View style={styles.container}>
@@ -128,24 +103,20 @@ const UserDetailScreen = () => {
 						size={48}
 						fallbackText={mappedUser?.fallbackText}
 					/>
-
 					<View>
 						<Text style={styles.title}>Account Details</Text>
 						<Text style={styles.nameSmall}>{mappedUser?.fullName}</Text>
 					</View>
 				</View>
-
 				<MdiIcon
 					path={mdiPencil}
 					size={22}
 					onPress={() => {
 						navigation.navigate("UserForm", {
 							id,
-							onSuccess: () => {
-								if (hasEditedUser) {
-									hasEditedUser();
-								}
-								refreshUser();
+							onSuccess: async () => {
+								await refreshUser();
+								hasEditedUser?.();
 							},
 						});
 					}}
@@ -156,7 +127,6 @@ const UserDetailScreen = () => {
 				{/* PERSONAL INFO */}
 				<View style={styles.section}>
 					<Text style={styles.sectionTitle}>Personal Info</Text>
-
 					<Text style={styles.name}>{mappedUser?.completeName}</Text>
 
 					<View style={styles.row}>
@@ -183,14 +153,12 @@ const UserDetailScreen = () => {
 
 					<View style={styles.row}>
 						<MdiIcon path={mdiEmailOutline} size={18} />
-						<Text style={styles.text}>{user ? user.email : ""}</Text>
+						<Text style={styles.text}>{user?.email ?? "N/A"}</Text>
 					</View>
 
 					<View style={styles.row}>
 						<MdiIcon path={mdiFacebook} size={18} />
-						<Text style={styles.text}>
-							{user?.facebookLink ? user?.facebookLink : "N/A"}
-						</Text>
+						<Text style={styles.text}>{user?.facebookLink ?? "N/A"}</Text>
 					</View>
 				</View>
 
@@ -215,20 +183,6 @@ const UserDetailScreen = () => {
 							onPress={handleAssignDLeader}
 						/>
 					</View>
-					{/* // TODO: Implement Members Lazy Load */}
-					{/* MEMBERS */}
-					{/* <View style={styles.membersHeader}>
-						<Text style={styles.subSectionTitle}>
-							Members ({dMembers.length})
-						</Text>
-					</View>
-
-					{dMembers.map((member) => (
-						<View key={member.id} style={styles.listItem}>
-							<MdiIcon path={mdiAccountCircleOutline} size={18} />
-							<Text style={styles.text}>{member.name}</Text>
-						</View>
-					))} */}
 				</View>
 
 				{/* EMERGENCY */}
@@ -238,7 +192,7 @@ const UserDetailScreen = () => {
 					<View style={styles.row}>
 						<MdiIcon path={mdiAccountOutline} size={18} />
 						<Text style={styles.text}>
-							{user?.emergencyContactName ? user.emergencyContactName : "N/A"}
+							{user?.emergencyContactName ?? "N/A"}
 						</Text>
 					</View>
 
@@ -256,22 +210,24 @@ const UserDetailScreen = () => {
 				<View style={styles.section}>
 					<View style={styles.sectionHeader}>
 						<Text style={styles.sectionTitle}>Education</Text>
-
 						<MdiIcon
 							path={mdiPlusCircleOutline}
 							size={20}
-							onPress={() => navigation.navigate("EducationFormScreen")}
+							onPress={() =>
+								navigation.navigate("EducationFormScreen", {
+									accountId: id,
+									onSuccess: refreshUser,
+								})
+							}
 						/>
 					</View>
 
 					{educations.map((edu, index) => (
 						<View key={index} style={styles.listItem}>
 							<MdiIcon path={mdiSchoolOutline} size={18} />
-
 							<View style={{ flex: 1 }}>
 								<Text style={styles.textBold}>{edu.school.name}</Text>
 								{edu.course && <Text style={styles.subText}>{edu.course}</Text>}
-
 								<Text style={styles.yearText}>
 									{formatDateRangeFromDate(edu.startDate, edu.endDate)}
 								</Text>
@@ -279,7 +235,13 @@ const UserDetailScreen = () => {
 							<MdiIcon
 								path={mdiPencil}
 								size={18}
-								onPress={() => navigation.navigate("EducationFormScreen")}
+								onPress={() =>
+									navigation.navigate("EducationFormScreen", {
+										accountId: id,
+										schoolId: edu.school.id,
+										onSuccess: refreshUser,
+									})
+								}
 							/>
 						</View>
 					))}
@@ -289,7 +251,6 @@ const UserDetailScreen = () => {
 				<View style={styles.section}>
 					<View style={styles.sectionHeader}>
 						<Text style={styles.sectionTitle}>Employment</Text>
-
 						<TouchableOpacity style={styles.addBtn}>
 							<MdiIcon path={mdiPlusCircleOutline} size={20} />
 						</TouchableOpacity>
@@ -301,7 +262,6 @@ const UserDetailScreen = () => {
 							<View style={{ flex: 1 }}>
 								<Text style={styles.textBold}>{job.position}</Text>
 								<Text style={styles.subText}>{job.company.name}</Text>
-
 								<Text style={styles.yearText}>
 									{formatDateRangeFromDate(job.startDate, job.endDate)}
 								</Text>
@@ -322,45 +282,13 @@ export default UserDetailScreen;
    STYLES
 ======================= */
 const styles = StyleSheet.create({
-	actionText: {
-		fontSize: 13,
-		fontWeight: "600",
-		color: "#2563EB",
-	},
-	emptyLeaderContainer: {
-		paddingVertical: 8,
-	},
-
-	emptyText: {
-		fontSize: 13,
-		color: "#9CA3AF",
-		marginBottom: 6,
-	},
-
-	assignBtn: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 6,
-	},
-
-	assignText: {
-		fontSize: 13,
-		fontWeight: "600",
-		color: "#2563EB",
-	},
-
-	profileContainer: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 12,
-	},
-
-	yearText: {
-		fontSize: 12,
-		color: "#9CA3AF",
-		marginTop: 2,
-	},
-
+	actionText: { fontSize: 13, fontWeight: "600", color: "#2563EB" },
+	emptyLeaderContainer: { paddingVertical: 8 },
+	emptyText: { fontSize: 13, color: "#9CA3AF", marginBottom: 6 },
+	assignBtn: { flexDirection: "row", alignItems: "center", gap: 6 },
+	assignText: { fontSize: 13, fontWeight: "600", color: "#2563EB" },
+	profileContainer: { flexDirection: "row", alignItems: "center", gap: 12 },
+	yearText: { fontSize: 12, color: "#9CA3AF", marginTop: 2 },
 	subSectionTitle: {
 		fontSize: 13,
 		fontWeight: "600",
@@ -368,101 +296,50 @@ const styles = StyleSheet.create({
 		marginTop: 6,
 		marginBottom: 4,
 	},
-
-	membersHeader: {
-		marginTop: 10,
-	},
-
-	nameSmall: {
-		fontSize: 13,
-		color: "#6B7280",
-	},
-
+	membersHeader: { marginTop: 10 },
+	nameSmall: { fontSize: 13, color: "#6B7280" },
 	container: {
 		flex: 1,
 		backgroundColor: "#F9FAFB",
 		paddingHorizontal: 16,
 		paddingTop: 12,
 	},
-
 	header: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 		marginBottom: 10,
 	},
-
-	title: {
-		fontSize: 20,
-		fontWeight: "700",
-		color: "#111827",
-	},
-
-	iconBtn: {
-		padding: 6,
-		borderRadius: 20,
-		backgroundColor: "#E5E7EB",
-	},
-
+	title: { fontSize: 20, fontWeight: "700", color: "#111827" },
+	iconBtn: { padding: 6, borderRadius: 20, backgroundColor: "#E5E7EB" },
 	section: {
 		backgroundColor: "#FFFFFF",
 		borderRadius: 12,
 		padding: 14,
 		marginBottom: 12,
 	},
-
 	sectionHeader: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 		marginBottom: 8,
 	},
-
 	sectionTitle: {
 		fontSize: 14,
 		fontWeight: "600",
 		color: "#6B7280",
 		marginBottom: 6,
 	},
-
-	name: {
-		fontSize: 18,
-		fontWeight: "700",
-		color: "#111827",
-		marginBottom: 6,
-	},
-
-	row: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
-		marginBottom: 6,
-	},
-
-	text: {
-		fontSize: 14,
-		color: "#374151",
-	},
-
-	textBold: {
-		fontSize: 14,
-		fontWeight: "600",
-		color: "#111827",
-	},
-
-	subText: {
-		fontSize: 12,
-		color: "#6B7280",
-	},
-
+	name: { fontSize: 18, fontWeight: "700", color: "#111827", marginBottom: 6 },
+	row: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 6 },
+	text: { fontSize: 14, color: "#374151" },
+	textBold: { fontSize: 14, fontWeight: "600", color: "#111827" },
+	subText: { fontSize: 12, color: "#6B7280" },
 	listItem: {
 		flexDirection: "row",
 		gap: 10,
 		marginBottom: 10,
 		alignItems: "center",
 	},
-
-	addBtn: {
-		padding: 4,
-	},
+	addBtn: { padding: 4 },
 });

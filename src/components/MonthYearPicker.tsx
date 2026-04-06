@@ -133,6 +133,7 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
 						onChange={handleMonthChange}
 						placeholder="Month"
 						touched={touched}
+						isBorderError={!!error}
 					/>
 				</View>
 				<View style={styles.dropdownContainer}>
@@ -143,6 +144,7 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
 						onChange={handleYearChange}
 						placeholder="Year"
 						touched={touched}
+						isBorderError={!!error}
 					/>
 				</View>
 			</View>

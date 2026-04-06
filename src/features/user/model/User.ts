@@ -9,10 +9,10 @@ export interface SchoolDTO {
 }
 
 export interface EducationDTO {
-	gradeYear: string;
-	course: string | null;
-	startDate: string;
-	endDate?: string;
+	educationLevel: string;
+	course?: string;
+	startDate: Date;
+	endDate?: Date;
 	school: SchoolDTO;
 }
 
@@ -55,8 +55,12 @@ export interface UserDTO {
 	isActive: boolean;
 	emergencyContactName?: string;
 	emergencyContactNumber?: string;
-	education?: EducationDTO[];
+	education: EducationDTO[];
 	employment?: EmploymentDTO[];
+}
+
+export interface AddEducationDTO {
+	accountId: number;
 }
 
 export interface CreateAccountDTO {
@@ -80,3 +84,4 @@ export interface CreateAccountBasicInfoDTO {
 }
 
 export type GetUserResponse = PaginatedResponse<UserDTO>;
+export { Gender };

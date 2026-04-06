@@ -20,11 +20,11 @@ interface DropdownProps {
 	onChange: (value: any) => void;
 	placeholder?: string;
 	label?: string;
-	title?: string; // 👈 modal title
+	title?: string;
 	error?: string;
+	isBorderError?: boolean;
 	touched?: boolean;
 	required?: boolean;
-	helperText?: string;
 }
 
 export const Dropdown: React.FC<DropdownProps> = ({
@@ -36,8 +36,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
 	title,
 	error,
 	touched,
+	isBorderError: isError = false,
 	required = false,
-	helperText,
 }) => {
 	const [open, setOpen] = useState(false);
 	const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
@@ -59,18 +59,17 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
 			{/* Input */}
 			<TouchableOpacity
-				style={[styles.input, touched && error && { borderColor: "#EF4444" }]}
+				style={[
+					styles.input,
+					touched && error && { borderColor: "#EF4444" },
+					isError && { borderColor: "#EF4444" },
+				]}
 				onPress={() => setOpen(true)}
 			>
 				<Text style={selectedLabel ? styles.value : styles.placeholder}>
 					{selectedLabel || placeholder}
 				</Text>
 			</TouchableOpacity>
-
-			{/* Helper */}
-			{!error && helperText && (
-				<Text style={styles.helperText}>{helperText}</Text>
-			)}
 
 			{/* Error */}
 			{touched && error && <Text style={styles.errorText}>{error}</Text>}

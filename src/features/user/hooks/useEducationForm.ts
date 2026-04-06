@@ -1,54 +1,55 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import EducationLevel, { gradeYearOptions } from "src/types/enums/GradeYear";
 import { useEducationViewModel } from "../viewModel/useEducationViewModel";
-import { EducationDTO, SchoolDTO } from "../model/user";
 import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
+import EducationLevel from "src/types/enums/EducationLevel";
 
 interface UseEducationFormProps {
 	educationId?: number;
+	accountId: number;
 	onSuccess?: () => void;
 }
 
 // 🔽 Initial Values
 const initialValues = {
-	accountId: -1,
 	schoolId: -1,
-	gradeYear: "" as EducationLevel | "",
+	educationLevel: "" as EducationLevel,
 	course: "",
 	startDate: "",
 	endDate: "",
 	isCurrent: false,
-	gradeOpen: false,
-	gradeItems: gradeYearOptions,
 };
 
-const seniorOrCollege: EducationLevel[] = [
-	EducationLevel.Grade11,
-	EducationLevel.Grade12,
-	EducationLevel.FirstYearCollege,
-	EducationLevel.SecondYearCollege,
-	EducationLevel.ThirdYearCollege,
-	EducationLevel.FourthYearCollege,
-	EducationLevel.FifthYearCollege,
-	EducationLevel.UnderGraduate,
-	EducationLevel.Graduated,
+const seniorOrCollegeKeys: (keyof typeof EducationLevel)[] = [
+	"College",
+	"Doctoral",
+	"Masteral",
+	"SeniorHigh",
 ];
 
 // 🔽 Validation Schema
 export const validationSchema = Yup.object({
-	accountId: Yup.number().required("Account is required"),
-	schoolId: Yup.number().required("School is required"),
-	gradeYear: Yup.mixed<EducationLevel>()
-		.oneOf(Object.values(EducationLevel))
-		.required("Grade Year is required"),
-	course: Yup.string().when("gradeYear", {
-		is: (gradeYear: any) => seniorOrCollege.includes(gradeYear),
+	schoolId: Yup.number()
+		.required("School is required")
+		.test(
+			"valid-school",
+			"School is required",
+			(value) => value !== undefined && value > 0,
+		),
+	educationLevel: Yup.mixed<keyof typeof EducationLevel>()
+		.oneOf(
+			Object.keys(EducationLevel) as (keyof typeof EducationLevel)[],
+			"Education Level is required",
+		)
+		.required("Education Level is required"),
+	course: Yup.string().when("educationLevel", {
+		is: (educationLevel: keyof typeof EducationLevel) =>
+			seniorOrCollegeKeys.includes(educationLevel),
 		then: (schema) => schema.required("Course is required"),
 		otherwise: (schema) => schema.notRequired(),
 	}),
@@ -71,6 +72,7 @@ export const validationSchema = Yup.object({
 
 export const useEducationForm = ({
 	educationId,
+	accountId,
 	onSuccess,
 }: UseEducationFormProps) => {
 	const navigation = useNavigation();
@@ -84,6 +86,8 @@ export const useEducationForm = ({
 		initialValues,
 		validationSchema,
 		enableReinitialize: true,
+		validateOnBlur: true,
+		validateOnChange: false,
 		onSubmit: async (values) => {
 			try {
 				setLoading(true);
@@ -93,12 +97,19 @@ export const useEducationForm = ({
 
 					await updateEducation(educationId.toString(), payload);
 				} else {
-					const payload: CreateEducationDTO = {
-						schoolId: 0,
-						gradeYear: EducationLevel.PreSchool,
-						startYear: 0,
-						...(values.course && { course: values.course }),
-						...(values.endDate && { endYear: parseInt(values.endDate) }),
+					const payload: CreateEducationListDTO = {
+						accountId,
+						educations: [
+							{
+								schoolId: values.schoolId,
+								educationLevel: values.educationLevel,
+								startDate: dayjs(values.startDate).toDate(),
+								...(values.course && { course: values.course }),
+								...(values.endDate && {
+									endDate: dayjs(values.endDate).toDate(),
+								}),
+							},
+						],
 					};
 					await addEducation(payload);
 				}
@@ -129,13 +140,11 @@ export const useEducationForm = ({
 
 				formik.setValues({
 					school: data.school ?? null,
-					gradeYear: data.gradeYear ?? "",
+					educationLevel: data.educationLevel ?? "",
 					course: data.course ?? "",
 					startYear: data.startYear?.toString() ?? "",
 					endYear: data.endYear?.toString() ?? "",
 					isCurrent: !!data.isCurrent,
-					gradeOpen: false,
-					gradeItems: gradeYearOptions,
 				});
 			} catch {
 				Alert.alert("Error", "Failed to load education");

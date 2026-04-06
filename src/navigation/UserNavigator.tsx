@@ -1,11 +1,11 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import UserFormScreen from "../features/user/view/UserFormScreen";
 import DleaderScreen from "../features/user/view/DleaderScreen";
-import UserDetailsScreen from "../features/user/view/UserDetailsScreen";
 import UserDetailScreen from "src/features/user/view/UserDetailScreen";
 import UserDetailFormScreen from "src/features/user/view/UserDetailFormScreen";
 import EducationFormScreen from "src/features/user/view/UserEducationFormScreen";
+import { SchoolListScreen } from "src/features/schools/view/SchoolListScreen";
+import SchoolFormScreen from "src/features/schools/view/SchoolFormScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +19,8 @@ export default function UserNavigator() {
 			/>
 			<Stack.Screen name="UserDetailsScreen" component={UserDetailScreen} />
 			<Stack.Screen name="DleaderScreen" component={DleaderScreen} />
+			<Stack.Screen name="SchoolListScreen" component={SchoolListScreen} />
+			<Stack.Screen name="SchoolFormScreen" component={SchoolFormScreen} />
 		</Stack.Navigator>
 	);
 }

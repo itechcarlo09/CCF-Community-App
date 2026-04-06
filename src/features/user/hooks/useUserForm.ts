@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react";
-import { Formik, useFormik } from "formik";
+import { useEffect } from "react";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
-import { useNavigation } from "@react-navigation/native";
-import { Alert } from "react-native";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { CreateAccountBasicInfoDTO, UserDTO } from "../model/user";
-import {
-	formatFullName,
-	formatPhoneNumber,
-	normalizePHNumber,
-} from "../../../utils/stringUtils";
-import UserType from "../../../types/enums/UserType";
-import topUsers from "../topUsers.json";
-import { Gender } from "src/types/enums/Gender";
+import { CreateAccountBasicInfoDTO, UserDTO, Gender } from "../model/user";
+import { useAccountQuery } from "./useAccountQuery";
+import EducationLevel from "src/types/enums/EducationLevel";
+import { CreateEducationDTO } from "../model/Education";
 
 interface UseUserFormProps {
 	userId?: number;
 	onSuccess?: () => void;
 }
 
-// 🔽 Initial Values
 const initialValues = {
 	firstName: "",
 	middleName: "",
@@ -34,164 +27,148 @@ const initialValues = {
 	facebook: "",
 	emergencyPerson: "",
 	emergencyNumber: "",
+	education: [] as CreateEducationDTO[],
 };
 
-// 🔽 Validation
 const validationSchema = Yup.object({
 	firstName: Yup.string().required("First name is required"),
 	lastName: Yup.string().required("Last name is required"),
 	birthdate: Yup.date().required("Birthdate is required"),
 	gender: Yup.string().required("Gender is required"),
 	email: Yup.string().email("Invalid email").required("Email is required"),
-
 	contactNumber: Yup.string()
 		.nullable()
 		.notRequired()
 		.matches(/^\d{3}-\d{3}-\d{4}$/, "Format: 999-999-9999")
-		.test("starts-with-9", "Must start with 9", (value) => {
-			if (!value) return true;
-			return value.replace(/\D/g, "").startsWith("9");
-		}),
-
+		.test(
+			"starts-with-9",
+			"Must start with 9",
+			(value) => !value || value.replace(/\D/g, "").startsWith("9"),
+		),
 	emergencyNumber: Yup.string()
 		.nullable()
 		.notRequired()
 		.matches(/^\d{3}-\d{3}-\d{4}$/, "Format: 999-999-9999")
-		.test("starts-with-9", "Must start with 9", (value) => {
-			if (!value) return true;
-			return value.replace(/\D/g, "").startsWith("9");
-		}),
+		.test(
+			"starts-with-9",
+			"Must start with 9",
+			(value) => !value || value.replace(/\D/g, "").startsWith("9"),
+		),
 });
 
 export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
-	const navigation = useNavigation();
-	const { addUser, updateUser, getUser } = useUserViewModel();
+	const queryClient = useQueryClient();
+	const { addUser, updateUser } = useUserViewModel();
+	const { data: user, isLoading, refetch } = useAccountQuery(userId);
 
-	const [loading, setLoading] = useState(false);
-	const [user, setUser] = useState<UserDTO | null>(null);
+	// 🔹 ADD USER MUTATION
+	const addUserMutation = useMutation<
+		UserDTO,
+		Error,
+		CreateAccountBasicInfoDTO
+	>({
+		mutationFn: async (data) => {
+			const result = await addUser(data);
+			if (!result) throw new Error("Failed to create user");
+			return result;
+		},
+		onSuccess: (newUser) => {
+			queryClient.setQueryData(["user", newUser.id], newUser);
+			onSuccess?.();
+		},
+	});
 
+	// 🔹 UPDATE USER MUTATION
+	const updateUserMutation = useMutation<
+		void,
+		Error,
+		{ id: number; data: Partial<CreateAccountBasicInfoDTO> }
+	>({
+		mutationFn: ({ id, data }) => updateUser(id, data),
+		onSuccess: async () => {
+			if (userId) {
+				await queryClient.invalidateQueries({ queryKey: ["user", userId] });
+			}
+			onSuccess?.();
+		},
+	});
+
+	// 🔹 FORM
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
 		enableReinitialize: true,
 		validateOnBlur: true,
 		validateOnChange: false,
-
 		onSubmit: async (values) => {
-			try {
-				setLoading(true);
-				if (userId) {
-					const payload: Partial<CreateAccountBasicInfoDTO> = {};
+			const payload: Partial<CreateAccountBasicInfoDTO> = {
+				firstName: values.firstName,
+				lastName: values.lastName,
+				email: values.email,
+				gender: values.gender as Gender,
+				birthDate: dayjs(values.birthdate).toDate(),
+				...(values.middleName && { middleName: values.middleName }),
+				...(values.nickname && { nickName: values.nickname }),
+				...(values.profilePicture && {
+					profilePicture: values.profilePicture,
+				}),
+				...(values.contactNumber && { contactNumber: values.contactNumber }),
+				...(values.facebook && { facebookLink: values.facebook }),
+				...(values.emergencyPerson && {
+					emergencyContactName: values.emergencyPerson,
+				}),
+				...(values.emergencyNumber && {
+					emergencyContactNumber: values.emergencyNumber,
+				}),
+			};
 
-					if (values.firstName) payload.firstName = values.firstName;
-					if (values.middleName) payload.middleName = values.middleName;
-					if (values.lastName) payload.lastName = values.lastName;
-					if (values.nickname) payload.nickName = values.nickname;
-					if (values.profilePicture)
-						payload.profilePicture = values.profilePicture;
-					if (values.facebook) payload.facebookLink = values.facebook;
-					if (values.contactNumber)
-						payload.contactNumber = values.contactNumber;
-					if (values.email) payload.email = values.email;
-					if (values.gender) payload.gender = values.gender as Gender;
-					if (values.birthdate)
-						payload.birthDate = dayjs(values.birthdate).toDate();
-					if (values.emergencyPerson)
-						payload.emergencyContactName = values.emergencyPerson;
-					if (values.emergencyNumber)
-						payload.emergencyContactNumber = values.emergencyNumber;
-
-					await updateUser(userId, payload);
-				} else {
-					await addUser({
-						firstName: values.firstName,
-						lastName: values.lastName,
-						email: values.email,
-						gender: values.gender as Gender,
-						birthDate: new Date(values.birthdate),
-						userType: UserType.Member,
-
-						...(values.middleName && { middleName: values.middleName }),
-						...(values.nickname && { nickName: values.nickname }),
-						...(values.profilePicture && {
-							profilePicture: values.profilePicture,
-						}),
-						...(values.contactNumber && {
-							contactNumber: values.contactNumber,
-						}),
-						...(values.facebook && { facebookLink: values.facebook }),
-						...(values.emergencyPerson && {
-							emergencyContactName: values.emergencyPerson,
-						}),
-						...(values.emergencyNumber && {
-							emergencyContactNumber: values.emergencyNumber,
-						}),
-					});
-				}
-
-				onSuccess?.();
-			} catch (error) {
-				Alert.alert("Error", `Failed to ${userId ? "update" : "create"} user`);
-			} finally {
-				setLoading(false);
+			if (userId) {
+				await updateUserMutation.mutateAsync({ id: userId, data: payload });
+			} else {
+				await addUserMutation.mutateAsync(payload as CreateAccountBasicInfoDTO);
 			}
 		},
 	});
 
-	// 🔽 Load user (Edit mode)
+	// 🔹 LOAD USER
 	useEffect(() => {
-		if (!userId) return;
-
-		const loadUser = async () => {
-			try {
-				setLoading(true);
-				const data = await getUser(userId.toString());
-
-				if (!data) return;
-
-				setUser(data);
-				const topUser = topUsers.find(
-					(topUser) => topUser.email === data.email,
-				);
-
-				formik.setValues({
-					firstName: data.firstName || "",
-					middleName: data.middleName || "",
-					lastName: data.lastName || "",
-					nickname: data.nickname || "",
-					profilePicture: data.profilePicture || "",
-					birthdate: data.birthDate
-						? dayjs(data.birthDate).format("YYYY-MM-DD")
-						: "",
-					gender: data.gender || "",
-					contactNumber: data.contactNumber || "",
-					email: data.email || "",
-					facebook: data.facebookLink || "",
-					emergencyPerson: data.emergencyContactName || "",
-					emergencyNumber: data.emergencyContactNumber || "",
-				});
-			} catch {
-				Alert.alert("Error", "Failed to load user");
-				navigation.goBack();
-			} finally {
-				setLoading(false);
-			}
+		if (!user) return;
+		console.log("reload user");
+		const loadUser = () => {
+			formik.setValues({
+				firstName: user.firstName || "",
+				middleName: user.middleName || "",
+				lastName: user.lastName || "",
+				nickname: user.nickname || "",
+				profilePicture: user.profilePicture || "",
+				birthdate: user.birthDate
+					? dayjs(user.birthDate).format("YYYY-MM-DD")
+					: "",
+				gender: user.gender || "",
+				contactNumber: user.contactNumber || "",
+				email: user.email || "",
+				facebook: user.facebookLink || "",
+				emergencyPerson: user.emergencyContactName || "",
+				emergencyNumber: user.emergencyContactNumber || "",
+				education: user.education.map((edu) => {
+					return {
+						schoolId: edu.school.id,
+						educationLevel: edu.educationLevel as EducationLevel,
+						course: edu.course,
+						startDate: edu.startDate,
+						endDate: edu.endDate,
+					};
+				}),
+			});
 		};
 
 		loadUser();
-	}, [userId]);
-
-	// 🔽 Refresh (optional)
-	const refreshUser = async () => {
-		if (!userId) return;
-		const data = await getUser(userId.toString());
-		if (data) setUser(data);
-	};
+	}, [user]);
 
 	return {
 		formik,
-		loading,
+		isLoading,
 		user,
-		refreshUser,
+		refreshUser: refetch,
 	};
 };

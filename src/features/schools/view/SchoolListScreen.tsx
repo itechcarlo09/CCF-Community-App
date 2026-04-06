@@ -13,14 +13,26 @@ import { Separator } from "@components/Separator";
 import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
 import SchoolCard from "./components/SchoolListItem";
 import useDebounce from "src/features/user/hooks/useDebounce";
-import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { OtherStackParamList } from "src/types/navigation";
+import { UserStackParamList, OtherStackParamList } from "src/types/navigation";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { SchoolItemUI } from "../model/SchoolListItem";
 
-type NavProp = NativeStackNavigationProp<OtherStackParamList>;
+type SchoolRouteProp = RouteProp<
+	OtherStackParamList | UserStackParamList,
+	"SchoolListScreen"
+>;
+type NavProp = NativeStackNavigationProp<
+	OtherStackParamList | UserStackParamList
+>;
+type OtherStackNavProp = NativeStackNavigationProp<OtherStackParamList>;
 
 export const SchoolListScreen = () => {
 	const navigation = useNavigation<NavProp>();
+	const otherNavigation = useNavigation<OtherStackNavProp>();
+	const route = useRoute<SchoolRouteProp>();
+	const { onSelect } = route.params || {};
+
 	const {
 		schools,
 		refresh,
@@ -51,6 +63,19 @@ export const SchoolListScreen = () => {
 		navigation.navigate("SchoolFormScreen", id ? { id } : undefined);
 	};
 
+	const handleSelect = (item: SchoolItemUI) => {
+		if (onSelect) {
+			onSelect(item.id, `${item.name} ${item.acronym && `- ${item.acronym}`}`);
+			navigation.goBack();
+		} else {
+			otherNavigation.navigate("SchoolDetailsScreen", {
+				id: item.id,
+				enrolledCount: item.currentCount,
+				graduatesCount: item.alumniCount,
+			});
+		}
+	};
+
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
@@ -73,13 +98,8 @@ export const SchoolListScreen = () => {
 					renderItem={({ item }) => (
 						<SchoolCard
 							item={item}
-							onPress={() =>
-								navigation.navigate("SchoolDetailsScreen", {
-									id: item.id,
-									enrolledCount: item.currentCount,
-									graduatesCount: item.alumniCount,
-								})
-							}
+							onPress={handleSelect}
+							isCountsShown={!onSelect}
 						/>
 					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}

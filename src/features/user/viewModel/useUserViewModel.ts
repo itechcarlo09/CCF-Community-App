@@ -129,16 +129,6 @@ export const useUserViewModel = () => {
 		},
 	});
 
-	// 🔽 GET SINGLE USER
-	const getUser = async (id: string): Promise<UserDTO | null> => {
-		try {
-			return await userRepository.getUserById(id);
-		} catch (error) {
-			console.error("Error fetching user:", error);
-			return null;
-		}
-	};
-
 	// 🔽 GET DLEADERS
 	const getDLeaders = async (
 		excludeId: number,
@@ -183,7 +173,6 @@ export const useUserViewModel = () => {
 			updateUserMutation.mutateAsync({ id, data }),
 
 		searchUsers,
-		getUser,
 		getDLeaders,
 		refresh: refreshUsers,
 		loadMoreUsers,

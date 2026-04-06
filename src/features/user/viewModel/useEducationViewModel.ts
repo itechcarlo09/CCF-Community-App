@@ -1,20 +1,24 @@
-import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EducationDTO } from "../model/user";
 import { userRepository } from "../data/userRepository";
-import { CreateEducationDTO } from "../model/Education";
+import { CreateEducationListDTO } from "../model/Education";
 
 export const useEducationViewModel = () => {
 	const queryClient = useQueryClient();
-	const [loading, setLoading] = useState(false);
 
 	// 🔽 ADD EDUCATION
-	const addEducationMutation = useMutation({
-		mutationFn: (education: CreateEducationDTO) =>
-			userRepository.addEducation?.(education),
-		onSuccess: () => {
-			// Optional: invalidate cached education queries if any
-			queryClient.invalidateQueries({ queryKey: ["educations"] });
+	const addEducationMutation = useMutation<
+		number,
+		Error,
+		CreateEducationListDTO
+	>({
+		mutationFn: async (data) => {
+			const accountId = await userRepository.addEducation(data);
+			return accountId.accountId;
+		},
+		onSuccess: (accountId) => {
+			// 2️⃣ Invalidate the user cache to refetch user with updated education
+			queryClient.invalidateQueries({ queryKey: ["user", accountId] });
 		},
 	});
 
@@ -30,7 +34,7 @@ export const useEducationViewModel = () => {
 				updatedAt: new Date(),
 			}),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["educations"] });
+			// queryClient.invalidateQueries({ queryKey: ["educations"] });
 		},
 	});
 
@@ -45,8 +49,6 @@ export const useEducationViewModel = () => {
 	};
 
 	return {
-		loading,
-
 		// Actions
 		addEducation: addEducationMutation.mutateAsync,
 		updateEducation: (id: string, data: Partial<EducationDTO>) =>
