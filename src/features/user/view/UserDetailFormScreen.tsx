@@ -15,6 +15,7 @@ import ChoiceChip from "@components/ChoiceChip";
 import { mapEnumToOptions } from "src/utils/selectionUtils";
 import { Gender } from "src/types/enums/Gender";
 import { ContactInputs } from "@components/ContactInputs";
+import SelectButton from "@components/SelectButton";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -189,20 +190,18 @@ const UserDetailFormScreen = () => {
 						/>
 					</View>
 
-					<View>
-						{/* LEADER */}
-						<Text style={styles.section}>Discipleship</Text>
-						<TouchableOpacity
-							style={styles.leaderButton}
-							onPress={handleAssignDLeader}
-						>
-							<Text style={styles.leaderButtonText}>
-								{formik.values.dLeadersName
-									? `Leader: ${formik.values.dLeadersName}`
-									: "Select Leader"}
-							</Text>
-						</TouchableOpacity>
-					</View>
+					<SelectButton
+						label="Leader"
+						required
+						value={formik.values.dLeadersName}
+						placeholder="Select Leader"
+						onPress={handleAssignDLeader}
+						error={
+							formik.touched.dLeaderID
+								? (formik.errors.dLeaderID as string)
+								: undefined
+						}
+					/>
 				</View>
 			</KeyboardAwareScrollView>
 			{/* SUBMIT */}

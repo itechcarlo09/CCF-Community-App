@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Switch } from "react-native";
+import React, { useMemo } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useNavigation } from "@react-navigation/native";
 
@@ -8,15 +8,16 @@ import Input from "@components/Inputs";
 import Loading from "@components/Loading";
 
 import { useEducationForm } from "../hooks/useEducationForm";
-import { DatePicker } from "@components/DatePicker";
 import dayjs from "dayjs";
-import { Dropdown, MonthYearPicker } from "@components/MonthYearPicker";
+import { MonthYearPicker } from "@components/MonthYearPicker";
 import { ModernSwitch } from "@components/ModernSwitch";
+import { Dropdown } from "@components/Dropdown";
+import { SelectionProps } from "src/types/selectionTypes";
+import EducationLevel from "src/types/enums/GradeYear";
+import SelectButton from "@components/SelectButton";
 
 const EducationFormScreen = () => {
 	const navigation = useNavigation();
-	const [isCurrent, setIsCurrent] = useState(false);
-	const [selectedMonth, setSelectedMonth] = useState();
 	const currentDate = dayjs().toDate();
 
 	const { formik, loading } = useEducationForm({
@@ -28,13 +29,21 @@ const EducationFormScreen = () => {
 		if (!val) return false;
 
 		return (
-			val.includes("Grade11") ||
-			val.includes("Grade12") ||
+			val.includes("Junior High") ||
+			val.includes("Senior High") ||
 			val.includes("College") ||
-			val === "UnderGraduate" ||
-			val === "Graduated"
+			val.includes("Masteral") ||
+			val.includes("Doctoral")
 		);
 	}, [formik.values.gradeYear]);
+
+	console.log("Formik error:", formik.errors);
+
+	const gradeYearOptions: SelectionProps<keyof typeof EducationLevel>[] =
+		Object.entries(EducationLevel).map(([key, value]) => ({
+			label: value,
+			value: key as keyof typeof EducationLevel,
+		}));
 
 	if (loading) return <Loading />;
 
@@ -44,22 +53,32 @@ const EducationFormScreen = () => {
 
 			<KeyboardAwareScrollView contentContainerStyle={styles.content}>
 				{/* SCHOOL SELECT */}
-				<Text style={styles.label}>School *</Text>
-				<TouchableOpacity
-					style={styles.selector}
-					onPress={() => navigation.navigate("SchoolListScreen" as never)}
-				>
-					{/* {selectedSchool ? (
-						<View>
-							<Text style={styles.schoolName}>{selectedSchool.name}</Text>
-							<Text style={styles.schoolSub}>
-								{selectedSchool.acronym} • {selectedSchool.address}
-							</Text>
-						</View>
-					) : ( */}
-					<Text style={styles.placeholder}>Select School</Text>
-					{/* )} */}
-				</TouchableOpacity>
+				<SelectButton
+					label="School"
+					required
+					value={
+						formik.values.schoolId > 0 ? formik.values.schoolId.toString() : ""
+					}
+					placeholder="Select School"
+					onPress={() => {}}
+					error={
+						formik.touched.schoolId
+							? (formik.errors.schoolId as string)
+							: undefined
+					}
+				/>
+
+				<Dropdown
+					title="Education Level"
+					items={gradeYearOptions}
+					value={formik.values.gradeYear}
+					onChange={formik.handleChange("gradeYear")}
+					placeholder="Education Level"
+					label="Education Level"
+					touched={formik.touched.gradeYear}
+					error={formik.errors.gradeYear}
+					required
+				/>
 
 				{/* GRADE YEAR */}
 				{/* <Text style={styles.label}>Grade Year *</Text>
@@ -94,17 +113,18 @@ const EducationFormScreen = () => {
 					required
 				/>
 
-				{/* CURRENTLY STUDYING */}
 				<View style={styles.rowBetween}>
-					<Text style={styles.label}>Currently Studying</Text>
+					<Text style={[styles.label, { marginBottom: 0 }]}>
+						Currently Studying
+					</Text>
 					<ModernSwitch
-						value={isCurrent}
-						onValueChange={(val) => setIsCurrent(val)}
+						value={formik.values.isCurrent}
+						onValueChange={(val) => formik.setFieldValue("isCurrent", val)}
 					/>
 				</View>
 
 				{/* END DATE */}
-				{!isCurrent && (
+				{!formik.values.isCurrent && (
 					<MonthYearPicker
 						label="End Date"
 						value={formik.values.endDate}
@@ -139,6 +159,7 @@ const styles = StyleSheet.create({
 	content: {
 		padding: 16,
 		paddingBottom: 32,
+		rowGap: 8,
 	},
 	label: {
 		fontWeight: "600",
@@ -173,8 +194,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		marginTop: 8,
-		marginBottom: 8,
 	},
 	submitButton: {
 		backgroundColor: "#4F46E5",

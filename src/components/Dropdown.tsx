@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -11,6 +11,7 @@ import {
 interface DropdownItem {
 	label: string;
 	value: any;
+	disabled?: boolean;
 }
 
 interface DropdownProps {
@@ -19,6 +20,7 @@ interface DropdownProps {
 	onChange: (value: any) => void;
 	placeholder?: string;
 	label?: string;
+	title?: string; // 👈 modal title
 	error?: string;
 	touched?: boolean;
 	required?: boolean;
@@ -31,6 +33,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 	onChange,
 	placeholder = "Select",
 	label,
+	title,
 	error,
 	touched,
 	required = false,
@@ -54,46 +57,68 @@ export const Dropdown: React.FC<DropdownProps> = ({
 				</View>
 			)}
 
-			{/* Touchable for dropdown */}
+			{/* Input */}
 			<TouchableOpacity
-				style={[styles.touchable, touched && error && { borderColor: "red" }]}
+				style={[styles.input, touched && error && { borderColor: "#EF4444" }]}
 				onPress={() => setOpen(true)}
 			>
-				<Text style={{ color: selectedLabel ? "#111827" : "#9CA3AF" }}>
+				<Text style={selectedLabel ? styles.value : styles.placeholder}>
 					{selectedLabel || placeholder}
 				</Text>
 			</TouchableOpacity>
 
-			{/* Helper text */}
+			{/* Helper */}
 			{!error && helperText && (
 				<Text style={styles.helperText}>{helperText}</Text>
 			)}
 
-			{/* Error text */}
+			{/* Error */}
 			{touched && error && <Text style={styles.errorText}>{error}</Text>}
 
 			{/* Modal */}
 			<Modal visible={open} transparent animationType="fade">
 				<TouchableOpacity
-					style={styles.modalOverlay}
+					style={styles.overlay}
 					activeOpacity={1}
 					onPress={() => setOpen(false)}
 				>
-					<View style={styles.modalContent}>
+					<View style={styles.modal}>
+						{/* Title */}
+						{title && <Text style={styles.modalTitle}>{title}</Text>}
+
 						<FlatList
 							data={items}
 							keyExtractor={(item) => String(item.value)}
-							renderItem={({ item }) => (
-								<TouchableOpacity
-									style={styles.item}
-									onPress={() => {
-										onChange(item.value);
-										setOpen(false);
-									}}
-								>
-									<Text style={styles.itemText}>{item.label}</Text>
-								</TouchableOpacity>
-							)}
+							renderItem={({ item }) => {
+								const isSelected = item.value === value;
+
+								return (
+									<TouchableOpacity
+										style={[
+											styles.item,
+											isSelected && styles.selectedItem,
+											item.disabled && styles.disabledItem,
+										]}
+										disabled={item.disabled}
+										onPress={() => {
+											onChange(item.value);
+											setOpen(false);
+										}}
+									>
+										<Text
+											style={[
+												styles.itemText,
+												item.disabled && styles.disabledText,
+											]}
+										>
+											{item.label}
+										</Text>
+
+										{/* Checkmark */}
+										{isSelected && <Text style={styles.check}>✓</Text>}
+									</TouchableOpacity>
+								);
+							}}
 						/>
 					</View>
 				</TouchableOpacity>
@@ -103,36 +128,95 @@ export const Dropdown: React.FC<DropdownProps> = ({
 };
 
 const styles = StyleSheet.create({
-	labelRow: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
+	labelRow: { flexDirection: "row", marginBottom: 4 },
 	label: { fontSize: 12, color: "#6B7280" },
-	required: { color: "#EF4444", fontSize: 14, fontWeight: "600" },
-	touchable: {
+	required: { color: "#EF4444", fontWeight: "600" },
+
+	input: {
 		height: 48,
 		borderWidth: 1,
 		borderColor: "#D1D5DB",
-		borderRadius: 8,
-		paddingHorizontal: 10,
+		borderRadius: 10, // 👈 softer
+		paddingHorizontal: 12,
 		justifyContent: "center",
 		backgroundColor: "#FFFFFF",
 	},
-	helperText: { color: "#6B7280", fontSize: 12, marginTop: 4 },
-	errorText: { color: "red", fontSize: 12, marginTop: 4 },
-	modalOverlay: {
+
+	value: {
+		color: "#111827",
+		fontSize: 14,
+	},
+
+	placeholder: {
+		color: "#9CA3AF",
+		fontSize: 14,
+	},
+
+	helperText: {
+		color: "#6B7280",
+		fontSize: 12,
+		marginTop: 4,
+	},
+
+	errorText: {
+		color: "#EF4444",
+		fontSize: 12,
+		marginTop: 4,
+	},
+
+	overlay: {
 		flex: 1,
-		backgroundColor: "rgba(0,0,0,0.2)",
+		backgroundColor: "rgba(0,0,0,0.3)",
 		justifyContent: "center",
-		paddingHorizontal: 20,
+		padding: 20,
 	},
-	modalContent: {
-		backgroundColor: "#fff",
-		borderRadius: 8,
-		maxHeight: "50%",
+
+	modal: {
+		backgroundColor: "#FFFFFF",
+		borderRadius: 16, // 👈 modern
+		maxHeight: "60%",
+		paddingVertical: 8,
+		shadowColor: "#000",
+		shadowOpacity: 0.1,
+		shadowRadius: 10,
+		elevation: 5,
 	},
-	item: {
-		paddingVertical: 12,
+
+	modalTitle: {
+		fontSize: 16,
+		fontWeight: "600",
+		color: "#111827",
 		paddingHorizontal: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: "#E5E7EB",
+		paddingBottom: 8,
 	},
-	itemText: { fontSize: 14, color: "#111827" },
+
+	item: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		paddingVertical: 14,
+		paddingHorizontal: 16,
+	},
+
+	selectedItem: {
+		backgroundColor: "#EFF6FF", // light blue
+	},
+
+	itemText: {
+		fontSize: 14,
+		color: "#111827",
+	},
+
+	check: {
+		color: "#2563EB",
+		fontWeight: "600",
+	},
+
+	disabledItem: {
+		opacity: 0.4,
+	},
+
+	disabledText: {
+		color: "#9CA3AF",
+	},
 });

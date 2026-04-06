@@ -64,37 +64,56 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
 	}, [selectedYear, minDate, maxDate]);
 
 	const handleMonthChange = (month: number) => {
-		const newDate = dayjs(value || new Date())
-			.month(month)
-			.date(1)
-			.toDate();
-		onChange(newDate);
-	};
+		let year = selectedYear ?? new Date().getFullYear();
 
-	const handleYearChange = (year: number) => {
-		// If current month is outside new year bounds, adjust
-		let newMonth = selectedMonth ?? 0;
-
-		if (
-			minDate &&
-			year === dayjs(minDate).year() &&
-			newMonth < dayjs(minDate).month()
-		) {
-			newMonth = dayjs(minDate).month();
+		if (minDate) {
+			const min = dayjs(minDate);
+			if (year === min.year() && month < min.month()) {
+				month = min.month();
+			}
 		}
-		if (
-			maxDate &&
-			year === dayjs(maxDate).year() &&
-			newMonth > dayjs(maxDate).month()
-		) {
-			newMonth = dayjs(maxDate).month();
+
+		if (maxDate) {
+			const max = dayjs(maxDate);
+			if (year === max.year() && month > max.month()) {
+				month = max.month();
+			}
 		}
 
 		const newDate = dayjs(value || new Date())
 			.year(year)
-			.month(newMonth)
+			.month(month)
 			.date(1)
 			.toDate();
+
+		onChange(newDate);
+	};
+
+	const handleYearChange = (year: number) => {
+		let month = selectedMonth ?? 0;
+
+		// 🔽 Clamp against minDate
+		if (minDate) {
+			const min = dayjs(minDate);
+			if (year === min.year() && month < min.month()) {
+				month = min.month();
+			}
+		}
+
+		// 🔽 Clamp against maxDate
+		if (maxDate) {
+			const max = dayjs(maxDate);
+			if (year === max.year() && month > max.month()) {
+				month = max.month();
+			}
+		}
+
+		const newDate = dayjs(value || new Date())
+			.year(year)
+			.month(month)
+			.date(1)
+			.toDate();
+
 		onChange(newDate);
 	};
 
@@ -108,21 +127,21 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
 			<View style={styles.row}>
 				<View style={styles.dropdownContainer}>
 					<Dropdown
+						title="Select Month"
 						items={monthItems}
 						value={selectedMonth}
 						onChange={handleMonthChange}
 						placeholder="Month"
-						error={error}
 						touched={touched}
 					/>
 				</View>
 				<View style={styles.dropdownContainer}>
 					<Dropdown
+						title="Select Year"
 						items={yearItems}
 						value={selectedYear}
 						onChange={handleYearChange}
 						placeholder="Year"
-						error={error}
 						touched={touched}
 					/>
 				</View>

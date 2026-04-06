@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import GradeYear, { gradeYearOptions } from "src/types/enums/GradeYear";
+import EducationLevel, { gradeYearOptions } from "src/types/enums/GradeYear";
 import { useEducationViewModel } from "../viewModel/useEducationViewModel";
 import { EducationDTO, SchoolDTO } from "../model/user";
 import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
@@ -19,7 +19,7 @@ interface UseEducationFormProps {
 const initialValues = {
 	accountId: -1,
 	schoolId: -1,
-	gradeYear: "" as GradeYear | "",
+	gradeYear: "" as EducationLevel | "",
 	course: "",
 	startDate: "",
 	endDate: "",
@@ -28,24 +28,24 @@ const initialValues = {
 	gradeItems: gradeYearOptions,
 };
 
-const seniorOrCollege: GradeYear[] = [
-	GradeYear.Grade11,
-	GradeYear.Grade12,
-	GradeYear.FirstYearCollege,
-	GradeYear.SecondYearCollege,
-	GradeYear.ThirdYearCollege,
-	GradeYear.FourthYearCollege,
-	GradeYear.FifthYearCollege,
-	GradeYear.UnderGraduate,
-	GradeYear.Graduated,
+const seniorOrCollege: EducationLevel[] = [
+	EducationLevel.Grade11,
+	EducationLevel.Grade12,
+	EducationLevel.FirstYearCollege,
+	EducationLevel.SecondYearCollege,
+	EducationLevel.ThirdYearCollege,
+	EducationLevel.FourthYearCollege,
+	EducationLevel.FifthYearCollege,
+	EducationLevel.UnderGraduate,
+	EducationLevel.Graduated,
 ];
 
 // 🔽 Validation Schema
 export const validationSchema = Yup.object({
 	accountId: Yup.number().required("Account is required"),
 	schoolId: Yup.number().required("School is required"),
-	gradeYear: Yup.mixed<GradeYear>()
-		.oneOf(Object.values(GradeYear))
+	gradeYear: Yup.mixed<EducationLevel>()
+		.oneOf(Object.values(EducationLevel))
 		.required("Grade Year is required"),
 	course: Yup.string().when("gradeYear", {
 		is: (gradeYear: any) => seniorOrCollege.includes(gradeYear),
@@ -95,7 +95,7 @@ export const useEducationForm = ({
 				} else {
 					const payload: CreateEducationDTO = {
 						schoolId: 0,
-						gradeYear: GradeYear.PreSchool,
+						gradeYear: EducationLevel.PreSchool,
 						startYear: 0,
 						...(values.course && { course: values.course }),
 						...(values.endDate && { endYear: parseInt(values.endDate) }),
