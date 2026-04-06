@@ -45,24 +45,6 @@ export const userDataSource = {
 		}
 	},
 
-	async searchUsers(
-		params?: GetUsersParams,
-	): Promise<GetUserResponse | undefined> {
-		try {
-			const res = await apiClient.get<GetUserResponse>(
-				`/account/search-by-name`,
-				{
-					params,
-				},
-			);
-			return res.data ?? undefined;
-		} catch (error: any) {
-			console.error("searchUsers error:", error.message ?? error);
-			// Optional: You can throw a custom error or handle it gracefully
-			return undefined;
-		}
-	},
-
 	async addUser(data: CreateAccountBasicInfoDTO): Promise<UserDTO | undefined> {
 		try {
 			console.log("addUser error DataSource:");

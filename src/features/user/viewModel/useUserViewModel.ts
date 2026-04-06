@@ -39,8 +39,6 @@ export const useUserViewModel = () => {
 		queryKey: ["users", search],
 
 		queryFn: async ({ pageParam }): Promise<UsersPage> => {
-			const isSearching = !!search.trim();
-
 			const baseParams = {
 				page: pageParam,
 				pageSize: PAGE_SIZE,
@@ -48,9 +46,10 @@ export const useUserViewModel = () => {
 				sortBy: "lastName",
 			};
 
-			const result = isSearching
-				? await userRepository.searchUsers({ name: search, ...baseParams })
-				: await userRepository.getUsers(baseParams);
+			const result = await userRepository.getUsers?.({
+				...(search.trim() && { search }),
+				...baseParams,
+			});
 
 			return {
 				data: result?.data.map(mapUserToUI) ?? [],
