@@ -37,12 +37,13 @@ import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
 import { NOID } from "src/types/globalTypes";
 import { normalizeGender } from "src/utils/stringUtils";
+import { EducationDTO } from "../model/user";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
 
 type WithEndDate = {
-	endDate?: string | null;
+	endDate?: Date | null;
 };
 
 export const sortByEndDate = <T extends WithEndDate>(data: T[] = []): T[] => {
@@ -66,13 +67,15 @@ const UserDetailScreen = () => {
 	const { id, hasEditedUser } = route.params;
 
 	// Load user & refresh
-	const { loading, user, refreshUser, formik } = useUserForm({ userId: id });
+	const { isLoading, user, refreshUser, formik } = useUserForm({ userId: id });
 
 	// Map user to UI
 	const mappedUser = user ? mapUserToUI(user) : undefined;
 
 	// Derive educations and employments directly
-	const educations = user?.education ? sortByEndDate(user.education) : [];
+	const educations = user?.education
+		? sortByEndDate<EducationDTO>(user.education)
+		: [];
 	const employments = user?.employment ? sortByEndDate(user.employment) : [];
 
 	const handleAssignDLeader = useCallback(() => {
@@ -91,7 +94,7 @@ const UserDetailScreen = () => {
 		});
 	}, [user?.gender, id, navigation, formik, refreshUser]);
 
-	if (loading) return <Loading />;
+	if (isLoading) return <Loading />;
 
 	return (
 		<View style={styles.container}>
@@ -238,7 +241,7 @@ const UserDetailScreen = () => {
 								onPress={() =>
 									navigation.navigate("EducationFormScreen", {
 										accountId: id,
-										schoolId: edu.school.id,
+										educationId: edu.id,
 										onSuccess: refreshUser,
 									})
 								}

@@ -8,6 +8,15 @@ import { useNavigation } from "@react-navigation/native";
 import { useEducationViewModel } from "../viewModel/useEducationViewModel";
 import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
 import EducationLevel from "src/types/enums/EducationLevel";
+import { useEducationQuery } from "./useAccountQuery";
+
+function removeEmptyFields<T extends object>(obj: T): Partial<T> {
+	return Object.fromEntries(
+		Object.entries(obj).filter(
+			([_, value]) => value !== undefined && value !== null && value !== "",
+		),
+	) as Partial<T>;
+}
 
 interface UseEducationFormProps {
 	educationId?: number;
@@ -76,11 +85,14 @@ export const useEducationForm = ({
 	onSuccess,
 }: UseEducationFormProps) => {
 	const navigation = useNavigation();
-	const { addEducation, updateEducation, getEducation } =
-		useEducationViewModel();
+	const { addEducation, updateEducation } = useEducationViewModel();
 
 	const [loading, setLoading] = useState(false);
-	const [education, setEducation] = useState<any | null>(null);
+	const {
+		data: education,
+		isLoading,
+		refetch,
+	} = useEducationQuery(educationId);
 
 	const formik = useFormik({
 		initialValues,
@@ -93,9 +105,24 @@ export const useEducationForm = ({
 				setLoading(true);
 
 				if (educationId) {
-					const payload: Partial<CreateEducationDTO> = {};
+					const payload: CreateEducationDTO = {
+						schoolId: values.schoolId,
+						educationLevel: values.educationLevel,
+						startDate: dayjs(values.startDate).toDate(),
+						course: values.course,
+						endDate: values.endDate
+							? dayjs(values.endDate).toDate()
+							: undefined,
+					};
 
-					await updateEducation(educationId.toString(), payload);
+					const filteredPayload = Object.fromEntries(
+						Object.entries(payload).filter(
+							([_, value]) =>
+								value !== undefined && value !== null && value !== "",
+						),
+					) as Partial<CreateEducationDTO>;
+
+					await updateEducation(educationId, payload);
 				} else {
 					const payload: CreateEducationListDTO = {
 						accountId,
@@ -128,46 +155,26 @@ export const useEducationForm = ({
 
 	// 🔽 Load education for edit mode
 	useEffect(() => {
-		if (!educationId) return;
+		if (!education) return;
 
 		const loadEducation = async () => {
-			try {
-				setLoading(true);
-				const data = await getEducation(educationId.toString());
-				if (!data) return;
-
-				setEducation(data);
-
-				formik.setValues({
-					school: data.school ?? null,
-					educationLevel: data.educationLevel ?? "",
-					course: data.course ?? "",
-					startYear: data.startYear?.toString() ?? "",
-					endYear: data.endYear?.toString() ?? "",
-					isCurrent: !!data.isCurrent,
-				});
-			} catch {
-				Alert.alert("Error", "Failed to load education");
-				navigation.goBack();
-			} finally {
-				setLoading(false);
-			}
+			formik.setValues({
+				schoolId: education.school.id ?? null,
+				educationLevel: education.educationLevel ?? "",
+				course: education.course ?? "",
+				startDate: education.startDate?.toString() ?? "",
+				endDate: education.endDate?.toString() ?? "",
+				isCurrent: !education.endDate,
+			});
 		};
 
 		loadEducation();
-	}, [educationId]);
-
-	// 🔽 Refresh (optional)
-	const refreshEducation = async () => {
-		if (!educationId) return;
-		const data = await getEducation(educationId.toString());
-		if (data) setEducation(data);
-	};
+	}, [education]);
 
 	return {
 		formik,
 		loading,
 		education,
-		refreshEducation,
+		refreshEducation: refetch,
 	};
 };

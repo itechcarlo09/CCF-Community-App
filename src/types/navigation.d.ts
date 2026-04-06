@@ -47,7 +47,7 @@ export type AppRouteProp<T extends keyof AppStackParamList> = RouteProp<
 export type UserStackParamList = {
 	UserForm: { id?: number; onSuccess?: () => void } | undefined;
 	EducationFormScreen:
-		| { accountId: number; schoolId?: number; onSuccess?: () => void }
+		| { educationId?: number; accountId: number; onSuccess?: () => void }
 		| undefined;
 	UserDetailScreen: { id: number; hasEditedUser: () => void };
 	SchoolListScreen: {

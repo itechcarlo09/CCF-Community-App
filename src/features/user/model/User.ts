@@ -9,6 +9,7 @@ export interface SchoolDTO {
 }
 
 export interface EducationDTO {
+	id: number;
 	educationLevel: string;
 	course?: string;
 	startDate: Date;

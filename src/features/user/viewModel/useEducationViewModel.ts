@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EducationDTO } from "../model/user";
 import { userRepository } from "../data/userRepository";
-import { CreateEducationListDTO } from "../model/Education";
+import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
+import { ApiResponse, EducationResponseDTO } from "src/types/dto";
 
 export const useEducationViewModel = () => {
 	const queryClient = useQueryClient();
@@ -24,35 +25,25 @@ export const useEducationViewModel = () => {
 
 	// 🔽 UPDATE EDUCATION
 	const updateEducationMutation = useMutation<
-		void,
-		Error,
-		{ id: string; data: Partial<EducationDTO> }
+		ApiResponse<EducationResponseDTO> | undefined, // TData
+		Error, // TError
+		{ id: number; data: Partial<CreateEducationDTO> } // TVariables
 	>({
-		mutationFn: ({ id, data }) =>
-			userRepository.updateEducation?.(id, {
-				...data,
-				updatedAt: new Date(),
-			}),
-		onSuccess: () => {
-			// queryClient.invalidateQueries({ queryKey: ["educations"] });
+		mutationFn: async ({ id, data }) =>
+			await userRepository.updateEducation?.(id, data),
+		onSuccess: (res) => {
+			if (res?.success && res.data) {
+				queryClient.invalidateQueries({
+					queryKey: ["user", res.data.accountId],
+				});
+			}
 		},
 	});
-
-	// 🔽 GET SINGLE EDUCATION
-	const getEducation = async (id: string): Promise<EducationDTO | null> => {
-		try {
-			return await userRepository.getEducationById?.(id);
-		} catch (error) {
-			console.error("Error fetching education:", error);
-			return null;
-		}
-	};
 
 	return {
 		// Actions
 		addEducation: addEducationMutation.mutateAsync,
-		updateEducation: (id: string, data: Partial<EducationDTO>) =>
+		updateEducation: (id: number, data: Partial<CreateEducationDTO>) =>
 			updateEducationMutation.mutateAsync({ id, data }),
-		getEducation,
 	};
 };

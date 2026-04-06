@@ -133,7 +133,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	// 🔹 LOAD USER
 	useEffect(() => {
 		if (!user) return;
-		console.log("reload user");
+
 		const loadUser = () => {
 			formik.setValues({
 				firstName: user.firstName || "",

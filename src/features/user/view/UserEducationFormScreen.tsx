@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -25,14 +25,16 @@ type NavProp = NativeStackNavigationProp<UserStackParamList>;
 const EducationFormScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
-	const { accountId } = route.params || {};
+	const { accountId, educationId } = route.params || {};
 	const currentDate = dayjs().toDate();
-	const [selectedSchool, setSelectedSchool] = useState("");
 
-	const { formik, loading } = useEducationForm({
+	const { formik, loading, education } = useEducationForm({
 		accountId: accountId ?? NOID,
+		educationId: educationId ?? NOID,
 		onSuccess: () => navigation.goBack(),
 	});
+
+	const [selectedSchool, setSelectedSchool] = useState("");
 
 	const isCollegeOrSenior = useMemo(() => {
 		const val = formik.values.educationLevel;
@@ -50,6 +52,14 @@ const EducationFormScreen = () => {
 			return false;
 		}
 	}, [formik.values.educationLevel]);
+
+	useEffect(() => {
+		setSelectedSchool(
+			`${education?.school.name} ${
+				education?.school.acronym ? `- ${education?.school.acronym}` : ""
+			}`,
+		);
+	}, [education]);
 
 	const educationLevelOptions: SelectionProps<keyof typeof EducationLevel>[] =
 		Object.entries(EducationLevel).map(([key, value]) => ({

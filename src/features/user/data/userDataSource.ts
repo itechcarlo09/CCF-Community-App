@@ -7,7 +7,12 @@ import {
 	GetUserResponse,
 	UserDTO,
 } from "../model/user";
-import { CreateEducationListDTO } from "../model/Education";
+import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
+import {
+	ApiResponse,
+	EducationGetResponseDTO,
+	EducationResponseDTO,
+} from "src/types/dto";
 
 export const userDataSource = {
 	async getUsers(
@@ -68,6 +73,36 @@ export const userDataSource = {
 		} catch (error: any) {
 			console.error("addEducation error:", error.message ?? error);
 			return { accountId: -1 };
+		}
+	},
+
+	async editEducation(
+		id: number,
+		data: Partial<CreateEducationDTO>,
+	): Promise<ApiResponse<EducationResponseDTO> | undefined> {
+		try {
+			const res = await apiClient.patch<ApiResponse<EducationResponseDTO>>(
+				`/education/${id}`,
+				data,
+			);
+			return res.data ?? undefined;
+		} catch (error: any) {
+			console.error("editEducation error:", error.message ?? error);
+			return undefined;
+		}
+	},
+
+	async getEducationById(
+		educationId: number,
+	): Promise<ApiResponse<EducationGetResponseDTO> | undefined> {
+		try {
+			const res = await apiClient.get<ApiResponse<EducationGetResponseDTO>>(
+				`/education/${educationId}`,
+			);
+			return res.data ? res.data : undefined;
+		} catch (error: any) {
+			console.error("getEducation error:", error.message ?? error);
+			return undefined;
 		}
 	},
 
