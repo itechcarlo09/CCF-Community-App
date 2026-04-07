@@ -30,7 +30,7 @@ const UserDetailFormScreen = () => {
 		new Date().setFullYear(new Date().getFullYear() - 10),
 	);
 
-	const { formik, loading, user } = useUserForm({
+	const { formik, isLoading, user } = useUserForm({
 		userId: id ? id : NOID,
 		onSuccess: () => {
 			if (onSuccess) onSuccess();
@@ -55,7 +55,7 @@ const UserDetailFormScreen = () => {
 		});
 	}, [user?.gender, id, navigation, formik]);
 
-	if (loading) return <Loading />;
+	if (isLoading) return <Loading />;
 
 	return (
 		<View style={{ flex: 1, backgroundColor: "#F9FAFB" }}>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { userRepository } from "../data/userRepository";
 import { UserDTO } from "../model/user";
-import { ApiResponse, EducationGetResponseDTO } from "src/types/dto";
+import { EducationGetResponseDTO } from "src/types/dto";
 
 export const useAccountQuery = (id?: number) => {
 	return useQuery<UserDTO | undefined>({
@@ -12,7 +12,8 @@ export const useAccountQuery = (id?: number) => {
 			const result = await userRepository.getUserById(id.toString());
 			return result ?? undefined;
 		},
-		enabled: !!id, // only run if id exists
+		enabled: !!id,
+		staleTime: 1000 * 60 * 5,
 	});
 };
 
@@ -27,6 +28,7 @@ export const useEducationQuery = (id?: number) => {
 
 			return undefined;
 		},
-		enabled: !!id, // only run if id exists
+		enabled: !!id,
+		staleTime: 1000 * 60 * 5,
 	});
 };
