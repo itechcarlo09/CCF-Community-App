@@ -18,6 +18,7 @@ import { NOID } from "src/types/globalTypes";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList } from "src/types/navigation";
 import EducationLevel from "src/types/enums/EducationLevel";
+import { useEducationViewModel } from "../viewModel/useEducationViewModel";
 
 type UserRouteProp = RouteProp<UserStackParamList, "EducationFormScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -27,6 +28,7 @@ const EducationFormScreen = () => {
 	const route = useRoute<UserRouteProp>();
 	const { accountId, educationId } = route.params || {};
 	const currentDate = dayjs().toDate();
+	const { deleteEducation } = useEducationViewModel();
 
 	const { formik, loading, education } = useEducationForm({
 		accountId: accountId ?? NOID,
@@ -67,11 +69,27 @@ const EducationFormScreen = () => {
 			value: key as keyof typeof EducationLevel,
 		}));
 
+	const handleDelete = async () => {
+		try {
+			const res = await deleteEducation(educationId ?? NOID);
+
+			if (res?.success) {
+				navigation.goBack();
+			}
+		} catch (error) {
+			// optional: show error toast
+		}
+	};
+
 	if (loading) return <Loading />;
 
 	return (
 		<View style={styles.container}>
-			<Header title="Education" onBack={navigation.goBack} />
+			<Header
+				title="Education"
+				onBack={navigation.goBack}
+				onDelete={handleDelete}
+			/>
 
 			<KeyboardAwareScrollView contentContainerStyle={styles.content}>
 				{/* SCHOOL SELECT */}

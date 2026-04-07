@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { EducationDTO } from "../model/user";
 import { userRepository } from "../data/userRepository";
 import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
 import { ApiResponse, EducationResponseDTO } from "src/types/dto";
@@ -40,10 +39,29 @@ export const useEducationViewModel = () => {
 		},
 	});
 
+	// 🔽 DELETE EDUCATION
+	const deleteEducationMutation = useMutation<
+		ApiResponse<EducationResponseDTO> | undefined, // TData
+		Error, // TError
+		number // TVariables (educationId)
+	>({
+		mutationFn: async (id) => {
+			return await userRepository.deleteEducation?.(id);
+		},
+		onSuccess: (res) => {
+			if (res?.success && res.data) {
+				queryClient.invalidateQueries({
+					queryKey: ["user", res.data.accountId],
+				});
+			}
+		},
+	});
+
 	return {
 		// Actions
 		addEducation: addEducationMutation.mutateAsync,
 		updateEducation: (id: number, data: Partial<CreateEducationDTO>) =>
 			updateEducationMutation.mutateAsync({ id, data }),
+		deleteEducation: (id: number) => deleteEducationMutation.mutateAsync(id),
 	};
 };

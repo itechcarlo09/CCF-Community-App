@@ -6,4 +6,5 @@ export interface MdiIconProps {
 	color?: string;
 	style?: StyleProp<ViewStyle>;
 	onPress?: () => void;
+	isForDelete?: boolean;
 }

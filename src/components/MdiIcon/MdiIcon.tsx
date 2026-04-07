@@ -10,13 +10,14 @@ const MdiIcon: React.FC<MdiIconProps> = ({
 	color = "#000",
 	style,
 	onPress,
+	isForDelete,
 }) => {
 	const circleSize = size + 6 * 2;
 	const circleStyle: ViewStyle = {
 		width: circleSize,
 		height: circleSize,
 		borderRadius: circleSize / 2,
-		backgroundColor: "#EAF3FF",
+		backgroundColor: isForDelete ? "#fff1ea" : "#EAF3FF",
 		alignItems: "center",
 		justifyContent: "center",
 	};
@@ -24,7 +25,10 @@ const MdiIcon: React.FC<MdiIconProps> = ({
 	const Content = (
 		<View style={[styles.container, onPress && circleStyle, style]}>
 			<Svg width={size} height={size} viewBox="0 0 24 24">
-				<Path d={path} fill={onPress ? "#007AFF" : color} />
+				<Path
+					d={path}
+					fill={onPress ? (isForDelete ? "red" : "#007AFF") : color}
+				/>
 			</Svg>
 		</View>
 	);

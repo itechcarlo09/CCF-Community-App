@@ -9,4 +9,5 @@ export const userRepository = {
 	updateUser: userDataSource.editUser,
 	updateEducation: userDataSource.editEducation,
 	getDLeaders: userDataSource.dLeadersUsers,
+	deleteEducation: userDataSource.deleteEducation,
 };

@@ -7,7 +7,7 @@ import {
 	Text,
 } from "react-native";
 import MdiIcon from "@components/MdiIcon";
-import { mdiArrowLeft, mdiMagnify, mdiPlus } from "@mdi/js";
+import { mdiArrowLeft, mdiDelete, mdiMagnify, mdiPlus } from "@mdi/js";
 
 interface Props {
 	title?: string;
@@ -15,6 +15,7 @@ interface Props {
 	onSearch?: (text: string) => void;
 	onBack?: () => void;
 	onAdd?: () => void;
+	onDelete?: () => void;
 }
 
 const Header: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const Header: React.FC<Props> = ({
 	onSearch,
 	onBack,
 	onAdd,
+	onDelete,
 }) => {
 	const [searchText, setSearchText] = useState("");
 
@@ -55,6 +57,16 @@ const Header: React.FC<Props> = ({
 						<View style={styles.sideButton}>
 							{onAdd && <MdiIcon path={mdiPlus} size={24} onPress={onAdd} />}
 						</View>
+						<View style={styles.sideButton}>
+							{onDelete && (
+								<MdiIcon
+									path={mdiDelete}
+									size={24}
+									onPress={onDelete}
+									isForDelete
+								/>
+							)}
+						</View>
 					</>
 				) : (
 					<>
@@ -76,6 +88,16 @@ const Header: React.FC<Props> = ({
 						{onAdd && (
 							<View style={styles.sideButton}>
 								<MdiIcon path={mdiPlus} size={24} onPress={onAdd} />
+							</View>
+						)}
+						{onDelete && (
+							<View style={styles.sideButton}>
+								<MdiIcon
+									path={mdiDelete}
+									size={24}
+									onPress={onDelete}
+									isForDelete
+								/>
 							</View>
 						)}
 					</>

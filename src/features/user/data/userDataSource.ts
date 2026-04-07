@@ -124,4 +124,18 @@ export const userDataSource = {
 			return null;
 		}
 	},
+
+	async deleteEducation(
+		id: number,
+	): Promise<ApiResponse<EducationResponseDTO> | undefined> {
+		try {
+			const res = await apiClient.delete<ApiResponse<EducationResponseDTO>>(
+				`/education/${id}`,
+			);
+			return res.data ?? undefined;
+		} catch (error: any) {
+			console.error("editEducation error:", error.message ?? error);
+			return undefined;
+		}
+	},
 };
