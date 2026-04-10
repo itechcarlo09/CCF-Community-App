@@ -38,8 +38,8 @@ export interface SchoolListItemDTO {
 	address: string;
 	createdAt: Date;
 	updatedAt: Date;
-	activeEducationCount: number;
-	completedEducationCount: number;
+	enrolledStudentCount: number;
+	alumniStudentCount: number;
 }
 
 export interface SchoolDTO {

@@ -55,15 +55,12 @@ const Header: React.FC<Props> = ({
 
 						{/* Right: Add Button placeholder */}
 						<View style={styles.sideButton}>
-							{onAdd && <MdiIcon path={mdiPlus} size={24} onPress={onAdd} />}
-						</View>
-						<View style={styles.sideButton}>
-							{onDelete && (
+							{(onAdd || onDelete) && (
 								<MdiIcon
-									path={mdiDelete}
+									path={onDelete ? mdiDelete : mdiPlus}
 									size={24}
-									onPress={onDelete}
-									isForDelete
+									onPress={onDelete ?? onAdd}
+									isForDelete={!!onDelete}
 								/>
 							)}
 						</View>
@@ -75,7 +72,13 @@ const Header: React.FC<Props> = ({
 								<MdiIcon path={mdiArrowLeft} size={24} onPress={onBack} />
 							</View>
 						)}
-						<View style={styles.searchCard}>
+						<View
+							style={[
+								styles.searchCard,
+								onBack && { marginLeft: 5 },
+								(onAdd || onDelete) && { marginRight: 5 },
+							]}
+						>
 							<MdiIcon path={mdiMagnify} size={20} color="#9CA3AF" />
 							<TextInput
 								style={styles.input}
@@ -85,18 +88,13 @@ const Header: React.FC<Props> = ({
 								onChangeText={handleChange}
 							/>
 						</View>
-						{onAdd && (
-							<View style={styles.sideButton}>
-								<MdiIcon path={mdiPlus} size={24} onPress={onAdd} />
-							</View>
-						)}
-						{onDelete && (
+						{(onAdd || onDelete) && (
 							<View style={styles.sideButton}>
 								<MdiIcon
-									path={mdiDelete}
+									path={onDelete ? mdiDelete : mdiPlus}
 									size={24}
-									onPress={onDelete}
-									isForDelete
+									onPress={onDelete ?? onAdd}
+									isForDelete={!!onDelete}
 								/>
 							</View>
 						)}

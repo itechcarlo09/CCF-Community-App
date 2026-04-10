@@ -109,18 +109,9 @@ export const useEducationForm = ({
 						schoolId: values.schoolId,
 						educationLevel: values.educationLevel,
 						startDate: dayjs(values.startDate).toDate(),
-						course: values.course,
-						endDate: values.endDate
-							? dayjs(values.endDate).toDate()
-							: undefined,
+						...(values.course && { course: values.course }),
+						endDate: values.isCurrent ? null : dayjs(values.endDate).toDate(),
 					};
-
-					const filteredPayload = Object.fromEntries(
-						Object.entries(payload).filter(
-							([_, value]) =>
-								value !== undefined && value !== null && value !== "",
-						),
-					) as Partial<CreateEducationDTO>;
 
 					await updateEducation(educationId, payload);
 				} else {
@@ -132,9 +123,9 @@ export const useEducationForm = ({
 								educationLevel: values.educationLevel,
 								startDate: dayjs(values.startDate).toDate(),
 								...(values.course && { course: values.course }),
-								...(values.endDate && {
-									endDate: dayjs(values.endDate).toDate(),
-								}),
+								endDate: values.isCurrent
+									? null
+									: dayjs(values.endDate).toDate(),
 							},
 						],
 					};

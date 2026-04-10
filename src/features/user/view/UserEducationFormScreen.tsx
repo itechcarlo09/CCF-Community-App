@@ -88,7 +88,7 @@ const EducationFormScreen = () => {
 			<Header
 				title="Education"
 				onBack={navigation.goBack}
-				onDelete={handleDelete}
+				onDelete={educationId ? handleDelete : undefined}
 			/>
 
 			<KeyboardAwareScrollView contentContainerStyle={styles.content}>
@@ -152,7 +152,6 @@ const EducationFormScreen = () => {
 					<ModernSwitch
 						value={formik.values.isCurrent}
 						onValueChange={(val) => {
-							if (val) formik.setFieldValue("endDate", "");
 							formik.setFieldValue("isCurrent", val);
 						}}
 					/>

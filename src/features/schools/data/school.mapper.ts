@@ -8,8 +8,8 @@ export const mapSchoolToUI = (school: SchoolListItemDTO): SchoolItemUI => {
 		name: school.name,
 		location: school.address,
 		acronym: school.acronym ?? "",
-		currentCount: school.activeEducationCount,
-		alumniCount: school.completedEducationCount,
+		currentCount: school.enrolledStudentCount,
+		alumniCount: school.alumniStudentCount,
 	};
 };
 

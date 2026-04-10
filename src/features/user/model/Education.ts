@@ -5,7 +5,7 @@ export interface CreateEducationDTO {
 	educationLevel: EducationLevel;
 	course?: string;
 	startDate: Date;
-	endDate?: Date;
+	endDate: Date | null;
 }
 
 export interface CreateEducationListDTO {
