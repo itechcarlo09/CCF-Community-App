@@ -87,6 +87,7 @@ export default SchoolFormScreen;
 const styles = StyleSheet.create({
 	container: {
 		padding: 16,
+		rowGap: 8,
 		paddingBottom: 32,
 		backgroundColor: "#F9FAFB",
 	},
