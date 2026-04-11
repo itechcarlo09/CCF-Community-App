@@ -9,6 +9,7 @@ import { useAccountQuery } from "./useAccountQuery";
 import EducationLevel from "src/types/enums/EducationLevel";
 import { CreateEducationDTO } from "../model/Education";
 import UserType from "src/types/enums/UserType";
+import { showError } from "src/utils/errorUtils";
 
 interface UseUserFormProps {
 	userId?: number;
@@ -62,7 +63,6 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 	const { addUser, updateUser } = useUserViewModel();
 	const { data: user, isLoading, refetch } = useAccountQuery(userId);
 
-	// 🔹 ADD USER MUTATION
 	const addUserMutation = useMutation<
 		UserDTO,
 		Error,
@@ -77,14 +77,9 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 			queryClient.setQueryData(["user", newUser.id], newUser);
 			onSuccess?.();
 		},
-		onError: (error: any) => {
-			const data = error?.response?.data;
-
-			// alert(data?.message ?? "Request failed");
-		},
+		onError: showError,
 	});
 
-	// 🔹 UPDATE USER MUTATION
 	const updateUserMutation = useMutation<
 		void,
 		Error,
@@ -97,9 +92,9 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 			}
 			onSuccess?.();
 		},
+		onError: showError,
 	});
 
-	// 🔹 FORM
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
@@ -136,7 +131,6 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 		},
 	});
 
-	// 🔹 LOAD USER
 	useEffect(() => {
 		if (!user) return;
 

@@ -30,7 +30,6 @@ apiClient.interceptors.request.use(async (config) => {
 apiClient.interceptors.response.use(
 	(res) => res,
 	(error) => {
-		console.error("API Error:", error.message);
 		return Promise.reject(error);
 	},
 );

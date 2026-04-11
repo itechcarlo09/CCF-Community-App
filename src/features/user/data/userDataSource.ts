@@ -53,18 +53,13 @@ export const userDataSource = {
 	},
 
 	async addUser(data: CreateAccountBasicInfoDTO): Promise<UserDTO | undefined> {
-		try {
-			console.log("addUser error DataSource:");
-			const res = await apiClient.post<UserDTO>("/account", {
-				basicInfo: {
-					...data,
-				},
-			});
-			return res.data;
-		} catch (error: any) {
-			console.error("addUser error:", error.message ?? error);
-			return undefined;
-		}
+		console.log("addUser error DataSource:");
+		const res = await apiClient.post<UserDTO>("/account", {
+			basicInfo: {
+				...data,
+			},
+		});
+		return res.data;
 	},
 
 	async addEducation(data: CreateEducationListDTO): Promise<AddEducationDTO> {

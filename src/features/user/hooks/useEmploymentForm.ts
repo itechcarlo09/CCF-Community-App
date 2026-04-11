@@ -101,7 +101,6 @@ export const useEmploymentForm = ({
 		},
 	});
 
-	// 🔽 Load employment for edit mode
 	useEffect(() => {
 		if (!employment) return;
 
