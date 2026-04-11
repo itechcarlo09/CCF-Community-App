@@ -80,7 +80,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 		onError: (error: any) => {
 			const data = error?.response?.data;
 
-			alert(data?.message ?? "Request failed");
+			// alert(data?.message ?? "Request failed");
 		},
 	});
 
