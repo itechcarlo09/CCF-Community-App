@@ -4,6 +4,7 @@ export const userRepository = {
 	getUsers: userDataSource.getUsers,
 	getUserById: userDataSource.getUserById,
 	getEducationById: userDataSource.getEducationById,
+	getEmploymentById: userDataSource.getEmploymentById,
 	addUser: userDataSource.addUser,
 	addEducation: userDataSource.addEducation,
 	updateUser: userDataSource.editUser,

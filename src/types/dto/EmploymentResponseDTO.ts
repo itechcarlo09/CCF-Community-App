@@ -2,7 +2,7 @@ export interface EmploymentResponseDTO {
 	id: number;
 	schoolId: number;
 	accountId: number;
-	course?: string;
+	position: string;
 	startDate: Date;
 	endDate?: Date;
 	createdAt: Date;
@@ -11,9 +11,9 @@ export interface EmploymentResponseDTO {
 
 export interface EmploymentGetResponseDTO {
 	startDate: Date;
-	school: CompanyGetResponseDTO;
+	company: CompanyGetResponseDTO;
 	endDate?: Date;
-	course?: string;
+	position: string;
 }
 
 interface CompanyGetResponseDTO {

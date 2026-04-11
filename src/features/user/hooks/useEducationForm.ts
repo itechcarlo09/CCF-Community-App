@@ -4,19 +4,10 @@ import * as Yup from "yup";
 import dayjs from "dayjs";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import { useEducationViewModel } from "../viewModel/useEducationViewModel";
 import { CreateEducationDTO, CreateEducationListDTO } from "../model/Education";
 import EducationLevel from "src/types/enums/EducationLevel";
 import { useEducationQuery } from "./useAccountQuery";
-
-function removeEmptyFields<T extends object>(obj: T): Partial<T> {
-	return Object.fromEntries(
-		Object.entries(obj).filter(
-			([_, value]) => value !== undefined && value !== null && value !== "",
-		),
-	) as Partial<T>;
-}
 
 interface UseEducationFormProps {
 	educationId?: number;
@@ -24,7 +15,6 @@ interface UseEducationFormProps {
 	onSuccess?: () => void;
 }
 
-// 🔽 Initial Values
 const initialValues = {
 	schoolId: -1,
 	educationLevel: "" as EducationLevel,
@@ -41,7 +31,6 @@ const seniorOrCollegeKeys: (keyof typeof EducationLevel)[] = [
 	"SeniorHigh",
 ];
 
-// 🔽 Validation Schema
 export const validationSchema = Yup.object({
 	schoolId: Yup.number()
 		.required("School is required")
@@ -84,10 +73,8 @@ export const useEducationForm = ({
 	accountId,
 	onSuccess,
 }: UseEducationFormProps) => {
-	const navigation = useNavigation();
 	const { addEducation, updateEducation } = useEducationViewModel();
 
-	const [loading, setLoading] = useState(false);
 	const {
 		data: education,
 		isLoading,
@@ -101,46 +88,33 @@ export const useEducationForm = ({
 		validateOnBlur: true,
 		validateOnChange: false,
 		onSubmit: async (values) => {
-			try {
-				setLoading(true);
+			if (educationId) {
+				const payload: CreateEducationDTO = {
+					schoolId: values.schoolId,
+					educationLevel: values.educationLevel,
+					startDate: dayjs(values.startDate).toDate(),
+					...(values.course && { course: values.course }),
+					endDate: values.isCurrent ? null : dayjs(values.endDate).toDate(),
+				};
 
-				if (educationId) {
-					const payload: CreateEducationDTO = {
-						schoolId: values.schoolId,
-						educationLevel: values.educationLevel,
-						startDate: dayjs(values.startDate).toDate(),
-						...(values.course && { course: values.course }),
-						endDate: values.isCurrent ? null : dayjs(values.endDate).toDate(),
-					};
-
-					await updateEducation(educationId, payload);
-				} else {
-					const payload: CreateEducationListDTO = {
-						accountId,
-						educations: [
-							{
-								schoolId: values.schoolId,
-								educationLevel: values.educationLevel,
-								startDate: dayjs(values.startDate).toDate(),
-								...(values.course && { course: values.course }),
-								endDate: values.isCurrent
-									? null
-									: dayjs(values.endDate).toDate(),
-							},
-						],
-					};
-					await addEducation(payload);
-				}
-
-				onSuccess?.();
-			} catch (error) {
-				Alert.alert(
-					"Error",
-					`Failed to ${educationId ? "update" : "create"} education`,
-				);
-			} finally {
-				setLoading(false);
+				await updateEducation(educationId, payload);
+			} else {
+				const payload: CreateEducationListDTO = {
+					accountId,
+					educations: [
+						{
+							schoolId: values.schoolId,
+							educationLevel: values.educationLevel,
+							startDate: dayjs(values.startDate).toDate(),
+							...(values.course && { course: values.course }),
+							endDate: values.isCurrent ? null : dayjs(values.endDate).toDate(),
+						},
+					],
+				};
+				await addEducation(payload);
 			}
+
+			onSuccess?.();
 		},
 	});
 
@@ -164,7 +138,7 @@ export const useEducationForm = ({
 
 	return {
 		formik,
-		loading,
+		isLoading,
 		education,
 		refreshEducation: refetch,
 	};

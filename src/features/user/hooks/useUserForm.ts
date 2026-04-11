@@ -8,6 +8,7 @@ import { CreateAccountBasicInfoDTO, UserDTO, Gender } from "../model/user";
 import { useAccountQuery } from "./useAccountQuery";
 import EducationLevel from "src/types/enums/EducationLevel";
 import { CreateEducationDTO } from "../model/Education";
+import UserType from "src/types/enums/UserType";
 
 interface UseUserFormProps {
 	userId?: number;
@@ -76,6 +77,11 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 			queryClient.setQueryData(["user", newUser.id], newUser);
 			onSuccess?.();
 		},
+		onError: (error: any) => {
+			const data = error?.response?.data;
+
+			alert(data?.message ?? "Request failed");
+		},
 	});
 
 	// 🔹 UPDATE USER MUTATION
@@ -106,6 +112,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				lastName: values.lastName,
 				email: values.email,
 				gender: values.gender as Gender,
+				userType: UserType.Member,
 				birthDate: dayjs(values.birthdate).toDate(),
 				...(values.middleName && { middleName: values.middleName }),
 				...(values.nickname && { nickName: values.nickname }),
@@ -121,7 +128,6 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 					emergencyContactNumber: values.emergencyNumber,
 				}),
 			};
-
 			if (userId) {
 				await updateUserMutation.mutateAsync({ id: userId, data: payload });
 			} else {
@@ -156,7 +162,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 						educationLevel: edu.educationLevel as EducationLevel,
 						course: edu.course,
 						startDate: edu.startDate,
-						endDate: edu.endDate,
+						endDate: edu.endDate ?? null,
 					};
 				}),
 			});

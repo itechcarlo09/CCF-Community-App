@@ -13,6 +13,7 @@ import {
 	EducationGetResponseDTO,
 	EducationResponseDTO,
 } from "src/types/dto";
+import { EmploymentGetResponseDTO } from "src/types/dto/EmploymentResponseDTO";
 
 export const userDataSource = {
 	async getUsers(
@@ -102,6 +103,20 @@ export const userDataSource = {
 			return res.data ? res.data : undefined;
 		} catch (error: any) {
 			console.error("getEducation error:", error.message ?? error);
+			return undefined;
+		}
+	},
+
+	async getEmploymentById(
+		employmentId: number,
+	): Promise<ApiResponse<EmploymentGetResponseDTO> | undefined> {
+		try {
+			const res = await apiClient.get<ApiResponse<EmploymentGetResponseDTO>>(
+				`/employment/${employmentId}`,
+			);
+			return res.data ? res.data : undefined;
+		} catch (error: any) {
+			console.error("getEmployment error:", error.message ?? error);
 			return undefined;
 		}
 	},
