@@ -86,7 +86,7 @@ export const SchoolDetailsScreen = () => {
 							)}
 						</Text>
 					</View>
-					<View style={{ marginLeft: 16 }}>
+					<View style={styles.schoolDetails}>
 						<Text style={styles.schoolName}>
 							{school?.name}
 							{school?.acronym ? `(${school.acronym})` : ""}
@@ -94,13 +94,11 @@ export const SchoolDetailsScreen = () => {
 						<Text style={styles.schoolAddress}>{school?.address}</Text>
 					</View>
 				</View>
-
-				<TouchableOpacity
-					style={styles.iconBtn}
+				<MdiIcon
+					path={mdiPencil}
+					size={22}
 					onPress={() => navigation.navigate("SchoolFormScreen", { id })}
-				>
-					<MdiIcon path={mdiPencil} size={22} />
-				</TouchableOpacity>
+				/>
 			</View>
 
 			{/* Search */}
@@ -174,7 +172,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginBottom: 16,
 	},
-	schoolInfo: { flexDirection: "row", alignItems: "center" },
+	schoolInfo: { flexDirection: "row", alignItems: "center", flex: 1 },
+	schoolDetails: { marginLeft: 16, flex: 1 },
 	logo: { width: 64, height: 64, borderRadius: 32 },
 	logoPlaceholder: {
 		width: 64,
@@ -187,13 +186,6 @@ const styles = StyleSheet.create({
 	logoPlaceholderText: { fontSize: 24, color: "#fff", fontWeight: "bold" },
 	schoolName: { fontSize: 20, fontWeight: "700", color: "#111827" },
 	schoolAddress: { color: "#555" },
-	iconBtn: {
-		padding: 6,
-		borderRadius: 20,
-		backgroundColor: "#E5E7EB",
-		justifyContent: "center",
-		alignItems: "center",
-	},
 	searchInput: {
 		borderWidth: 1,
 		color: "#111827",

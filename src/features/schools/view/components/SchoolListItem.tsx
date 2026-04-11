@@ -35,9 +35,7 @@ const SchoolCard: React.FC<Props> = ({
 
 			{/* Middle Content */}
 			<View style={styles.content}>
-				<Text style={styles.name} numberOfLines={1}>
-					{item.name}
-				</Text>
+				<Text style={styles.name}>{item.name}</Text>
 				{item.acronym && <Text style={styles.acronym}>{item.acronym}</Text>}
 				<Text style={styles.location} numberOfLines={1}>
 					{item.location}
