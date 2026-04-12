@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import MdiIcon from "@components/MdiIcon";
-import { mdiPencil, mdiAccountOutline } from "@mdi/js";
+import { mdiPencil, mdiAccountOutline, mdiMagnify } from "@mdi/js";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { OtherStackParamList } from "src/types/navigation";
 import { NOID } from "src/types/globalTypes";
@@ -102,15 +102,18 @@ export const SchoolDetailsScreen = () => {
 			</View>
 
 			{/* Search */}
-			<TextInput
-				placeholder={`Search ${
-					activeTab === "enrolled" ? "Enrolled" : "Graduated"
-				}...`}
-				value={search}
-				onChangeText={setSearch}
-				placeholderTextColor="#9CA3AF"
-				style={styles.searchInput}
-			/>
+			<View style={styles.searchMainCard}>
+				<MdiIcon path={mdiMagnify} size={20} color="#9CA3AF" />
+				<TextInput
+					style={styles.input}
+					placeholder={`Search ${
+						activeTab === "enrolled" ? "Enrolled" : "Graduated"
+					}...`}
+					placeholderTextColor="#9CA3AF"
+					value={search}
+					onChangeText={setSearch}
+				/>
+			</View>
 
 			{/* Tabs */}
 			<View style={styles.tabContainer}>
@@ -186,15 +189,6 @@ const styles = StyleSheet.create({
 	logoPlaceholderText: { fontSize: 24, color: "#fff", fontWeight: "bold" },
 	schoolName: { fontSize: 20, fontWeight: "700", color: "#111827" },
 	schoolAddress: { color: "#555" },
-	searchInput: {
-		borderWidth: 1,
-		color: "#111827",
-		borderRadius: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		backgroundColor: "#fff",
-		marginBottom: 12,
-	},
 	tabContainer: { flexDirection: "row", marginBottom: 12 },
 	tab: {
 		flex: 1,
@@ -215,4 +209,25 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 	},
 	listItemText: { fontSize: 14, color: "#111827" },
+	searchMainCard: {
+		flexDirection: "row",
+		alignItems: "center",
+		backgroundColor: "#fff",
+		borderRadius: 12,
+		paddingHorizontal: 12,
+		marginBottom: 12,
+		height: 48,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.1,
+		shadowRadius: 2,
+		elevation: 2,
+	},
+
+	input: {
+		flex: 1,
+		marginLeft: 8,
+		fontSize: 14,
+		color: "#111827",
+	},
 });

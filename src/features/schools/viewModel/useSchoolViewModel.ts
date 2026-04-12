@@ -8,7 +8,7 @@ import {
 import { CreateSchoolDTO } from "../model/School";
 import { schoolRepository } from "../data/schoolRepository";
 import { mapSchoolToUI, mapStudentsToUI } from "../data/school.mapper";
-import { PAGE_SIZE } from "src/types/globalTypes";
+import { PAGE_SIZE, SCHOOL_PAGE_SIZE } from "src/types/globalTypes";
 
 const STUDENTS_PAGE_SIZE = 20;
 
@@ -47,8 +47,8 @@ export const useSchoolViewModel = ({
 		queryFn: async ({ pageParam = 1 }) => {
 			const result = await schoolRepository.getSchools?.({
 				...(search.trim() && { search }),
-				skip: (pageParam - 1) * PAGE_SIZE,
-				take: PAGE_SIZE,
+				skip: (pageParam - 1) * SCHOOL_PAGE_SIZE,
+				take: SCHOOL_PAGE_SIZE,
 			});
 
 			return {
