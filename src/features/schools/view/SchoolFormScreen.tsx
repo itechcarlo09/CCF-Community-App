@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginTop: 24,
 		marginHorizontal: 16,
+		marginVertical: 10,
 	},
 	submitText: {
 		color: "#fff",
