@@ -8,7 +8,7 @@ import {
 import { CreateSchoolDTO } from "../model/School";
 import { schoolRepository } from "../data/schoolRepository";
 import { mapSchoolToUI, mapStudentsToUI } from "../data/school.mapper";
-import { PAGE_SIZE, SCHOOL_PAGE_SIZE } from "src/types/globalTypes";
+import { SCHOOL_PAGE_SIZE } from "src/types/globalTypes";
 
 const STUDENTS_PAGE_SIZE = 20;
 

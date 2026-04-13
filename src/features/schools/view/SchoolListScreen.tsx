@@ -95,6 +95,7 @@ export const SchoolListScreen = () => {
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
+					keyExtractor={(item) => String(item.id)}
 					renderItem={({ item }) => (
 						<SchoolCard
 							item={item}

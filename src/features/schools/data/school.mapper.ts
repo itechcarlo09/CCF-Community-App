@@ -1,4 +1,4 @@
-import { formatCompleteName, formatFullName } from "src/utils/stringUtils";
+import { formatCompleteName } from "src/utils/stringUtils";
 import { SchoolListItemDTO, StudentListItemDTO } from "../model/School";
 import { SchoolItemUI, StudentItemUI } from "../model/SchoolListItem";
 
