@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-	View,
-	TextInput,
-	StyleSheet,
-	TouchableOpacity,
-	Text,
-} from "react-native";
+import { View, TextInput, StyleSheet, Text } from "react-native";
 import MdiIcon from "@components/MdiIcon";
 import { mdiArrowLeft, mdiDelete, mdiMagnify, mdiPlus } from "@mdi/js";
 
