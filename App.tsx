@@ -11,7 +11,7 @@ import RootNavigator from "./src/navigation/RootNavigator";
 import { ThemeProvider } from "./src/theme/ThemeProvider";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Toast from "react-native-toast-message";
+import { ToastProvider } from "@components/toast/ToastContext";
 
 const queryClient = new QueryClient();
 
@@ -21,13 +21,14 @@ function App() {
 			<SafeAreaProvider>
 				<KeyboardProvider>
 					<ThemeProvider>
-						<SafeAreaView style={{ flex: 1 }}>
-							<RootNavigator />
-						</SafeAreaView>
+						<ToastProvider>
+							<SafeAreaView style={{ flex: 1 }}>
+								<RootNavigator />
+							</SafeAreaView>
+						</ToastProvider>
 					</ThemeProvider>
 				</KeyboardProvider>
 			</SafeAreaProvider>
-			<Toast />
 		</QueryClientProvider>
 	);
 }

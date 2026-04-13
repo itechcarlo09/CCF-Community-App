@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SchoolDTO, CreateSchoolDTO } from "../model/School";
 import { schoolRepository } from "../data/schoolRepository";
 import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
+import { showError } from "src/utils/errorUtils";
 
 interface UseSchoolFormProps {
 	schoolId?: number;
@@ -50,9 +51,9 @@ export const useSchoolForm = ({ schoolId, onSuccess }: UseSchoolFormProps) => {
 			}
 
 			return addSchool({
-				name: values.name,
-				acronym: values.acronym,
-				address: values.address,
+				name: values.name.trim(),
+				...(values.acronym && { acronym: values.acronym.trim() }),
+				address: values.address.trim(),
 			});
 		},
 
@@ -61,12 +62,9 @@ export const useSchoolForm = ({ schoolId, onSuccess }: UseSchoolFormProps) => {
 			queryClient.invalidateQueries({ queryKey: ["school", schoolId] });
 
 			onSuccess?.();
-			navigation.goBack(); // ✅ usually expected UX
 		},
 
-		onError: () => {
-			Alert.alert("Error", `Failed to ${schoolId ? "update" : "add"} school`);
-		},
+		onError: showError,
 	});
 
 	// ✅ Derive initial values safely

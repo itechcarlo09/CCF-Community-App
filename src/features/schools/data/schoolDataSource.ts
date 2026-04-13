@@ -60,13 +60,9 @@ export const schoolDataSource = {
 	// 		return undefined;
 	// 	}
 	// },
-	async addSchool(data: CreateSchoolDTO): Promise<SchoolDTO | null> {
-		try {
-			const res = await apiClient.post<any>("/school", data);
-			return res.data ?? null;
-		} catch (error: any) {
-			throw new Error(error.message);
-		}
+	async addSchool(data: CreateSchoolDTO): Promise<SchoolDTO> {
+		const res = await apiClient.post<any>("/school", data);
+		return res.data;
 	},
 	async updateSchool(id: number, data: Partial<SchoolDTO>): Promise<void> {
 		try {

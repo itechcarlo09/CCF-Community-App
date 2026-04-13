@@ -53,7 +53,7 @@ export interface SchoolDTO {
 
 export interface CreateSchoolDTO {
 	name: string;
-	acronym: string | null;
+	acronym?: string | null;
 	address: string;
 }
 
