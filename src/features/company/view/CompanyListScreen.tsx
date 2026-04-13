@@ -13,8 +13,26 @@ import { Separator } from "@components/Separator";
 import useDebounce from "src/features/user/hooks/useDebounce";
 import { useCompanyViewModel } from "../viewModel/useCompanyViewModel";
 import CompanyCard from "./components/CompanyListItem";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { OtherStackParamList, UserStackParamList } from "src/types/navigation";
+import { CompanyItemUI } from "../model/CompanyListUI";
 
-export const CompanyListScreen = ({ navigation }: any) => {
+type CompanyRouteProp = RouteProp<
+	OtherStackParamList | UserStackParamList,
+	"CompanyListScreen"
+>;
+type NavProp = NativeStackNavigationProp<
+	OtherStackParamList | UserStackParamList
+>;
+type OtherStackNavProp = NativeStackNavigationProp<OtherStackParamList>;
+
+export const CompanyListScreen = () => {
+	const navigation = useNavigation<NavProp>();
+	const otherNavigation = useNavigation<OtherStackNavProp>();
+	const route = useRoute<CompanyRouteProp>();
+	const { onSelect } = route.params || {};
+
 	const {
 		companies,
 		refresh,
@@ -41,6 +59,27 @@ export const CompanyListScreen = ({ navigation }: any) => {
 		setRefreshing(false);
 	}, [refresh]);
 
+	const goToCompanyForm = (id?: number) => {
+		navigation.navigate("CompanyFormScreen", id ? { id } : undefined);
+	};
+
+	const handleSelect = (item: CompanyItemUI) => {
+		if (onSelect) {
+			onSelect(item.id, `${item.name} ${item.acronym && `- ${item.acronym}`}`);
+			navigation.goBack();
+		} else {
+			// otherNavigation.navigate("CompanyDetailsScreen", {
+			// 	id: item.id,
+			// 	enrolledCount: item.employeeCount,
+			// 	graduatesCount: item.pastCount,
+			// });
+			navigation.navigate(
+				"CompanyFormScreen",
+				item.id ? { id: item.id } : undefined,
+			);
+		}
+	};
+
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
@@ -48,7 +87,7 @@ export const CompanyListScreen = ({ navigation }: any) => {
 				placeholder="Search company..."
 				onSearch={setSearch}
 				onBack={() => navigation.goBack()}
-				onAdd={() => navigation.navigate("CompanyFormScreen")}
+				onAdd={() => goToCompanyForm()}
 			/>
 
 			{loading ? (
@@ -61,7 +100,13 @@ export const CompanyListScreen = ({ navigation }: any) => {
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
 					keyExtractor={(item) => String(item.id)}
-					renderItem={({ item }) => <CompanyCard item={item} />}
+					renderItem={({ item }) => (
+						<CompanyCard
+							item={item}
+							onPress={handleSelect}
+							isCountsShown={!onSelect}
+						/>
+					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
 						fetching ? (

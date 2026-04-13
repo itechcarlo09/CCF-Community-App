@@ -54,6 +54,7 @@ export type UserStackParamList = {
 		onSelect: (id: number, fullName: string) => void;
 	};
 	CompanyListScreen: { onSelect: (id: number, fullName: string) => void };
+	CompanyFormScreen: { id: number } | undefined;
 	SchoolFormScreen: { id: number } | undefined;
 	DleaderScreen: {
 		id: number;

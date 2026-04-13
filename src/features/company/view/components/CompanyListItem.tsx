@@ -5,6 +5,7 @@ import { CompanyItemUI } from "../../model/CompanyListUI";
 interface Props {
 	item: CompanyItemUI;
 	onPress?: (item: CompanyItemUI) => void;
+	isCountsShown: boolean;
 }
 
 const getAcronym = (acronym?: string, name?: string) => {
@@ -26,7 +27,11 @@ const getAcronym = (acronym?: string, name?: string) => {
 		.toUpperCase();
 };
 
-const CompanyCard: React.FC<Props> = ({ item, onPress }) => {
+const CompanyCard: React.FC<Props> = ({
+	item,
+	onPress,
+	isCountsShown = true,
+}) => {
 	return (
 		<TouchableOpacity
 			style={styles.card}
@@ -60,19 +65,21 @@ const CompanyCard: React.FC<Props> = ({ item, onPress }) => {
 			</View>
 
 			{/* Stats */}
-			<View style={styles.stats}>
-				<View style={styles.statItem}>
-					<Text style={styles.statValue}>{item.employeeCount}</Text>
-					<Text style={styles.statLabel}>Employees</Text>
-				</View>
+			{isCountsShown && (
+				<View style={styles.stats}>
+					<View style={styles.statItem}>
+						<Text style={styles.statValue}>{item.employeeCount}</Text>
+						<Text style={styles.statLabel}>Employees</Text>
+					</View>
 
-				<View style={styles.divider} />
+					<View style={styles.divider} />
 
-				<View style={styles.statItem}>
-					<Text style={styles.statValue}>{item.pastCount}</Text>
-					<Text style={styles.statLabel}>Past</Text>
+					<View style={styles.statItem}>
+						<Text style={styles.statValue}>{item.pastCount}</Text>
+						<Text style={styles.statLabel}>Past</Text>
+					</View>
 				</View>
-			</View>
+			)}
 		</TouchableOpacity>
 	);
 };
