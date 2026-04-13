@@ -1,3 +1,4 @@
+import { showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
 import { GetCompanyResponse } from "../model/Company";
 import { GetCompanyParams } from "../model/RequestParams";
@@ -20,9 +21,7 @@ export const companyDataSource = {
 			});
 			return res.data ?? undefined;
 		} catch (error: any) {
-			console.error("getCompanies error:", error.message ?? error);
-			// Optional: You can throw a custom error or handle it gracefully
-			return undefined;
+			showError(error);
 		}
 	},
 

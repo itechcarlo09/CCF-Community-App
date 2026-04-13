@@ -19,7 +19,7 @@ export const CompanyListScreen = ({ navigation }: any) => {
 		companies,
 		refresh,
 		loading,
-		activityLoading,
+		fetching,
 		loadMoreCompanies,
 		searchCompanies,
 	} = useCompanyViewModel();
@@ -60,21 +60,18 @@ export const CompanyListScreen = ({ navigation }: any) => {
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
+					keyExtractor={(item) => String(item.id)}
 					renderItem={({ item }) => <CompanyCard item={item} />}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
-						activityLoading ? (
+						fetching ? (
 							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
 						) : (
 							<View style={{ height: 16 }} />
 						)
 					}
 					onEndReached={() => {
-						if (
-							!onEndReachedCalledDuringMomentum &&
-							!activityLoading &&
-							!loading
-						) {
+						if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
 							loadMoreCompanies();
 							setOnEndReachedCalledDuringMomentum(true);
 						}

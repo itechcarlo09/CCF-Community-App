@@ -7,3 +7,8 @@ export interface CompanyItemUI {
 	employeeCount: number;
 	pastCount: number;
 }
+
+export interface EmployeeItemUI {
+	id: number;
+	fullName: string;
+}

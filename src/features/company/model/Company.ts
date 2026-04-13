@@ -9,19 +9,24 @@ import { PaginatedResponse } from "../../../types/paginationTypes";
 // 	updatedAt: Date;
 // }
 
-// export interface EventSpeaker {
-// 	speakerId: number;
-// 	eventId: number;
-// 	createdAt: Date;
-// 	speaker: Speaker;
-// }
+export interface EmployeesItemDTO {
+	id: number;
+	firstName: string;
+	middleName: string | null;
+	lastName: string;
+	profilePicture: string | null;
+}
 
-// export interface Series {
-// 	id: number;
-// 	name: string;
-// 	createdAt: Date;
-// 	updatedAt?: Date;
-// }
+export interface CompaniesItemDTO {
+	id: number;
+	name: string;
+	acronym: string | null;
+	address: string;
+	createdAt: Date;
+	updatedAt: Date;
+	employedCount: number;
+	formerEmployeeCount: number;
+}
 
 export interface CompanyDTO {
 	id: number;
@@ -32,11 +37,9 @@ export interface CompanyDTO {
 	updatedAt: Date;
 }
 
-// export interface CreateMinistryDTO {
-// 	name: string;
-// 	mission?: string;
-// 	vision?: string;
-// 	description?: string;
-// }
-
+export interface CreateCompanyDTO {
+	name: string;
+	acronym?: string | null;
+	address: string;
+}
 export type GetCompanyResponse = PaginatedResponse<CompanyDTO>;
