@@ -32,7 +32,9 @@ export const useCompanyForm = ({
 	const { addCompany, updateCompany } = useCompanyViewModel();
 
 	// ✅ Fetch company (EDIT mode)
-	const { data: company, isLoading: isFetching } = useQuery<CompanyDTO | null>({
+	const { data: company, isLoading: isFetching } = useQuery<
+		CompanyDTO | undefined
+	>({
 		queryKey: ["company", companyId],
 		queryFn: () => companyRepository.getCompanyById?.(companyId!),
 		enabled: !!companyId,
@@ -44,12 +46,11 @@ export const useCompanyForm = ({
 		mutationFn: async (values: typeof staticInitialValues) => {
 			if (companyId && companyId > 0) {
 				return updateCompany(companyId, {
-					name: values.name,
+					name: values.name.trim(),
 					acronym: values.acronym?.trim() ? values.acronym.trim() : null,
-					address: values.address,
+					address: values.address.trim(),
 				});
 			}
-
 			return addCompany({
 				name: values.name.trim(),
 				...(values.acronym?.trim() && { acronym: values.acronym.trim() }),
@@ -63,6 +64,7 @@ export const useCompanyForm = ({
 
 			onSuccess?.();
 		},
+		onError: showError,
 	});
 
 	// ✅ Initial values (edit vs create)

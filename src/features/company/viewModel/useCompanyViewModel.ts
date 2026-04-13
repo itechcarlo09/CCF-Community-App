@@ -6,7 +6,7 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 
-import { CreateCompanyDTO } from "../model/Company";
+import { CreateCompanyDTO, UpdateCompanyDTO } from "../model/Company";
 import { companyRepository } from "../data/companyRepository";
 import { mapCompanyToUI, mapEmployeesToUI } from "../data/company.mapper";
 import { COMPANY_PAGE_SIZE } from "src/types/globalTypes";
@@ -172,13 +172,8 @@ export const useCompanyViewModel = ({
 	// ✏️ UPDATE COMPANY (Optimistic)
 	// =========================
 	const updateCompanyMutation = useMutation({
-		mutationFn: ({
-			id,
-			data,
-		}: {
-			id: number;
-			data: Partial<CreateCompanyDTO>;
-		}) => companyRepository.updateCompany?.(id, data),
+		mutationFn: ({ id, data }: { id: number; data: UpdateCompanyDTO }) =>
+			companyRepository.updateCompany?.(id, data),
 
 		onMutate: async ({ id, data }) => {
 			await queryClient.cancelQueries({ queryKey: companyKeys.all });
@@ -204,10 +199,14 @@ export const useCompanyViewModel = ({
 			return { previous };
 		},
 
-		onError: (_err, _vars, context) => {
-			context?.previous?.forEach(([key, data]) => {
-				queryClient.setQueryData(key, data);
-			});
+		onError: (err, variables, context) => {
+			showError(err);
+
+			if (context?.previous) {
+				context.previous.forEach(([queryKey, data]) => {
+					queryClient.setQueryData(queryKey, data);
+				});
+			}
 		},
 
 		onSettled: () => {
@@ -234,7 +233,7 @@ export const useCompanyViewModel = ({
 
 		// actions
 		addCompany: addCompanyMutation.mutateAsync,
-		updateCompany: (id: number, data: Partial<CreateCompanyDTO>) =>
+		updateCompany: (id: number, data: UpdateCompanyDTO) =>
 			updateCompanyMutation.mutateAsync({ id, data }),
 
 		searchCompanies: setSearch,

@@ -1,10 +1,10 @@
 import { companyDataSource } from "./companyDataSource";
 
 export const companyRepository = {
-	// getEventById: ministryDataSource.getEventById,
+	getCompanyById: companyDataSource.getCompanyById,
 	getCompanies: companyDataSource.getCompanies,
 	// searchEvents: eventDataSource.searchEvents,
 	addCompany: companyDataSource.addCompany,
-	// updateEvent: eventDataSource.update,
+	updateCompany: companyDataSource.updateCompany,
 	// deleteEvent: eventDataSource.delete,
 };

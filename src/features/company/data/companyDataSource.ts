@@ -1,10 +1,10 @@
 import { showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
 import {
-	CompaniesItemDTO,
 	CompanyDTO,
 	CreateCompanyDTO,
 	GetCompanyResponse,
+	UpdateCompanyDTO,
 } from "../model/Company";
 import { GetCompanyParams } from "../model/RequestParams";
 
@@ -29,7 +29,14 @@ export const companyDataSource = {
 			showError(error);
 		}
 	},
-
+	async getCompanyById(id: number): Promise<CompanyDTO | undefined> {
+		try {
+			const res = await apiClient.get<CompanyDTO>(`/company/${id}`);
+			return res.data ? res.data : undefined;
+		} catch (error: any) {
+			showError(error);
+		}
+	},
 	// async searchEvents(
 	// 	params?: GetMinistryParams,
 	// ): Promise<GetMinistryResponse | undefined> {
@@ -46,6 +53,10 @@ export const companyDataSource = {
 	// },
 	async addCompany(data: CreateCompanyDTO): Promise<CompanyDTO> {
 		const res = await apiClient.post<any>("/company", data);
+		return res.data;
+	},
+	async updateCompany(id: number, data: UpdateCompanyDTO): Promise<CompanyDTO> {
+		const res = await apiClient.put(`/company/${id}`, data);
 		return res.data;
 	},
 	// async update(id: string, data: Partial<Event>): Promise<void> {
