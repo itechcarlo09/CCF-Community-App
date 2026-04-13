@@ -39,7 +39,8 @@ export interface CompanyDTO {
 
 export interface CreateCompanyDTO {
 	name: string;
-	acronym?: string | null;
+	acronym?: string;
 	address: string;
 }
+
 export type GetCompanyResponse = PaginatedResponse<CompaniesItemDTO>;

@@ -48,7 +48,7 @@ export const CompanyListScreen = ({ navigation }: any) => {
 				placeholder="Search company..."
 				onSearch={setSearch}
 				onBack={() => navigation.goBack()}
-				onAdd={() => navigation.navigate("CreateMinistryScreen")}
+				onAdd={() => navigation.navigate("CompanyFormScreen")}
 			/>
 
 			{loading ? (

@@ -1,6 +1,11 @@
 import { showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
-import { GetCompanyResponse } from "../model/Company";
+import {
+	CompaniesItemDTO,
+	CompanyDTO,
+	CreateCompanyDTO,
+	GetCompanyResponse,
+} from "../model/Company";
 import { GetCompanyParams } from "../model/RequestParams";
 
 export const companyDataSource = {
@@ -39,13 +44,10 @@ export const companyDataSource = {
 	// 		return undefined;
 	// 	}
 	// },
-	// async add(user: Omit<Event, "id">): Promise<void> {
-	// 	try {
-	// 		await eventCollection.doc().set(eventConverter.toFirestore(user));
-	// 	} catch (error) {
-	// 		console.error("eventDataSource.add error:", error);
-	// 	}
-	// },
+	async addCompany(data: CreateCompanyDTO): Promise<CompanyDTO> {
+		const res = await apiClient.post<any>("/company", data);
+		return res.data;
+	},
 	// async update(id: string, data: Partial<Event>): Promise<void> {
 	// 	try {
 	// 		await eventCollection.doc(id).update({

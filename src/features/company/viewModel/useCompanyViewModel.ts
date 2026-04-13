@@ -10,6 +10,7 @@ import { CreateCompanyDTO } from "../model/Company";
 import { companyRepository } from "../data/companyRepository";
 import { mapCompanyToUI, mapEmployeesToUI } from "../data/company.mapper";
 import { COMPANY_PAGE_SIZE } from "src/types/globalTypes";
+import { showError } from "src/utils/errorUtils";
 
 const EMPLOYEES_PAGE_SIZE = 20;
 
@@ -164,6 +165,7 @@ export const useCompanyViewModel = ({
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: companyKeys.all });
 		},
+		onError: showError,
 	});
 
 	// =========================

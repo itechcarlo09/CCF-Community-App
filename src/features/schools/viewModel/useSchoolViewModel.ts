@@ -9,6 +9,7 @@ import { CreateSchoolDTO } from "../model/School";
 import { schoolRepository } from "../data/schoolRepository";
 import { mapSchoolToUI, mapStudentsToUI } from "../data/school.mapper";
 import { SCHOOL_PAGE_SIZE } from "src/types/globalTypes";
+import { showError } from "src/utils/errorUtils";
 
 const STUDENTS_PAGE_SIZE = 20;
 
@@ -163,6 +164,7 @@ export const useSchoolViewModel = ({
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: schoolKeys.all });
 		},
+		onError: showError,
 	});
 
 	// =========================

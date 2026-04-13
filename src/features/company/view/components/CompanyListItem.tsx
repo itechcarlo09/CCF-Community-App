@@ -48,9 +48,7 @@ const CompanyCard: React.FC<Props> = ({ item, onPress }) => {
 
 			{/* Content */}
 			<View style={styles.content}>
-				<Text style={styles.name} numberOfLines={1}>
-					{item.name}
-				</Text>
+				<Text style={styles.name}>{item.name}</Text>
 
 				<Text style={styles.acronym}>
 					{getAcronym(item.acronym, item.name)}

@@ -53,6 +53,7 @@ export type UserStackParamList = {
 	SchoolListScreen: {
 		onSelect: (id: number, fullName: string) => void;
 	};
+	CompanyListScreen: { onSelect: (id: number, fullName: string) => void };
 	SchoolFormScreen: { id: number } | undefined;
 	DleaderScreen: {
 		id: number;
@@ -113,6 +114,8 @@ export type OtherStackParamList = {
 		graduatesCount: number;
 	};
 	SchoolFormScreen: { id: number } | undefined;
+	CompanyListScreen: undefined;
+	CompanyFormScreen: { id: number } | undefined;
 };
 
 export type OtherNavigationProp<

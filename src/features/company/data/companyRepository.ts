@@ -4,7 +4,7 @@ export const companyRepository = {
 	// getEventById: ministryDataSource.getEventById,
 	getCompanies: companyDataSource.getCompanies,
 	// searchEvents: eventDataSource.searchEvents,
-	// addEvent: eventDataSource.add,
+	addCompany: companyDataSource.addCompany,
 	// updateEvent: eventDataSource.update,
 	// deleteEvent: eventDataSource.delete,
 };
