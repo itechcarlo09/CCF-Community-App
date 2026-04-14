@@ -1,12 +1,14 @@
-import { showError } from "src/utils/errorUtils";
+import { handleApiError, showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
 import {
 	CompanyDTO,
 	CreateCompanyDTO,
 	GetCompanyResponse,
+	GetEmployeesResponse,
 	UpdateCompanyDTO,
 } from "../model/Company";
 import { GetCompanyParams } from "../model/RequestParams";
+import { PAGE_SIZE } from "src/types/globalTypes";
 
 export const companyDataSource = {
 	// async getMinistriesById(id: string): Promise<MinistryDTO | null> {
@@ -58,6 +60,40 @@ export const companyDataSource = {
 	async updateCompany(id: number, data: UpdateCompanyDTO): Promise<CompanyDTO> {
 		const res = await apiClient.put(`/company/${id}`, data);
 		return res.data;
+	},
+
+	async getEmployees(
+		params?: GetCompanyParams,
+		isEmployed: boolean = true,
+		companyId: number = 0,
+	): Promise<GetEmployeesResponse> {
+		try {
+			const res = await apiClient.get<GetEmployeesResponse>(
+				`/company${isEmployed ? "/employed" : "/former"}/${companyId}`,
+				{
+					params,
+				},
+			);
+
+			return {
+				data: res.data?.data ?? [], // always array
+				meta: res.data?.meta ?? {
+					page: 0,
+					limit: PAGE_SIZE,
+					hasMore: false,
+				},
+			};
+		} catch (error: any) {
+			showError(error);
+			return {
+				data: [],
+				meta: {
+					page: 0,
+					limit: PAGE_SIZE,
+					hasMore: false,
+				},
+			};
+		}
 	},
 	// async update(id: string, data: Partial<Event>): Promise<void> {
 	// 	try {

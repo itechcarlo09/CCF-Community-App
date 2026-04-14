@@ -17,13 +17,15 @@ export const mapCompanyToUI = (company: CompaniesItemDTO): CompanyItemUI => {
 	};
 };
 
-export const mapEmployeesToUI = (student: EmployeesItemDTO): EmployeeItemUI => {
+export const mapEmployeesToUI = (
+	employee: EmployeesItemDTO,
+): EmployeeItemUI => {
 	return {
-		id: student.id,
+		id: employee.id,
 		fullName: formatCompleteName(
-			student.firstName,
-			student.middleName ?? "",
-			student.lastName,
+			employee.firstName,
+			employee.middleName ?? "",
+			employee.lastName,
 		),
 	};
 };

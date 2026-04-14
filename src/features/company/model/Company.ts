@@ -50,3 +50,4 @@ export interface UpdateCompanyDTO {
 }
 
 export type GetCompanyResponse = PaginatedResponse<CompaniesItemDTO>;
+export type GetEmployeesResponse = PaginatedResponse<EmployeesItemDTO>;
