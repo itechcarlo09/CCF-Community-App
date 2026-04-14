@@ -19,6 +19,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList } from "src/types/navigation";
 import EducationLevel from "src/types/enums/EducationLevel";
 import { useEducationViewModel } from "../viewModel/useEducationViewModel";
+import { showText } from "src/utils/errorUtils";
 
 type UserRouteProp = RouteProp<UserStackParamList, "EducationFormScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -30,7 +31,7 @@ const EducationFormScreen = () => {
 	const currentDate = dayjs().toDate();
 	const { deleteEducation } = useEducationViewModel();
 
-	const { formik, loading, education } = useEducationForm({
+	const { formik, isLoading, education } = useEducationForm({
 		accountId: accountId ?? NOID,
 		educationId: educationId ?? NOID,
 		onSuccess: () => navigation.goBack(),
@@ -77,11 +78,11 @@ const EducationFormScreen = () => {
 				navigation.goBack();
 			}
 		} catch (error) {
-			// optional: show error toast
+			showText("Error deleting education", "error");
 		}
 	};
 
-	if (loading) return <Loading />;
+	if (isLoading) return <Loading />;
 
 	return (
 		<View style={styles.container}>

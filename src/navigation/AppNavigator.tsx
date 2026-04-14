@@ -19,7 +19,7 @@ function AppNavigator() {
 			<Stack.Screen name="UserNavigator" component={UserNavigator} />
 			<Stack.Screen name="DgroupNavigator" component={DGroupNavigator} />
 			<Stack.Screen name="OthersNavigator" component={OthersNavigator} />
-			<Stack.Screen name="SharedNavigator" component={SharedNavigator} />
+			{/* <Stack.Screen name="SharedNavigator" component={SharedNavigator} /> */}
 		</Stack.Navigator>
 	);
 }

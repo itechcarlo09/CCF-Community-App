@@ -65,7 +65,10 @@ export const CompanyListScreen = () => {
 
 	const handleSelect = (item: CompanyItemUI) => {
 		if (onSelect) {
-			onSelect(item.id, `${item.name} ${item.acronym && `- ${item.acronym}`}`);
+			onSelect(
+				item.id,
+				`${item.name} ${item.acronym ? `- ${item.acronym}` : ""}`,
+			);
 			navigation.goBack();
 		} else {
 			otherNavigation.navigate("CompanyDetailsScreen", {

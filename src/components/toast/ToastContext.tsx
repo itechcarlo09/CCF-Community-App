@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { ToastComponent } from "./ToastComponents";
 
-type ToastType = "success" | "error";
+export type ToastType = "success" | "error";
 
 type ToastState = {
 	visible: boolean;

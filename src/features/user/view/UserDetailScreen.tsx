@@ -27,7 +27,6 @@ import { useUserForm } from "../hooks/useUserForm";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList } from "src/types/navigation";
-import { RecordItemUI } from "../model/RecordListItem";
 import { mapUserToUI } from "../data/user.mapper";
 import {
 	formatDateRangeFromDate,
@@ -37,7 +36,7 @@ import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
 import { NOID } from "src/types/globalTypes";
 import { normalizeGender } from "src/utils/stringUtils";
-import { EducationDTO } from "../model/user";
+import { EducationDTO, EmploymentDTO } from "../model/user";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -76,7 +75,9 @@ const UserDetailScreen = () => {
 	const educations = user?.education
 		? sortByEndDate<EducationDTO>(user.education)
 		: [];
-	const employments = user?.employment ? sortByEndDate(user.employment) : [];
+	const employments = user?.employment
+		? sortByEndDate<EmploymentDTO>(user.employment)
+		: [];
 
 	const handleAssignDLeader = useCallback(() => {
 		const gender = normalizeGender(user?.gender);
@@ -219,7 +220,6 @@ const UserDetailScreen = () => {
 							onPress={() =>
 								navigation.navigate("EducationFormScreen", {
 									accountId: id,
-									onSuccess: refreshUser,
 								})
 							}
 						/>
@@ -242,7 +242,6 @@ const UserDetailScreen = () => {
 									navigation.navigate("EducationFormScreen", {
 										accountId: id,
 										educationId: edu.id,
-										onSuccess: refreshUser,
 									})
 								}
 							/>
@@ -254,9 +253,13 @@ const UserDetailScreen = () => {
 				<View style={styles.section}>
 					<View style={styles.sectionHeader}>
 						<Text style={styles.sectionTitle}>Employment</Text>
-						<TouchableOpacity style={styles.addBtn}>
-							<MdiIcon path={mdiPlusCircleOutline} size={20} />
-						</TouchableOpacity>
+						<MdiIcon
+							path={mdiPlusCircleOutline}
+							size={20}
+							onPress={() =>
+								navigation.navigate("EmploymentFormScreen", { accountId: id })
+							}
+						/>
 					</View>
 
 					{employments.map((job, index) => (
@@ -269,6 +272,16 @@ const UserDetailScreen = () => {
 									{formatDateRangeFromDate(job.startDate, job.endDate)}
 								</Text>
 							</View>
+							<MdiIcon
+								path={mdiPencil}
+								size={18}
+								onPress={() =>
+									navigation.navigate("EmploymentFormScreen", {
+										accountId: id,
+										employmentId: job.id,
+									})
+								}
+							/>
 						</View>
 					))}
 				</View>

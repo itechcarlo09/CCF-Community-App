@@ -9,26 +9,25 @@ import Loading from "@components/Loading";
 import { MonthYearPicker } from "@components/MonthYearPicker";
 import { ModernSwitch } from "@components/ModernSwitch";
 import SelectButton from "@components/SelectButton";
-
+import dayjs from "dayjs";
 import { NOID } from "src/types/globalTypes";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList } from "src/types/navigation";
+import { useEmploymentForm } from "../hooks/useEmploymentForm";
+import { useEmploymentViewModel } from "../viewModel/useEmploymentViewModel";
+import { showText } from "src/utils/errorUtils";
 
-// import { useEmploymentForm } from "../hooks/useEmploymentForm"; // similar to useEducationForm
-// import { useEmploymentViewModel } from "../viewModel/useEmploymentViewModel"; // similar to education VM
-import dayjs from "dayjs";
-
-// type UserRouteProp = RouteProp<UserStackParamList, "EmploymentFormScreen">;
-// type NavProp = NativeStackNavigationProp<UserStackParamList>;
+type UserRouteProp = RouteProp<UserStackParamList, "EmploymentFormScreen">;
+type NavProp = NativeStackNavigationProp<UserStackParamList>;
 
 const EmploymentFormScreen = () => {
-	// const navigation = useNavigation<NavProp>();
-	// const route = useRoute<UserRouteProp>();
+	const navigation = useNavigation<NavProp>();
+	const route = useRoute<UserRouteProp>();
 	const { accountId, employmentId } = route.params || {};
 	const currentDate = dayjs().toDate();
-	// const { deleteEmployment } = useEmploymentViewModel();
+	const { deleteEmployment } = useEmploymentViewModel();
 
-	const { formik, loading, employment } = useEmploymentForm({
+	const { formik, isLoading, employment } = useEmploymentForm({
 		accountId: accountId ?? NOID,
 		employmentId: employmentId ?? NOID,
 		onSuccess: () => navigation.goBack(),
@@ -49,18 +48,18 @@ const EmploymentFormScreen = () => {
 			const res = await deleteEmployment(employmentId ?? NOID);
 			if (res?.success) navigation.goBack();
 		} catch (error) {
-			// optional: show error toast
+			showText("Error deleting employment", "error");
 		}
 	};
 
-	if (loading) return <Loading />;
+	if (isLoading) return <Loading />;
 
 	return (
 		<View style={styles.container}>
 			<Header
 				title="Employment"
 				onBack={navigation.goBack}
-				onDelete={handleDelete}
+				onDelete={employmentId ? handleDelete : undefined}
 			/>
 
 			<KeyboardAwareScrollView contentContainerStyle={styles.content}>
@@ -71,13 +70,12 @@ const EmploymentFormScreen = () => {
 					value={formik.values.companyId > 0 ? selectedCompany : ""}
 					placeholder="Select Company"
 					onPress={() =>
-						// navigation.navigate("CompanyListScreen", {
-						// 	onSelect: (selectedId: number, companyName: string) => {
-						// 		formik.setFieldValue("companyId", selectedId);
-						// 		setSelectedCompany(companyName);
-						// 	},
-						// })
-						{}
+						navigation.navigate("CompanyListScreen", {
+							onSelect: (selectedId: number, companyName: string) => {
+								formik.setFieldValue("companyId", selectedId);
+								setSelectedCompany(companyName);
+							},
+						})
 					}
 					error={formik.errors.companyId}
 				/>

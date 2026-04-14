@@ -24,9 +24,10 @@ export interface CompanyDTO {
 }
 
 export interface EmploymentDTO {
+	id: number;
 	position: string;
-	startDate: string;
-	endDate?: string;
+	startDate: Date;
+	endDate?: Date;
 	company: CompanyDTO;
 }
 
@@ -57,7 +58,7 @@ export interface UserDTO {
 	emergencyContactName?: string;
 	emergencyContactNumber?: string;
 	education: EducationDTO[];
-	employment?: EmploymentDTO[];
+	employment: EmploymentDTO[];
 }
 
 export interface AddEducationDTO {

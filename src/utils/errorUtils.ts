@@ -1,10 +1,14 @@
-import { useToast } from "@components/toast/ToastContext";
+import { ToastType, useToast } from "@components/toast/ToastContext";
 import { Alert } from "react-native";
 
 const { show } = useToast();
 
 export function handleApiError(error: any) {
 	Alert.alert("Error", error.message ?? "Something went wrong");
+}
+
+export function showText(message: string, type: ToastType = "success") {
+	show(message, type);
 }
 
 export function showError(error: Error) {

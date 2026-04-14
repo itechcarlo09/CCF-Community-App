@@ -10,6 +10,7 @@ import EducationLevel from "src/types/enums/EducationLevel";
 import { CreateEducationDTO } from "../model/Education";
 import UserType from "src/types/enums/UserType";
 import { showError } from "src/utils/errorUtils";
+import { CreateEmploymentDTO } from "../model/Employment";
 
 interface UseUserFormProps {
 	userId?: number;
@@ -30,6 +31,7 @@ const initialValues = {
 	emergencyPerson: "",
 	emergencyNumber: "",
 	education: [] as CreateEducationDTO[],
+	employment: [] as CreateEmploymentDTO[],
 };
 
 const validationSchema = Yup.object({
@@ -157,6 +159,14 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 						course: edu.course,
 						startDate: edu.startDate,
 						endDate: edu.endDate ?? null,
+					};
+				}),
+				employment: user.employment.map((emp) => {
+					return {
+						companyId: emp.company.id,
+						position: emp.position,
+						startDate: emp.startDate,
+						endDate: emp.endDate ?? null,
 					};
 				}),
 			});

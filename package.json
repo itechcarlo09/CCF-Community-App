@@ -6,6 +6,7 @@
 		"update-env": "node scripts/update-env.js",
 		"android:stag": "yarn update-env && ENVFILE=.env.staging react-native run-android",
 		"android": "yarn update-env && ENVFILE=.env.development react-native run-android",
+		"android:reset": "yarn update-env && ENVFILE=.env.development react-native run-android --reset-cache",
 		"android:prod": "ENVFILE=.env.production react-native run-android",
 		"ios": "yarn update-env && ENVFILE=.env.development react-native run-ios",
 		"ios:prod": "ENVFILE=.env.production react-native run-ios",
