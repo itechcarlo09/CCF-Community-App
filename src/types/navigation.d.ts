@@ -116,6 +116,11 @@ export type OtherStackParamList = {
 	};
 	SchoolFormScreen: { id: number } | undefined;
 	CompanyListScreen: undefined;
+	CompanyDetailsScreen: {
+		id: number;
+		employeesCount: number;
+		formerEmployeesCount: number;
+	};
 	CompanyFormScreen: { id: number } | undefined;
 };
 

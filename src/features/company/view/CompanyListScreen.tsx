@@ -39,12 +39,12 @@ export const CompanyListScreen = () => {
 		loading,
 		fetching,
 		loadMoreCompanies,
-		searchCompanies,
+		searchEmployees,
 	} = useCompanyViewModel();
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
 	useEffect(() => {
-		searchCompanies(debouncedSearchTerm);
+		searchEmployees(debouncedSearchTerm);
 	}, [debouncedSearchTerm]);
 
 	const { theme } = useTheme();
@@ -68,15 +68,11 @@ export const CompanyListScreen = () => {
 			onSelect(item.id, `${item.name} ${item.acronym && `- ${item.acronym}`}`);
 			navigation.goBack();
 		} else {
-			// otherNavigation.navigate("CompanyDetailsScreen", {
-			// 	id: item.id,
-			// 	enrolledCount: item.employeeCount,
-			// 	graduatesCount: item.pastCount,
-			// });
-			navigation.navigate(
-				"CompanyFormScreen",
-				item.id ? { id: item.id } : undefined,
-			);
+			otherNavigation.navigate("CompanyDetailsScreen", {
+				id: item.id,
+				employeesCount: item.employeeCount,
+				formerEmployeesCount: item.pastCount,
+			});
 		}
 	};
 

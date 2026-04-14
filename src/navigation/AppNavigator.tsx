@@ -6,6 +6,7 @@ import UserNavigator from "./UserNavigator";
 import LoginScreen from "../features/auth/view/LoginScreen";
 import OthersNavigator from "./OthersNavigator";
 import DGroupNavigator from "./DGroupNavigator";
+import SharedNavigator from "./SharedNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ function AppNavigator() {
 			<Stack.Screen name="UserNavigator" component={UserNavigator} />
 			<Stack.Screen name="DgroupNavigator" component={DGroupNavigator} />
 			<Stack.Screen name="OthersNavigator" component={OthersNavigator} />
+			<Stack.Screen name="SharedNavigator" component={SharedNavigator} />
 		</Stack.Navigator>
 	);
 }

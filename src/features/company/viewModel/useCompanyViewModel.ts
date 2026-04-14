@@ -236,7 +236,7 @@ export const useCompanyViewModel = ({
 		updateCompany: (id: number, data: UpdateCompanyDTO) =>
 			updateCompanyMutation.mutateAsync({ id, data }),
 
-		searchCompanies: setSearch,
+		searchEmployees: setSearch,
 
 		loadMoreCompanies: () =>
 			companiesQuery.hasNextPage && companiesQuery.fetchNextPage(),
