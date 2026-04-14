@@ -82,7 +82,7 @@ export const SchoolListScreen = () => {
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
-				title="Schools"
+				title={`${onSelect ? "Select School" : "Manage Schools"}`}
 				placeholder="Search school..."
 				onSearch={setSearch}
 				onBack={navigation.goBack}

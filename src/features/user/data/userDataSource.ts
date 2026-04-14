@@ -14,6 +14,11 @@ import {
 	EducationResponseDTO,
 } from "src/types/dto";
 import { EmploymentGetResponseDTO } from "src/types/dto/EmploymentResponseDTO";
+import {
+	AddEmploymentDTO,
+	CreateEmploymentDTO,
+	CreateEmploymentListDTO,
+} from "../model/Employment";
 
 export const userDataSource = {
 	async getUsers(
@@ -72,6 +77,18 @@ export const userDataSource = {
 		}
 	},
 
+	async addEmployment(
+		data: CreateEmploymentListDTO,
+	): Promise<AddEmploymentDTO> {
+		try {
+			const res = await apiClient.post<AddEmploymentDTO>("/employment", data);
+			return res.data;
+		} catch (error: any) {
+			console.error("addEmployment error:", error.message ?? error);
+			return { accountId: -1 };
+		}
+	},
+
 	async editEducation(
 		id: number,
 		data: Partial<CreateEducationDTO>,
@@ -84,6 +101,22 @@ export const userDataSource = {
 			return res.data ?? undefined;
 		} catch (error: any) {
 			console.error("editEducation error:", error.message ?? error);
+			return undefined;
+		}
+	},
+
+	async editEmployment(
+		id: number,
+		data: Partial<CreateEmploymentDTO>,
+	): Promise<ApiResponse<EmploymentGetResponseDTO> | undefined> {
+		try {
+			const res = await apiClient.patch<ApiResponse<EmploymentGetResponseDTO>>(
+				`/employment/${id}`,
+				data,
+			);
+			return res.data ?? undefined;
+		} catch (error: any) {
+			console.error("editEmployment error:", error.message ?? error);
 			return undefined;
 		}
 	},
@@ -145,6 +178,20 @@ export const userDataSource = {
 			return res.data ?? undefined;
 		} catch (error: any) {
 			console.error("editEducation error:", error.message ?? error);
+			return undefined;
+		}
+	},
+
+	async deleteEmployment(
+		id: number,
+	): Promise<ApiResponse<EmploymentGetResponseDTO> | undefined> {
+		try {
+			const res = await apiClient.delete<ApiResponse<EmploymentGetResponseDTO>>(
+				`/employment/${id}`,
+			);
+			return res.data ?? undefined;
+		} catch (error: any) {
+			console.error("deleteEmployment error:", error.message ?? error);
 			return undefined;
 		}
 	},

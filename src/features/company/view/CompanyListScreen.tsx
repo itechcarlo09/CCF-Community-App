@@ -82,7 +82,7 @@ export const CompanyListScreen = () => {
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
-				title="Companies"
+				title={`${onSelect ? "Select Company" : "Manage Companies"}`}
 				placeholder="Search company..."
 				onSearch={setSearch}
 				onBack={() => navigation.goBack()}

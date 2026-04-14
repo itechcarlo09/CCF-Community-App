@@ -7,8 +7,11 @@ export const userRepository = {
 	getEmploymentById: userDataSource.getEmploymentById,
 	addUser: userDataSource.addUser,
 	addEducation: userDataSource.addEducation,
+	addEmployment: userDataSource.addEmployment,
 	updateUser: userDataSource.editUser,
 	updateEducation: userDataSource.editEducation,
+	updateEmployment: userDataSource.editEmployment,
 	getDLeaders: userDataSource.dLeadersUsers,
 	deleteEducation: userDataSource.deleteEducation,
+	deleteEmployment: userDataSource.deleteEmployment,
 };

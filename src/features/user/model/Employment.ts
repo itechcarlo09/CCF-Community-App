@@ -9,3 +9,7 @@ export interface CreateEmploymentListDTO {
 	accountId: number;
 	employments: CreateEmploymentDTO[];
 }
+
+export interface AddEmploymentDTO {
+	accountId: number;
+}
