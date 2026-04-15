@@ -10,22 +10,22 @@ import {
 import { DGroupItemUI } from "../../model/DGroupItemUI";
 import { useTheme } from "@theme/ThemeProvider";
 
-const DGroupCard: React.FC<DGroupItemUI> = ({
-	groupName,
-	leaderName,
-	memberCount,
-	leaderImageUrl,
-	leaderProfileUrl,
-	memberTypes,
-	id,
-}) => {
+interface Props {
+	item: DGroupItemUI;
+}
+
+const DGroupCard: React.FC<Props> = ({ item }) => {
 	const { theme } = useTheme();
 	return (
-		<View style={styles.card} key={id}>
+		<View style={styles.card} key={item.id}>
 			{/* LEFT SIDE */}
 			<View style={styles.left}>
 				<View style={styles.avatar}>
-					<CircularImage uri={leaderImageUrl} size={45} fallbackText={""} />
+					<CircularImage
+						uri={item.leaderImageUrl}
+						size={45}
+						fallbackText={""}
+					/>
 				</View>
 
 				<View style={styles.textContainer}>
@@ -33,13 +33,23 @@ const DGroupCard: React.FC<DGroupItemUI> = ({
 						style={[styles.groupName, { color: theme.text }]}
 						numberOfLines={1}
 					>
-						{groupName}
+						{item.groupName}
 					</Text>
 
-					<Text style={styles.leaderName}>👤 {leaderName}</Text>
+					<Text style={styles.leaderName}>{`${
+						item.gender === "Couples"
+							? "👨👩"
+							: item.gender === "Male"
+							? "👨"
+							: "👩"
+					} ${item.leadersName}`}</Text>
 
-					{leaderProfileUrl && (
-						<TouchableOpacity onPress={() => Linking.openURL(leaderProfileUrl)}>
+					{item.leaderProfileUrl && (
+						<TouchableOpacity
+							onPress={() =>
+								item.leaderProfileUrl && Linking.openURL(item.leaderProfileUrl)
+							}
+						>
 							<Text style={styles.link}>View Profile</Text>
 						</TouchableOpacity>
 					)}
@@ -49,12 +59,12 @@ const DGroupCard: React.FC<DGroupItemUI> = ({
 			{/* RIGHT SIDE */}
 			<View style={styles.right}>
 				<Text style={[styles.memberCount, { color: theme.text }]}>
-					{memberCount}
+					{item.memberCount}
 				</Text>
 				<Text style={styles.memberLabel}>Members</Text>
 
 				<View style={styles.tags}>
-					{memberTypes.map((type, i) => (
+					{item.memberTypes.map((type, i) => (
 						<View key={i} style={styles.tag}>
 							<Text style={styles.tagText}>{type}</Text>
 						</View>

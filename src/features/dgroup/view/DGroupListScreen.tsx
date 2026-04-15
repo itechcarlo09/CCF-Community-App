@@ -19,7 +19,7 @@ const DGroupListScreen = ({ navigation }: any) => {
 		dgroups,
 		refresh,
 		loading,
-		activityLoading,
+		fetching,
 		searchDGroups,
 		loadMoreDGroups,
 	} = useDGroupViewModel();
@@ -81,29 +81,17 @@ const DGroupListScreen = ({ navigation }: any) => {
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
-					renderItem={({ item }) => (
-						<DGroupListCard
-							groupName={item.groupName}
-							leaderName={item.leaderName}
-							memberCount={item.memberCount}
-							memberTypes={item.memberTypes}
-							id={item.id}
-						/>
-					)}
+					renderItem={({ item }) => <DGroupListCard item={item} />}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
-						activityLoading ? (
+						fetching ? (
 							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
 						) : (
 							<View style={{ height: 16 }} />
 						)
 					}
 					onEndReached={() => {
-						if (
-							!onEndReachedCalledDuringMomentum &&
-							!activityLoading &&
-							!loading
-						) {
+						if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
 							loadMoreDGroups();
 							setOnEndReachedCalledDuringMomentum(true);
 						}

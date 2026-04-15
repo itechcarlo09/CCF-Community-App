@@ -33,16 +33,11 @@ export const useDGroupViewModel = () => {
 		queryFn: async ({ pageParam = 1 }) => {
 			const skip = (pageParam - 1) * PAGE_SIZE;
 
-			const result = search.trim()
-				? await dgroupRepository.searchDGroups?.({
-						name: search,
-						skip,
-						take: PAGE_SIZE,
-				  })
-				: await dgroupRepository.getDGroups({
-						skip,
-						take: PAGE_SIZE,
-				  });
+			const result = await dgroupRepository.getDGroups({
+				...(search.trim() && { search }),
+				skip,
+				take: PAGE_SIZE,
+			});
 
 			return {
 				data: result?.data.map(mapDGroupToUI) ?? [],

@@ -2,17 +2,21 @@ import { DGroupDTO } from "../model/DGroup";
 import { DGroupItemUI } from "../model/DGroupItemUI";
 
 export const mapDGroupToUI = (dgroup: DGroupDTO): DGroupItemUI => {
-	const getMemberTypes = (count: number) => {
-		return count % 2 !== 0 ? ["Couple"] : ["Elevate", "B1G"];
-	};
+	const leadersName = dgroup.leaders
+		.map((leader) => `${leader.firstName} ${leader.lastName}`)
+		.join(", ");
+
+	const gender =
+		dgroup.leaders.length === 2 ? "Couples" : dgroup.leaders[0]?.gender;
 
 	return {
 		id: dgroup.id,
 		groupName: dgroup.name,
-		leaderName: "DLeaders Name", // TODO: replace with real data
-		memberCount: 0, // TODO
+		leadersName,
+		memberCount: dgroup.members,
 		leaderImageUrl: "", // TODO
 		leaderProfileUrl: "", // TODO
-		memberTypes: getMemberTypes(dgroup.id),
+		memberTypes: dgroup.lifestage,
+		gender,
 	};
 };
