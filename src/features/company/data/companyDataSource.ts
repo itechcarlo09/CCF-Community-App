@@ -19,16 +19,22 @@ export const companyDataSource = {
 	// 		throw new Error(error.message);
 	// 	}
 	// },
-	async getCompanies(
-		params?: GetCompanyParams,
-	): Promise<GetCompanyResponse | undefined> {
+	async getCompanies(params?: GetCompanyParams): Promise<GetCompanyResponse> {
 		try {
 			const res = await apiClient.get<GetCompanyResponse>("/company", {
 				params,
 			});
-			return res.data ?? undefined;
+			return res.data;
 		} catch (error: any) {
 			showError(error);
+			return {
+				data: [], // fallback safe value
+				meta: {
+					page: 0,
+					limit: PAGE_SIZE,
+					hasMore: false,
+				},
+			};
 		}
 	},
 	async getCompanyById(id: number): Promise<CompanyDTO | undefined> {

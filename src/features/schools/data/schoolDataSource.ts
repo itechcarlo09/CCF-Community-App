@@ -1,4 +1,4 @@
-import { handleApiError } from "src/utils/errorUtils";
+import { handleApiError, showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
 import { GetSchoolParams } from "../model/RequestParams";
 import {
@@ -25,7 +25,7 @@ export const schoolDataSource = {
 				},
 			};
 		} catch (error: any) {
-			handleApiError(error);
+			showError(error);
 
 			return {
 				data: [], // fallback safe value
