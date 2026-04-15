@@ -59,9 +59,11 @@ const DGroupCard: React.FC<Props> = ({ item }) => {
 			{/* RIGHT SIDE */}
 			<View style={styles.right}>
 				<Text style={[styles.memberCount, { color: theme.text }]}>
-					{item.memberCount}
+					{item.gender === "Couples" ? item.memberCount / 2 : item.memberCount}
 				</Text>
-				<Text style={styles.memberLabel}>Members</Text>
+				<Text style={styles.memberLabel}>
+					{item.gender === "Couples" ? "Couples" : "Members"}
+				</Text>
 
 				<View style={styles.tags}>
 					{item.memberTypes.map((type, i) => (
