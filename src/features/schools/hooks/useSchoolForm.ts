@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { SchoolDTO, CreateSchoolDTO } from "../model/School";
+import { SchoolDTO } from "../model/School";
 import { schoolRepository } from "../data/schoolRepository";
 import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
 import { showError } from "src/utils/errorUtils";

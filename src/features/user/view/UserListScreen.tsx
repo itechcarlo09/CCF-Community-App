@@ -126,7 +126,6 @@ const UserListScreen = ({ navigation }: any) => {
 					keyExtractor={(item) => item.id.toString()}
 					renderItem={renderItem}
 					refreshControl={Refresh()}
-					contentContainerStyle={styles.listContainer}
 					onEndReached={() => {
 						if (
 							!onEndReachedCalledDuringMomentum &&
@@ -227,6 +226,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		borderRadius: 12,
 		padding: 16,
+		marginHorizontal: 16,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.1,
