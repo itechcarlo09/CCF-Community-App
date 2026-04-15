@@ -1,6 +1,8 @@
+import { showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
 import { GetDGroupResponse } from "../model/DGroup";
 import { GetDGroupParams } from "../model/RequestParams";
+import { PAGE_SIZE } from "src/types/globalTypes";
 
 export const dgroupDataSource = {
 	// async getMinistriesById(id: string): Promise<MinistryDTO | null> {
@@ -11,18 +13,30 @@ export const dgroupDataSource = {
 	// 		throw new Error(error.message);
 	// 	}
 	// },
-	async getDGroups(
-		params?: GetDGroupParams,
-	): Promise<GetDGroupResponse | undefined> {
+	async getDGroups(params?: GetDGroupParams): Promise<GetDGroupResponse> {
 		try {
 			const res = await apiClient.get<GetDGroupResponse>("/dgroup", {
 				params,
 			});
-			return res.data ?? undefined;
+			return {
+				data: res.data?.data ?? [], // always array
+				meta: res.data?.meta ?? {
+					page: 0,
+					limit: PAGE_SIZE,
+					hasMore: false,
+				},
+			};
 		} catch (error: any) {
-			console.error("getDGroups error:", error.message ?? error);
-			// Optional: You can throw a custom error or handle it gracefully
-			return undefined;
+			showError(error);
+
+			return {
+				data: [], // fallback safe value
+				meta: {
+					page: 0,
+					limit: PAGE_SIZE,
+					hasMore: false,
+				},
+			};
 		}
 	},
 

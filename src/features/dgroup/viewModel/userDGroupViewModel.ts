@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
 import {
-	InfiniteData,
 	useInfiniteQuery,
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
+
 import { DGroupDTO } from "../model/DGroup";
 import { DGroupItemUI } from "../model/DGroupItemUI";
 import { dgroupRepository } from "../data/dgroupRepository";
@@ -12,48 +12,37 @@ import { mapDGroupToUI } from "../data/dgroup.mapper";
 
 const PAGE_SIZE = 10;
 
-// 🔥 Types
-type DGroupsPage = {
-	data: DGroupItemUI[];
-	hasMore: boolean;
-};
-
-type InfiniteDGroupsData = {
-	pages: DGroupsPage[];
-	pageParams: number[];
+// =========================
+// 🔑 QUERY KEYS
+// =========================
+const dgroupKeys = {
+	all: ["dgroups"] as const,
+	lists: (search: string) => ["dgroups", search] as const,
 };
 
 export const useDGroupViewModel = () => {
 	const queryClient = useQueryClient();
 	const [search, setSearch] = useState("");
 
-	// 🔽 QUERY (Infinite + Search ready)
-	const query = useInfiniteQuery<
-		DGroupsPage,
-		Error,
-		InfiniteData<DGroupsPage>,
-		["dgroups", string],
-		number
-	>({
-		queryKey: ["dgroups", search],
+	// =========================
+	// 📄 DGROUP LIST (INFINITE - SKIP/TAKE)
+	// =========================
+	const dgroupsQuery = useInfiniteQuery({
+		queryKey: dgroupKeys.lists(search),
 
-		queryFn: async ({ pageParam }): Promise<DGroupsPage> => {
-			const isSearching = !!search.trim();
+		queryFn: async ({ pageParam = 1 }) => {
+			const skip = (pageParam - 1) * PAGE_SIZE;
 
-			const baseParams = {
-				page: pageParam,
-				pageSize: PAGE_SIZE,
-				sortOrder: "asc",
-				sortBy: "name",
-			};
-
-			// 🔥 Replace when search API is ready
-			const result = isSearching
+			const result = search.trim()
 				? await dgroupRepository.searchDGroups?.({
 						name: search,
-						...baseParams,
+						skip,
+						take: PAGE_SIZE,
 				  })
-				: await dgroupRepository.getDGroups(baseParams);
+				: await dgroupRepository.getDGroups({
+						skip,
+						take: PAGE_SIZE,
+				  });
 
 			return {
 				data: result?.data.map(mapDGroupToUI) ?? [],
@@ -61,56 +50,59 @@ export const useDGroupViewModel = () => {
 			};
 		},
 
-		initialPageParam: 1,
-
 		getNextPageParam: (lastPage, pages) =>
 			lastPage.hasMore ? pages.length + 1 : undefined,
 
+		initialPageParam: 1,
 		staleTime: 1000 * 60 * 5,
 	});
 
-	// 🔽 Flatten
-	const dgroups = useMemo<DGroupItemUI[]>(() => {
-		return query.data?.pages.flatMap((page) => page.data) ?? [];
-	}, [query.data]);
+	// =========================
+	// 🧠 FLATTEN
+	// =========================
+	const dgroups = useMemo<DGroupItemUI[]>(
+		() => dgroupsQuery.data?.pages.flatMap((p) => p.data) ?? [],
+		[dgroupsQuery.data],
+	);
 
-	// 🔽 ADD (optional, future-proof)
+	// =========================
+	// ➕ ADD
+	// =========================
 	const addDGroupMutation = useMutation({
 		mutationFn: (data: Omit<DGroupDTO, "id">) =>
 			dgroupRepository.addDGroup?.(data),
 
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["dgroups"] });
+			queryClient.invalidateQueries({ queryKey: dgroupKeys.all });
 		},
 	});
 
-	// 🔽 UPDATE (Optimistic ready)
-	const updateDGroupMutation = useMutation<
-		void,
-		Error,
-		{ id: string; data: Partial<DGroupDTO> },
-		{ previous?: InfiniteDGroupsData }
-	>({
-		mutationFn: ({ id, data }) => dgroupRepository.updateDGroup?.(id, data),
+	// =========================
+	// ✏️ UPDATE (OPTIMISTIC)
+	// =========================
+	const updateDGroupMutation = useMutation({
+		mutationFn: ({ id, data }: { id: string; data: Partial<DGroupDTO> }) =>
+			dgroupRepository.updateDGroup?.(id, data),
 
 		onMutate: async ({ id, data }) => {
-			await queryClient.cancelQueries({ queryKey: ["dgroups", search] });
+			await queryClient.cancelQueries({
+				queryKey: dgroupKeys.lists(search),
+			});
 
-			const previous = queryClient.getQueryData<InfiniteDGroupsData>([
-				"dgroups",
-				search,
-			]);
+			const previous = queryClient.getQueriesData({
+				queryKey: dgroupKeys.lists(search),
+			});
 
-			queryClient.setQueryData<InfiniteDGroupsData>(
-				["dgroups", search],
-				(old) => {
-					if (!old) return old;
+			queryClient.setQueriesData(
+				{ queryKey: dgroupKeys.lists(search) },
+				(old: any) => {
+					if (!old?.pages) return old;
 
 					return {
 						...old,
-						pages: old.pages.map((page) => ({
+						pages: old.pages.map((page: any) => ({
 							...page,
-							data: page.data.map((d) =>
+							data: page.data.map((d: any) =>
 								d.id.toString() === id ? { ...d, ...data } : d,
 							),
 						})),
@@ -122,59 +114,39 @@ export const useDGroupViewModel = () => {
 		},
 
 		onError: (_err, _vars, context) => {
-			if (context?.previous) {
-				queryClient.setQueryData(["dgroups", search], context.previous);
-			}
+			context?.previous?.forEach(([key, data]) => {
+				queryClient.setQueryData(key, data);
+			});
 		},
 
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ["dgroups"] });
+			queryClient.invalidateQueries({ queryKey: dgroupKeys.all });
 		},
 	});
 
-	// 🔽 GET SINGLE
-	const getDGroup = async (id: string): Promise<DGroupDTO | null> => {
-		try {
-			return await dgroupRepository.getDGroupById?.(id);
-		} catch (error) {
-			console.error("Error fetching dgroup:", error);
-			return null;
-		}
-	};
-
-	// 🔍 SEARCH
-	const searchDGroups = (text: string) => {
-		setSearch(text);
-	};
-
-	// 📄 LOAD MORE
-	const loadMoreDGroups = () => {
-		if (query.hasNextPage) {
-			query.fetchNextPage();
-		}
-	};
-
-	// 🔄 REFRESH
-	const refreshDGroups = () => {
-		query.refetch();
-	};
-
+	// =========================
+	// 🎯 ACTIONS
+	// =========================
 	return {
+		// data
 		dgroups,
 
-		// loading states
-		loading: query.isLoading,
-		activityLoading: query.isFetching,
+		// loading
+		loading: dgroupsQuery.isLoading,
+		fetching: dgroupsQuery.isFetching,
 
 		// actions
 		addDGroup: addDGroupMutation.mutateAsync,
 		updateDGroup: (id: string, data: Partial<DGroupDTO>) =>
 			updateDGroupMutation.mutateAsync({ id, data }),
 
-		searchDGroups,
-		getDGroup,
-		refresh: refreshDGroups,
-		loadMoreDGroups,
-		hasMore: query.hasNextPage,
+		searchDGroups: setSearch,
+
+		loadMoreDGroups: () =>
+			dgroupsQuery.hasNextPage && dgroupsQuery.fetchNextPage(),
+
+		refresh: dgroupsQuery.refetch,
+
+		hasMore: dgroupsQuery.hasNextPage,
 	};
 };

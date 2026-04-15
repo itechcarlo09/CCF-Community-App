@@ -76,6 +76,7 @@ const DGroupListScreen = ({ navigation }: any) => {
 			) : (
 				<FlatList
 					data={dgroups}
+					keyExtractor={(item) => String(item.id)}
 					ItemSeparatorComponent={Separator}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
