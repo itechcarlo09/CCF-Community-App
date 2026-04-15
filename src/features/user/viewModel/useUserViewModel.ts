@@ -40,8 +40,8 @@ export const useUserViewModel = () => {
 
 		queryFn: async ({ pageParam }): Promise<UsersPage> => {
 			const baseParams = {
-				page: pageParam,
-				pageSize: PAGE_SIZE,
+				skip: (pageParam - 1) * PAGE_SIZE,
+				take: PAGE_SIZE,
 				sortOrder: "asc",
 				sortBy: "lastName",
 			};
