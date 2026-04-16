@@ -18,14 +18,15 @@ import { LifeStage } from "src/types/enums/LifeStage";
 // 	speaker: Speaker;
 // }
 
-// export interface Series {
-// 	id: number;
-// 	name: string;
-// 	createdAt: Date;
-// 	updatedAt?: Date;
-// }
+export interface DGroupDTO {
+	id: number;
+	name: string;
+	dleaders: DMemberDTO[];
+	dmembers: DMemberDTO[];
+	churchId: number;
+}
 
-export interface LeaderDTO {
+export interface DMemberDTO {
 	id: number;
 	firstName: string;
 	middleName?: string;
@@ -33,12 +34,12 @@ export interface LeaderDTO {
 	gender: Gender;
 }
 
-export interface DGroupDTO {
+export interface DGroupListItemDTO {
 	id: number;
 	name: string;
 	members: number;
-	leaders: LeaderDTO[];
+	leaders: DMemberDTO[];
 	lifestage: LifeStage[];
 }
 
-export type GetDGroupResponse = PaginatedResponse<DGroupDTO>;
+export type GetDGroupResponse = PaginatedResponse<DGroupListItemDTO>;

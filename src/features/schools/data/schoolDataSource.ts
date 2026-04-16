@@ -42,8 +42,8 @@ export const schoolDataSource = {
 			const res = await apiClient.get<SchoolDTO>(`/school/${id}`);
 			return res.data ? res.data : null;
 		} catch (error: any) {
-			handleApiError(error);
-			throw new Error(error.message);
+			showError(error);
+			return null;
 		}
 	},
 	// async searchEvents(

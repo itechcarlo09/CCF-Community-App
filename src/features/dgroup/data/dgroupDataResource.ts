@@ -1,6 +1,6 @@
 import { showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
-import { GetDGroupResponse } from "../model/DGroup";
+import { DGroupDTO, GetDGroupResponse } from "../model/DGroup";
 import { GetDGroupParams } from "../model/RequestParams";
 import { PAGE_SIZE } from "src/types/globalTypes";
 
@@ -37,6 +37,16 @@ export const dgroupDataSource = {
 					hasMore: false,
 				},
 			};
+		}
+	},
+
+	async getDGroupById(id: number): Promise<DGroupDTO | null> {
+		try {
+			const res = await apiClient.get<DGroupDTO>(`/dgroup/${id}`);
+			return res.data ? res.data : null;
+		} catch (error: any) {
+			showError(error);
+			return null;
 		}
 	},
 

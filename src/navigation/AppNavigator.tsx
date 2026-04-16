@@ -17,7 +17,7 @@ function AppNavigator() {
 			<Stack.Screen name="BottomNavigator" component={BottomTabNavigator} />
 			<Stack.Screen name="EventNavigator" component={EventNavigator} />
 			<Stack.Screen name="UserNavigator" component={UserNavigator} />
-			<Stack.Screen name="DgroupNavigator" component={DGroupNavigator} />
+			<Stack.Screen name="DGroupNavigator" component={DGroupNavigator} />
 			<Stack.Screen name="OthersNavigator" component={OthersNavigator} />
 			{/* <Stack.Screen name="SharedNavigator" component={SharedNavigator} /> */}
 		</Stack.Navigator>

@@ -1,5 +1,4 @@
 import { LifeStage } from "src/types/enums/LifeStage";
-import { LeaderDTO } from "./DGroup";
 import { Gender } from "src/types/enums/Gender";
 
 export interface DGroupItemUI {

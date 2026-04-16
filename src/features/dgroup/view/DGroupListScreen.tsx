@@ -62,9 +62,8 @@ const DGroupListScreen = ({ navigation }: any) => {
 			<Header
 				placeholder="Search DGroup..."
 				onAdd={() =>
-					navigation.navigate("EventNavigator", {
-						screen: "EventForm",
-						params: { onSuccess: onRefresh },
+					navigation.navigate("DGroupNavigator", {
+						screen: "DGroupFormScreen",
 					})
 				}
 				onSearch={setSearch}

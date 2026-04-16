@@ -1,7 +1,7 @@
-import { DGroupDTO } from "../model/DGroup";
+import { DGroupListItemDTO } from "../model/DGroup";
 import { DGroupItemUI } from "../model/DGroupItemUI";
 
-export const mapDGroupToUI = (dgroup: DGroupDTO): DGroupItemUI => {
+export const mapDGroupToUI = (dgroup: DGroupListItemDTO): DGroupItemUI => {
 	const leadersName = dgroup.leaders
 		.map((leader) => `${leader.firstName} ${leader.lastName}`)
 		.join(", ");

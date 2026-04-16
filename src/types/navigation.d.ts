@@ -92,7 +92,7 @@ export type EventRouteProp<T extends keyof EventStackParamList> = RouteProp<
 // DGroup Stack (nested stack for user-related screens)
 // -----------------------------
 export type DgroupStackParamList = {
-	DGroupForm: { id?: number; onSuccess?: () => void } | undefined;
+	DGroupFormScreen: { id?: number } | undefined;
 	DGroupListScreen: undefined;
 };
 
@@ -143,6 +143,7 @@ declare global {
 				AppStackParamList,
 				AuthStackParamList,
 				UserStackParamList,
+				DgroupStackParamList,
 				EventStackParamList,
 				OtherStackParamList {}
 	}
