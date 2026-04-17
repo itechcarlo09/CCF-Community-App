@@ -45,12 +45,12 @@ export interface UserDTO {
 	lastName: string;
 	nickname?: string;
 	birthDate: Date;
-	dGroupLeaderId?: number | null;
+	spouse?: DGroupBasicInfoDTO;
 	dGroupLeader?: DGroupBasicInfoDTO;
+	dGroupMembers?: DGroupBasicInfoDTO[];
 	profilePicture?: string;
 	facebookLink?: string;
 	contactNumber: string;
-	dGroupMembers?: DGroupBasicInfoDTO[];
 	email: string;
 	gender: string;
 	userType: string;

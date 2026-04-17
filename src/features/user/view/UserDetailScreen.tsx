@@ -1,11 +1,5 @@
 import React, { useCallback } from "react";
-import {
-	View,
-	Text,
-	StyleSheet,
-	ScrollView,
-	TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import MdiIcon from "@components/MdiIcon";
 import {
 	mdiPencil,
@@ -22,6 +16,7 @@ import {
 	mdiArrowUpBoldCircleOutline,
 	mdiAccountSwitch,
 	mdiAccountPlus,
+	mdiAccountHeartOutline,
 } from "@mdi/js";
 import { useUserForm } from "../hooks/useUserForm";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -34,9 +29,8 @@ import {
 } from "src/utils/dateFormatter";
 import Loading from "@components/Loading";
 import CircularImage from "@components/CircularImage";
-import { NOID } from "src/types/globalTypes";
-import { normalizeGender } from "src/utils/stringUtils";
 import { EducationDTO, EmploymentDTO } from "../model/user";
+import { showText } from "src/utils/errorUtils";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -80,19 +74,20 @@ const UserDetailScreen = () => {
 		: [];
 
 	const handleAssignDLeader = useCallback(() => {
-		const gender = normalizeGender(user?.gender);
-		const safeId = Number(id) || NOID;
-		if (!gender) return;
+		showText("DLeader assignment functionality not implemented.");
+		// const gender = normalizeGender(user?.gender);
+		// const safeId = Number(id) || NOID;
+		// if (!gender) return;
 
-		navigation.navigate("DleaderScreen", {
-			id: safeId,
-			gender,
-			onSelect: async (selectedId: number) => {
-				formik.setFieldValue("dLeaderID", selectedId);
-				await formik.submitForm();
-				await refreshUser(); // refresh user to get updated leader
-			},
-		});
+		// navigation.navigate("DleaderScreen", {
+		// 	id: safeId,
+		// 	gender,
+		// 	onSelect: async (selectedId: number) => {
+		// 		formik.setFieldValue("dLeaderID", selectedId);
+		// 		await formik.submitForm();
+		// 		await refreshUser();
+		// 	},
+		// });
 	}, [user?.gender, id, navigation, formik, refreshUser]);
 
 	if (isLoading) return <Loading />;
@@ -163,6 +158,39 @@ const UserDetailScreen = () => {
 					<View style={styles.row}>
 						<MdiIcon path={mdiFacebook} size={18} />
 						<Text style={styles.text}>{user?.facebookLink ?? "N/A"}</Text>
+					</View>
+				</View>
+
+				{/* SPOUSE */}
+				<View style={styles.section}>
+					<View style={styles.sectionHeader}>
+						<Text style={styles.sectionTitle}>Spouse</Text>
+						<MdiIcon path={mdiAccountHeartOutline} size={18} />
+					</View>
+
+					<View style={styles.listItem}>
+						<MdiIcon path={mdiAccountOutline} size={18} />
+						<View style={{ flex: 1 }}>
+							<Text style={styles.textBold}>
+								{mappedUser?.spouseName ?? "No spouse assigned"}
+							</Text>
+						</View>
+
+						<MdiIcon
+							path={mappedUser?.spouseName ? mdiAccountSwitch : mdiAccountPlus}
+							size={18}
+							onPress={() => {
+								showText("Spouse assignment functionality not implemented.");
+								// navigation.navigate("SpouseScreen", {
+								// 	id: Number(id),
+								// 	onSelect: async (selectedId: number) => {
+								// 		formik.setFieldValue("spouseId", selectedId);
+								// 		await formik.submitForm();
+								// 		await refreshUser();
+								// 	},
+								// });
+							}}
+						/>
 					</View>
 				</View>
 

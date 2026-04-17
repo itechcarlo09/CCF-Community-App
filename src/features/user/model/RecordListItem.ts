@@ -10,5 +10,6 @@ export interface RecordItemUI {
 	ministryText: string;
 	membershipType: MembershipType;
 	dleaderName?: string;
+	spouseName?: string;
 	isActive: boolean;
 }

@@ -41,6 +41,14 @@ export const mapUserToUI = (user: UserDTO): RecordItemUI => {
 			  )
 			: undefined);
 
+	const spouseName = user.spouse
+		? formatFullName(
+				user.spouse.firstName,
+				user.spouse.lastName,
+				user.spouse.middleName,
+		  )
+		: undefined;
+
 	const isActive = user.isActive ?? false;
 
 	let membershipType: MembershipType;
@@ -71,6 +79,7 @@ export const mapUserToUI = (user: UserDTO): RecordItemUI => {
 		ministryText,
 		isActive,
 		dleaderName,
+		spouseName,
 		membershipType,
 	};
 };
