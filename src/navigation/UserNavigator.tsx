@@ -1,14 +1,14 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import DleaderScreen from "../features/user/view/DleaderScreen";
-import UserDetailScreen from "src/features/user/view/UserDetailScreen";
-import UserDetailFormScreen from "src/features/user/view/UserDetailFormScreen";
-import EducationFormScreen from "src/features/user/view/UserEducationFormScreen";
-import { SchoolListScreen } from "src/features/schools/view/SchoolListScreen";
-import SchoolFormScreen from "src/features/schools/view/SchoolFormScreen";
-import EmploymentFormScreen from "src/features/user/view/UserEmploymentFormScreen";
-import { CompanyListScreen } from "src/features/company/view/CompanyListScreen";
-import CompanyFormScreen from "src/features/company/view/CompanyFormScreen";
+import DleaderScreen from "../feature/user/view/DleaderScreen";
+import UserDetailScreen from "src/feature/user/view/UserDetailScreen";
+import UserDetailFormScreen from "src/feature/user/view/UserDetailFormScreen";
+import EducationFormScreen from "src/feature/user/view/UserEducationFormScreen";
+import { SchoolListScreen } from "src/feature/schools/view/SchoolListScreen";
+import SchoolFormScreen from "src/feature/schools/view/SchoolFormScreen";
+import EmploymentFormScreen from "src/feature/user/view/UserEmploymentFormScreen";
+import { CompanyListScreen } from "src/feature/company/view/CompanyListScreen";
+import CompanyFormScreen from "src/feature/company/view/CompanyFormScreen";
 
 const Stack = createNativeStackNavigator();
 

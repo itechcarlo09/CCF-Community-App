@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigator from "./BottomTabNavigator";
 import EventNavigator from "./EventNavigator";
 import UserNavigator from "./UserNavigator";
-import LoginScreen from "../features/auth/view/LoginScreen";
+import LoginScreen from "../feature/auth/view/LoginScreen";
 import OthersNavigator from "./OthersNavigator";
 import DGroupNavigator from "./DGroupNavigator";
 import SharedNavigator from "./SharedNavigator";

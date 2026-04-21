@@ -1,15 +1,15 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MinistryPage } from "src/features/ministry/view/MinistryPage";
-import CreateMinistryScreen from "src/features/ministry/view/MinistryFormScreem";
-import { SchoolListScreen } from "src/features/schools/view/SchoolListScreen";
-import { CompanyListScreen } from "src/features/company/view/CompanyListScreen";
-import { SeriesListScreen } from "src/features/series/view/SeriesListScreen";
-import { SpeakerListScreen } from "src/features/speaker/view/SpeakerListScreen";
-import SchoolFormScreen from "src/features/schools/view/SchoolFormScreen";
-import SchoolDetailsScreen from "src/features/schools/view/SchoolDetailScreen";
-import CompanyFormScreen from "src/features/company/view/CompanyFormScreen";
-import CompanyDetailsScreen from "src/features/company/view/CompanyDetailScreen";
+import { MinistryPage } from "src/feature/ministry/view/MinistryPage";
+import CreateMinistryScreen from "src/feature/ministry/view/MinistryFormScreem";
+import { SchoolListScreen } from "src/feature/schools/view/SchoolListScreen";
+import { CompanyListScreen } from "src/feature/company/view/CompanyListScreen";
+import { SeriesListScreen } from "src/feature/series/view/SeriesListScreen";
+import { SpeakerListScreen } from "src/feature/speaker/view/SpeakerListScreen";
+import SchoolFormScreen from "src/feature/schools/view/SchoolFormScreen";
+import SchoolDetailsScreen from "src/feature/schools/view/SchoolDetailScreen";
+import CompanyFormScreen from "src/feature/company/view/CompanyFormScreen";
+import CompanyDetailsScreen from "src/feature/company/view/CompanyDetailScreen";
 
 const Stack = createNativeStackNavigator();
 

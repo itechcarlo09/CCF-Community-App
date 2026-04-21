@@ -10,41 +10,41 @@ import Header from "@components/Header";
 import Loading from "@components/Loading";
 import { useTheme } from "@theme/ThemeProvider";
 import { Separator } from "@components/Separator";
-import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
-import SchoolCard from "./components/SchoolListItem";
-import useDebounce from "src/features/user/hooks/useDebounce";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { UserStackParamList, OtherStackParamList } from "src/types/navigation";
+import useDebounce from "src/feature/user/hooks/useDebounce";
+import { useCompanyViewModel } from "../viewModel/useCompanyViewModel";
+import CompanyCard from "./components/CompanyListItem";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { SchoolItemUI } from "../model/SchoolListItem";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { OtherStackParamList, UserStackParamList } from "src/types/navigation";
+import { CompanyItemUI } from "../model/CompanyListUI";
 
-type SchoolRouteProp = RouteProp<
+type CompanyRouteProp = RouteProp<
 	OtherStackParamList | UserStackParamList,
-	"SchoolListScreen"
+	"CompanyListScreen"
 >;
 type NavProp = NativeStackNavigationProp<
 	OtherStackParamList | UserStackParamList
 >;
 type OtherStackNavProp = NativeStackNavigationProp<OtherStackParamList>;
 
-export const SchoolListScreen = () => {
+export const CompanyListScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const otherNavigation = useNavigation<OtherStackNavProp>();
-	const route = useRoute<SchoolRouteProp>();
+	const route = useRoute<CompanyRouteProp>();
 	const { onSelect } = route.params || {};
 
 	const {
-		schools,
+		companies,
 		refresh,
 		loading,
 		fetching,
-		loadMoreSchools,
-		searchSchools,
-	} = useSchoolViewModel();
+		loadMoreCompanies,
+		searchEmployees,
+	} = useCompanyViewModel();
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
 	useEffect(() => {
-		searchSchools(debouncedSearchTerm);
+		searchEmployees(debouncedSearchTerm);
 	}, [debouncedSearchTerm]);
 
 	const { theme } = useTheme();
@@ -59,11 +59,11 @@ export const SchoolListScreen = () => {
 		setRefreshing(false);
 	}, [refresh]);
 
-	const goToSchoolForm = (id?: number) => {
-		navigation.navigate("SchoolFormScreen", id ? { id } : undefined);
+	const goToCompanyForm = (id?: number) => {
+		navigation.navigate("CompanyFormScreen", id ? { id } : undefined);
 	};
 
-	const handleSelect = (item: SchoolItemUI) => {
+	const handleSelect = (item: CompanyItemUI) => {
 		if (onSelect) {
 			onSelect(
 				item.id,
@@ -71,10 +71,10 @@ export const SchoolListScreen = () => {
 			);
 			navigation.goBack();
 		} else {
-			otherNavigation.navigate("SchoolDetailsScreen", {
+			otherNavigation.navigate("CompanyDetailsScreen", {
 				id: item.id,
-				enrolledCount: item.currentCount,
-				graduatesCount: item.alumniCount,
+				employeesCount: item.employeeCount,
+				formerEmployeesCount: item.pastCount,
 			});
 		}
 	};
@@ -82,25 +82,25 @@ export const SchoolListScreen = () => {
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
-				title={`${onSelect ? "Select School" : "Manage Schools"}`}
-				placeholder="Search school..."
+				title={`${onSelect ? "Select Company" : "Manage Companies"}`}
+				placeholder="Search company..."
 				onSearch={setSearch}
-				onBack={navigation.goBack}
-				onAdd={() => goToSchoolForm()}
+				onBack={() => navigation.goBack()}
+				onAdd={() => goToCompanyForm()}
 			/>
 
 			{loading ? (
 				<Loading />
 			) : (
 				<FlatList
-					data={schools}
+					data={companies}
 					ItemSeparatorComponent={Separator}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
 					keyExtractor={(item) => String(item.id)}
 					renderItem={({ item }) => (
-						<SchoolCard
+						<CompanyCard
 							item={item}
 							onPress={handleSelect}
 							isCountsShown={!onSelect}
@@ -116,7 +116,7 @@ export const SchoolListScreen = () => {
 					}
 					onEndReached={() => {
 						if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
-							loadMoreSchools();
+							loadMoreCompanies();
 							setOnEndReachedCalledDuringMomentum(true);
 						}
 					}}

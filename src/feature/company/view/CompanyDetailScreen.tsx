@@ -16,7 +16,7 @@ import { OtherStackParamList } from "src/types/navigation";
 import { NOID } from "src/types/globalTypes";
 import Loading from "@components/Loading";
 import { getAcronym } from "src/utils/stringUtils";
-import useDebounce from "src/features/user/hooks/useDebounce";
+import useDebounce from "src/feature/user/hooks/useDebounce";
 
 // 👉 Replace with your actual hooks
 import { useCompanyForm } from "../hooks/useCompanyForm";

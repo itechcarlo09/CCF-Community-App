@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SchoolFormScreen from "src/features/schools/view/SchoolFormScreen";
-import CompanyFormScreen from "src/features/company/view/CompanyFormScreen";
+import SchoolFormScreen from "src/feature/schools/view/SchoolFormScreen";
+import CompanyFormScreen from "src/feature/company/view/CompanyFormScreen";
 
 const Stack = createNativeStackNavigator();
 

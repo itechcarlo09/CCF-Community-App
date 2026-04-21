@@ -19,7 +19,7 @@ import Loading from "@components/Loading";
 import { getAcronym } from "src/utils/stringUtils";
 import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
 import { StudentItemUI } from "../model/SchoolListItem";
-import useDebounce from "src/features/user/hooks/useDebounce";
+import useDebounce from "src/feature/user/hooks/useDebounce";
 
 type SchoolRouteProp = RouteProp<OtherStackParamList, "SchoolDetailsScreen">;
 type NavProp = NativeStackNavigationProp<OtherStackParamList>;

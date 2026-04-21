@@ -10,23 +10,41 @@ import Header from "@components/Header";
 import Loading from "@components/Loading";
 import { useTheme } from "@theme/ThemeProvider";
 import { Separator } from "@components/Separator";
-import useDebounce from "src/features/user/hooks/useDebounce";
-import { SeriesCard } from "./components/SeriesListItem";
-import { useSeriesViewModel } from "../viewModel/userSeriesViewModel";
+import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
+import SchoolCard from "./components/SchoolListItem";
+import useDebounce from "src/feature/user/hooks/useDebounce";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserStackParamList, OtherStackParamList } from "src/types/navigation";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { SchoolItemUI } from "../model/SchoolListItem";
 
-export const SeriesListScreen = ({ navigation }: any) => {
+type SchoolRouteProp = RouteProp<
+	OtherStackParamList | UserStackParamList,
+	"SchoolListScreen"
+>;
+type NavProp = NativeStackNavigationProp<
+	OtherStackParamList | UserStackParamList
+>;
+type OtherStackNavProp = NativeStackNavigationProp<OtherStackParamList>;
+
+export const SchoolListScreen = () => {
+	const navigation = useNavigation<NavProp>();
+	const otherNavigation = useNavigation<OtherStackNavProp>();
+	const route = useRoute<SchoolRouteProp>();
+	const { onSelect } = route.params || {};
+
 	const {
-		series,
+		schools,
 		refresh,
 		loading,
-		activityLoading,
-		loadMoreSeries,
-		searchSeries,
-	} = useSeriesViewModel();
+		fetching,
+		loadMoreSchools,
+		searchSchools,
+	} = useSchoolViewModel();
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
 	useEffect(() => {
-		searchSeries(debouncedSearchTerm);
+		searchSchools(debouncedSearchTerm);
 	}, [debouncedSearchTerm]);
 
 	const { theme } = useTheme();
@@ -41,42 +59,64 @@ export const SeriesListScreen = ({ navigation }: any) => {
 		setRefreshing(false);
 	}, [refresh]);
 
+	const goToSchoolForm = (id?: number) => {
+		navigation.navigate("SchoolFormScreen", id ? { id } : undefined);
+	};
+
+	const handleSelect = (item: SchoolItemUI) => {
+		if (onSelect) {
+			onSelect(
+				item.id,
+				`${item.name} ${item.acronym ? `- ${item.acronym}` : ""}`,
+			);
+			navigation.goBack();
+		} else {
+			otherNavigation.navigate("SchoolDetailsScreen", {
+				id: item.id,
+				enrolledCount: item.currentCount,
+				graduatesCount: item.alumniCount,
+			});
+		}
+	};
+
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
-				title="Series"
-				placeholder="Search series..."
+				title={`${onSelect ? "Select School" : "Manage Schools"}`}
+				placeholder="Search school..."
 				onSearch={setSearch}
-				onBack={() => navigation.goBack()}
-				onAdd={() => navigation.navigate("CreateMinistryScreen")}
+				onBack={navigation.goBack}
+				onAdd={() => goToSchoolForm()}
 			/>
 
 			{loading ? (
 				<Loading />
 			) : (
 				<FlatList
-					data={series}
-					keyExtractor={(item) => String(item.id)}
+					data={schools}
 					ItemSeparatorComponent={Separator}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
-					renderItem={({ item }) => <SeriesCard item={item} />}
+					keyExtractor={(item) => String(item.id)}
+					renderItem={({ item }) => (
+						<SchoolCard
+							item={item}
+							onPress={handleSelect}
+							isCountsShown={!onSelect}
+						/>
+					)}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
-						activityLoading ? (
+						fetching ? (
 							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
 						) : (
 							<View style={{ height: 16 }} />
 						)
 					}
 					onEndReached={() => {
-						if (
-							!onEndReachedCalledDuringMomentum &&
-							!activityLoading &&
-							!loading
-						) {
-							loadMoreSeries();
+						if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
+							loadMoreSchools();
 							setOnEndReachedCalledDuringMomentum(true);
 						}
 					}}

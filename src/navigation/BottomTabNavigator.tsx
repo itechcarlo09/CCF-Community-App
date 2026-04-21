@@ -1,14 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import UserScreen from "../features/user/view/UserScreen";
 import { useTheme } from "../theme/ThemeProvider";
 import MdiIcon from "../components/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
-import OtherScreen from "src/features/others/view/OtherScreen";
-import EventListScreen from "src/features/event/view/EventListScreen";
-import { DashboardScreen } from "src/features/dashboard/view/DashboardScreen";
-import UserListScreen from "src/features/user/view/UserListScreen";
-import DGroupListScreen from "src/features/dgroup/view/DGroupListScreen";
+import OtherScreen from "src/feature/others/view/OtherScreen";
+import EventListScreen from "src/feature/event/view/EventListScreen";
+import { DashboardScreen } from "src/feature/dashboard/view/DashboardScreen";
+import UserListScreen from "src/feature/user/view/UserListScreen";
+import DGroupListScreen from "src/feature/dgroup/view/DGroupListScreen";
 
 const Tab = createBottomTabNavigator();
 

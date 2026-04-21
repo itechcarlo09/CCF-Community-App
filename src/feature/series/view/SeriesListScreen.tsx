@@ -10,41 +10,23 @@ import Header from "@components/Header";
 import Loading from "@components/Loading";
 import { useTheme } from "@theme/ThemeProvider";
 import { Separator } from "@components/Separator";
-import useDebounce from "src/features/user/hooks/useDebounce";
-import { useCompanyViewModel } from "../viewModel/useCompanyViewModel";
-import CompanyCard from "./components/CompanyListItem";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { OtherStackParamList, UserStackParamList } from "src/types/navigation";
-import { CompanyItemUI } from "../model/CompanyListUI";
+import useDebounce from "src/feature/user/hooks/useDebounce";
+import { SeriesCard } from "./components/SeriesListItem";
+import { useSeriesViewModel } from "../viewModel/userSeriesViewModel";
 
-type CompanyRouteProp = RouteProp<
-	OtherStackParamList | UserStackParamList,
-	"CompanyListScreen"
->;
-type NavProp = NativeStackNavigationProp<
-	OtherStackParamList | UserStackParamList
->;
-type OtherStackNavProp = NativeStackNavigationProp<OtherStackParamList>;
-
-export const CompanyListScreen = () => {
-	const navigation = useNavigation<NavProp>();
-	const otherNavigation = useNavigation<OtherStackNavProp>();
-	const route = useRoute<CompanyRouteProp>();
-	const { onSelect } = route.params || {};
-
+export const SeriesListScreen = ({ navigation }: any) => {
 	const {
-		companies,
+		series,
 		refresh,
 		loading,
-		fetching,
-		loadMoreCompanies,
-		searchEmployees,
-	} = useCompanyViewModel();
+		activityLoading,
+		loadMoreSeries,
+		searchSeries,
+	} = useSeriesViewModel();
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
 	useEffect(() => {
-		searchEmployees(debouncedSearchTerm);
+		searchSeries(debouncedSearchTerm);
 	}, [debouncedSearchTerm]);
 
 	const { theme } = useTheme();
@@ -59,64 +41,42 @@ export const CompanyListScreen = () => {
 		setRefreshing(false);
 	}, [refresh]);
 
-	const goToCompanyForm = (id?: number) => {
-		navigation.navigate("CompanyFormScreen", id ? { id } : undefined);
-	};
-
-	const handleSelect = (item: CompanyItemUI) => {
-		if (onSelect) {
-			onSelect(
-				item.id,
-				`${item.name} ${item.acronym ? `- ${item.acronym}` : ""}`,
-			);
-			navigation.goBack();
-		} else {
-			otherNavigation.navigate("CompanyDetailsScreen", {
-				id: item.id,
-				employeesCount: item.employeeCount,
-				formerEmployeesCount: item.pastCount,
-			});
-		}
-	};
-
 	return (
 		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
 			<Header
-				title={`${onSelect ? "Select Company" : "Manage Companies"}`}
-				placeholder="Search company..."
+				title="Series"
+				placeholder="Search series..."
 				onSearch={setSearch}
 				onBack={() => navigation.goBack()}
-				onAdd={() => goToCompanyForm()}
+				onAdd={() => navigation.navigate("CreateMinistryScreen")}
 			/>
 
 			{loading ? (
 				<Loading />
 			) : (
 				<FlatList
-					data={companies}
+					data={series}
+					keyExtractor={(item) => String(item.id)}
 					ItemSeparatorComponent={Separator}
 					refreshControl={
 						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					}
-					keyExtractor={(item) => String(item.id)}
-					renderItem={({ item }) => (
-						<CompanyCard
-							item={item}
-							onPress={handleSelect}
-							isCountsShown={!onSelect}
-						/>
-					)}
+					renderItem={({ item }) => <SeriesCard item={item} />}
 					ListHeaderComponent={<View style={{ height: 6 }} />}
 					ListFooterComponent={
-						fetching ? (
+						activityLoading ? (
 							<ActivityIndicator style={{ marginVertical: 16 }} size="large" />
 						) : (
 							<View style={{ height: 16 }} />
 						)
 					}
 					onEndReached={() => {
-						if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
-							loadMoreCompanies();
+						if (
+							!onEndReachedCalledDuringMomentum &&
+							!activityLoading &&
+							!loading
+						) {
+							loadMoreSeries();
 							setOnEndReachedCalledDuringMomentum(true);
 						}
 					}}

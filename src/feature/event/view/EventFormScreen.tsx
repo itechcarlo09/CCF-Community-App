@@ -23,7 +23,7 @@ import { EventStackParamList } from "src/types/navigation";
 import { roles } from "src/types/enums/UserType";
 import { formatDateForDisplay } from "src/utils/dateFormatter";
 import { useTheme } from "@theme/ThemeProvider";
-import { useMinistryViewModel } from "src/features/ministry/viewModel/useMinistryViewModel";
+import { useMinistryViewModel } from "src/feature/ministry/viewModel/useMinistryViewModel";
 
 interface EventFormValues {
 	name: string;

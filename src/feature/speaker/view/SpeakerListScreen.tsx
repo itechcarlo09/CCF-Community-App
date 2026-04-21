@@ -10,7 +10,7 @@ import {
 import Header from "@components/Header";
 import Loading from "@components/Loading";
 import { useTheme } from "@theme/ThemeProvider";
-import useDebounce from "src/features/user/hooks/useDebounce";
+import useDebounce from "src/feature/user/hooks/useDebounce";
 import { useSpeakerViewModel } from "../viewModel/useSpeakerViewModel";
 import SpeakerCard from "./components/SpeakerListItem";
 
