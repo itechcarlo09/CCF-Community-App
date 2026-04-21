@@ -8,6 +8,7 @@ module.exports = {
 				alias: {
 					"@theme": "./src/theme",
 					"@components": "./src/components",
+					"@features": "./src/features",
 					src: "./src",
 				},
 			},
