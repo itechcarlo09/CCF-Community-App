@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { CCFTextInputProps } from "./CCFTextInput.types";
 import { useTheme } from "@theme/ThemeProvider";
 import { styles } from "./CCFTextInput.styles";
+import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
+import MDIIcon from "@components/MDIIcon";
 
 const CCFTextInput: React.FC<CCFTextInputProps> = ({
 	placeholder,
@@ -34,18 +36,13 @@ const CCFTextInput: React.FC<CCFTextInputProps> = ({
 			/>
 
 			{isPassword && (
-				<TouchableOpacity
-					style={styles.toggle}
-					onPress={() => setSecure(!secure)}
-				>
-					<Text
-						style={{
-							color: theme.primary,
-						}}
-					>
-						{secure ? "Show" : "Hide"}
-					</Text>
-				</TouchableOpacity>
+				<View style={styles.toggle}>
+					<MDIIcon
+						onPress={() => setSecure(!secure)}
+						path={secure ? mdiEyeOutline : mdiEyeOffOutline}
+						color={theme.primary}
+					/>
+				</View>
 			)}
 		</View>
 	);
