@@ -28,7 +28,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
 
 		setTimeout(() => {
 			setToast((prev) => ({ ...prev, visible: false }));
-		}, 5000);
+		}, 3000);
 	};
 
 	const hide = () => {

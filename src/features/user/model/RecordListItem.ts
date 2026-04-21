@@ -1,3 +1,4 @@
+import { DGroupStatus } from "src/types/enums/DGroupStatus";
 import { MembershipType } from "../types";
 
 export interface RecordItemUI {
@@ -8,7 +9,7 @@ export interface RecordItemUI {
 	fallbackText: string;
 	age: number;
 	ministryText: string;
-	membershipType: MembershipType;
+	membershipType: DGroupStatus;
 	dleaderName?: string;
 	spouseName?: string;
 	isActive: boolean;

@@ -51,24 +51,7 @@ export const mapUserToUI = (user: UserDTO): RecordItemUI => {
 
 	const isActive = user.isActive ?? false;
 
-	let membershipType: MembershipType;
-	if (
-		topUser ||
-		(user.dGroupMembers &&
-			user.dGroupMembers.length >= MIN_DGROUP_MEMBERS_FOR_DLEADER)
-	) {
-		membershipType = "DLeader";
-	} else if (
-		user.dGroupMembers &&
-		user.dGroupMembers.length >= MIN_DGROUP_MEMBERS_FOR_TIMOTHY
-	) {
-		membershipType = "Facilitator";
-	} else if (user.dGroupLeader) {
-		membershipType = "DMember";
-	} else {
-		membershipType = "Pending Member";
-	}
-
+	const membershipType = user.dGroupStatus;
 	return {
 		id,
 		url,

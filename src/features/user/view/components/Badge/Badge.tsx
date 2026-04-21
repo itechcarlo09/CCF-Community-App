@@ -3,14 +3,15 @@ import { Text, View } from "react-native";
 import { styles } from "./Badge.styles";
 import { BadgeProps } from "./Badge.types";
 import { useTheme } from "../../../../../theme/ThemeProvider";
+import { DGroupStatus } from "src/types/enums/DGroupStatus";
 
 const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 	const { theme } = useTheme();
 
 	let textColor;
-	if (type === "DLeader") {
+	if (type === DGroupStatus.Dleader) {
 		textColor = theme.badge.success.text;
-	} else if (type === "Facilitator") {
+	} else if (type === DGroupStatus.Facilitator) {
 		textColor = theme.badge.primary.text;
 	} else if (dleader) {
 		textColor = theme.badge.secondary.text;
@@ -19,9 +20,9 @@ const Badge: React.FC<BadgeProps> = ({ type, dleader }) => {
 	}
 
 	let backgroundColor;
-	if (type === "DLeader") {
+	if (type === DGroupStatus.Dleader) {
 		backgroundColor = theme.badge.success.background;
-	} else if (type === "Facilitator") {
+	} else if (type === DGroupStatus.Facilitator) {
 		backgroundColor = theme.badge.primary.background;
 	} else if (dleader) {
 		backgroundColor = theme.badge.secondary.background;

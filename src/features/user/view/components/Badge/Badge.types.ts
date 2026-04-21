@@ -1,6 +1,6 @@
-import { MembershipType } from "../../../types";
+import { DGroupStatus } from "src/types/enums/DGroupStatus";
 
 export interface BadgeProps {
-	type: MembershipType;
+	type: DGroupStatus;
 	dleader?: string | null;
 }

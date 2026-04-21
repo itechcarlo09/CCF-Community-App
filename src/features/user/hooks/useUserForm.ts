@@ -124,6 +124,7 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				...(values.emergencyNumber && {
 					emergencyContactNumber: values.emergencyNumber,
 				}),
+				churchId: 5,
 			};
 			if (userId) {
 				await updateUserMutation.mutateAsync({ id: userId, data: payload });
@@ -152,23 +153,27 @@ export const useUserForm = ({ userId, onSuccess }: UseUserFormProps) => {
 				facebook: user.facebookLink || "",
 				emergencyPerson: user.emergencyContactName || "",
 				emergencyNumber: user.emergencyContactNumber || "",
-				education: user.education.map((edu) => {
-					return {
-						schoolId: edu.school.id,
-						educationLevel: edu.educationLevel as EducationLevel,
-						course: edu.course,
-						startDate: edu.startDate,
-						endDate: edu.endDate ?? null,
-					};
-				}),
-				employment: user.employment.map((emp) => {
-					return {
-						companyId: emp.company.id,
-						position: emp.position,
-						startDate: emp.startDate,
-						endDate: emp.endDate ?? null,
-					};
-				}),
+				education: user.education
+					? user.education.map((edu) => {
+							return {
+								schoolId: edu.school.id,
+								educationLevel: edu.educationLevel as EducationLevel,
+								course: edu.course,
+								startDate: edu.startDate,
+								endDate: edu.endDate ?? null,
+							};
+					  })
+					: [],
+				employment: user.employment
+					? user.employment.map((emp) => {
+							return {
+								companyId: emp.company.id,
+								position: emp.position,
+								startDate: emp.startDate,
+								endDate: emp.endDate ?? null,
+							};
+					  })
+					: [],
 			});
 		};
 
