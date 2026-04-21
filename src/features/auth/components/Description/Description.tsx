@@ -1,18 +1,15 @@
 import { useTheme } from "@theme/ThemeProvider";
 import { Text, TextStyle } from "react-native";
-import { TitleProps } from ".";
+import { DescriptionProps } from ".";
 import { design } from "@theme/index";
 
-const Title: React.FC<TitleProps> = ({
-	value = "CCF Community App",
-	style,
-}) => {
+const Description: React.FC<DescriptionProps> = ({ value, style }) => {
 	const { theme } = useTheme();
 	return (
 		<Text
 			style={[
 				{
-					...(design.typography.h1 as TextStyle),
+					...(design.typography.body as TextStyle),
 					color: theme.text,
 				},
 				style,
@@ -23,4 +20,4 @@ const Title: React.FC<TitleProps> = ({
 	);
 };
 
-export default Title;
+export default Description;

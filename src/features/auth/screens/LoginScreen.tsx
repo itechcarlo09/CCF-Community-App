@@ -6,6 +6,8 @@ import { useTheme } from "../../../theme/ThemeProvider";
 import Button from "../../../components/Button";
 import useLoginForm from "src/feature/auth/hook/useLoginForm";
 import Title from "../components/Title";
+import Description from "../components/Description";
+import { design } from "@theme/index";
 
 const LoginScreen = () => {
 	const { theme } = useTheme();
@@ -15,7 +17,13 @@ const LoginScreen = () => {
 
 	return (
 		<View style={styles.mainContainer}>
-			<Title value="CCF Community App" style={styles.title} />
+			<View style={{ rowGap: design.spacing.md }}>
+				<Title value="CCF Community App" style={styles.title} />
+				<Description
+					value="to honor God and make Christ-committed followers who will make Christ-committed followers."
+					style={styles.description}
+				/>
+			</View>
 			<View style={styles.fieldContainer}>
 				<TextField
 					placeholder="Enter Email"
@@ -83,6 +91,10 @@ const styles = StyleSheet.create({
 
 	title: {
 		textAlign: "center",
+	},
+	description: {
+		textAlign: "center",
+		fontStyle: "italic",
 	},
 });
 
