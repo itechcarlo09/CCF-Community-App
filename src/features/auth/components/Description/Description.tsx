@@ -3,7 +3,7 @@ import { Text, TextStyle } from "react-native";
 import { DescriptionProps } from ".";
 import { design } from "@theme/index";
 
-const Description: React.FC<DescriptionProps> = ({ value, style }) => {
+const Description: React.FC<DescriptionProps> = ({ children, style }) => {
 	const { theme } = useTheme();
 	return (
 		<Text
@@ -15,7 +15,7 @@ const Description: React.FC<DescriptionProps> = ({ value, style }) => {
 				style,
 			]}
 		>
-			{value}
+			{children}
 		</Text>
 	);
 };

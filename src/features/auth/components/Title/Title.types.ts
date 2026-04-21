@@ -1,3 +1,3 @@
-import { TextInputProps } from "react-native";
+import { TextProps } from "react-native";
 
-export interface TitleProps extends TextInputProps {}
+export interface TitleProps extends TextProps {}

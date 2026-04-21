@@ -8,6 +8,7 @@ import useLoginForm from "src/feature/auth/hook/useLoginForm";
 import Title from "../components/Title";
 import Description from "../components/Description";
 import { design } from "@theme/index";
+import CCFTextInput from "src/components/CCFTextInput";
 
 const LoginScreen = () => {
 	const { theme } = useTheme();
@@ -17,12 +18,27 @@ const LoginScreen = () => {
 
 	return (
 		<View style={styles.mainContainer}>
-			<View style={{ rowGap: design.spacing.md }}>
-				<Title value="CCF Community App" style={styles.title} />
-				<Description
-					value="to honor God and make Christ-committed followers who will make Christ-committed followers."
-					style={styles.description}
-				/>
+			<View style={{ rowGap: design.spacing["2xl"] }}>
+				<View style={{ rowGap: design.spacing.md }}>
+					<Title style={styles.title}>CCF Community App</Title>
+					<Description style={styles.description}>
+						to honor God and make Christ-committed followers who will make
+						Christ-committed followers.
+					</Description>
+				</View>
+				<View style={{ rowGap: design.spacing.lg }}>
+					<CCFTextInput
+						placeholder="Email or Phone Number"
+						value={formik.values.email}
+						onChangeText={formik.handleChange("email")}
+					/>
+					<CCFTextInput
+						placeholder="Password"
+						isPassword
+						value={formik.values.password}
+						onChangeText={formik.handleChange("password")}
+					/>
+				</View>
 			</View>
 			<View style={styles.fieldContainer}>
 				<TextField

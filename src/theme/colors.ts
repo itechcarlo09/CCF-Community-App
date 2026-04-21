@@ -1,11 +1,13 @@
 export const lightColors = {
 	text: "#111827",
+	muted: "#6B7280",
+	primary: "#58B9DA",
+	border: "#D1D5DB",
 
-	primary: "#4F46E5",
 	secondary: "#F59E0B",
 	background: "#FFFFFF",
 	card: "#F3F4F6",
-	border: "#E5E7EB",
+
 	success: "#10B981",
 	error: "#EF4444",
 	textDanger: {
@@ -80,12 +82,13 @@ export const lightColors = {
 
 export const darkColors = {
 	text: "#FFF",
+	muted: "#9CA3AF",
+	primary: "#58B9DA",
+	border: "#D1D5DB",
 
-	primary: "#818CF8",
 	secondary: "#FBBF24",
 	background: "#111827",
 	card: "#1F2937",
-	border: "#374151",
 	success: "#34D399",
 	error: "#F87171",
 	badge: {

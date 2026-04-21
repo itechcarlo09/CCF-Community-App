@@ -3,10 +3,7 @@ import { Text, TextStyle } from "react-native";
 import { TitleProps } from ".";
 import { design } from "@theme/index";
 
-const Title: React.FC<TitleProps> = ({
-	value = "CCF Community App",
-	style,
-}) => {
+const Title: React.FC<TitleProps> = ({ children, style }) => {
 	const { theme } = useTheme();
 	return (
 		<Text
@@ -18,7 +15,7 @@ const Title: React.FC<TitleProps> = ({
 				style,
 			]}
 		>
-			{value}
+			{children}
 		</Text>
 	);
 };
