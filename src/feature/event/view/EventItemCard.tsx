@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import {
 	mdiFileChartOutline,
 	mdiPencilOutline,

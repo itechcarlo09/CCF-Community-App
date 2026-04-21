@@ -1,9 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useTheme } from "../../../../../theme/ThemeProvider";
-import CircularImage from "../../../../../components/CircularImage";
-import MdiIcon from "../../../../../components/MdiIcon";
-import { mdiPencilOutline } from "@mdi/js";
 import { ContactInformationROProps } from "./ContactInformationRO.types";
 import { styles } from "./ContactInformationRO.styles";
 

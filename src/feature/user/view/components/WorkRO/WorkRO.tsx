@@ -6,9 +6,9 @@ import {
 	View,
 } from "react-native";
 import { useTheme } from "../../../../../theme/ThemeProvider";
-import MdiIcon from "../../../../../components/MdiIcon";
+import MdiIcon from "../../../../../component/MdiIcon";
 import { mdiPencilOutline, mdiPlus } from "@mdi/js";
-import Button from "../../../../../components/Button";
+import Button from "../../../../../component/Button";
 import { WorkROProps } from "./WorkRO.types";
 import { styles } from "./WorkRO.styles";
 

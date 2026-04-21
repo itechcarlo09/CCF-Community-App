@@ -7,8 +7,8 @@ import {
 	ActivityIndicator,
 	Dimensions,
 } from "react-native";
-import Header from "@components/Header";
-import Loading from "@components/Loading";
+import Header from "@component/Header";
+import Loading from "@component/Loading";
 import { useTheme } from "@theme/ThemeProvider";
 import useDebounce from "src/feature/user/hooks/useDebounce";
 import { useSpeakerViewModel } from "../viewModel/useSpeakerViewModel";

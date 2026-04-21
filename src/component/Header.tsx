@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, StyleSheet, Text } from "react-native";
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import { mdiArrowLeft, mdiDelete, mdiMagnify, mdiPlus } from "@mdi/js";
 
 interface Props {

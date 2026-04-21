@@ -8,14 +8,14 @@ import {
 	RefreshControl,
 	ActivityIndicator,
 } from "react-native";
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import { mdiAccountGroupOutline, mdiPencil, mdiDelete } from "@mdi/js";
-import Header from "@components/Header";
-import Loading from "@components/Loading";
+import Header from "@component/Header";
+import Loading from "@component/Loading";
 import { useMinistryViewModel } from "../viewModel/useMinistryViewModel";
 import { MinistryItemUI } from "../model/MinistryListItem";
 import { useTheme } from "@theme/ThemeProvider";
-import { Separator } from "@components/Separator";
+import { Separator } from "@component/Separator";
 
 export const MinistryPage = ({ navigation }: any) => {
 	const { ministries, refresh, loading, activityLoading, loadMoreMinistries } =

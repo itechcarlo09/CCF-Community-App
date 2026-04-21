@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import {
 	mdiPencil,
 	mdiPhoneOutline,
@@ -27,8 +27,8 @@ import {
 	formatDateRangeFromDate,
 	formatFullDate,
 } from "src/utils/dateFormatter";
-import Loading from "@components/Loading";
-import CircularImage from "@components/CircularImage";
+import Loading from "@component/Loading";
+import CircularImage from "@component/CircularImage";
 import { EducationDTO, EmploymentDTO } from "../model/user";
 import { showText } from "src/utils/errorUtils";
 

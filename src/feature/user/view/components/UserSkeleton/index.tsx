@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import { ShimmerSkeleton } from "../../../../../components/ShimmerSkeleton";
+import { ShimmerSkeleton } from "../../../../../component/ShimmerSkeleton";
 import { useTheme } from "../../../../../theme/ThemeProvider";
 
 const UserLoaderItem = () => {

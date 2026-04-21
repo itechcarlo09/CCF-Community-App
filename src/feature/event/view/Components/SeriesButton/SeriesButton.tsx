@@ -4,7 +4,7 @@ import { SeriesButtonProps } from "./SeriesButton.types";
 import { useTheme } from "../../../../../theme/ThemeProvider";
 import { styles } from "./SeriesButton.styles";
 import { mdiArrowRight } from "@mdi/js";
-import MdiIcon from "../../../../../components/MdiIcon";
+import MdiIcon from "../../../../../component/MdiIcon";
 
 const SeriesButton: React.FC<SeriesButtonProps> = ({
 	name,

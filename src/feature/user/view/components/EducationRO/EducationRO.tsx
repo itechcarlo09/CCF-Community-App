@@ -6,11 +6,11 @@ import {
 	View,
 } from "react-native";
 import { useTheme } from "../../../../../theme/ThemeProvider";
-import MdiIcon from "../../../../../components/MdiIcon";
+import MdiIcon from "../../../../../component/MdiIcon";
 import { mdiPencilOutline, mdiPlus } from "@mdi/js";
 import { styles } from "./EducationRO.styles";
 import { EducationROProps } from "./EducationRO.types";
-import Button from "../../../../../components/Button";
+import Button from "../../../../../component/Button";
 
 const Educations: React.FC<EducationROProps> = ({ educations }) => {
 	const { theme } = useTheme();

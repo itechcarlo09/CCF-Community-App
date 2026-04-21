@@ -1,4 +1,4 @@
-import CircularImage from "@components/CircularImage";
+import CircularImage from "@component/CircularImage";
 import React from "react";
 import {
 	View,

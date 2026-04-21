@@ -5,8 +5,8 @@ import { NOID } from "src/types/globalTypes";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { EventStackParamList } from "src/types/navigation";
-import Input from "@components/Inputs";
-import Loading from "@components/Loading";
+import Input from "@component/Inputs";
+import Loading from "@component/Loading";
 import { useMinistryForm } from "../hooks/useMinistryForm";
 
 type UserRouteProp = RouteProp<EventStackParamList, "EventForm">;

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useTheme } from "@theme/ThemeProvider";
 import { SpeakerItemUI } from "../../model/SpeakerItemUI";
-import CircularImage from "@components/CircularImage";
+import CircularImage from "@component/CircularImage";
 
 type Props = {
 	item: SpeakerItemUI;

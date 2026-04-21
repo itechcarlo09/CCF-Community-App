@@ -11,10 +11,10 @@ import { useEventViewModel } from "../viewModel/useEventViewModel";
 import { useTheme } from "../../../theme/ThemeProvider";
 import EventListItem from "./EventListItem";
 import useDebounce from "../../user/hooks/useDebounce";
-import { SearchField } from "../../../components/SearchField";
-import MdiIcon from "../../../components/MdiIcon";
+import { SearchField } from "../../../component/SearchField";
+import MdiIcon from "../../../component/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
-import Loading from "../../../components/Loading";
+import Loading from "../../../component/Loading";
 import { EventItemCard } from "./EventItemCard";
 
 const Separator = () => <View style={styles.separator} />;

@@ -7,12 +7,12 @@ import {
 	ActivityIndicator,
 } from "react-native";
 import { useTheme } from "../../../theme/ThemeProvider";
-import Loading from "../../../components/Loading";
+import Loading from "../../../component/Loading";
 import useDebounce from "../../user/hooks/useDebounce";
-import Header from "@components/Header";
+import Header from "@component/Header";
 import DGroupListCard from "./components/DGroupListCard";
 import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
-import { Separator } from "@components/Separator";
+import { Separator } from "@component/Separator";
 
 const DGroupListScreen = ({ navigation }: any) => {
 	const {

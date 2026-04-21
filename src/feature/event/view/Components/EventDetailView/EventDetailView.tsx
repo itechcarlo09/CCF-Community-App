@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { EventDetailViewProps } from "./EventDetailView.types";
 import { useTheme } from "../../../../../theme/ThemeProvider";
 import { styles } from "./EventDetailView.styles";
-import MdiIcon from "../../../../../components/MdiIcon";
+import MdiIcon from "../../../../../component/MdiIcon";
 
 const EventDetailView: React.FC<EventDetailViewProps> = ({
 	iconPath,

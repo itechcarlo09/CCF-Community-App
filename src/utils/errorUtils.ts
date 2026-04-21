@@ -1,4 +1,4 @@
-import { ToastType, useToast } from "@components/toast/ToastContext";
+import { ToastType, useToast } from "@component/toast/ToastContext";
 import { Alert } from "react-native";
 
 const { show } = useToast();

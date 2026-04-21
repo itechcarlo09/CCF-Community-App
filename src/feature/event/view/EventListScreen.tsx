@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import { useEventViewModel } from "../viewModel/useEventViewModel";
 import { useTheme } from "../../../theme/ThemeProvider";
-import Loading from "../../../components/Loading";
+import Loading from "../../../component/Loading";
 import { EventItemCard } from "./EventItemCard";
 import useDebounce from "../../user/hooks/useDebounce";
-import Header from "@components/Header";
-import { Separator } from "@components/Separator";
+import Header from "@component/Header";
+import { Separator } from "@component/Separator";
 
 const EventListScreen = ({ navigation }: any) => {
 	const {

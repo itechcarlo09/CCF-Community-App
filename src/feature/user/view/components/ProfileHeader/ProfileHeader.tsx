@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { useTheme } from "../../../../../theme/ThemeProvider";
 import { ProfileHeaderProps } from "./ProfileHeader.types";
-import CircularImage from "../../../../../components/CircularImage";
+import CircularImage from "../../../../../component/CircularImage";
 import { styles } from "./ProfileHeader.styles";
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({

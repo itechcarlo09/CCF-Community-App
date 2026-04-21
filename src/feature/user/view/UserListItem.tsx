@@ -7,7 +7,7 @@ import {
 	ViewStyle,
 	StyleProp,
 } from "react-native";
-import CircularImage from "../../../components/CircularImage";
+import CircularImage from "../../../component/CircularImage";
 import { RecordItemUI } from "../model/RecordListItem";
 import { useTheme } from "../../../theme/ThemeProvider";
 import {
@@ -15,7 +15,7 @@ import {
 	mdiAlertCircleOutline,
 	mdiCheckCircleOutline,
 } from "@mdi/js";
-import MdiIcon from "../../../components/MdiIcon";
+import MdiIcon from "../../../component/MdiIcon";
 import Badge from "./components/Badge/Badge";
 
 interface Props {

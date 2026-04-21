@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import useLoginForm from "../hook/useLoginForm";
-import Loading from "../../../components/Loading";
-import TextField from "../../../components/TextField";
+import Loading from "../../../component/Loading";
+import TextField from "../../../component/TextField";
 import { useTheme } from "../../../theme/ThemeProvider";
-import Button from "../../../components/Button";
+import Button from "../../../component/Button";
 
 const LoginScreen = () => {
 	const { theme } = useTheme();

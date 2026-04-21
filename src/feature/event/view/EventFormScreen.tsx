@@ -15,8 +15,8 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 
-import Input from "@components/Inputs";
-import Loading from "@components/Loading";
+import Input from "@component/Inputs";
+import Loading from "@component/Loading";
 import { useEventForm } from "../hooks/userEventForm";
 import { NOID } from "src/types/globalTypes";
 import { EventStackParamList } from "src/types/navigation";

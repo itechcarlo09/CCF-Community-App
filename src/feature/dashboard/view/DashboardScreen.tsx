@@ -8,10 +8,10 @@ import {
 	Linking,
 } from "react-native";
 import { useDashboardViewModel } from "../viewModel/useDashboardViewModel";
-import Loading from "@components/Loading";
+import Loading from "@component/Loading";
 import DashboardCard from "./components/DataTile";
 import { useTheme } from "@theme/ThemeProvider";
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import {
 	mdiAccountGroupOutline,
 	mdiAccountTieOutline,

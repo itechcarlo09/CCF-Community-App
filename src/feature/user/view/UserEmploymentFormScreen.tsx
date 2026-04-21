@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 
-import Header from "@components/Header";
-import Input from "@components/Inputs";
-import Loading from "@components/Loading";
-import { MonthYearPicker } from "@components/MonthYearPicker";
-import { ModernSwitch } from "@components/ModernSwitch";
-import SelectButton from "@components/SelectButton";
+import Header from "@component/Header";
+import Input from "@component/Inputs";
+import Loading from "@component/Loading";
+import { MonthYearPicker } from "@component/MonthYearPicker";
+import { ModernSwitch } from "@component/ModernSwitch";
+import SelectButton from "@component/SelectButton";
 import dayjs from "dayjs";
 import { NOID } from "src/types/globalTypes";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

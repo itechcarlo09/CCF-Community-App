@@ -11,7 +11,7 @@ import RootNavigator from "./src/navigation/RootNavigator";
 import { ThemeProvider } from "./src/theme/ThemeProvider";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastProvider } from "@components/toast/ToastContext";
+import { ToastProvider } from "@component/toast/ToastContext";
 
 const queryClient = new QueryClient();
 

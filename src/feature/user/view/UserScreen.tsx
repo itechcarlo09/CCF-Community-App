@@ -10,12 +10,12 @@ import {
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import MdiIcon from "../../../components/MdiIcon";
+import MdiIcon from "../../../component/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
-import { SearchField } from "../../../components/SearchField";
+import { SearchField } from "../../../component/SearchField";
 import useDebounce from "../hooks/useDebounce";
-import UserLoader from "./components/UserSkeleton";
+import UserLoader from "./component/UserSkeleton";
 import UserType from "../../../types/enums/UserType";
 
 const Separator = () => <View style={styles.separator} />;

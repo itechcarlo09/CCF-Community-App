@@ -7,11 +7,11 @@ import {
 	mdiPencilOutline,
 } from "@mdi/js";
 import { EventItemUI } from "../model/EventListItem";
-import CircularDate from "../../../components/CircularDate";
+import CircularDate from "../../../component/CircularDate";
 import SeriesButton from "./Components/SeriesButton";
 import AttendanceView from "./Components/AttendanceView";
 import EventDetailView from "./Components/EventDetailView";
-import MdiIcon from "../../../components/MdiIcon";
+import MdiIcon from "../../../component/MdiIcon";
 
 interface Props {
 	event: EventItemUI;

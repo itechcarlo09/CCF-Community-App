@@ -1,4 +1,4 @@
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import { useTheme } from "@theme/ThemeProvider";
 import React from "react";
 import {

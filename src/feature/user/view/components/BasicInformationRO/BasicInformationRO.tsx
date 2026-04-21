@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { useTheme } from "../../../../../theme/ThemeProvider";
 import { BasicInformationROProps } from "./BasicInformationRO.types";
-import MdiIcon from "../../../../../components/MdiIcon";
+import MdiIcon from "../../../../../component/MdiIcon";
 import { mdiPencilOutline } from "@mdi/js";
 import { styles } from "./BasicInformationRO.styles";
 

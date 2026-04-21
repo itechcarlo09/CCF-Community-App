@@ -10,11 +10,11 @@ import {
 } from "react-native";
 import { useUserViewModel } from "../viewModel/useUserViewModel";
 import { RecordItemUI } from "../model/RecordListItem";
-import Loading from "@components/Loading";
-import CircularImage from "@components/CircularImage";
-import Header from "@components/Header";
+import Loading from "@component/Loading";
+import CircularImage from "@component/CircularImage";
+import Header from "@component/Header";
 import { useTheme } from "@theme/ThemeProvider";
-import { Separator } from "@components/Separator";
+import { Separator } from "@component/Separator";
 
 const UserListScreen = ({ navigation }: any) => {
 	const {

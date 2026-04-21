@@ -5,10 +5,10 @@ import { NOID } from "src/types/globalTypes";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { OtherStackParamList } from "src/types/navigation";
-import Input from "@components/Inputs";
-import Loading from "@components/Loading";
+import Input from "@component/Inputs";
+import Loading from "@component/Loading";
 import { useSchoolForm } from "../hooks/useSchoolForm";
-import Header from "@components/Header";
+import Header from "@component/Header";
 
 type SchoolRouteProp = RouteProp<OtherStackParamList, "SchoolFormScreen">;
 type NavProp = NativeStackNavigationProp<OtherStackParamList>;

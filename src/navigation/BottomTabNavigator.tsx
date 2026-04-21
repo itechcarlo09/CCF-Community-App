@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "../theme/ThemeProvider";
-import MdiIcon from "../components/MdiIcon";
+import MdiIcon from "../component/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
 import OtherScreen from "src/feature/others/view/OtherScreen";
 import EventListScreen from "src/feature/event/view/EventListScreen";

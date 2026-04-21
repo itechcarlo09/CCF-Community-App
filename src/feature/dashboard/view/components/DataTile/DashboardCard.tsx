@@ -1,4 +1,4 @@
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { DataCardProps } from "./DashboardCard.types";

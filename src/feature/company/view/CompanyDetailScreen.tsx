@@ -9,12 +9,12 @@ import {
 	ActivityIndicator,
 } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import MdiIcon from "@components/MdiIcon";
+import MdiIcon from "@component/MdiIcon";
 import { mdiPencil, mdiAccountOutline, mdiMagnify } from "@mdi/js";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { OtherStackParamList } from "src/types/navigation";
 import { NOID } from "src/types/globalTypes";
-import Loading from "@components/Loading";
+import Loading from "@component/Loading";
 import { getAcronym } from "src/utils/stringUtils";
 import useDebounce from "src/feature/user/hooks/useDebounce";
 
