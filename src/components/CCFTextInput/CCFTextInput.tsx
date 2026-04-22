@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
+import { TextInput, View } from "react-native";
 import { CCFTextInputProps } from "./CCFTextInput.types";
 import { useTheme } from "@theme/ThemeProvider";
 import { styles } from "./CCFTextInput.styles";
