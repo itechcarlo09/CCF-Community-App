@@ -1,9 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Loading from "../../../component/Loading";
-import TextField from "../../../component/TextField";
 import { useTheme } from "../../../theme/ThemeProvider";
-import Button from "../../../component/Button";
 import useLoginForm from "src/feature/auth/hook/useLoginForm";
 import Title from "../components/Title";
 import Description from "../components/Description";
@@ -11,12 +9,11 @@ import { design } from "@theme/index";
 import CCFTextInput from "src/components/CCFTextInput";
 import TextLink from "../components/TextLink";
 import CCFButton from "@components/CCFButton";
-import { useErrorUtils } from "src/utils/errorUtils";
+import { toast } from "@component/toast/toast";
 
 const LoginScreen = () => {
 	const { theme } = useTheme();
 	const { formik, loading } = useLoginForm();
-	const { showText } = useErrorUtils();
 
 	if (loading) return <Loading />;
 
@@ -42,50 +39,31 @@ const LoginScreen = () => {
 						value={formik.values.password}
 						onChangeText={formik.handleChange("password")}
 					/>
-					<TextLink style={styles.forgotPassword}>Forgot Password?</TextLink>
-					<CCFButton
-						title={"Login"}
-						onPress={() => showText("implement login")}
-					/>
+					<TextLink
+						onPress={() =>
+							toast.default("Forgot Password feature is not implemented yet.")
+						}
+						style={styles.forgotPassword}
+					>
+						Forgot Password?
+					</TextLink>
 				</View>
-			</View>
-			<View style={styles.fieldContainer}>
-				<TextField
-					placeholder="Enter Email"
-					label="Email"
-					value={formik.values.email}
-					onChangeText={formik.handleChange("email")}
-					error={formik.errors.email}
-					touched={formik.touched.email}
-					name={"email"}
-				/>
-				<TextField
-					placeholder="Enter Password"
-					label="Password"
-					value={formik.values.password}
-					onChangeText={formik.handleChange("password")}
-					name={"password"}
-					touched={formik.touched.password}
-					error={formik.errors.password}
-					secureTextEntry={true}
+				<CCFButton
+					title={"Log In"}
+					onPress={formik.handleSubmit as any}
+					disabled={loading}
 				/>
 			</View>
-			<Button
-				title="Login"
-				style={{ backgroundColor: theme.blue[500] }}
-				onPress={formik.handleSubmit as any}
-				disabled={loading}
-			/>
+			<View style={styles.container}>
+				<View style={styles.line} />
+				<Text style={styles.text}>or continue with</Text>
+				<View style={styles.line} />
+			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	mainContainer: {
-		flex: 1,
-		justifyContent: "center",
-		padding: 24,
-	},
 	fieldContainer: {
 		marginVertical: 64,
 		rowGap: 16,
@@ -114,6 +92,11 @@ const styles = StyleSheet.create({
 		paddingLeft: 12,
 	},
 
+	mainContainer: {
+		flex: 1,
+		justifyContent: "center",
+		padding: 24,
+	},
 	title: {
 		textAlign: "center",
 	},
@@ -123,6 +106,24 @@ const styles = StyleSheet.create({
 	},
 	forgotPassword: {
 		alignSelf: "flex-end",
+	},
+	dividerContainer: {
+		alignSelf: "flex-end",
+	},
+	container: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginVertical: 24,
+	},
+	line: {
+		flex: 1,
+		height: 1,
+		backgroundColor: "#E5E7EB",
+	},
+	text: {
+		marginHorizontal: 12,
+		fontSize: 14,
+		color: "#9CA3AF",
 	},
 });
 

@@ -1,44 +1,42 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { ToastComponent } from "./ToastComponents";
+import { ToastContainer } from "./ToastComponents";
+import { setToastHandler } from "./toast";
 
-export type ToastType = "success" | "error";
+export type ToastType = "success" | "error" | "default";
 
-type ToastState = {
-	visible: boolean;
+type ToastItem = {
+	id: string;
 	message: string;
 	type: ToastType;
 };
 
 type ToastContextType = {
 	show: (message: string, type?: ToastType) => void;
-	hide: () => void;
+	remove: (id: string) => void;
 };
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
-	const [toast, setToast] = useState<ToastState>({
-		visible: false,
-		message: "",
-		type: "success",
-	});
+	const [toasts, setToasts] = useState<ToastItem[]>([]);
 
 	const show = (message: string, type: ToastType = "success") => {
-		setToast({ visible: true, message, type });
+		const id = Date.now().toString();
 
-		setTimeout(() => {
-			setToast((prev) => ({ ...prev, visible: false }));
-		}, 5000);
+		setToasts((prev) => [...prev, { id, message, type }]);
 	};
 
-	const hide = () => {
-		setToast((prev) => ({ ...prev, visible: false }));
+	const remove = (id: string) => {
+		setToasts((prev) => prev.filter((t) => t.id !== id));
 	};
+
+	// 🔥 Register global handler
+	setToastHandler(show);
 
 	return (
-		<ToastContext.Provider value={{ show, hide }}>
+		<ToastContext.Provider value={{ show, remove }}>
 			{children}
-			<ToastComponent toast={toast} />
+			<ToastContainer toasts={toasts} remove={remove} />
 		</ToastContext.Provider>
 	);
 };

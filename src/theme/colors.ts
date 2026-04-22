@@ -5,13 +5,26 @@ export const lightColors = {
 	border: "#D1D5DB",
 	button: "#00A6B6",
 	buttonClicked: "#008C9A",
+	success: {
+		backgroundColor: "#ECFDF3", // light green
+		borderColor: "#12B76A",
+		textColor: "#027A48",
+	},
+	error: {
+		backgroundColor: "#FEF3F2", // light red
+		borderColor: "#F04438",
+		textColor: "#B42318",
+	},
+	default: {
+		backgroundColor: "#DBEAFE", // light blue
+		borderColor: "#3B82F6", // primary blue
+		textColor: "#1E3A8A", // deep blue
+	},
 
 	secondary: "#F59E0B",
 	background: "#FFFFFF",
 	card: "#F3F4F6",
 
-	success: "#10B981",
-	error: "#EF4444",
 	textDanger: {
 		onDanger: {
 			secondary: "#900B09",
@@ -89,12 +102,25 @@ export const darkColors = {
 	border: "#D1D5DB",
 	button: "#00A6B6",
 	buttonClicked: "#008C9A",
+	success: {
+		backgroundColor: "#ECFDF3", // light green
+		borderColor: "#12B76A",
+		textColor: "#027A48",
+	},
+	error: {
+		backgroundColor: "#FEF3F2", // light red
+		borderColor: "#F04438",
+		textColor: "#B42318",
+	},
+	default: {
+		backgroundColor: "#F9FAFB", // light gray
+		borderColor: "#D0D5DD",
+		textColor: "#344054",
+	},
 
 	secondary: "#FBBF24",
 	background: "#111827",
 	card: "#1F2937",
-	success: "#34D399",
-	error: "#F87171",
 	badge: {
 		primary: {
 			background: "#DFE7F6",
