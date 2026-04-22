@@ -10,10 +10,13 @@ import Description from "../components/Description";
 import { design } from "@theme/index";
 import CCFTextInput from "src/components/CCFTextInput";
 import TextLink from "../components/TextLink";
+import CCFButton from "@components/CCFButton";
+import { useErrorUtils } from "src/utils/errorUtils";
 
 const LoginScreen = () => {
 	const { theme } = useTheme();
 	const { formik, loading } = useLoginForm();
+	const { showText } = useErrorUtils();
 
 	if (loading) return <Loading />;
 
@@ -40,6 +43,10 @@ const LoginScreen = () => {
 						onChangeText={formik.handleChange("password")}
 					/>
 					<TextLink style={styles.forgotPassword}>Forgot Password?</TextLink>
+					<CCFButton
+						title={"Login"}
+						onPress={() => showText("implement login")}
+					/>
 				</View>
 			</View>
 			<View style={styles.fieldContainer}>

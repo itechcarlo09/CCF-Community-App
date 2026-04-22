@@ -39,7 +39,7 @@ export const ToastComponent = ({ toast }: any) => {
 const styles = StyleSheet.create({
 	container: {
 		position: "absolute",
-		bottom: 30, // 👈 move to bottom
+		top: 0, // 👈 move to bottom
 		width: width * 0.9,
 		alignSelf: "center",
 		padding: 16,

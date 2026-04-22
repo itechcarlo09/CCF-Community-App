@@ -3,6 +3,8 @@ export const lightColors = {
 	muted: "#6B7280",
 	primary: "#58B9DA",
 	border: "#D1D5DB",
+	button: "#00A6B6",
+	buttonClicked: "#008C9A",
 
 	secondary: "#F59E0B",
 	background: "#FFFFFF",
@@ -85,6 +87,8 @@ export const darkColors = {
 	muted: "#9CA3AF",
 	primary: "#58B9DA",
 	border: "#D1D5DB",
+	button: "#00A6B6",
+	buttonClicked: "#008C9A",
 
 	secondary: "#FBBF24",
 	background: "#111827",
