@@ -10,6 +10,7 @@ import CCFTextInput from "src/components/CCFTextInput";
 import TextLink from "../components/TextLink";
 import CCFButton from "@components/CCFButton";
 import { toast } from "@component/toast/toast";
+import GoogleButton from "../components/GoogleButton";
 
 const LoginScreen = () => {
 	const { theme } = useTheme();
@@ -59,6 +60,11 @@ const LoginScreen = () => {
 				<Text style={styles.text}>or continue with</Text>
 				<View style={styles.line} />
 			</View>
+			<GoogleButton
+				onPress={() =>
+					toast.default("Google Login feature is not implemented yet.")
+				}
+			/>
 		</View>
 	);
 };
