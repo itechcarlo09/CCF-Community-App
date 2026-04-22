@@ -7,7 +7,7 @@ import Title from "../components/Title";
 import Description from "../components/Description";
 import { design } from "@theme/index";
 import CCFTextInput from "src/components/CCFTextInput";
-import TextLink from "../components/TextLink";
+import TextLink from "../../../components/TextLink";
 import CCFButton from "@components/CCFButton";
 import { toast } from "@component/toast/toast";
 import GoogleButton from "../components/GoogleButton";
@@ -65,6 +65,14 @@ const LoginScreen = () => {
 					toast.default("Google Login feature is not implemented yet.")
 				}
 			/>
+			<TextLink
+				onPress={() =>
+					toast.default("Account creation will be available soon.")
+				}
+				style={styles.createAccount}
+			>
+				Create an account
+			</TextLink>
 		</View>
 	);
 };
@@ -130,6 +138,10 @@ const styles = StyleSheet.create({
 		marginHorizontal: 12,
 		fontSize: 14,
 		color: "#9CA3AF",
+	},
+	createAccount: {
+		alignSelf: "center",
+		marginTop: 32,
 	},
 });
 
