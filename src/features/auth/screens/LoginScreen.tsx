@@ -33,12 +33,14 @@ const LoginScreen = () => {
 						placeholder="Email or Phone Number"
 						value={formik.values.email}
 						onChangeText={formik.handleChange("email")}
+						error={formik.errors.email}
 					/>
 					<CCFTextInput
 						placeholder="Password"
 						isPassword
 						value={formik.values.password}
 						onChangeText={formik.handleChange("password")}
+						error={formik.errors.password}
 					/>
 					<TextLink
 						onPress={() =>

@@ -10,9 +10,9 @@ import {
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import DateTimePicker, {
-	DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+// import DateTimePicker, {
+// 	DateTimePickerEvent,
+// } from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 
 import Input from "@component/Inputs";
@@ -72,23 +72,23 @@ const CreateEventScreen: React.FC = () => {
 		},
 	});
 
-	const handleDateChange = (
-		event: DateTimePickerEvent,
-		selectedDate?: Date,
-	) => {
-		if (Platform.OS === "android") setShowDatePicker(false);
-		if (event.type === "dismissed") return;
-		if (selectedDate) formik.setFieldValue("date", selectedDate);
-	};
+	// const handleDateChange = (
+	// 	event: DateTimePickerEvent,
+	// 	selectedDate?: Date,
+	// ) => {
+	// 	if (Platform.OS === "android") setShowDatePicker(false);
+	// 	if (event.type === "dismissed") return;
+	// 	if (selectedDate) formik.setFieldValue("date", selectedDate);
+	// };
 
-	const handleTimeChange = (
-		event: DateTimePickerEvent,
-		selectedTime?: Date,
-	) => {
-		if (Platform.OS === "android") setShowTimePicker(false);
-		if (event.type === "dismissed") return;
-		if (selectedTime) formik.setFieldValue("time", selectedTime);
-	};
+	// const handleTimeChange = (
+	// 	event: DateTimePickerEvent,
+	// 	selectedTime?: Date,
+	// ) => {
+	// 	if (Platform.OS === "android") setShowTimePicker(false);
+	// 	if (event.type === "dismissed") return;
+	// 	if (selectedTime) formik.setFieldValue("time", selectedTime);
+	// };
 
 	const handleAssignSeries = useCallback(() => {
 		const parsedId = Number(id);
@@ -149,14 +149,14 @@ const CreateEventScreen: React.FC = () => {
 					<Text style={styles.errorText}>{formik.errors.date}</Text>
 				)}
 			</View>
-			{showDatePicker && (
+			{/* {showDatePicker && (
 				<DateTimePicker
 					value={formik.values.date || new Date()}
 					mode="date"
 					display={Platform.OS === "ios" ? "spinner" : "default"}
 					onChange={handleDateChange}
 				/>
-			)}
+			)} */}
 			{/* Event Time */}
 			<View style={{ marginBottom: 12 }}>
 				<View style={styles.labelRow}>
@@ -185,7 +185,7 @@ const CreateEventScreen: React.FC = () => {
 					<Text style={styles.errorText}>{formik.errors.time}</Text>
 				)}
 			</View>
-			{showTimePicker && (
+			{/* {showTimePicker && (
 				<DateTimePicker
 					value={formik.values.time || new Date()}
 					mode="time"
@@ -193,7 +193,7 @@ const CreateEventScreen: React.FC = () => {
 					display={Platform.OS === "ios" ? "spinner" : "default"}
 					onChange={handleTimeChange}
 				/>
-			)}
+			)} */}
 			<Input
 				label="Location"
 				placeholder="Enter Location"

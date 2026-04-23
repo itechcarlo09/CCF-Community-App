@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	Platform,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDateForDisplay } from "src/utils/dateFormatter";
 import dayjs from "dayjs";
 
@@ -68,7 +68,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
 			{touched && error && <Text style={styles.errorText}>{error}</Text>}
 
-			{showPicker && (
+			{/* {showPicker && (
 				<DateTimePicker
 					value={value ? dayjs(value).toDate() : new Date()}
 					mode="date"
@@ -77,7 +77,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 					maximumDate={maximumDate}
 					minimumDate={minimumDate}
 				/>
-			)}
+			)} */}
 		</View>
 	);
 };

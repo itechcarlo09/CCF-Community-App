@@ -20,6 +20,11 @@ export const lightColors = {
 		borderColor: "#3B82F6", // primary blue
 		textColor: "#1E3A8A", // deep blue
 	},
+	disabled: {
+		disabledBackground: "#F5F5F5",
+		disabledText: "#A0A0A0",
+		disabledBorder: "#E0E0E0",
+	},
 
 	secondary: "#F59E0B",
 	background: "#FFFFFF",
@@ -116,6 +121,11 @@ export const darkColors = {
 		backgroundColor: "#F9FAFB", // light gray
 		borderColor: "#D0D5DD",
 		textColor: "#344054",
+	},
+	disabled: {
+		disabledBackground: "#2A2A2A",
+		disabledText: "#6B6B6B",
+		disabledBorder: "#3A3A3A",
 	},
 
 	secondary: "#FBBF24",
