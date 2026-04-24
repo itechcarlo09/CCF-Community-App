@@ -19,8 +19,12 @@ function BottomTabNavigator() {
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
 				headerShown: false,
+				tabBarStyle: {
+					backgroundColor: theme.background,
+					borderTopColor: theme.muted,
+				},
 				tabBarActiveTintColor: theme.primary,
-				tabBarInactiveTintColor: theme.text,
+				tabBarInactiveTintColor: theme.muted,
 				tabBarIcon: ({ focused, color, size }) => {
 					type TabName = (typeof bottomTabNames)[number];
 					const iconConfig = tabIconMap[route.name as TabName];
@@ -58,7 +62,7 @@ function BottomTabNavigator() {
 			<Tab.Screen
 				name="ProfileTab"
 				component={ProfileScreen}
-				options={{ title: "Others" }}
+				options={{ title: "Profile" }}
 			/>
 		</Tab.Navigator>
 	);
