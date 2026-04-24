@@ -26,7 +26,7 @@ import {
 } from "@mdi/js";
 import { useAppMode } from "src/context/app-mode";
 import SettingsItemButton from "../components/SettingsItemButton";
-import MdiIcon from "@component/MdiIcon";
+import MDIIcon from "@components/MDIIcon";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -251,7 +251,7 @@ const ProfileScreen = () => {
 						pressed && { backgroundColor: theme.logout.pressedBackgroundColor },
 					]}
 				>
-					<MdiIcon path={mdiLogout} size={20} color={theme.logout.textColor} />
+					<MDIIcon path={mdiLogout} size={20} color={theme.logout.textColor} />
 
 					<Text style={[styles.logoutText, { color: theme.logout.textColor }]}>
 						Log Out
