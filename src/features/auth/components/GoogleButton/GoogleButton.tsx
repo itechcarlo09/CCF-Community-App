@@ -2,15 +2,20 @@ import React from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { styles } from "./GoogleButton.styles";
+import { useTheme } from "@theme/ThemeProvider";
 
 type Props = {
 	onPress: () => void;
 };
 
 const GoogleButton: React.FC<Props> = ({ onPress }) => {
+	const { theme } = useTheme();
 	return (
 		<TouchableOpacity
-			style={styles.button}
+			style={[
+				styles.button,
+				{ backgroundColor: theme.background, borderColor: theme.primary },
+			]}
 			onPress={onPress}
 			activeOpacity={0.8}
 		>
@@ -34,7 +39,9 @@ const GoogleButton: React.FC<Props> = ({ onPress }) => {
 					/>
 				</Svg>
 
-				<Text style={styles.text}>Continue with Google</Text>
+				<Text style={[styles.text, { color: theme.text }]}>
+					Continue with Google
+				</Text>
 			</View>
 		</TouchableOpacity>
 	);
