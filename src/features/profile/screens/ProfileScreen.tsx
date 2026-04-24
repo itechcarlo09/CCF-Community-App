@@ -84,7 +84,15 @@ const ProfileScreen = () => {
 			</LinearGradient>
 
 			{/* Content */}
-			<View style={[styles.content, { paddingHorizontal: design.spacing.xl }]}>
+			<View
+				style={[
+					styles.content,
+					{
+						paddingHorizontal: design.spacing.xl,
+						backgroundColor: theme.background,
+					},
+				]}
+			>
 				{/* Profile Card */}
 				<ShadowCard
 					containerStyle={{

@@ -28,9 +28,9 @@ export const lightColors = {
 	card: "#FFF",
 	white: "#FFF",
 	black: "#000",
+	background: "#F9FAFB",
 
 	secondary: "#F59E0B",
-	background: "#FFFFFF",
 
 	textDanger: {
 		onDanger: {
@@ -131,9 +131,10 @@ export const darkColors = {
 	card: "#1F2937",
 	white: "#FFF",
 	black: "#000",
+	background: "#111827",
 
 	secondary: "#FBBF24",
-	background: "#111827",
+
 	badge: {
 		primary: {
 			background: "#DFE7F6",
