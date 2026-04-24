@@ -51,7 +51,7 @@ const ProfileScreen = () => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { backgroundColor: theme.background }]}>
 			{/* Header */}
 			<LinearGradient
 				colors={["#00A6B6", "#58B9DA"]}
@@ -62,7 +62,9 @@ const ProfileScreen = () => {
 					style={[
 						styles.header,
 						{
-							paddingTop: insets.top,
+							paddingTop:
+								insets.top +
+								(Platform.OS === "android" ? design.spacing.lg : 0),
 							paddingHorizontal: design.spacing.xl,
 						},
 					]}
@@ -86,11 +88,10 @@ const ProfileScreen = () => {
 			{/* Content */}
 			<View
 				style={[
-					styles.content,
 					{
 						paddingHorizontal: design.spacing.xl,
-						backgroundColor: theme.background,
 					},
+					styles.content,
 				]}
 			>
 				{/* Profile Card */}
@@ -116,24 +117,36 @@ const ProfileScreen = () => {
 
 						<View style={styles.userInfo}>
 							<Text
-								style={{
-									color: theme.text,
-									...(design.typography.h4 as TextStyle),
-								}}
+								style={[
+									{
+										color: theme.text,
+									},
+									design.typography.h4 as TextStyle,
+								]}
 							>
 								{user.name}
 							</Text>
 							<Text
-								style={{
-									color: theme.muted,
-									...(design.typography.body as TextStyle),
-								}}
+								style={[
+									{
+										color: theme.muted,
+										marginBottom: design.spacing.sm,
+									},
+									design.typography.body,
+								]}
 							>
 								{user.email}
 							</Text>
 
-							<View style={styles.badge}>
-								<Text style={styles.badgeText}>{user.roleBadge}</Text>
+							<View style={[styles.badge, { backgroundColor: theme.badge }]}>
+								<Text
+									style={[
+										design.typography.caption,
+										{ color: theme.badgeText },
+									]}
+								>
+									{user.roleBadge}
+								</Text>
 							</View>
 						</View>
 					</View>
@@ -213,7 +226,6 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#F9FAFB",
 		paddingBottom: 80,
 	},
 	header: {
@@ -262,16 +274,10 @@ const styles = StyleSheet.create({
 	},
 
 	badge: {
-		backgroundColor: "#EFF6FF",
 		paddingHorizontal: 12,
 		paddingVertical: 4,
 		borderRadius: 999,
 		alignSelf: "flex-start",
-	},
-
-	badgeText: {
-		color: "#1D4ED8",
-		fontSize: 12,
 	},
 
 	section: {

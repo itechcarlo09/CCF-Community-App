@@ -29,6 +29,8 @@ export const lightColors = {
 	white: "#FFF",
 	black: "#000",
 	background: "#F9FAFB",
+	badge: "#EFF6FF",
+	badgeText: "#1D4ED8",
 
 	secondary: "#F59E0B",
 
@@ -40,24 +42,24 @@ export const lightColors = {
 	textPositive: {
 		secondary: "#009951",
 	},
-	badge: {
-		primary: {
-			background: "#DFE7F6",
-			text: "#2C58A0",
-		},
-		secondary: {
-			background: "#EBEDEF",
-			text: "#40464F",
-		},
-		warning: {
-			background: "#FBF0DA",
-			text: "#73510D",
-		},
-		success: {
-			background: "#D6F0E0",
-			text: "#0D6832",
-		},
-	},
+	// badge: {
+	// 	primary: {
+	// 		background: "#DFE7F6",
+	// 		text: "#2C58A0",
+	// 	},
+	// 	secondary: {
+	// 		background: "#EBEDEF",
+	// 		text: "#40464F",
+	// 	},
+	// 	warning: {
+	// 		background: "#FBF0DA",
+	// 		text: "#73510D",
+	// 	},
+	// 	success: {
+	// 		background: "#D6F0E0",
+	// 		text: "#0D6832",
+	// 	},
+	// },
 	gray: {
 		50: "#F9FAFB", // background for screens
 		100: "#F3F4F6", // SearchField background
@@ -132,23 +134,24 @@ export const darkColors = {
 	white: "#FFF",
 	black: "#000",
 	background: "#111827",
+	badge: "rgba(30, 58, 138, 0.3)",
+	badgeText: "#60A5FA",
 
 	secondary: "#FBBF24",
-
-	badge: {
-		primary: {
-			background: "#DFE7F6",
-			text: "#2C58A0",
-		},
-		secondary: {
-			background: "#EBEDEF",
-			text: "#40464F",
-		},
-		success: {
-			background: "#D6F0E0",
-			text: "#0D6832",
-		},
-	},
+	// {
+	// 	primary: {
+	// 		background: "#DFE7F6",
+	// 		text: "#2C58A0",
+	// 	},
+	// 	secondary: {
+	// 		background: "#EBEDEF",
+	// 		text: "#40464F",
+	// 	},
+	// 	success: {
+	// 		background: "#D6F0E0",
+	// 		text: "#0D6832",
+	// 	},
+	// },
 	gray: {
 		200: "#E5E7EB",
 		500: "#6B7280",

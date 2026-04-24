@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+	createContext,
+	useContext,
+	useState,
+	ReactNode,
+	useEffect,
+} from "react";
+import { Appearance, useColorScheme } from "react-native";
 import { darkColors, lightColors, ThemeType } from "./colors";
 
 type ThemeContextType = {
@@ -14,7 +21,19 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-	const [isDarkMode, setIsDarkMode] = useState(false);
+	const systemTheme = useColorScheme(); // "light" | "dark"
+	const [isDarkMode, setIsDarkMode] = useState(systemTheme === "dark");
+
+	// Sync with system theme on mount + change
+	useEffect(() => {
+		setIsDarkMode(systemTheme === "dark");
+
+		const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+			setIsDarkMode(colorScheme === "dark");
+		});
+
+		return () => subscription.remove();
+	}, [systemTheme]);
 
 	const toggleTheme = () => setIsDarkMode((prev) => !prev);
 
