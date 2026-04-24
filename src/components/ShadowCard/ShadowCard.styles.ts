@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
 	shadowWrapper: {
 		borderRadius: design.spacing.lg,
-		padding: design.spacing.lg,
+		padding: design.spacing.xl,
 		// 🔥 iOS shadow
 		shadowOpacity: 0.12,
 		shadowRadius: design.spacing.lg,

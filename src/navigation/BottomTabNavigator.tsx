@@ -23,7 +23,7 @@ function BottomTabNavigator() {
 					backgroundColor: theme.background,
 					borderTopColor: theme.muted,
 				},
-				tabBarActiveTintColor: theme.primary,
+				tabBarActiveTintColor: theme.active.textColor,
 				tabBarInactiveTintColor: theme.muted,
 				tabBarIcon: ({ focused, color, size }) => {
 					type TabName = (typeof bottomTabNames)[number];

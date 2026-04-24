@@ -14,6 +14,8 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import ModeCard, { AppMode } from "../components/ModeCard";
+import { mdiAccountCircleOutline, mdiCogOutline } from "@mdi/js";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -31,7 +33,7 @@ const getInitials = (name?: string) => {
 
 const ProfileScreen = () => {
 	const insets = useSafeAreaInsets();
-	const [appMode, setAppMode] = useState<"member" | "management">("member");
+	const [appMode, setAppMode] = useState<AppMode>(AppMode.MemberMode);
 	const { theme } = useTheme();
 
 	const user = {
@@ -41,7 +43,7 @@ const ProfileScreen = () => {
 		roleBadge: "Member",
 	};
 
-	const handleModeToggle = (mode: "member" | "management") => {
+	const handleModeToggle = (mode: AppMode) => {
 		setAppMode(mode);
 		toast.success(`Switched to ${mode}`);
 	};
@@ -154,44 +156,58 @@ const ProfileScreen = () => {
 
 				{/* App Mode */}
 				<ShadowCard>
-					<Text style={styles.sectionTitle}>App Mode</Text>
+					<Text style={[styles.sectionTitle, { color: theme.text }]}>
+						App Mode
+					</Text>
 
 					<View style={styles.grid}>
 						{/* Member */}
-						<TouchableOpacity
-							onPress={() => handleModeToggle("member")}
+						<ModeCard
+							title={"Member Mode"}
+							icon={mdiAccountCircleOutline}
+							isActive={appMode === AppMode.MemberMode}
+							onPress={() => handleModeToggle(AppMode.MemberMode)}
+						/>
+						<ModeCard
+							title={"Member Mode"}
+							icon={mdiCogOutline}
+							isActive={appMode === AppMode.Management}
+							onPress={() => handleModeToggle(AppMode.Management)}
+						/>
+						{/* <TouchableOpacity
+							onPress={() => handleModeToggle(AppMode.MemberMode)}
 							style={[
 								styles.modeCard,
-								appMode === "member" && styles.modeActivePrimary,
+								appMode === AppMode.MemberMode && styles.modeActivePrimary,
 							]}
 						>
 							<Text
 								style={[
 									styles.modeText,
-									appMode === "member" && styles.modeTextPrimary,
+									appMode === AppMode.MemberMode && styles.modeTextPrimary,
 								]}
 							>
 								Member Mode
 							</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 
 						{/* Management */}
-						<TouchableOpacity
-							onPress={() => handleModeToggle("management")}
+						{/* <TouchableOpacity
+							onPress={() => handleModeToggle(AppMode.Management)}
 							style={[
 								styles.modeCard,
-								appMode === "management" && styles.modeActiveSecondary,
+								appMode === AppMode.Management && styles.modeActiveSecondary,
 							]}
 						>
 							<Text
 								style={[
 									styles.modeText,
-									appMode === "management" && styles.modeTextSecondary,
+									appMode === AppMode.Management && styles.modeTextSecondary,
 								]}
 							>
 								Management
 							</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 					</View>
 				</ShadowCard>
 
@@ -298,7 +314,6 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: "600",
 		marginBottom: 12,
-		color: "#323232",
 	},
 
 	grid: {

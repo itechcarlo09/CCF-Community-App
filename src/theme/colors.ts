@@ -2,7 +2,7 @@ export const lightColors = {
 	text: "#111827",
 	muted: "#6B7280",
 	primary: "#58B9DA",
-	border: "#D1D5DB",
+	border: "#E5E7EB",
 	button: "#00A6B6",
 	buttonClicked: "#008C9A",
 	success: {
@@ -24,6 +24,11 @@ export const lightColors = {
 		disabledBackground: "#F5F5F5",
 		disabledText: "#A0A0A0",
 		disabledBorder: "#E0E0E0",
+	},
+	active: {
+		backgroundColor: "rgba(0,166,182,0.05)",
+		textColor: "#00A6B6",
+		borderColor: "#00A6B6",
 	},
 	card: "#FFF",
 	white: "#FFF",
@@ -107,7 +112,7 @@ export const darkColors = {
 	text: "#FFF",
 	muted: "#9CA3AF",
 	primary: "#58B9DA",
-	border: "#D1D5DB",
+	border: "#374151",
 	button: "#00A6B6",
 	buttonClicked: "#008C9A",
 	success: {
@@ -129,6 +134,11 @@ export const darkColors = {
 		disabledBackground: "#2A2A2A",
 		disabledText: "#6B6B6B",
 		disabledBorder: "#3A3A3A",
+	},
+	active: {
+		backgroundColor: "rgba(0,166,182,0.05)",
+		textColor: "#00A6B6",
+		borderColor: "#00A6B6",
 	},
 	card: "#1F2937",
 	white: "#FFF",
