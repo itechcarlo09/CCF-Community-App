@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
 		flex: 1,
 		borderRadius: 12,
 		borderWidth: 2,
-		alignItems: "center",
 	},
 	text: {
 		textAlign: "center",

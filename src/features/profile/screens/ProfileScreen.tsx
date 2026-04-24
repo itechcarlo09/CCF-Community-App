@@ -11,11 +11,17 @@ import {
 	TouchableOpacity,
 	Platform,
 	TextStyle,
+	ScrollView,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ModeCard, { AppMode } from "../components/ModeCard";
-import { mdiAccountCircleOutline, mdiCogOutline } from "@mdi/js";
+import {
+	mdiAccountCircleOutline,
+	mdiCogOutline,
+	mdiShieldCrownOutline,
+} from "@mdi/js";
+import { useAppMode } from "src/context/app-mode";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -33,7 +39,8 @@ const getInitials = (name?: string) => {
 
 const ProfileScreen = () => {
 	const insets = useSafeAreaInsets();
-	const [appMode, setAppMode] = useState<AppMode>(AppMode.MemberMode);
+	const { appMode, setAppMode } = useAppMode();
+	// const [appMode, setAppMode] = useState<AppMode>(AppMode.MemberMode);
 	const { theme } = useTheme();
 
 	const user = {
@@ -53,7 +60,9 @@ const ProfileScreen = () => {
 	};
 
 	return (
-		<View style={[styles.container, { backgroundColor: theme.background }]}>
+		<ScrollView
+			style={[styles.container, { backgroundColor: theme.background }]}
+		>
 			{/* Header */}
 			<LinearGradient
 				colors={["#00A6B6", "#58B9DA"]}
@@ -155,59 +164,41 @@ const ProfileScreen = () => {
 				</ShadowCard>
 
 				{/* App Mode */}
-				<ShadowCard>
-					<Text style={[styles.sectionTitle, { color: theme.text }]}>
+				<ShadowCard style={{ rowGap: design.spacing.md }}>
+					<Text
+						style={[
+							{
+								color: theme.text,
+							},
+							design.typography.h4 as TextStyle,
+						]}
+					>
 						App Mode
 					</Text>
 
-					<View style={styles.grid}>
-						{/* Member */}
-						<ModeCard
-							title={"Member Mode"}
-							icon={mdiAccountCircleOutline}
-							isActive={appMode === AppMode.MemberMode}
-							onPress={() => handleModeToggle(AppMode.MemberMode)}
-						/>
-						<ModeCard
-							title={"Member Mode"}
-							icon={mdiCogOutline}
-							isActive={appMode === AppMode.Management}
-							onPress={() => handleModeToggle(AppMode.Management)}
-						/>
-						{/* <TouchableOpacity
-							onPress={() => handleModeToggle(AppMode.MemberMode)}
-							style={[
-								styles.modeCard,
-								appMode === AppMode.MemberMode && styles.modeActivePrimary,
-							]}
-						>
-							<Text
-								style={[
-									styles.modeText,
-									appMode === AppMode.MemberMode && styles.modeTextPrimary,
-								]}
-							>
-								Member Mode
-							</Text>
-						</TouchableOpacity> */}
-
-						{/* Management */}
-						{/* <TouchableOpacity
-							onPress={() => handleModeToggle(AppMode.Management)}
-							style={[
-								styles.modeCard,
-								appMode === AppMode.Management && styles.modeActiveSecondary,
-							]}
-						>
-							<Text
-								style={[
-									styles.modeText,
-									appMode === AppMode.Management && styles.modeTextSecondary,
-								]}
-							>
-								Management
-							</Text>
-						</TouchableOpacity> */}
+					<View style={{ rowGap: design.spacing.md }}>
+						<View style={styles.grid}>
+							<ModeCard
+								title={AppMode.MemberMode}
+								icon={mdiAccountCircleOutline}
+								isActive={appMode === AppMode.MemberMode}
+								onPress={handleModeToggle}
+							/>
+							<ModeCard
+								title={AppMode.Management}
+								icon={mdiCogOutline}
+								isActive={appMode === AppMode.Management}
+								onPress={handleModeToggle}
+							/>
+						</View>
+						<View style={styles.grid}>
+							<ModeCard
+								title={AppMode.SuperAdmin}
+								icon={mdiShieldCrownOutline}
+								isActive={appMode === AppMode.SuperAdmin}
+								onPress={handleModeToggle}
+							/>
+						</View>
 					</View>
 				</ShadowCard>
 
@@ -233,7 +224,7 @@ const ProfileScreen = () => {
 					<Text style={styles.logoutText}>Log Out</Text>
 				</TouchableOpacity>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 

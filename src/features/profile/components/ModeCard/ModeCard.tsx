@@ -15,7 +15,7 @@ const ModeCard: React.FC<ModeCardProps> = ({
 	const { theme } = useTheme();
 	return (
 		<TouchableOpacity
-			onPress={onPress}
+			onPress={() => onPress(title)}
 			style={[
 				styles.card,
 				{

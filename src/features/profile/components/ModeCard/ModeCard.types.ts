@@ -1,11 +1,12 @@
 export interface ModeCardProps {
-	title: string;
+	title: AppMode;
 	icon: string;
 	isActive: boolean;
-	onPress: () => void;
+	onPress: (mode: AppMode) => void;
 }
 
 export enum AppMode {
 	MemberMode = "Member Mode",
 	Management = "Management",
+	SuperAdmin = "Super Admin",
 }

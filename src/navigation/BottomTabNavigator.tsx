@@ -9,11 +9,38 @@ import { DashboardScreen } from "src/feature/dashboard/view/DashboardScreen";
 import UserListScreen from "src/feature/user/view/UserListScreen";
 import DGroupListScreen from "src/feature/dgroup/view/DGroupListScreen";
 import ProfileScreen from "@features/profile/screens/ProfileScreen";
+import { useAppMode } from "src/context/app-mode";
+import { AppMode } from "@features/profile/components/ModeCard";
 
 const Tab = createBottomTabNavigator();
 
+const TAB_CONFIG = {
+	[AppMode.MemberMode]: [
+		{ name: "DashboardTab", component: DashboardScreen, title: "Dashboard" },
+		{ name: "EventTab", component: EventListScreen, title: "Events" },
+		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
+	],
+
+	[AppMode.Management]: [
+		{ name: "DashboardTab", component: DashboardScreen, title: "Dashboard" },
+		{ name: "UserTab", component: UserListScreen, title: "Members" },
+		{ name: "DGroupTab", component: DGroupListScreen, title: "DGroups" },
+		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
+	],
+
+	[AppMode.SuperAdmin]: [
+		{ name: "UserTab", component: UserListScreen, title: "Members" },
+		{ name: "DGroupTab", component: DGroupListScreen, title: "DGroups" },
+		{ name: "EventTab", component: EventListScreen, title: "Events" },
+		{ name: "OthersTab", component: OtherScreen, title: "Others" },
+		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
+	],
+};
+
 function BottomTabNavigator() {
 	const { theme } = useTheme();
+	const { appMode } = useAppMode();
+	const tabs = TAB_CONFIG[appMode] ?? TAB_CONFIG[AppMode.MemberMode];
 
 	return (
 		<Tab.Navigator
@@ -34,36 +61,16 @@ function BottomTabNavigator() {
 				},
 			})}
 		>
-			<Tab.Screen
-				name="DashboardTab"
-				component={DashboardScreen}
-				options={{ title: "Dashboard" }}
-			/>
-			<Tab.Screen
-				name="EventTab"
-				component={EventListScreen}
-				options={{ title: "Events" }}
-			/>
-			<Tab.Screen
-				name="UserTab"
-				component={UserListScreen}
-				options={{ title: "Members" }}
-			/>
-			<Tab.Screen
-				name="DGroupTab"
-				component={DGroupListScreen}
-				options={{ title: "DGroups" }}
-			/>
-			<Tab.Screen
-				name="OthersTab"
-				component={OtherScreen}
-				options={{ title: "Others" }}
-			/>
-			<Tab.Screen
-				name="ProfileTab"
-				component={ProfileScreen}
-				options={{ title: "Profile" }}
-			/>
+			<>
+				{tabs.map((tab) => (
+					<Tab.Screen
+						key={tab.name}
+						name={tab.name}
+						component={tab.component}
+						options={{ title: tab.title }}
+					/>
+				))}
+			</>
 		</Tab.Navigator>
 	);
 }
