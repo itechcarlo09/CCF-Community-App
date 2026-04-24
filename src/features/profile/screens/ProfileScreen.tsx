@@ -18,10 +18,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ModeCard, { AppMode } from "../components/ModeCard";
 import {
 	mdiAccountCircleOutline,
+	mdiBellOutline,
+	mdiCog,
 	mdiCogOutline,
+	mdiHelpCircleOutline,
 	mdiShieldCrownOutline,
 } from "@mdi/js";
 import { useAppMode } from "src/context/app-mode";
+import SettingsItemButton from "../components/SettingsItemButton";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -203,21 +207,27 @@ const ProfileScreen = () => {
 				</ShadowCard>
 
 				{/* Settings */}
-				<View style={styles.section}>
-					<Text style={styles.sectionTitle}>Settings</Text>
+				<ShadowCard style={{ rowGap: design.spacing.md }}>
+					<Text
+						style={[
+							{
+								color: theme.text,
+							},
+							design.typography.h4 as TextStyle,
+						]}
+					>
+						Settings
+					</Text>
 
-					<TouchableOpacity style={styles.item}>
-						<Text style={styles.itemText}>App Settings</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity style={styles.item}>
-						<Text style={styles.itemText}>Notifications</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity style={styles.item}>
-						<Text style={styles.itemText}>Help & Support</Text>
-					</TouchableOpacity>
-				</View>
+					<View style={{ rowGap: design.spacing.xs }}>
+						<SettingsItemButton title={"App Settings"} icon={mdiCogOutline} />
+						<SettingsItemButton title={"Notifications"} icon={mdiBellOutline} />
+						<SettingsItemButton
+							title={"Help & Support"}
+							icon={mdiHelpCircleOutline}
+						/>
+					</View>
+				</ShadowCard>
 
 				{/* Logout */}
 				<TouchableOpacity style={styles.logout} onPress={handleLogout}>

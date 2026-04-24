@@ -36,6 +36,7 @@ export const lightColors = {
 	background: "#F9FAFB",
 	badge: "#EFF6FF",
 	badgeText: "#1D4ED8",
+	itemPressed: "#F9FAFB",
 
 	secondary: "#F59E0B",
 
@@ -146,6 +147,7 @@ export const darkColors = {
 	background: "#111827",
 	badge: "rgba(30, 58, 138, 0.3)",
 	badgeText: "#60A5FA",
+	itemPressed: "#374151",
 
 	secondary: "#FBBF24",
 	// {
