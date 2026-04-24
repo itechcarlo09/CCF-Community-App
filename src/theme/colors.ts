@@ -25,10 +25,12 @@ export const lightColors = {
 		disabledText: "#A0A0A0",
 		disabledBorder: "#E0E0E0",
 	},
+	card: "#FFF",
+	white: "#FFF",
+	black: "#000",
 
 	secondary: "#F59E0B",
 	background: "#FFFFFF",
-	card: "#F3F4F6",
 
 	textDanger: {
 		onDanger: {
@@ -56,7 +58,6 @@ export const lightColors = {
 			text: "#0D6832",
 		},
 	},
-	white: "#FFFFFF",
 	gray: {
 		50: "#F9FAFB", // background for screens
 		100: "#F3F4F6", // SearchField background
@@ -127,10 +128,12 @@ export const darkColors = {
 		disabledText: "#6B6B6B",
 		disabledBorder: "#3A3A3A",
 	},
+	card: "#1F2937",
+	white: "#FFF",
+	black: "#000",
 
 	secondary: "#FBBF24",
 	background: "#111827",
-	card: "#1F2937",
 	badge: {
 		primary: {
 			background: "#DFE7F6",

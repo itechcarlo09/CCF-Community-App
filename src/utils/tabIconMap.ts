@@ -32,4 +32,8 @@ export const tabIconMap = {
 		focused: mdiCog,
 		unfocused: mdiCogOutline,
 	},
+	ProfileTab: {
+		focused: mdiAccount,
+		unfocused: mdiAccountOutline,
+	},
 };

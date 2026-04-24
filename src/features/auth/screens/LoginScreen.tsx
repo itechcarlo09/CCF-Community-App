@@ -80,34 +80,6 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-	fieldContainer: {
-		marginVertical: 64,
-		rowGap: 16,
-	},
-	signInText: {
-		fontSize: 36,
-		fontWeight: "bold",
-		fontFamily: "Sans",
-		color: "#000",
-		textAlign: "center",
-	},
-	inputWrapper: {
-		flexDirection: "row",
-		alignItems: "center",
-		borderWidth: 1,
-		borderColor: "gray",
-		paddingHorizontal: 10,
-		width: "80%",
-	},
-	input: {
-		flex: 1,
-		paddingVertical: 12,
-	},
-	toggle: {
-		color: "#007BFF",
-		paddingLeft: 12,
-	},
-
 	mainContainer: {
 		flex: 1,
 		justifyContent: "center",

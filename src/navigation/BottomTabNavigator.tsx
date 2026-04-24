@@ -8,6 +8,7 @@ import EventListScreen from "src/feature/event/view/EventListScreen";
 import { DashboardScreen } from "src/feature/dashboard/view/DashboardScreen";
 import UserListScreen from "src/feature/user/view/UserListScreen";
 import DGroupListScreen from "src/feature/dgroup/view/DGroupListScreen";
+import ProfileScreen from "@features/profile/screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +19,7 @@ function BottomTabNavigator() {
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
 				headerShown: false,
-				tabBarActiveTintColor: theme.blue[500],
+				tabBarActiveTintColor: theme.primary,
 				tabBarInactiveTintColor: theme.text,
 				tabBarIcon: ({ focused, color, size }) => {
 					type TabName = (typeof bottomTabNames)[number];
@@ -52,6 +53,11 @@ function BottomTabNavigator() {
 			<Tab.Screen
 				name="OthersTab"
 				component={OtherScreen}
+				options={{ title: "Others" }}
+			/>
+			<Tab.Screen
+				name="ProfileTab"
+				component={ProfileScreen}
 				options={{ title: "Others" }}
 			/>
 		</Tab.Navigator>
