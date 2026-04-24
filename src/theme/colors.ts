@@ -37,6 +37,11 @@ export const lightColors = {
 	badge: "#EFF6FF",
 	badgeText: "#1D4ED8",
 	itemPressed: "#F9FAFB",
+	logout: {
+		pressedBackgroundColor: "#FEE2E2",
+		backgroundColor: "#FEF2F2",
+		textColor: "#DC2626",
+	},
 
 	secondary: "#F59E0B",
 
@@ -148,6 +153,11 @@ export const darkColors = {
 	badge: "rgba(30, 58, 138, 0.3)",
 	badgeText: "#60A5FA",
 	itemPressed: "#374151",
+	logout: {
+		pressedBackgroundColor: "rgba(127, 29, 29, 0.3)",
+		backgroundColor: "rgba(127, 29, 29, 0.2)",
+		textColor: "#F87171",
+	},
 
 	secondary: "#FBBF24",
 	// {

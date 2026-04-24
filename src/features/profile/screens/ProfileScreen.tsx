@@ -2,16 +2,16 @@ import { toast } from "@component/toast/toast";
 import ShadowCard from "@components/ShadowCard";
 import { design } from "@theme/index";
 import { useTheme } from "@theme/ThemeProvider";
-import React, { useState } from "react";
+import React from "react";
 import {
 	View,
 	Text,
 	StyleSheet,
 	Image,
-	TouchableOpacity,
 	Platform,
 	TextStyle,
 	ScrollView,
+	Pressable,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -19,13 +19,14 @@ import ModeCard, { AppMode } from "../components/ModeCard";
 import {
 	mdiAccountCircleOutline,
 	mdiBellOutline,
-	mdiCog,
 	mdiCogOutline,
 	mdiHelpCircleOutline,
+	mdiLogout,
 	mdiShieldCrownOutline,
 } from "@mdi/js";
 import { useAppMode } from "src/context/app-mode";
 import SettingsItemButton from "../components/SettingsItemButton";
+import MdiIcon from "@component/MdiIcon";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -44,7 +45,6 @@ const getInitials = (name?: string) => {
 const ProfileScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { appMode, setAppMode } = useAppMode();
-	// const [appMode, setAppMode] = useState<AppMode>(AppMode.MemberMode);
 	const { theme } = useTheme();
 
 	const user = {
@@ -105,6 +105,8 @@ const ProfileScreen = () => {
 				style={[
 					{
 						paddingHorizontal: design.spacing.xl,
+						marginBottom: design.spacing.xl,
+						rowGap: design.spacing.xl,
 					},
 					styles.content,
 				]}
@@ -166,7 +168,6 @@ const ProfileScreen = () => {
 						</View>
 					</View>
 				</ShadowCard>
-
 				{/* App Mode */}
 				<ShadowCard style={{ rowGap: design.spacing.md }}>
 					<Text
@@ -205,7 +206,6 @@ const ProfileScreen = () => {
 						</View>
 					</View>
 				</ShadowCard>
-
 				{/* Settings */}
 				<ShadowCard style={{ rowGap: design.spacing.md }}>
 					<Text
@@ -220,19 +220,43 @@ const ProfileScreen = () => {
 					</Text>
 
 					<View style={{ rowGap: design.spacing.xs }}>
-						<SettingsItemButton title={"App Settings"} icon={mdiCogOutline} />
-						<SettingsItemButton title={"Notifications"} icon={mdiBellOutline} />
+						<SettingsItemButton
+							title={"App Settings"}
+							icon={mdiCogOutline}
+							onPress={() =>
+								toast.default("App Settings feature is not implemented yet.")
+							}
+						/>
+						<SettingsItemButton
+							title={"Notifications"}
+							icon={mdiBellOutline}
+							onPress={() =>
+								toast.default("Notifications feature is not implemented yet.")
+							}
+						/>
 						<SettingsItemButton
 							title={"Help & Support"}
 							icon={mdiHelpCircleOutline}
+							onPress={() =>
+								toast.default("Help & Support feature is not implemented yet.")
+							}
 						/>
 					</View>
 				</ShadowCard>
+				<Pressable
+					onPress={handleLogout}
+					style={({ pressed }) => [
+						styles.logout,
+						{ backgroundColor: theme.logout.backgroundColor },
+						pressed && { backgroundColor: theme.logout.pressedBackgroundColor },
+					]}
+				>
+					<MdiIcon path={mdiLogout} size={20} color={theme.logout.textColor} />
 
-				{/* Logout */}
-				<TouchableOpacity style={styles.logout} onPress={handleLogout}>
-					<Text style={styles.logoutText}>Log Out</Text>
-				</TouchableOpacity>
+					<Text style={[styles.logoutText, { color: theme.logout.textColor }]}>
+						Log Out
+					</Text>
+				</Pressable>
 			</View>
 		</ScrollView>
 	);
@@ -258,7 +282,6 @@ const styles = StyleSheet.create({
 
 	content: {
 		marginTop: -48,
-		rowGap: 24,
 	},
 
 	row: {
@@ -363,10 +386,12 @@ const styles = StyleSheet.create({
 	},
 
 	logout: {
-		backgroundColor: "#FEF2F2",
 		padding: 16,
 		borderRadius: 12,
+		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "center",
+		gap: 8,
 	},
 
 	logoutText: {
