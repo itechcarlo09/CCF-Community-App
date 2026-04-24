@@ -11,13 +11,14 @@ import DGroupListScreen from "src/feature/dgroup/view/DGroupListScreen";
 import ProfileScreen from "@features/profile/screens/ProfileScreen";
 import { useAppMode } from "src/context/app-mode";
 import { AppMode } from "@features/profile/components/ModeCard";
+import HomeScreen from "@features/home/screens/HomeScreen";
 
 const Tab = createBottomTabNavigator();
 
 const TAB_CONFIG = {
 	[AppMode.MemberMode]: [
-		{ name: "DashboardTab", component: DashboardScreen, title: "Dashboard" },
 		{ name: "EventTab", component: EventListScreen, title: "Events" },
+		{ name: "HomeTab", component: HomeScreen, title: "Home" },
 		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
 	],
 

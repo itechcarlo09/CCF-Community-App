@@ -9,9 +9,15 @@ import {
 	mdiCalendarOutline,
 	mdiViewDashboard,
 	mdiViewDashboardOutline,
+	mdiHome,
+	mdiHomeOutline,
 } from "@mdi/js";
 
 export const tabIconMap = {
+	HomeTab: {
+		focused: mdiHome,
+		unfocused: mdiHomeOutline,
+	},
 	DashboardTab: {
 		focused: mdiViewDashboard,
 		unfocused: mdiViewDashboardOutline,
