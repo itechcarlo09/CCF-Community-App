@@ -1,4 +1,3 @@
-import { toast } from "@component/toast/toast";
 import ShadowCard from "@components/ShadowCard";
 import { design } from "@theme/index";
 import { useTheme } from "@theme/ThemeProvider";
@@ -13,8 +12,6 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { mdiBellOutline, mdiCogOutline, mdiHelpCircleOutline } from "@mdi/js";
-import SettingsItemButton from "@features/profile/components/SettingsItemButton";
 import StatItem from "../components/StatItem";
 
 const ProfileScreen = () => {
@@ -82,9 +79,9 @@ const ProfileScreen = () => {
 
 					<View style={{ rowGap: design.spacing.md }}>
 						<StatItem label={"Members"} value={"200"} change={""} />
-						<StatItem label={"DGroups"} value={"200"} change={"+3%"} />
-						<StatItem label={"Facilitators"} value={"200"} change={"+3"} />
-						<StatItem label={"Volunteers"} value={"200"} change={"+3"} />
+						<StatItem label={"DGroups"} value={"200"} change={""} />
+						<StatItem label={"Facilitators"} value={"200"} change={""} />
+						<StatItem label={"Volunteers"} value={"200"} change={""} />
 					</View>
 				</ShadowCard>
 			</View>
