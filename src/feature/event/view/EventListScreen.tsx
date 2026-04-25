@@ -13,6 +13,7 @@ import { EventItemCard } from "./EventItemCard";
 import useDebounce from "../../user/hooks/useDebounce";
 import Header from "@component/Header";
 import { Separator } from "@component/Separator";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const EventListScreen = ({ navigation }: any) => {
 	const {
@@ -25,6 +26,7 @@ const EventListScreen = ({ navigation }: any) => {
 	} = useEventViewModel();
 
 	const { theme } = useTheme();
+	const insets = useSafeAreaInsets();
 	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
@@ -58,7 +60,12 @@ const EventListScreen = ({ navigation }: any) => {
 	};
 
 	return (
-		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
+		<View
+			style={[
+				styles.container,
+				{ backgroundColor: theme.gray[50], paddingTop: insets.top },
+			]}
+		>
 			<Header
 				placeholder="Search event..."
 				onAdd={() =>

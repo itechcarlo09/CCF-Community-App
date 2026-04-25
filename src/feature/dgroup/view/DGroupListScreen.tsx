@@ -13,6 +13,7 @@ import Header from "@component/Header";
 import DGroupListCard from "./components/DGroupListCard";
 import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
 import { Separator } from "@component/Separator";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const DGroupListScreen = ({ navigation }: any) => {
 	const {
@@ -25,6 +26,7 @@ const DGroupListScreen = ({ navigation }: any) => {
 	} = useDGroupViewModel();
 
 	const { theme } = useTheme();
+	const insets = useSafeAreaInsets();
 	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
 	const debouncedSearchTerm = useDebounce(search, 500);
@@ -58,7 +60,12 @@ const DGroupListScreen = ({ navigation }: any) => {
 	};
 
 	return (
-		<View style={[styles.container, { backgroundColor: theme.gray[50] }]}>
+		<View
+			style={[
+				styles.container,
+				{ backgroundColor: theme.gray[50], paddingTop: insets.top },
+			]}
+		>
 			<Header
 				placeholder="Search DGroup..."
 				onAdd={() =>

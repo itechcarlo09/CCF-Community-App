@@ -15,6 +15,7 @@ import CircularImage from "@component/CircularImage";
 import Header from "@component/Header";
 import { useTheme } from "@theme/ThemeProvider";
 import { Separator } from "@component/Separator";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const UserListScreen = ({ navigation }: any) => {
 	const {
@@ -27,6 +28,7 @@ const UserListScreen = ({ navigation }: any) => {
 	} = useUserViewModel();
 	const [searchText, setSearchText] = useState("");
 	const { theme } = useTheme();
+	const insets = useSafeAreaInsets();
 	const [
 		onEndReachedCalledDuringMomentum,
 		setOnEndReachedCalledDuringMomentum,
@@ -102,7 +104,13 @@ const UserListScreen = ({ navigation }: any) => {
 	};
 
 	return (
-		<View style={{ flex: 1, backgroundColor: theme.gray[50] }}>
+		<View
+			style={{
+				flex: 1,
+				backgroundColor: theme.gray[50],
+				paddingTop: insets.top,
+			}}
+		>
 			{/* Header with Search and Add Button */}
 			<Header
 				onSearch={setSearchText}

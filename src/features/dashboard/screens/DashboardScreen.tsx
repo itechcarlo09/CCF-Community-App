@@ -83,8 +83,8 @@ const ProfileScreen = () => {
 					<View style={{ rowGap: design.spacing.md }}>
 						<StatItem label={"Members"} value={"200"} change={"+3%"} />
 						<StatItem label={"DGroups"} value={"200"} change={"+3%"} />
-						<StatItem label={"Facilitators"} value={"200"} change={"+3%"} />
-						<StatItem label={"Volunteers"} value={"200"} change={"+3%"} />
+						<StatItem label={"Facilitators"} value={"200"} change={"+3"} />
+						<StatItem label={"Volunteers"} value={"200"} change={"+3"} />
 					</View>
 				</ShadowCard>
 			</View>

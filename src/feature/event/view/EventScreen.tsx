@@ -16,6 +16,7 @@ import MdiIcon from "../../../component/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import Loading from "../../../component/Loading";
 import { EventItemCard } from "./EventItemCard";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -28,6 +29,7 @@ const EventScreen = ({ navigation }: any) => {
 		activityLoading,
 		loadMoreEvents,
 	} = useEventViewModel();
+	const insets = useSafeAreaInsets();
 	const [refreshing, setRefreshing] = useState(false);
 	const { theme } = useTheme();
 	const Refresh = () => (
@@ -51,7 +53,7 @@ const EventScreen = ({ navigation }: any) => {
 	}, [refresh]);
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { paddingTop: insets.top }]}>
 			<View style={styles.sortContainer}>
 				<View style={[styles.sortBox, { backgroundColor: theme.gray[200] }]}>
 					{/* <Text style={[styles.sortText, { color: theme.gray[900] }]}>

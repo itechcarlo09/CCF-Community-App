@@ -45,6 +45,7 @@ function BottomTabNavigator() {
 
 	return (
 		<Tab.Navigator
+			initialRouteName="HomeTab"
 			screenOptions={({ route }) => ({
 				headerShown: false,
 				tabBarStyle: {
