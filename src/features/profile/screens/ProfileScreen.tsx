@@ -320,69 +320,9 @@ const styles = StyleSheet.create({
 		alignSelf: "flex-start",
 	},
 
-	section: {
-		backgroundColor: "#FFF",
-		borderRadius: 16,
-		padding: 16,
-		marginBottom: 24,
-		// 🔥 iOS shadow (stronger so it's visible)
-		shadowColor: "#000",
-		shadowOpacity: 0.15,
-		shadowRadius: 12,
-		shadowOffset: { width: 0, height: 6 },
-
-		elevation: 4,
-	},
-
-	sectionTitle: {
-		fontSize: 16,
-		fontWeight: "600",
-		marginBottom: 12,
-	},
-
 	grid: {
 		flexDirection: "row",
 		gap: 12,
-	},
-
-	modeCard: {
-		flex: 1,
-		padding: 16,
-		borderRadius: 12,
-		borderWidth: 2,
-		borderColor: "#E5E7EB",
-		alignItems: "center",
-	},
-
-	modeActivePrimary: {
-		borderColor: "#00A6B6",
-		backgroundColor: "rgba(0,166,182,0.05)",
-	},
-
-	modeActiveSecondary: {
-		borderColor: "#58B9DA",
-		backgroundColor: "rgba(88,185,218,0.05)",
-	},
-
-	modeText: {
-		color: "#6B7280",
-	},
-
-	modeTextPrimary: {
-		color: "#00A6B6",
-	},
-
-	modeTextSecondary: {
-		color: "#58B9DA",
-	},
-
-	item: {
-		paddingVertical: 12,
-	},
-
-	itemText: {
-		fontSize: 14,
-		color: "#323232",
 	},
 
 	logout: {

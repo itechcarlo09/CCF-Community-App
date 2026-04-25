@@ -5,13 +5,13 @@ import MdiIcon from "../component/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
 import OtherScreen from "src/feature/others/view/OtherScreen";
 import EventListScreen from "src/feature/event/view/EventListScreen";
-import { DashboardScreen } from "src/feature/dashboard/view/DashboardScreen";
 import UserListScreen from "src/feature/user/view/UserListScreen";
 import DGroupListScreen from "src/feature/dgroup/view/DGroupListScreen";
 import ProfileScreen from "@features/profile/screens/ProfileScreen";
 import { useAppMode } from "src/context/app-mode";
 import { AppMode } from "@features/profile/components/ModeCard";
 import HomeScreen from "@features/home/screens/HomeScreen";
+import DashboardScreen from "@features/dashboard/screens/DashboardScreen";
 
 const Tab = createBottomTabNavigator();
 
