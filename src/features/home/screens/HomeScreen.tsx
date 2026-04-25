@@ -40,12 +40,7 @@ const HomeScreen = () => {
 	const { theme } = useTheme();
 	const [showQR, setShowQR] = useState(false);
 
-	const user = {
-		name: "John Doe",
-		email: "john@example.com",
-		avatar: "",
-		roleBadge: "Member",
-	};
+	const members = ["Joshua Analupa", "Aldrin Amurao", "Kristianne Magtangob"];
 
 	const handleModeToggle = (mode: AppMode) => {
 		setAppMode(mode);
@@ -151,6 +146,109 @@ const HomeScreen = () => {
 							style={{ flex: 1 }}
 							onPress={() => toast.default("Scan QR is not yet implemented.")}
 						/>
+					</View>
+				</ShadowCard>
+				<ShadowCard style={{ rowGap: design.spacing.md }}>
+					<Text
+						style={[
+							{
+								color: theme.text,
+							},
+							design.typography.h4 as TextStyle,
+						]}
+					>
+						Upline DGroup
+					</Text>
+					<View>
+						<Text
+							style={[
+								{
+									color: theme.text,
+								},
+								design.typography.bodyLg as TextStyle,
+							]}
+						>
+							TRIBO UNO
+						</Text>
+						<Text
+							style={[
+								{
+									color: theme.text,
+								},
+								design.typography.body as TextStyle,
+							]}
+						>
+							Leader: Paulo Perez & Rina Perez
+						</Text>
+						<Text
+							style={[
+								{
+									color: theme.text,
+								},
+								design.typography.body as TextStyle,
+							]}
+						>
+							Next Meeting: May 10, Sunday, 6PM at CCF Commonwealth
+						</Text>
+					</View>
+				</ShadowCard>
+				<ShadowCard style={{ rowGap: design.spacing.md }}>
+					<Text
+						style={[
+							{
+								color: theme.text,
+							},
+							design.typography.h4 as TextStyle,
+						]}
+					>
+						Downline DGroup
+					</Text>
+					<View>
+						<Text
+							style={[
+								{
+									color: theme.text,
+								},
+								design.typography.bodyLg as TextStyle,
+							]}
+						>
+							Overcomers
+						</Text>
+						<Text
+							style={[
+								{
+									color: theme.text,
+								},
+								design.typography.body as TextStyle,
+							]}
+						>
+							Next Meeting: May 10, Sunday, 6PM at CCF Commonwealth
+						</Text>
+						<Text
+							style={[
+								{
+									color: theme.text,
+								},
+								design.typography.body as TextStyle,
+							]}
+						>
+							Members:
+						</Text>
+						{members.length > 0 &&
+							members.map((member, index) => (
+								<Text
+									key={index}
+									style={[
+										{
+											color: theme.text,
+											fontStyle: "italic",
+										},
+										design.typography.bodySm as TextStyle,
+									]}
+								>
+									{member}
+								</Text>
+							))}
 					</View>
 				</ShadowCard>
 			</View>
