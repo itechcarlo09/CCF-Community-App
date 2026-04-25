@@ -38,14 +38,21 @@ const TAB_CONFIG = {
 	],
 };
 
+const DEFAULT_TAB = {
+	[AppMode.MemberMode]: "HomeTab",
+	[AppMode.Management]: "DashboardTab",
+	[AppMode.SuperAdmin]: "UserTab",
+};
+
 function BottomTabNavigator() {
 	const { theme } = useTheme();
 	const { appMode } = useAppMode();
 	const tabs = TAB_CONFIG[appMode] ?? TAB_CONFIG[AppMode.MemberMode];
+	const defaultTab = DEFAULT_TAB[appMode] ?? DEFAULT_TAB[AppMode.MemberMode];
 
 	return (
 		<Tab.Navigator
-			initialRouteName="HomeTab"
+			initialRouteName={defaultTab}
 			screenOptions={({ route }) => ({
 				headerShown: false,
 				tabBarStyle: {

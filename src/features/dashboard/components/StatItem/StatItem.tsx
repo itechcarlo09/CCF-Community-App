@@ -5,47 +5,42 @@ import { styles } from "./StatItem.styles";
 import { StatItemProps } from ".";
 
 const StatItem: React.FC<StatItemProps> = ({ label, value, change }) => {
-	const { isDarkMode } = useTheme();
+	const { theme } = useTheme();
 	return (
 		<View
 			style={[
 				styles.card,
 				{
-					backgroundColor: isDarkMode ? "rgba(55, 65, 81, 0.5)" : "#F9FAFB",
+					backgroundColor: theme.stats.backgroundColor,
 				},
 			]}
 		>
 			<View>
-				<Text
-					style={[styles.label, { color: isDarkMode ? "#9CA3AF" : "#6B7280" }]}
-				>
+				<Text style={[styles.label, { color: theme.stats.detailColor }]}>
 					{label}
 				</Text>
 
-				<Text
-					style={[styles.value, { color: isDarkMode ? "#FFFFFF" : "#323232" }]}
-				>
+				<Text style={[styles.value, { color: theme.stats.textColor }]}>
 					{value}
 				</Text>
 			</View>
 
-			<View
-				style={[
-					styles.badge,
-					{
-						backgroundColor: isDarkMode ? "rgba(20, 83, 45, 0.3)" : "#DCFCE7",
-					},
-				]}
-			>
-				<Text
+			{change && (
+				<View
 					style={[
-						styles.badgeText,
-						{ color: isDarkMode ? "#4ADE80" : "#15803D" },
+						styles.badge,
+						{
+							backgroundColor: theme.increaseStats.backgroundColor,
+						},
 					]}
 				>
-					{change}
-				</Text>
-			</View>
+					<Text
+						style={[styles.badgeText, { color: theme.increaseStats.textColor }]}
+					>
+						{change}
+					</Text>
+				</View>
+			)}
 		</View>
 	);
 };

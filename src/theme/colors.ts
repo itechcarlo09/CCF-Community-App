@@ -43,6 +43,15 @@ export const lightColors = {
 		backgroundColor: "#FEF2F2",
 		textColor: "#DC2626",
 	},
+	stats: {
+		backgroundColor: "#F9FAFB",
+		textColor: "#323232",
+		detailColor: "#6B7280",
+	},
+	increaseStats: {
+		textColor: "#15803D",
+		backgroundColor: "#DCFCE7",
+	},
 
 	secondary: "#F59E0B",
 
@@ -159,6 +168,15 @@ export const darkColors = {
 		pressedBackgroundColor: "rgba(127, 29, 29, 0.3)",
 		backgroundColor: "rgba(127, 29, 29, 0.2)",
 		textColor: "#F87171",
+	},
+	stats: {
+		backgroundColor: "rgba(55, 65, 81, 0.5)",
+		textColor: "#FFFFFF",
+		detailColor: "#9CA3AF",
+	},
+	increaseStats: {
+		textColor: "#4ADE80",
+		backgroundColor: "rgba(20, 83, 45, 0.3)",
 	},
 
 	secondary: "#FBBF24",

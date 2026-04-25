@@ -81,7 +81,7 @@ const ProfileScreen = () => {
 					</Text>
 
 					<View style={{ rowGap: design.spacing.md }}>
-						<StatItem label={"Members"} value={"200"} change={"+3%"} />
+						<StatItem label={"Members"} value={"200"} change={""} />
 						<StatItem label={"DGroups"} value={"200"} change={"+3%"} />
 						<StatItem label={"Facilitators"} value={"200"} change={"+3"} />
 						<StatItem label={"Volunteers"} value={"200"} change={"+3"} />
