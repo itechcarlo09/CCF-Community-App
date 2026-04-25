@@ -11,14 +11,16 @@ type Props = {
 export const QRDisplayCard: React.FC<Props> = ({
 	hint = "Scan this at events for attendance",
 }) => {
-	const { theme } = useTheme();
+	const { theme, isDarkMode } = useTheme();
 
 	return (
 		<View
 			style={[
 				styles.container,
 				{
-					backgroundColor: theme.active.backgroundColor,
+					backgroundColor: isDarkMode
+						? theme.active.backgroundColor
+						: theme.outlineButtonClicked,
 					borderColor: theme.active.borderColor,
 				},
 			]}
@@ -46,7 +48,6 @@ const styles = StyleSheet.create({
 		padding: 24,
 		borderRadius: 16,
 		borderWidth: 2,
-		marginBottom: 16,
 	},
 	qrWrapper: {
 		aspectRatio: 1,

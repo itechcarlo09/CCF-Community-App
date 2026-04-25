@@ -2,34 +2,23 @@ import { toast } from "@component/toast/toast";
 import ShadowCard from "@components/ShadowCard";
 import { design } from "@theme/index";
 import { useTheme } from "@theme/ThemeProvider";
-import React from "react";
+import React, { useState } from "react";
 import {
 	View,
 	Text,
 	StyleSheet,
-	Image,
 	Platform,
 	TextStyle,
 	ScrollView,
-	Pressable,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {
-	mdiAccountCircleOutline,
-	mdiBellOutline,
-	mdiCogOutline,
-	mdiHelpCircleOutline,
-	mdiLogout,
-	mdiQrcode,
-	mdiShieldCrownOutline,
-} from "@mdi/js";
+import { mdiQrcode } from "@mdi/js";
 import { useAppMode } from "src/context/app-mode";
-import MdiIcon from "@component/MdiIcon";
-import SettingsItemButton from "@features/profile/components/SettingsItemButton";
-import ModeCard, { AppMode } from "@features/profile/components/ModeCard";
+import { AppMode } from "@features/profile/components/ModeCard";
 import MDIIcon from "@components/MDIIcon";
 import QRCodeSection from "../components/QRCode";
+import CCFButton from "@components/CCFButton";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -49,6 +38,7 @@ const HomeScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { appMode, setAppMode } = useAppMode();
 	const { theme } = useTheme();
+	const [showQR, setShowQR] = useState(false);
 
 	const user = {
 		name: "John Doe",
@@ -148,7 +138,20 @@ const HomeScreen = () => {
 							color={theme.primary}
 						/>
 					</View>
-					<QRCodeSection showQR={true} />
+					<QRCodeSection showQR={showQR} />
+					<View style={{ flexDirection: "row", columnGap: design.spacing.md }}>
+						<CCFButton
+							title={`${showQR ? "Hide" : "Show"} QR`}
+							style={{ flex: 1 }}
+							onPress={() => setShowQR((prev) => !prev)}
+						/>
+						<CCFButton
+							title={"Scan QR"}
+							variant="outline"
+							style={{ flex: 1 }}
+							onPress={() => toast.default("Scan QR is not yet implemented.")}
+						/>
+					</View>
 				</ShadowCard>
 			</View>
 		</ScrollView>

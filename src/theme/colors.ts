@@ -5,6 +5,7 @@ export const lightColors = {
 	border: "#E5E7EB",
 	button: "#00A6B6",
 	buttonClicked: "#008C9A",
+	outlineButtonClicked: "#F9FAFB",
 	success: {
 		backgroundColor: "#ECFDF3", // light green
 		borderColor: "#12B76A",
@@ -121,6 +122,7 @@ export const darkColors = {
 	border: "#374151",
 	button: "#00A6B6",
 	buttonClicked: "#008C9A",
+	outlineButtonClicked: "#4B5563",
 	success: {
 		backgroundColor: "#ECFDF3", // light green
 		borderColor: "#12B76A",
