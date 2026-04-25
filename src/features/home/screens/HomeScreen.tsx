@@ -13,12 +13,19 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { mdiQrcode } from "@mdi/js";
+import {
+	mdiAccountDetailsOutline,
+	mdiAccountGroupOutline,
+	mdiAccountSupervisorOutline,
+	mdiCalendarClockOutline,
+	mdiQrcode,
+} from "@mdi/js";
 import { useAppMode } from "src/context/app-mode";
 import { AppMode } from "@features/profile/components/ModeCard";
 import MDIIcon from "@components/MDIIcon";
 import QRCodeSection from "../components/QRCode";
 import CCFButton from "@components/CCFButton";
+import DGroupDetail from "../components/DGroupDetail";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -160,36 +167,21 @@ const HomeScreen = () => {
 						Upline DGroup
 					</Text>
 					<View>
-						<Text
-							style={[
-								{
-									color: theme.text,
-								},
-								design.typography.bodyLg as TextStyle,
-							]}
-						>
-							TRIBO UNO
-						</Text>
-						<Text
-							style={[
-								{
-									color: theme.text,
-								},
-								design.typography.body as TextStyle,
-							]}
-						>
-							Leader: Paulo Perez & Rina Perez
-						</Text>
-						<Text
-							style={[
-								{
-									color: theme.text,
-								},
-								design.typography.body as TextStyle,
-							]}
-						>
-							Next Meeting: May 10, Sunday, 6PM at CCF Commonwealth
-						</Text>
+						<DGroupDetail
+							icon={mdiAccountDetailsOutline}
+							value={"TRIBO UNO"}
+							title={"DGroup Name"}
+						/>
+						<DGroupDetail
+							icon={mdiAccountSupervisorOutline}
+							value={"Paulo Perez & Rina Perez"}
+							title={"Leader"}
+						/>
+						<DGroupDetail
+							icon={mdiCalendarClockOutline}
+							value={"March 22, Sunday, 6PM at CCF Commonwealth"}
+							title={"Next Meeting"}
+						/>
 					</View>
 				</ShadowCard>
 				<ShadowCard style={{ rowGap: design.spacing.md }}>
@@ -204,51 +196,25 @@ const HomeScreen = () => {
 						Downline DGroup
 					</Text>
 					<View>
-						<Text
-							style={[
-								{
-									color: theme.text,
-								},
-								design.typography.bodyLg as TextStyle,
+						<DGroupDetail
+							icon={mdiAccountDetailsOutline}
+							value={"Overcomers"}
+							title={"DGroup Name"}
+						/>
+						<DGroupDetail
+							icon={mdiCalendarClockOutline}
+							value={"March 22, Sunday, 2PM at CCF Tandang Sora"}
+							title={"Next Meeting"}
+						/>
+						<DGroupDetail
+							icon={mdiAccountGroupOutline}
+							value={[
+								"Joshua Analupa",
+								"Aldrin Amurao",
+								"Kristianne Magtangob",
 							]}
-						>
-							Overcomers
-						</Text>
-						<Text
-							style={[
-								{
-									color: theme.text,
-								},
-								design.typography.body as TextStyle,
-							]}
-						>
-							Next Meeting: May 10, Sunday, 6PM at CCF Commonwealth
-						</Text>
-						<Text
-							style={[
-								{
-									color: theme.text,
-								},
-								design.typography.body as TextStyle,
-							]}
-						>
-							Members:
-						</Text>
-						{members.length > 0 &&
-							members.map((member, index) => (
-								<Text
-									key={index}
-									style={[
-										{
-											color: theme.text,
-											fontStyle: "italic",
-										},
-										design.typography.bodySm as TextStyle,
-									]}
-								>
-									{member}
-								</Text>
-							))}
+							title={"Members"}
+						/>
 					</View>
 				</ShadowCard>
 			</View>
