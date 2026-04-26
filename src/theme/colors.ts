@@ -52,6 +52,7 @@ export const lightColors = {
 		textColor: "#15803D",
 		backgroundColor: "#DCFCE7",
 	},
+	divider: "#E5E7EB",
 
 	secondary: "#F59E0B",
 
@@ -178,6 +179,7 @@ export const darkColors = {
 		textColor: "#4ADE80",
 		backgroundColor: "rgba(20, 83, 45, 0.3)",
 	},
+	divider: "#374151",
 
 	secondary: "#FBBF24",
 	// {

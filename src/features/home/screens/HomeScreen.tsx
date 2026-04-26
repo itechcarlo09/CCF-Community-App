@@ -19,6 +19,7 @@ import {
 	mdiAccountSupervisorOutline,
 	mdiCalendarClockOutline,
 	mdiQrcode,
+	mdiSproutOutline,
 } from "@mdi/js";
 import { useAppMode } from "src/context/app-mode";
 import { AppMode } from "@features/profile/components/ModeCard";
@@ -182,6 +183,29 @@ const HomeScreen = () => {
 							value={"March 22, Sunday, 6PM at CCF Commonwealth"}
 							title={"Next Meeting"}
 						/>
+						<View style={[styles.divider, { borderTopColor: theme.divider }]}>
+							<Text
+								style={[
+									{
+										color: theme.muted,
+									},
+									design.typography.bodyLg as TextStyle,
+								]}
+							>
+								Last Attendance
+							</Text>
+							<Text
+								style={[
+									{
+										color: theme.text,
+										fontStyle: "italic",
+									},
+									design.typography.body as TextStyle,
+								]}
+							>
+								March 22, Sunday, 6PM
+							</Text>
+						</View>
 					</View>
 				</ShadowCard>
 				<ShadowCard style={{ rowGap: design.spacing.md }}>
@@ -200,6 +224,11 @@ const HomeScreen = () => {
 							icon={mdiAccountDetailsOutline}
 							value={"Overcomers"}
 							title={"DGroup Name"}
+						/>
+						<DGroupDetail
+							icon={mdiSproutOutline}
+							value={"Singles & Elevate"}
+							title={"Lifestage"}
 						/>
 						<DGroupDetail
 							icon={mdiCalendarClockOutline}
@@ -357,5 +386,10 @@ const styles = StyleSheet.create({
 	logoutText: {
 		color: "#DC2626",
 		fontWeight: "600",
+	},
+	divider: {
+		marginTop: 12,
+		paddingTop: 12,
+		borderTopWidth: 1,
 	},
 });
