@@ -7,7 +7,7 @@ import {
 	TouchableOpacity,
 	Linking,
 } from "react-native";
-import { useDashboardViewModel } from "../viewModel/useDashboardViewModel";
+import { useDashboardViewModel } from "../../../features/dashboard/viewModel/useDashboardViewModel";
 import Loading from "@component/Loading";
 import DashboardCard from "./components/DataTile";
 import { useTheme } from "@theme/ThemeProvider";

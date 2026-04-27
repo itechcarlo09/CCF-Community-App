@@ -13,10 +13,12 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import StatItem from "../components/StatItem";
+import { useDashboardViewModel } from "../viewModel/useDashboardViewModel";
 
 const ProfileScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
+	const { loading, dashboard } = useDashboardViewModel();
 
 	return (
 		<ScrollView
@@ -78,9 +80,21 @@ const ProfileScreen = () => {
 					</Text>
 
 					<View style={{ rowGap: design.spacing.md }}>
-						<StatItem label={"Members"} value={"200"} change={""} />
-						<StatItem label={"DGroups"} value={"200"} change={""} />
-						<StatItem label={"Facilitators"} value={"200"} change={""} />
+						<StatItem
+							label={"Members"}
+							value={dashboard?.totalAccounts ?? 0}
+							change={""}
+						/>
+						<StatItem
+							label={"DGroups"}
+							value={dashboard?.dLeaders ?? 0}
+							change={""}
+						/>
+						<StatItem
+							label={"Facilitators"}
+							value={dashboard?.facilitators ?? 0}
+							change={""}
+						/>
 						<StatItem label={"Volunteers"} value={"200"} change={""} />
 					</View>
 				</ShadowCard>

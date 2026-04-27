@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { dashboardRepository } from "../data/dashboardRepository";
 import { DashboardUI } from "../model/DashboardUI";
 import { mapDashboardResponseToDashboard } from "../data/dashboard.mappers";
+import { dashboardRepository } from "../data/dashboardRepository";
 
 export const useDashboardViewModel = () => {
 	const [dashboard, setDashboard] = useState<DashboardUI>();

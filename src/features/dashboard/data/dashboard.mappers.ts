@@ -1,8 +1,8 @@
-import { Dashboard } from "../model/Dashboard";
+import { DashboardDTO } from "../model/DashboardDTO";
 import { DashboardUI } from "../model/DashboardUI";
 
 export const mapDashboardResponseToDashboard = (
-	data: Dashboard,
+	data: DashboardDTO,
 ): DashboardUI => {
 	return {
 		totalAccounts: data.totalAccounts,
