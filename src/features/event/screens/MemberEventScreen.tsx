@@ -1,8 +1,6 @@
-import { toast } from "@component/toast/toast";
-import ShadowCard from "@components/ShadowCard";
 import { design } from "@theme/index";
 import { useTheme } from "@theme/ThemeProvider";
-import React, { useState } from "react";
+import React from "react";
 import {
 	View,
 	Text,
@@ -12,18 +10,12 @@ import {
 	ScrollView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { mdiQrcode } from "@mdi/js";
-import MDIIcon from "@components/MDIIcon";
-import CCFButton from "@components/CCFButton";
-import MinistryBadge from "../components/MinistryBadge";
-import TextLink from "@components/TextLink";
 import MinistryCard from "../components/MinistryCard";
 import dayjs from "dayjs";
 
 const MemberEventScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
-	const [showQR, setShowQR] = useState(false);
 
 	return (
 		<ScrollView

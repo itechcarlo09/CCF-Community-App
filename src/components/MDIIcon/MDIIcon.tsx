@@ -1,8 +1,9 @@
 import React from "react";
 import Svg, { Path } from "react-native-svg";
-import { TouchableOpacity, View, ViewStyle } from "react-native";
+import { Pressable, View } from "react-native";
 import { styles } from "./MDIIcon.styles";
 import { MDIIconProps } from "./MDIIcon.types";
+import { useTheme } from "@theme/ThemeProvider";
 
 const MDIIcon: React.FC<MDIIconProps> = ({
 	path,
@@ -11,6 +12,8 @@ const MDIIcon: React.FC<MDIIconProps> = ({
 	style,
 	onPress,
 }) => {
+	const { theme } = useTheme();
+
 	const Content = (
 		<View style={[styles.container, style]}>
 			<Svg width={size} height={size} viewBox="0 0 24 24">
@@ -19,13 +22,25 @@ const MDIIcon: React.FC<MDIIconProps> = ({
 		</View>
 	);
 
-	return onPress ? (
-		<TouchableOpacity onPress={onPress} hitSlop={8}>
-			{Content}
-		</TouchableOpacity>
-	) : (
-		Content
-	);
+	if (onPress) {
+		return (
+			<Pressable
+				onPress={onPress}
+				hitSlop={8}
+				style={({ pressed }) => [
+					styles.button,
+					{ backgroundColor: theme.primary },
+					pressed && {
+						backgroundColor: theme.buttonClicked,
+					},
+				]}
+			>
+				{Content}
+			</Pressable>
+		);
+	}
+
+	return Content;
 };
 
 export default MDIIcon;

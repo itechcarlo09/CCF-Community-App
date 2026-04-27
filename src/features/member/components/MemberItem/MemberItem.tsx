@@ -1,0 +1,236 @@
+import React from "react";
+import { View, Text, Pressable, Image, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import MDIIcon from "@components/MDIIcon";
+import { mdiChevronRight } from "@mdi/js";
+import { useTheme } from "@theme/ThemeProvider";
+import { MemberCardProps } from ".";
+import ShadowCard from "@components/ShadowCard";
+
+export default function MemberCard({
+	id,
+	name,
+	gender,
+	dgroup,
+	role,
+	status,
+	lastAttendance,
+	avatar,
+}: MemberCardProps) {
+	const navigation = useNavigation<any>();
+	const { theme } = useTheme();
+
+	const getInitials = (name: string) =>
+		name
+			.split(" ")
+			.map((word) => word[0])
+			.join("")
+			.toUpperCase()
+			.slice(0, 2);
+
+	const getStatusStyle = (status: MemberCardProps["status"]) => {
+		switch (status) {
+			case "Active":
+				return styles.active;
+			case "Inactive":
+				return styles.inactive;
+			case "Pending":
+				return styles.pending;
+			default:
+				return styles.inactive;
+		}
+	};
+
+	const formatDate = (dateString: string | null) => {
+		if (!dateString) return "No attendance";
+
+		const date = new Date(dateString);
+		const now = new Date();
+
+		const diffTime = now.getTime() - date.getTime();
+		const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+		if (diffDays === 0) return "Today";
+		if (diffDays === 1) return "Yesterday";
+		if (diffDays < 7) return `${diffDays} days ago`;
+
+		return date.toLocaleDateString("en-US", {
+			month: "short",
+			day: "numeric",
+		});
+	};
+
+	return (
+		<ShadowCard onPress={() => navigation.navigate("MemberDetails", { id })}>
+			<View style={styles.row}>
+				{/* Avatar */}
+				<View style={styles.avatar}>
+					{avatar ? (
+						<Image source={{ uri: avatar }} style={styles.avatarImage} />
+					) : (
+						<Text style={styles.avatarText}>{getInitials(name)}</Text>
+					)}
+				</View>
+
+				{/* Info */}
+				<View style={styles.info}>
+					<Text style={[styles.name, { color: theme.text }]} numberOfLines={1}>
+						{name}
+					</Text>
+
+					<View style={styles.metaRow}>
+						<Text style={[styles.metaText, { color: theme.muted }]}>
+							{role}
+						</Text>
+						<Text style={[styles.dot, { color: theme.muted }]}>•</Text>
+						<Text style={[styles.metaText, { color: theme.muted }]}>
+							{gender}
+						</Text>
+
+						{dgroup && (
+							<>
+								<Text style={[styles.dot, { color: theme.muted }]}>•</Text>
+								<Text
+									style={[styles.group, { color: theme.muted }]}
+									numberOfLines={1}
+								>
+									{dgroup}
+								</Text>
+							</>
+						)}
+					</View>
+
+					<View style={styles.bottomRow}>
+						<View style={[styles.statusBadge, getStatusStyle(status)]}>
+							<Text style={styles.statusText}>{status}</Text>
+						</View>
+
+						<Text style={styles.lastAttendance}>
+							Last: {formatDate(lastAttendance)}
+						</Text>
+					</View>
+				</View>
+
+				<MDIIcon path={mdiChevronRight} size={22} color="#9CA3AF" />
+			</View>
+		</ShadowCard>
+	);
+}
+
+const styles = StyleSheet.create({
+	card: {
+		backgroundColor: "#FFFFFF",
+		borderRadius: 16,
+		padding: 16,
+		marginBottom: 12,
+		borderWidth: 1,
+		borderColor: "#E5E7EB",
+	},
+
+	row: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 16,
+	},
+
+	avatar: {
+		width: 48,
+		height: 48,
+		borderRadius: 999,
+		backgroundColor: "#00A6B6",
+		justifyContent: "center",
+		alignItems: "center",
+		overflow: "hidden",
+	},
+
+	avatarImage: {
+		width: "100%",
+		height: "100%",
+	},
+
+	avatarText: {
+		color: "#FFFFFF",
+		fontWeight: "600",
+		fontSize: 16,
+	},
+
+	info: {
+		flex: 1,
+	},
+
+	name: {
+		fontSize: 16,
+		fontWeight: "600",
+		color: "#111827",
+	},
+
+	metaRow: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		alignItems: "center",
+		marginTop: 4,
+		gap: 6,
+	},
+
+	metaText: {
+		fontSize: 14,
+		color: "#6B7280",
+	},
+
+	dot: {
+		color: "#9CA3AF",
+	},
+
+	group: {
+		fontSize: 14,
+		color: "#00A6B6",
+		flexShrink: 1,
+	},
+
+	bottomRow: {
+		flexDirection: "row",
+		alignItems: "center",
+		flexWrap: "wrap",
+		gap: 8,
+		marginTop: 8,
+	},
+
+	statusBadge: {
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		borderRadius: 999,
+	},
+
+	active: {
+		backgroundColor: "#DCFCE7",
+	},
+
+	inactive: {
+		backgroundColor: "#F3F4F6",
+	},
+
+	pending: {
+		backgroundColor: "#FEF3C7",
+	},
+
+	statusText: {
+		fontSize: 12,
+		fontWeight: "500",
+		color: "#111827",
+	},
+
+	lastAttendance: {
+		fontSize: 12,
+		color: "#9CA3AF",
+	},
+
+	actions: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 8,
+	},
+
+	iconButton: {
+		padding: 8,
+	},
+});

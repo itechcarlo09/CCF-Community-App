@@ -5,12 +5,20 @@ export const styles = StyleSheet.create({
 	wrapper: {
 		position: "relative",
 	},
+	leftIcon: {
+		position: "absolute",
+		left: 12,
+		top: "50%",
+		transform: [{ translateY: -10 }],
+		zIndex: 1,
+	},
 	toggle: {
 		position: "absolute",
 		right: 12,
 		top: 0,
 		bottom: 0,
 		justifyContent: "center",
+		transform: [{ translateY: -10 }],
 		...(design.typography.caption as TextStyle),
 	},
 	input: {

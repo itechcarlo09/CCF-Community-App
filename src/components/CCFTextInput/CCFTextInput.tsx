@@ -9,7 +9,7 @@ import {
 import { CCFTextInputProps } from "./CCFTextInput.types";
 import { useTheme } from "@theme/ThemeProvider";
 import { styles } from "./CCFTextInput.styles";
-import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
+import { mdiEyeOffOutline, mdiEyeOutline, mdiMagnify } from "@mdi/js";
 import MDIIcon from "@components/MDIIcon";
 
 const CCFTextInput: React.FC<CCFTextInputProps> = ({
@@ -19,7 +19,9 @@ const CCFTextInput: React.FC<CCFTextInputProps> = ({
 	onChangeText,
 	error,
 	touched,
+	containerStyle,
 	disabled = false,
+	isSearch = false,
 }) => {
 	const { theme } = useTheme();
 
@@ -48,9 +50,16 @@ const CCFTextInput: React.FC<CCFTextInputProps> = ({
 		? theme.error.textColor
 		: theme.primary;
 
+	const leftIconColor = disabled ? theme.disabled.disabledText : theme.muted;
+
 	return (
-		<View style={styles.wrapper}>
+		<View style={[styles.wrapper, containerStyle]}>
 			<View>
+				{isSearch && (
+					<View style={styles.leftIcon}>
+						<MDIIcon path={mdiMagnify} color={leftIconColor} />
+					</View>
+				)}
 				<TextInput
 					placeholder={placeholder}
 					placeholderTextColor={theme.muted}
@@ -69,6 +78,7 @@ const CCFTextInput: React.FC<CCFTextInputProps> = ({
 								? theme.disabled.disabledBackground
 								: theme.background,
 							borderColor,
+							paddingLeft: isSearch ? 44 : 16,
 							paddingRight: isPassword ? 44 : 16,
 						},
 					]}
