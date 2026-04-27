@@ -53,6 +53,10 @@ export const lightColors = {
 		backgroundColor: "#DCFCE7",
 	},
 	divider: "#E5E7EB",
+	ministry: {
+		backgroundColor: "#00A6B6",
+		textColor: "#e6f7f6",
+	},
 
 	secondary: "#F59E0B",
 
@@ -180,6 +184,10 @@ export const darkColors = {
 		backgroundColor: "rgba(20, 83, 45, 0.3)",
 	},
 	divider: "#374151",
+	ministry: {
+		backgroundColor: "#164e63",
+		textColor: "#00A6B6",
+	},
 
 	secondary: "#FBBF24",
 	// {

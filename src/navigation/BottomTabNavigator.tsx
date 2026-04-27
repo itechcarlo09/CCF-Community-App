@@ -12,12 +12,13 @@ import { useAppMode } from "src/context/app-mode";
 import { AppMode } from "@features/profile/components/ModeCard";
 import HomeScreen from "@features/home/screens/HomeScreen";
 import DashboardScreen from "@features/dashboard/screens/DashboardScreen";
+import MemberEventScreen from "@features/event/screens/MemberEventScreen";
 
 const Tab = createBottomTabNavigator();
 
 const TAB_CONFIG = {
 	[AppMode.MemberMode]: [
-		{ name: "EventTab", component: EventListScreen, title: "Events" },
+		{ name: "EventTab", component: MemberEventScreen, title: "Events" },
 		{ name: "HomeTab", component: HomeScreen, title: "Home" },
 		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
 	],
