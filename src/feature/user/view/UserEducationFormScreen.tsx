@@ -6,8 +6,6 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import Header from "@component/Header";
 import Input from "@component/Inputs";
 import Loading from "@component/Loading";
-
-import { useEducationForm } from "../hooks/useEducationForm";
 import dayjs from "dayjs";
 import { MonthYearPicker } from "@component/MonthYearPicker";
 import { ModernSwitch } from "@component/ModernSwitch";
@@ -18,8 +16,10 @@ import { NOID } from "src/types/globalTypes";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList } from "src/types/navigation";
 import EducationLevel from "src/types/enums/EducationLevel";
-import { useEducationViewModel } from "../viewModel/useEducationViewModel";
-import { showText } from "src/utils/errorUtils";
+import { useEducationViewModel } from "../../../features/member/viewModel/useEducationViewModel";
+import { toast } from "@component/toast/toast";
+import { useEducationForm } from "@features/member/hooks/useEducationForm";
+// import { showText } from "src/utils/errorUtils";
 
 type UserRouteProp = RouteProp<UserStackParamList, "EducationFormScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -78,7 +78,8 @@ const EducationFormScreen = () => {
 				navigation.goBack();
 			}
 		} catch (error) {
-			showText("Error deleting education", "error");
+			// showText("Error deleting education", "error");
+			toast.error("Error deleting education");
 		}
 	};
 

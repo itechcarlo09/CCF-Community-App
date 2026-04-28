@@ -1,19 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, Text, RefreshControl } from "react-native";
-import { useUserViewModel } from "../viewModel/useUserViewModel";
+import { useUserViewModel } from "../../../features/member/viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "../../../theme/ThemeProvider";
 import Loading from "../../../component/Loading";
 import { SearchField } from "../../../component/SearchField";
-import useDebounce from "../hooks/useDebounce";
 import { UserStackParamList } from "../../../types/navigation";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { RecordItemUI } from "../model/RecordListItem";
 import MdiIcon from "../../../component/MdiIcon";
 import { mdiArrowLeft } from "@mdi/js";
-import Gender from "../../../types/enums/Gender";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RecordItemUI } from "@features/member/model/RecordListItem";
+import useDebounce from "@features/member/hooks/useDebounce";
 
 type UserRouteProp = RouteProp<UserStackParamList, "DleaderScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;

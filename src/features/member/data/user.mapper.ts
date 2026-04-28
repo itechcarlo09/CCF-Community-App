@@ -1,10 +1,12 @@
+import dayjs from "dayjs";
 import {
 	ageNumber,
 	isWithinLastThreeMonths,
 } from "../../../utils/dateFormatter";
 import { formatCompleteName, formatFullName } from "../../../utils/stringUtils";
+import { MemberCardModel } from "../model/Member";
 import { RecordItemUI } from "../model/RecordListItem";
-import { UserDTO } from "../model/user";
+import { Gender, UserDTO } from "../model/user";
 import topUsers from "../topUsers.json";
 import { MembershipType } from "../types";
 
@@ -66,3 +68,17 @@ export const mapUserToUI = (user: UserDTO): RecordItemUI => {
 		membershipType,
 	};
 };
+
+export const toMemberCard = (member: UserDTO): MemberCardModel => ({
+	id: member.id,
+	fullName: formatFullName(
+		member.firstName,
+		member.lastName,
+		member.middleName,
+	),
+	membershipType: member.dGroupStatus,
+	gender: member.gender as Gender,
+	priorityMinistry: "",
+	latestDGroup: dayjs().toDate(),
+	latestActivity: dayjs().toDate(),
+});

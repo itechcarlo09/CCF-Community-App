@@ -3,27 +3,29 @@ import { useTheme } from "@theme/ThemeProvider";
 import React, { useCallback, useEffect, useState } from "react";
 import {
 	View,
-	Text,
 	StyleSheet,
-	Platform,
-	TextStyle,
-	ScrollView,
 	RefreshControl,
 	FlatList,
 	ActivityIndicator,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import dayjs from "dayjs";
 import CCFTextInput from "@components/CCFTextInput";
 import MDIIcon from "@components/MDIIcon";
 import { mdiPlus } from "@mdi/js";
-import { toast } from "@component/toast/toast";
 import Loading from "@component/Loading";
-import { useUserViewModel } from "src/feature/user/viewModel/useUserViewModel";
+import { useUserViewModel } from "@features/member/viewModel/useUserViewModel";
 import { Separator } from "@component/Separator";
 import MemberItem from "../components/MemberItem";
+import { AppStackParamList, UserStackParamList } from "src/types/navigation";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type UserRouteProp = RouteProp<AppStackParamList, "UserNavigator">;
+type NavProp = NativeStackNavigationProp<AppStackParamList>;
 
 const MemberScreen = () => {
+	const navigation = useNavigation<NavProp>();
+	const route = useRoute<UserRouteProp>();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const {
@@ -78,7 +80,6 @@ const MemberScreen = () => {
 						paddingBottom: design.spacing.md,
 						paddingHorizontal: design.spacing.lg,
 						columnGap: design.spacing.md,
-						alignItems: "center",
 					},
 				]}
 			>
@@ -92,7 +93,14 @@ const MemberScreen = () => {
 					path={mdiPlus}
 					size={22}
 					color={theme.white}
-					onPress={() => toast.default("Add Button is not implemented yet.")}
+					onPress={() => {
+						navigation.navigate("UserNavigator", {
+							screen: "UserForm",
+							params: {
+								onSuccess: onRefresh,
+							},
+						});
+					}}
 				/>
 			</View>
 			{loading ? (
@@ -114,6 +122,15 @@ const MemberScreen = () => {
 							status={"Inactive"}
 							lastAttendance={null}
 							avatar={null}
+							onPress={() => {
+								navigation.navigate("UserNavigator", {
+									screen: "UserDetailsScreen",
+									params: {
+										id: item.item.id,
+										hasEditedUser: refresh,
+									},
+								});
+							}}
 						/>
 					)}
 					refreshControl={Refresh()}
@@ -154,5 +171,6 @@ const styles = StyleSheet.create({
 	},
 	headerContainer: {
 		flexDirection: "row",
+		alignItems: "center",
 	},
 });

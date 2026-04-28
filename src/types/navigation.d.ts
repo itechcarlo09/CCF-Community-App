@@ -30,9 +30,9 @@ export type AuthRouteProp<T extends keyof AuthStackParamList> = RouteProp<
 // -----------------------------
 export type AppStackParamList = {
 	Login: undefined;
-	BottomNavigator: undefined;
-	EventNavigator: undefined;
-	UserNavigator: undefined;
+	BottomNavigator: NavigatorScreenParams<BottomTabParamList>;
+	EventNavigator: NavigatorScreenParams<EventStackParamList>;
+	UserNavigator: NavigatorScreenParams<UserStackParamList>;
 };
 
 export type AppNavigationProp = NativeStackNavigationProp<AppStackParamList>;

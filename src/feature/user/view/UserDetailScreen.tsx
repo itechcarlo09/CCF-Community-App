@@ -18,19 +18,19 @@ import {
 	mdiAccountPlus,
 	mdiAccountHeartOutline,
 } from "@mdi/js";
-import { useUserForm } from "../hooks/useUserForm";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList } from "src/types/navigation";
-import { mapUserToUI } from "../data/user.mapper";
 import {
 	formatDateRangeFromDate,
 	formatFullDate,
 } from "src/utils/dateFormatter";
 import Loading from "@component/Loading";
 import CircularImage from "@component/CircularImage";
-import { EducationDTO, EmploymentDTO } from "../model/user";
-import { showText } from "src/utils/errorUtils";
+import { useUserForm } from "@features/member/hooks/useUserForm";
+import { mapUserToUI } from "@features/member/data/user.mapper";
+import { EducationDTO, EmploymentDTO } from "@features/member/model/user";
+import { toast } from "@component/toast/toast";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserDetailScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -74,7 +74,7 @@ const UserDetailScreen = () => {
 		: [];
 
 	const handleAssignDLeader = useCallback(() => {
-		showText("DLeader assignment functionality not implemented.");
+		toast.error("DLeader assignment functionality not implemented.");
 		// const gender = normalizeGender(user?.gender);
 		// const safeId = Number(id) || NOID;
 		// if (!gender) return;
@@ -180,7 +180,7 @@ const UserDetailScreen = () => {
 							path={mappedUser?.spouseName ? mdiAccountSwitch : mdiAccountPlus}
 							size={18}
 							onPress={() => {
-								showText("Spouse assignment functionality not implemented.");
+								toast.error("Spouse assignment functionality not implemented.");
 								// navigation.navigate("SpouseScreen", {
 								// 	id: Number(id),
 								// 	onSelect: async (selectedId: number) => {

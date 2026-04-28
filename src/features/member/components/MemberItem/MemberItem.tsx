@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MDIIcon from "@components/MDIIcon";
 import { mdiChevronRight } from "@mdi/js";
@@ -16,6 +16,7 @@ export default function MemberCard({
 	status,
 	lastAttendance,
 	avatar,
+	onPress,
 }: MemberCardProps) {
 	const navigation = useNavigation<any>();
 	const { theme } = useTheme();
@@ -61,7 +62,7 @@ export default function MemberCard({
 	};
 
 	return (
-		<ShadowCard onPress={() => navigation.navigate("MemberDetails", { id })}>
+		<ShadowCard onPress={onPress}>
 			<View style={styles.row}>
 				{/* Avatar */}
 				<View style={styles.avatar}>

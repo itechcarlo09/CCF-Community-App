@@ -10,7 +10,7 @@ import {
 import Header from "@component/Header";
 import Loading from "@component/Loading";
 import { useTheme } from "@theme/ThemeProvider";
-import useDebounce from "src/feature/user/hooks/useDebounce";
+import useDebounce from "@features/member/hooks/useDebounce";
 import { useSpeakerViewModel } from "../viewModel/useSpeakerViewModel";
 import SpeakerCard from "./components/SpeakerListItem";
 
@@ -63,7 +63,7 @@ export const SpeakerListScreen = ({ navigation }: any) => {
 			) : (
 				<FlatList
 					data={speakers}
-					keyExtractor={(item) => item.id}
+					keyExtractor={(item) => item.id.toString()}
 					numColumns={numColumns}
 					columnWrapperStyle={{
 						justifyContent: "space-between",

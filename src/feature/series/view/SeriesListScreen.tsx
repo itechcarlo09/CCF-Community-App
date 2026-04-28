@@ -10,7 +10,7 @@ import Header from "@component/Header";
 import Loading from "@component/Loading";
 import { useTheme } from "@theme/ThemeProvider";
 import { Separator } from "@component/Separator";
-import useDebounce from "src/feature/user/hooks/useDebounce";
+import useDebounce from "@features/member/hooks/useDebounce";
 import { SeriesCard } from "./components/SeriesListItem";
 import { useSeriesViewModel } from "../viewModel/userSeriesViewModel";
 

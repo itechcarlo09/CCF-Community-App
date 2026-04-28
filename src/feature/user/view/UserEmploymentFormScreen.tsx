@@ -13,9 +13,9 @@ import dayjs from "dayjs";
 import { NOID } from "src/types/globalTypes";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList } from "src/types/navigation";
-import { useEmploymentForm } from "../hooks/useEmploymentForm";
-import { useEmploymentViewModel } from "../viewModel/useEmploymentViewModel";
-import { showText } from "src/utils/errorUtils";
+import { useEmploymentViewModel } from "../../../features/member/viewModel/useEmploymentViewModel";
+// import { showText } from "src/utils/errorUtils";
+import { useEmploymentForm } from "@features/member/hooks/useEmploymentForm";
 
 type UserRouteProp = RouteProp<UserStackParamList, "EmploymentFormScreen">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;
@@ -48,7 +48,7 @@ const EmploymentFormScreen = () => {
 			const res = await deleteEmployment(employmentId ?? NOID);
 			if (res?.success) navigation.goBack();
 		} catch (error) {
-			showText("Error deleting employment", "error");
+			// showText("Error deleting employment", "error");
 		}
 	};
 

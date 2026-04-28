@@ -10,10 +10,10 @@ import { useEventViewModel } from "../viewModel/useEventViewModel";
 import { useTheme } from "../../../theme/ThemeProvider";
 import Loading from "../../../component/Loading";
 import { EventItemCard } from "./EventItemCard";
-import useDebounce from "../../user/hooks/useDebounce";
 import Header from "@component/Header";
 import { Separator } from "@component/Separator";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import useDebounce from "@features/member/hooks/useDebounce";
 
 const EventListScreen = ({ navigation }: any) => {
 	const {

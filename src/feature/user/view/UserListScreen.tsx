@@ -8,14 +8,14 @@ import {
 	ActivityIndicator,
 	RefreshControl,
 } from "react-native";
-import { useUserViewModel } from "../viewModel/useUserViewModel";
-import { RecordItemUI } from "../model/RecordListItem";
+import { useUserViewModel } from "../../../features/member/viewModel/useUserViewModel";
 import Loading from "@component/Loading";
 import CircularImage from "@component/CircularImage";
 import Header from "@component/Header";
 import { useTheme } from "@theme/ThemeProvider";
 import { Separator } from "@component/Separator";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { RecordItemUI } from "@features/member/model/RecordListItem";
 
 const UserListScreen = ({ navigation }: any) => {
 	const {

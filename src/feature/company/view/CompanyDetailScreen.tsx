@@ -16,12 +16,12 @@ import { OtherStackParamList } from "src/types/navigation";
 import { NOID } from "src/types/globalTypes";
 import Loading from "@component/Loading";
 import { getAcronym } from "src/utils/stringUtils";
-import useDebounce from "src/feature/user/hooks/useDebounce";
 
 // 👉 Replace with your actual hooks
 import { useCompanyForm } from "../hooks/useCompanyForm";
 import { useCompanyViewModel } from "../viewModel/useCompanyViewModel";
 import { EmployeeItemUI } from "../model/CompanyListUI";
+import useDebounce from "@features/member/hooks/useDebounce";
 
 type CompanyRouteProp = RouteProp<OtherStackParamList, "CompanyDetailsScreen">;
 type NavProp = NativeStackNavigationProp<OtherStackParamList>;

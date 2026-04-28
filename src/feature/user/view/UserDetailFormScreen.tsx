@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import { useUserForm } from "../hooks/useUserForm";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NOID } from "src/types/globalTypes";
 import { UserStackParamList } from "src/types/navigation";
@@ -16,6 +15,7 @@ import { Gender } from "src/types/enums/Gender";
 import { ContactInputs } from "@component/ContactInputs";
 import SelectButton from "@component/SelectButton";
 import Loading from "@component/Loading";
+import { useUserForm } from "@features/member/hooks/useUserForm";
 
 type UserRouteProp = RouteProp<UserStackParamList, "UserForm">;
 type NavProp = NativeStackNavigationProp<UserStackParamList>;

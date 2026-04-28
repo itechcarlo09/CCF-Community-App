@@ -7,4 +7,5 @@ export interface MemberCardProps {
 	status: "Active" | "Inactive" | "Pending";
 	lastAttendance: string | null;
 	avatar: string | null;
+	onPress: () => void;
 }

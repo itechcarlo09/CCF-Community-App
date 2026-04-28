@@ -8,12 +8,12 @@ import {
 } from "react-native";
 import { useTheme } from "../../../theme/ThemeProvider";
 import Loading from "../../../component/Loading";
-import useDebounce from "../../user/hooks/useDebounce";
 import Header from "@component/Header";
 import DGroupListCard from "./components/DGroupListCard";
 import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
 import { Separator } from "@component/Separator";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import useDebounce from "@features/member/hooks/useDebounce";
 
 const DGroupListScreen = ({ navigation }: any) => {
 	const {

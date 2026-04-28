@@ -7,16 +7,16 @@ import {
 	RefreshControl,
 	ActivityIndicator,
 } from "react-native";
-import { useUserViewModel } from "../viewModel/useUserViewModel";
+import { useUserViewModel } from "../../../features/member/viewModel/useUserViewModel";
 import UserListItem from "./UserListItem";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MdiIcon from "../../../component/MdiIcon";
 import { mdiPlusBoxOutline } from "@mdi/js";
 import { useTheme } from "../../../theme/ThemeProvider";
 import { SearchField } from "../../../component/SearchField";
-import useDebounce from "../hooks/useDebounce";
-import UserLoader from "./component/UserSkeleton";
 import UserType from "../../../types/enums/UserType";
+import UserLoader from "./components/UserSkeleton";
+import useDebounce from "@features/member/hooks/useDebounce";
 
 const Separator = () => <View style={styles.separator} />;
 

@@ -12,11 +12,11 @@ import { useTheme } from "@theme/ThemeProvider";
 import { Separator } from "@component/Separator";
 import { useSchoolViewModel } from "../viewModel/useSchoolViewModel";
 import SchoolCard from "./components/SchoolListItem";
-import useDebounce from "src/feature/user/hooks/useDebounce";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UserStackParamList, OtherStackParamList } from "src/types/navigation";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { SchoolItemUI } from "../model/SchoolListItem";
+import useDebounce from "@features/member/hooks/useDebounce";
 
 type SchoolRouteProp = RouteProp<
 	OtherStackParamList | UserStackParamList,
