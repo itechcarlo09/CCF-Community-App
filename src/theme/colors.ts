@@ -57,6 +57,18 @@ export const lightColors = {
 		backgroundColor: "#00A6B6",
 		textColor: "#e6f7f6",
 	},
+	statusActive: {
+		backgroundColor: "#DCFCE7",
+		textColor: "#15803D",
+	},
+	statusInactive: {
+		backgroundColor: "#F3F4F6",
+		textColor: "#374151",
+	},
+	statusPending: {
+		backgroundColor: "#FEF9C3",
+		textColor: "#A16207",
+	},
 
 	secondary: "#F59E0B",
 
@@ -187,6 +199,18 @@ export const darkColors = {
 	ministry: {
 		backgroundColor: "#164e63",
 		textColor: "#00A6B6",
+	},
+	statusActive: {
+		backgroundColor: "rgba(20, 83, 45, 0.3)",
+		textColor: "#4ADE80",
+	},
+	statusInactive: {
+		backgroundColor: "#374151",
+		textColor: "#D1D5DB",
+	},
+	statusPending: {
+		backgroundColor: "rgba(113, 63, 18, 0.3)",
+		textColor: "#FACC15",
 	},
 
 	secondary: "#FBBF24",

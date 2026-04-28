@@ -15,13 +15,23 @@ import { mdiPlus } from "@mdi/js";
 import Loading from "@component/Loading";
 import { useUserViewModel } from "@features/member/viewModel/useUserViewModel";
 import { Separator } from "@component/Separator";
-import MemberItem from "../components/MemberItem";
-import { AppStackParamList, UserStackParamList } from "src/types/navigation";
+import MemberItem, { MemberCardProps } from "../components/MemberItem";
+import { AppStackParamList } from "src/types/navigation";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type UserRouteProp = RouteProp<AppStackParamList, "UserNavigator">;
 type NavProp = NativeStackNavigationProp<AppStackParamList>;
+const getRandomStatus = (): MemberCardProps["status"] => {
+	const statuses: MemberCardProps["status"][] = [
+		"Active",
+		"Inactive",
+		"Pending",
+	];
+	const randomIndex = Math.floor(Math.random() * statuses.length);
+
+	return statuses[randomIndex];
+};
 
 const MemberScreen = () => {
 	const navigation = useNavigation<NavProp>();
@@ -103,62 +113,58 @@ const MemberScreen = () => {
 					}}
 				/>
 			</View>
-			{loading ? (
-				<Loading />
-			) : (
-				<FlatList
-					data={users}
-					keyExtractor={(item) => item.id.toString()}
-					ItemSeparatorComponent={Separator}
-					ListHeaderComponent={<View style={{ height: 16 }} />}
-					style={{ paddingHorizontal: 16 }}
-					renderItem={(item) => (
-						<MemberItem
-							id={item.item.id}
-							name={item.item.completeName}
-							gender={"gender"}
-							dgroup={null}
-							role={"ss"}
-							status={"Inactive"}
-							lastAttendance={null}
-							avatar={null}
-							onPress={() => {
-								navigation.navigate("UserNavigator", {
-									screen: "UserDetailsScreen",
-									params: {
-										id: item.item.id,
-										hasEditedUser: refresh,
-									},
-								});
-							}}
-						/>
-					)}
-					refreshControl={Refresh()}
-					onEndReached={() => {
-						if (
-							!onEndReachedCalledDuringMomentum &&
-							!activityLoading &&
-							!loading
-						) {
-							loadMoreUsers();
-							setOnEndReachedCalledDuringMomentum(true);
-						}
-					}}
-					onEndReachedThreshold={0.1}
-					ListFooterComponent={() =>
-						activityLoading ? (
-							<View style={{ padding: 12 }}>
-								<ActivityIndicator size="small" color="#2563EB" />
-							</View>
-						) : (
-							<View style={{ height: 16 }} />
-						)
+			<FlatList
+				data={users}
+				keyExtractor={(item) => item.id.toString()}
+				ItemSeparatorComponent={Separator}
+				ListHeaderComponent={<View style={{ height: 16 }} />}
+				style={{ paddingHorizontal: 16 }}
+				renderItem={(item) => (
+					<MemberItem
+						id={item.item.id}
+						name={item.item.completeName}
+						gender={"gender"}
+						dgroup={null}
+						role={"ss"}
+						status={getRandomStatus()}
+						lastAttendance={null}
+						avatar={null}
+						onPress={() => {
+							navigation.navigate("UserNavigator", {
+								screen: "UserDetailsScreen",
+								params: {
+									id: item.item.id,
+									hasEditedUser: refresh,
+								},
+							});
+						}}
+					/>
+				)}
+				refreshControl={Refresh()}
+				onEndReached={() => {
+					if (
+						!onEndReachedCalledDuringMomentum &&
+						!activityLoading &&
+						!loading
+					) {
+						loadMoreUsers();
+						setOnEndReachedCalledDuringMomentum(true);
 					}
-					onMomentumScrollBegin={() => {
-						setOnEndReachedCalledDuringMomentum(false);
-					}}
-				/>
-			)}
+				}}
+				onEndReachedThreshold={0.1}
+				ListFooterComponent={() =>
+					activityLoading ? (
+						<View style={{ padding: 12 }}>
+							<ActivityIndicator size="small" color="#2563EB" />
+						</View>
+					) : (
+						<View style={{ height: 16 }} />
+					)
+				}
+				onMomentumScrollBegin={() => {
+					setOnEndReachedCalledDuringMomentum(false);
+				}}
+			/>
 		</View>
 	);
 };

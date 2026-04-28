@@ -32,13 +32,25 @@ export default function MemberCard({
 	const getStatusStyle = (status: MemberCardProps["status"]) => {
 		switch (status) {
 			case "Active":
-				return styles.active;
+				return {
+					backgroundColor: theme.statusActive.backgroundColor,
+					color: theme.statusActive.textColor,
+				};
 			case "Inactive":
-				return styles.inactive;
+				return {
+					backgroundColor: theme.statusInactive.backgroundColor,
+					color: theme.statusInactive.textColor,
+				};
 			case "Pending":
-				return styles.pending;
+				return {
+					backgroundColor: theme.statusPending.backgroundColor,
+					color: theme.statusPending.textColor,
+				};
 			default:
-				return styles.inactive;
+				return {
+					backgroundColor: theme.statusInactive.backgroundColor,
+					color: theme.statusInactive.textColor,
+				};
 		}
 	};
 
@@ -102,9 +114,9 @@ export default function MemberCard({
 					</View>
 
 					<View style={styles.bottomRow}>
-						<View style={[styles.statusBadge, getStatusStyle(status)]}>
-							<Text style={styles.statusText}>{status}</Text>
-						</View>
+						<Text style={[styles.statusBadge, getStatusStyle(status)]}>
+							{status}
+						</Text>
 
 						<Text style={styles.lastAttendance}>
 							Last: {formatDate(lastAttendance)}
@@ -200,6 +212,9 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 8,
 		paddingVertical: 2,
 		borderRadius: 999,
+		fontSize: 12,
+		fontWeight: "500",
+		color: "#111827",
 	},
 
 	active: {
@@ -212,12 +227,6 @@ const styles = StyleSheet.create({
 
 	pending: {
 		backgroundColor: "#FEF3C7",
-	},
-
-	statusText: {
-		fontSize: 12,
-		fontWeight: "500",
-		color: "#111827",
 	},
 
 	lastAttendance: {
