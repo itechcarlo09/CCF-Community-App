@@ -5,7 +5,6 @@ import MdiIcon from "../component/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
 import OtherScreen from "src/feature/others/view/OtherScreen";
 import EventListScreen from "src/feature/event/view/EventListScreen";
-import UserListScreen from "src/feature/user/view/UserListScreen";
 import DGroupListScreen from "src/feature/dgroup/view/DGroupListScreen";
 import ProfileScreen from "@features/profile/screens/ProfileScreen";
 import { useAppMode } from "src/context/app-mode";
@@ -26,7 +25,7 @@ const TAB_CONFIG = {
 
 	[AppMode.Management]: [
 		{ name: "DashboardTab", component: DashboardScreen, title: "Dashboard" },
-		{ name: "UserTab", component: UserListScreen, title: "Members" },
+		{ name: "UserTab", component: MemberScreen, title: "Members" },
 		{ name: "DGroupTab", component: DGroupListScreen, title: "DGroups" },
 		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
 	],
