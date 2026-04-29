@@ -123,9 +123,9 @@ const MemberScreen = () => {
 					<MemberItem
 						id={item.item.id}
 						name={item.item.completeName}
-						gender={"gender"}
-						dgroup={null}
-						role={"ss"}
+						gender={"Gender"}
+						dgroup={"DGroup Name"}
+						role={"DGroup Type"}
 						status={getRandomStatus()}
 						lastAttendance={null}
 						avatar={null}

@@ -1,14 +1,10 @@
 import dayjs from "dayjs";
-import {
-	ageNumber,
-	isWithinLastThreeMonths,
-} from "../../../utils/dateFormatter";
+import { ageNumber } from "../../../utils/dateFormatter";
 import { formatCompleteName, formatFullName } from "../../../utils/stringUtils";
 import { MemberCardModel } from "../model/Member";
 import { RecordItemUI } from "../model/RecordListItem";
 import { Gender, UserDTO } from "../model/user";
 import topUsers from "../topUsers.json";
-import { MembershipType } from "../types";
 
 const MAX_AGE_FOR_ELEVATE = 22;
 const MIN_DGROUP_MEMBERS_FOR_DLEADER = 3;
