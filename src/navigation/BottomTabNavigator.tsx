@@ -13,6 +13,7 @@ import HomeScreen from "@features/home/screens/HomeScreen";
 import DashboardScreen from "@features/dashboard/screens/DashboardScreen";
 import MemberEventScreen from "@features/event/screens/MemberEventScreen";
 import MemberScreen from "@features/member/screens/MemberScreen";
+import DGroupScreen from "@features/dgroup/screens/DGroupScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,13 +27,13 @@ const TAB_CONFIG = {
 	[AppMode.Management]: [
 		{ name: "DashboardTab", component: DashboardScreen, title: "Dashboard" },
 		{ name: "UserTab", component: MemberScreen, title: "Members" },
-		{ name: "DGroupTab", component: DGroupListScreen, title: "DGroups" },
+		{ name: "DGroupTab", component: DGroupScreen, title: "DGroups" },
 		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
 	],
 
 	[AppMode.SuperAdmin]: [
 		{ name: "UserTab", component: MemberScreen, title: "Members" },
-		{ name: "DGroupTab", component: DGroupListScreen, title: "DGroups" },
+		{ name: "DGroupTab", component: DGroupScreen, title: "DGroups" },
 		{ name: "EventTab", component: EventListScreen, title: "Events" },
 		{ name: "OthersTab", component: OtherScreen, title: "Others" },
 		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },

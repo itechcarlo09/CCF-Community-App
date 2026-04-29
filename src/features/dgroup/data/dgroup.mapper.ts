@@ -1,5 +1,5 @@
-import { DGroupListItemDTO } from "../model/DGroup";
-import { DGroupItemUI } from "../model/DGroupItemUI";
+import { DGroupListItemDTO } from "../../../features/dgroup/model/DGroup";
+import { DGroupItemUI } from "../../../features/dgroup/model/DGroupItemUI";
 
 export const mapDGroupToUI = (dgroup: DGroupListItemDTO): DGroupItemUI => {
 	const leadersName = dgroup.leaders

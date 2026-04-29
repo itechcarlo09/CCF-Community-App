@@ -1,7 +1,10 @@
 import { showError } from "src/utils/errorUtils";
 import apiClient from "../../../services/apiClient";
-import { DGroupDTO, GetDGroupResponse } from "../model/DGroup";
-import { GetDGroupParams } from "../model/RequestParams";
+import {
+	DGroupDTO,
+	GetDGroupResponse,
+} from "../../../features/dgroup/model/DGroup";
+import { GetDGroupParams } from "../../../features/dgroup/model/RequestParams";
 import { PAGE_SIZE } from "src/types/globalTypes";
 
 export const dgroupDataSource = {

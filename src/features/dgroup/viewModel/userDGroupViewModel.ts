@@ -7,9 +7,9 @@ import {
 
 import { DGroupDTO } from "../model/DGroup";
 import { DGroupItemUI } from "../model/DGroupItemUI";
-import { dgroupRepository } from "../data/dgroupRepository";
-import { mapDGroupToUI } from "../data/dgroup.mapper";
 import { PAGE_SIZE } from "src/types/globalTypes";
+import { mapDGroupToUI } from "../data/dgroup.mapper";
+import { dgroupRepository } from "../data/dgroupRepository";
 
 // =========================
 // 🔑 QUERY KEYS

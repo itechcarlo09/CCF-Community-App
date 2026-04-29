@@ -7,7 +7,7 @@ import {
 	TouchableOpacity,
 	Linking,
 } from "react-native";
-import { DGroupItemUI } from "../../model/DGroupItemUI";
+import { DGroupItemUI } from "../../../../features/dgroup/model/DGroupItemUI";
 import { useTheme } from "@theme/ThemeProvider";
 
 interface Props {
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		padding: 14,
 		borderRadius: 18,
-		marginHorizontal: 16,
 
 		// modern shadow
 		elevation: 3,

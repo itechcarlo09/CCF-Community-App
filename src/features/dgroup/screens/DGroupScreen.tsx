@@ -1,4 +1,3 @@
-import { design } from "@theme/index";
 import { useTheme } from "@theme/ThemeProvider";
 import React, { useCallback, useEffect, useState } from "react";
 import {
@@ -9,17 +8,17 @@ import {
 	ActivityIndicator,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import CCFTextInput from "@components/CCFTextInput";
-import MDIIcon from "@components/MDIIcon";
-import { mdiPlus } from "@mdi/js";
-import Loading from "@component/Loading";
 import { useUserViewModel } from "@features/member/viewModel/useUserViewModel";
 import { Separator } from "@component/Separator";
-import MemberItem, { MemberCardProps } from "../components/MemberItem";
 import { AppStackParamList } from "src/types/navigation";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import CCFHeader from "@components/CCFHeader";
+import MemberItem, {
+	MemberCardProps,
+} from "@features/member/components/MemberItem";
+import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
+import DGroupListCard from "src/feature/dgroup/view/components/DGroupListCard";
 
 type UserRouteProp = RouteProp<AppStackParamList, "UserNavigator">;
 type NavProp = NativeStackNavigationProp<AppStackParamList>;
@@ -34,19 +33,19 @@ const getRandomStatus = (): MemberCardProps["status"] => {
 	return statuses[randomIndex];
 };
 
-const MemberScreen = () => {
+const DGroupScreen = () => {
 	const navigation = useNavigation<NavProp>();
 	const route = useRoute<UserRouteProp>();
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const {
-		users,
+		dgroups,
 		refresh,
 		loading,
-		activityLoading,
-		searchUsers,
-		loadMoreUsers,
-	} = useUserViewModel();
+		fetching,
+		searchDGroups,
+		loadMoreDGroups,
+	} = useDGroupViewModel();
 	const [searchText, setSearchText] = useState("");
 	const [
 		onEndReachedCalledDuringMomentum,
@@ -65,7 +64,7 @@ const MemberScreen = () => {
 
 	useEffect(() => {
 		const delay = setTimeout(() => {
-			searchUsers(searchText);
+			searchDGroups(searchText);
 		}, 300);
 
 		return () => clearTimeout(delay);
@@ -84,56 +83,29 @@ const MemberScreen = () => {
 				searchText={searchText}
 				onChangeSearch={setSearchText}
 				onAddPress={() => {
-					navigation.navigate("UserNavigator", {
-						screen: "UserForm",
-						params: {
-							onSuccess: onRefresh,
-						},
+					navigation.navigate("DGroupNavigator", {
+						screen: "DGroupFormScreen",
 					});
 				}}
-				placeholder="Search Record.."
+				placeholder="Search DGroup.."
 			/>
 			<FlatList
-				data={users}
+				data={dgroups}
 				keyExtractor={(item) => item.id.toString()}
 				ItemSeparatorComponent={Separator}
 				ListHeaderComponent={<View style={{ height: 16 }} />}
 				style={{ paddingHorizontal: 16 }}
-				renderItem={(item) => (
-					<MemberItem
-						id={item.item.id}
-						name={item.item.completeName}
-						gender={"Gender"}
-						dgroup={"DGroup Name"}
-						role={"DGroup Type"}
-						status={getRandomStatus()}
-						lastAttendance={null}
-						avatar={null}
-						onPress={() => {
-							navigation.navigate("UserNavigator", {
-								screen: "UserDetailsScreen",
-								params: {
-									id: item.item.id,
-									hasEditedUser: refresh,
-								},
-							});
-						}}
-					/>
-				)}
+				renderItem={({ item }) => <DGroupListCard item={item} />}
 				refreshControl={Refresh()}
 				onEndReached={() => {
-					if (
-						!onEndReachedCalledDuringMomentum &&
-						!activityLoading &&
-						!loading
-					) {
-						loadMoreUsers();
+					if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
+						loadMoreDGroups();
 						setOnEndReachedCalledDuringMomentum(true);
 					}
 				}}
 				onEndReachedThreshold={0.1}
 				ListFooterComponent={() =>
-					activityLoading ? (
+					fetching ? (
 						<View style={{ padding: 12 }}>
 							<ActivityIndicator size="small" color="#2563EB" />
 						</View>
@@ -149,7 +121,7 @@ const MemberScreen = () => {
 	);
 };
 
-export default MemberScreen;
+export default DGroupScreen;
 
 const styles = StyleSheet.create({
 	container: {

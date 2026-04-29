@@ -2,11 +2,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { DGroupListItemDTO } from "../model/DGroup";
-import { showError } from "src/utils/errorUtils";
-import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
 import { dgroupRepository } from "../data/dgroupRepository";
+import { toast } from "@component/toast/toast";
+import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
+import { DGroupListItemDTO } from "../model/DGroup";
 
 interface UseDGroupFormProps {
 	dGroupId?: number;
@@ -64,7 +63,9 @@ export const useDGroupForm = ({
 			onSuccess?.();
 		},
 
-		onError: showError,
+		onError: (error) => {
+			toast.error(error.message);
+		},
 	});
 
 	// ✅ Derive initial values

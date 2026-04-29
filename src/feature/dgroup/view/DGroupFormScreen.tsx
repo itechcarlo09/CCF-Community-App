@@ -9,7 +9,7 @@ import Input from "@component/Inputs";
 import Loading from "@component/Loading";
 // import { useSchoolForm } from "../hooks/useSchoolForm";
 import Header from "@component/Header";
-import { useDGroupForm } from "../hooks/useDGroupForm";
+import { useDGroupForm } from "@features/dgroup/hooks/useDGroupForm";
 
 type SchoolRouteProp = RouteProp<OtherStackParamList, "SchoolFormScreen">;
 type NavProp = NativeStackNavigationProp<OtherStackParamList>;
