@@ -19,6 +19,8 @@ import MemberItem, {
 } from "@features/member/components/MemberItem";
 import { useDGroupViewModel } from "../viewModel/userDGroupViewModel";
 import DGroupListCard from "src/feature/dgroup/view/components/DGroupListCard";
+import { toast } from "@component/toast/toast";
+import DGroupListItem from "../components/DGroupListItem";
 
 type UserRouteProp = RouteProp<AppStackParamList, "UserNavigator">;
 type NavProp = NativeStackNavigationProp<AppStackParamList>;
@@ -95,7 +97,19 @@ const DGroupScreen = () => {
 				ItemSeparatorComponent={Separator}
 				ListHeaderComponent={<View style={{ height: 16 }} />}
 				style={{ paddingHorizontal: 16 }}
-				renderItem={({ item }) => <DGroupListCard item={item} />}
+				renderItem={({ item }) => (
+					<DGroupListItem
+						id={item.id}
+						name={item.groupName}
+						leaders={item.leadersName}
+						members={item.memberCount}
+						category={item.memberTypes}
+						avatar={null}
+						onPress={() =>
+							toast.default("DGroup Item function is not implemented yet")
+						}
+					/>
+				)}
 				refreshControl={Refresh()}
 				onEndReached={() => {
 					if (!onEndReachedCalledDuringMomentum && !fetching && !loading) {
