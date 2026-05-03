@@ -1,6 +1,9 @@
 import apiClient from "../../../services/apiClient";
-import { EventDTO, GetEventResponse } from "../model/Event";
-import { GetEventsParams } from "../model/RequestParams";
+import {
+	EventDTO,
+	GetEventResponse,
+} from "../../../features/event/model/Event";
+import { GetEventsParams } from "../../../features/event/model/RequestParams";
 
 export const eventDataSource = {
 	async getEventById(id: string): Promise<EventDTO | null> {

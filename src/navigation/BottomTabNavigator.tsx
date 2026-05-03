@@ -5,7 +5,6 @@ import MdiIcon from "../component/MdiIcon";
 import { tabIconMap } from "../utils/tabIconMap";
 import OtherScreen from "src/feature/others/view/OtherScreen";
 import EventListScreen from "src/feature/event/view/EventListScreen";
-import DGroupListScreen from "src/feature/dgroup/view/DGroupListScreen";
 import ProfileScreen from "@features/profile/screens/ProfileScreen";
 import { useAppMode } from "src/context/app-mode";
 import { AppMode } from "@features/profile/components/ModeCard";
@@ -14,6 +13,7 @@ import DashboardScreen from "@features/dashboard/screens/DashboardScreen";
 import MemberEventScreen from "@features/event/screens/MemberEventScreen";
 import MemberScreen from "@features/member/screens/MemberScreen";
 import DGroupScreen from "@features/dgroup/screens/DGroupScreen";
+import EventScreen from "@features/event/screens/EventScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +34,7 @@ const TAB_CONFIG = {
 	[AppMode.SuperAdmin]: [
 		{ name: "UserTab", component: MemberScreen, title: "Members" },
 		{ name: "DGroupTab", component: DGroupScreen, title: "DGroups" },
-		{ name: "EventTab", component: EventListScreen, title: "Events" },
+		{ name: "EventTab", component: EventScreen, title: "Events" },
 		{ name: "OthersTab", component: OtherScreen, title: "Others" },
 		{ name: "ProfileTab", component: ProfileScreen, title: "Profile" },
 	],

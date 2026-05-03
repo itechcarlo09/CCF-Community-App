@@ -16,6 +16,8 @@ import { MinistryCardProps } from "./MinistryCard.types";
 import MinistryBadge from "../MinistryBadge";
 import dayjs from "dayjs";
 import CCFButton from "@components/CCFButton";
+import { AppMode } from "@features/profile/components/ModeCard";
+import { useAppMode } from "src/context/app-mode";
 
 const formatDateRange = (startDate: Date, endDate?: Date) => {
 	const start = dayjs(startDate);
@@ -51,6 +53,7 @@ const MinistryCard: React.FC<MinistryCardProps> = ({
 	speaker,
 }) => {
 	const { theme } = useTheme();
+	const { appMode } = useAppMode();
 	const start = dayjs(startDate);
 	const end = dayjs(endDate);
 	return (
@@ -133,7 +136,47 @@ const MinistryCard: React.FC<MinistryCardProps> = ({
 					{speaker}
 				</Text>
 			</View>
-			<CCFButton title={"Register"} />
+			{appMode === AppMode.MemberMode ? (
+				<CCFButton title={"Register"} />
+			) : (
+				<View style={styles.footer}>
+					<View style={styles.countItem}>
+						<Text style={[styles.countLabel, { color: theme.muted }]}>
+							1st Time Attendees:
+						</Text>
+						<Text style={[styles.countNumber, { color: theme.text }]}>
+							{/* {item.firstTimeAttendees} */} 0
+						</Text>
+					</View>
+					<View style={styles.countItem}>
+						<Text style={[styles.countLabel, { color: theme.muted }]}>
+							Volunteers:
+						</Text>
+						<Text style={[styles.countNumber, { color: theme.text }]}>
+							{/* {item.volunteers} */}0
+						</Text>
+					</View>
+					<View style={styles.countItem}>
+						<Text style={[styles.countLabel, { color: theme.muted }]}>
+							Regular:
+						</Text>
+						<Text style={[styles.countNumber, { color: theme.text }]}>
+							{/* {item.regularAttendees} */}0
+						</Text>
+					</View>
+					<View style={styles.countItem}>
+						<Text style={[styles.countLabel, { color: theme.muted }]}>
+							Total:
+						</Text>
+						<Text style={[styles.countNumber, { color: theme.text }]}>
+							{/* {item.firstTimeAttendees +
+								item.volunteers +
+								item.regularAttendees} */}
+							0
+						</Text>
+					</View>
+				</View>
+			)}
 		</ShadowCard>
 	);
 };

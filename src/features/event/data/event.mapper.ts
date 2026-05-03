@@ -1,5 +1,5 @@
-import { EventDTO } from "../model/Event";
-import { EventItemUI } from "../model/EventListItem";
+import { EventDTO } from "../../../features/event/model/Event";
+import { EventItemUI } from "../../../features/event/model/EventListItem";
 
 export const mapEventToUI = (event: EventDTO): EventItemUI => {
 	return {

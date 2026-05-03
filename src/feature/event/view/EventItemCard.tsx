@@ -9,7 +9,7 @@ import {
 	mdiAccountVoice,
 	mdiChevronRight,
 } from "@mdi/js";
-import { EventItemUI } from "../model/EventListItem";
+import { EventItemUI } from "../../../features/event/model/EventListItem";
 import { useTheme } from "@theme/ThemeProvider";
 
 interface Props {

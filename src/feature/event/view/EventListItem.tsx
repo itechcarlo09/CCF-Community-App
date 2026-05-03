@@ -6,7 +6,7 @@ import {
 	mdiMicrophoneOutline,
 	mdiPencilOutline,
 } from "@mdi/js";
-import { EventItemUI } from "../model/EventListItem";
+import { EventItemUI } from "../../../features/event/model/EventListItem";
 import CircularDate from "../../../component/CircularDate";
 import SeriesButton from "./Components/SeriesButton";
 import AttendanceView from "./Components/AttendanceView";

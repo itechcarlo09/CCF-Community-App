@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 
 import Input from "@component/Inputs";
 import Loading from "@component/Loading";
-import { useEventForm } from "../hooks/userEventForm";
+import { useEventForm } from "../../../features/event/hooks/userEventForm";
 import { NOID } from "src/types/globalTypes";
 import { EventStackParamList } from "src/types/navigation";
 import { roles } from "src/types/enums/UserType";

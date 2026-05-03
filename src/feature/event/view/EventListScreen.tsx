@@ -6,7 +6,6 @@ import {
 	RefreshControl,
 	ActivityIndicator,
 } from "react-native";
-import { useEventViewModel } from "../viewModel/useEventViewModel";
 import { useTheme } from "../../../theme/ThemeProvider";
 import Loading from "../../../component/Loading";
 import { EventItemCard } from "./EventItemCard";
@@ -14,6 +13,7 @@ import Header from "@component/Header";
 import { Separator } from "@component/Separator";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useDebounce from "@features/member/hooks/useDebounce";
+import { useEventViewModel } from "@features/event/viewModel/useEventViewModel";
 
 const EventListScreen = ({ navigation }: any) => {
 	const {
