@@ -1,28 +1,48 @@
-// UserListHeader.tsx
+// CCFHeader.tsx
 import React from "react";
-import { View, ViewStyle } from "react-native";
+import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { mdiPlus } from "@mdi/js";
+import { mdiArrowLeft, mdiPlus } from "@mdi/js";
 
 import CCFTextInput from "@components/CCFTextInput";
 import MDIIcon from "@components/MDIIcon";
 import { useTheme } from "@theme/ThemeProvider";
 import { design } from "@theme/index";
 
-interface UserListHeaderProps {
-	searchText: string;
-	onChangeSearch: (text: string) => void;
-	onAddPress: () => void;
+interface CCFHeaderProps {
+	// common
 	style?: ViewStyle;
+	title?: string;
+
+	// back button
+	showBack?: boolean;
+	onBackPress?: () => void;
+
+	// search mode
+	searchText?: string;
+	onChangeSearch?: (text: string) => void;
 	placeholder?: string;
+	enableSearch?: boolean;
+
+	// add button
+	showAdd?: boolean;
+	onAddPress?: () => void;
 }
 
-const CCFHeader: React.FC<UserListHeaderProps> = ({
-	searchText,
-	onChangeSearch,
-	onAddPress,
+const CCFHeader: React.FC<CCFHeaderProps> = ({
 	style,
-	placeholder,
+	title,
+
+	showBack = false,
+	onBackPress,
+
+	searchText = "",
+	onChangeSearch,
+	placeholder = "Search",
+	enableSearch = false,
+
+	showAdd = false,
+	onAddPress,
 }) => {
 	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
@@ -44,20 +64,39 @@ const CCFHeader: React.FC<UserListHeaderProps> = ({
 				style,
 			]}
 		>
-			<CCFTextInput
-				placeholder={placeholder}
-				isSearch
-				value={searchText}
-				onChangeText={onChangeSearch}
-				containerStyle={{ flex: 1 }}
-			/>
+			{/* Back */}
+			{showBack && (
+				<TouchableOpacity onPress={onBackPress}>
+					<MDIIcon path={mdiArrowLeft} size={22} color={theme.text} />
+				</TouchableOpacity>
+			)}
 
-			<MDIIcon
-				path={mdiPlus}
-				size={22}
-				color={theme.white}
-				onPress={onAddPress}
-			/>
+			{/* Search or Title */}
+			{enableSearch ? (
+				<CCFTextInput
+					placeholder={placeholder}
+					isSearch
+					value={searchText}
+					onChangeText={onChangeSearch}
+					containerStyle={{ flex: 1 }}
+				/>
+			) : (
+				<View style={{ flex: 1 }}>
+					<Text style={[design.typography.h3, { color: theme.text }]}>
+						{title}
+					</Text>
+				</View>
+			)}
+
+			{/* Add */}
+			{showAdd && (
+				<MDIIcon
+					path={mdiPlus}
+					size={22}
+					color={theme.white}
+					onPress={onAddPress}
+				/>
+			)}
 		</View>
 	);
 };

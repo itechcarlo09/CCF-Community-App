@@ -15,6 +15,8 @@ interface UseDGroupFormProps {
 
 const staticInitialValues = {
 	name: "",
+	type: [],
+	leader: [],
 	dleaders: [] as number[],
 	dmembers: [] as number[],
 	churchId: 0,

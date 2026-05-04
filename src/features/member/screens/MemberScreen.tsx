@@ -81,6 +81,8 @@ const MemberScreen = () => {
 			]}
 		>
 			<CCFHeader
+				enableSearch
+				showAdd
 				searchText={searchText}
 				onChangeSearch={setSearchText}
 				onAddPress={() => {

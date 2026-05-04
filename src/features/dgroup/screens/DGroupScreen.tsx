@@ -82,6 +82,8 @@ const DGroupScreen = () => {
 			]}
 		>
 			<CCFHeader
+				enableSearch
+				showAdd
 				searchText={searchText}
 				onChangeSearch={setSearchText}
 				onAddPress={() => {
