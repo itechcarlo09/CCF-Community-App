@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Loading from "../../../component/Loading";
 import { useTheme } from "../../../theme/ThemeProvider";
-import useLoginForm from "src/feature/auth/hook/useLoginForm";
+import useLoginForm from "@features/auth/hook/useLoginForm";
 import Title from "../components/Title";
 import Description from "../components/Description";
 import { design } from "@theme/index";

@@ -19,8 +19,22 @@ import {
 	CreateEmploymentDTO,
 	CreateEmploymentListDTO,
 } from "../model/Employment";
+import { toast } from "@component/toast/toast";
 
 export const userDataSource = {
+	async getUserByEmail(email: string): Promise<UserDTO | undefined> {
+		try {
+			const res = await apiClient.post<UserDTO>(`/account/login`, {
+				email,
+			});
+
+			return res.data ?? undefined;
+		} catch (error: any) {
+			toast.error(error.response?.data?.message || error.message);
+			// throw new Error(error.response?.data?.message || error.message);
+		}
+	},
+
 	async getUsers(
 		params?: GetUsersParams,
 	): Promise<GetUserResponse | undefined> {

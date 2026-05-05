@@ -27,6 +27,8 @@ import {
 import { useAppMode } from "src/context/app-mode";
 import SettingsItemButton from "../components/SettingsItemButton";
 import MDIIcon from "@components/MDIIcon";
+import { useAccountStore } from "@features/account/account.store";
+import { formatCompleteName } from "src/utils/stringUtils";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -46,6 +48,7 @@ const ProfileScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { appMode, setAppMode } = useAppMode();
 	const { theme } = useTheme();
+	const { account } = useAccountStore();
 
 	const user = {
 		name: "John Doe",
@@ -128,7 +131,15 @@ const ProfileScreen = () => {
 									style={styles.avatarImage}
 								/>
 							) : (
-								<Text style={styles.avatarText}>{getInitials(user.name)}</Text>
+								<Text style={styles.avatarText}>
+									{getInitials(
+										formatCompleteName(
+											account?.firstName,
+											account?.middleName,
+											account?.lastName,
+										),
+									)}
+								</Text>
 							)}
 						</LinearGradient>
 
@@ -141,7 +152,11 @@ const ProfileScreen = () => {
 									design.typography.h4 as TextStyle,
 								]}
 							>
-								{user.name}
+								{formatCompleteName(
+									account?.firstName,
+									account?.middleName,
+									account?.lastName,
+								)}
 							</Text>
 							<Text
 								style={[
@@ -152,7 +167,7 @@ const ProfileScreen = () => {
 									design.typography.body,
 								]}
 							>
-								{user.email}
+								{account?.email}
 							</Text>
 
 							<View style={[styles.badge, { backgroundColor: theme.badge }]}>

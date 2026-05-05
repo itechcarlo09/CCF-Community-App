@@ -3,6 +3,7 @@ import { userDataSource } from "./userDataSource";
 export const userRepository = {
 	getUsers: userDataSource.getUsers,
 	getUserById: userDataSource.getUserById,
+	getUserByEmail: userDataSource.getUserByEmail,
 	getEducationById: userDataSource.getEducationById,
 	getEmploymentById: userDataSource.getEmploymentById,
 	addUser: userDataSource.addUser,

@@ -3,13 +3,32 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
-import { Login } from "../model/Login";
+import { Login } from "../../../feature/auth/model/Login";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../../../types/navigation";
 import { toast } from "@component/toast/toast";
+import { useAccountStore } from "@features/account/account.store";
+import { userRepository } from "@features/member/data/userRepository";
 
 const useLoginForm = () => {
 	const [loading, setLoading] = useState(false);
+	const { setAccount, clearAccount } = useAccountStore();
+
+	const login = async (email: string): Promise<boolean> => {
+		const account = await userRepository.getUserByEmail(email);
+
+		if (account) {
+			setAccount(account);
+			return true;
+		}
+
+		return false;
+	};
+
+	const logout = () => {
+		clearAccount();
+	};
+
 	const navigation =
 		useNavigation<NativeStackNavigationProp<AppStackParamList, "Login">>();
 
@@ -32,12 +51,11 @@ const useLoginForm = () => {
 		onSubmit: async (values) => {
 			setLoading(true);
 			try {
-				const auth: Omit<Login, "id" | "createdAt" | "updatedAt"> = {
-					email: values.email,
-					password: values.password,
-				};
-
-				if (values.email === "Admin" && values.password === "1234") {
+				// const auth: Omit<Login, "id" | "createdAt" | "updatedAt"> = {
+				// 	email: values.email,
+				// 	password: values.password,
+				// };
+				if (await login(values.email)) {
 					navigation.navigate("BottomNavigator");
 				} else {
 					toast.error("Login failed. Please try again.");
@@ -51,6 +69,8 @@ const useLoginForm = () => {
 	});
 
 	return {
+		login,
+		logout,
 		formik,
 		loading,
 	};

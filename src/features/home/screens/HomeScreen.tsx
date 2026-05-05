@@ -27,6 +27,8 @@ import MDIIcon from "@components/MDIIcon";
 import QRCodeSection from "../components/QRCode";
 import CCFButton from "@components/CCFButton";
 import DGroupDetail from "../components/DGroupDetail";
+import { useAccountStore } from "@features/account/account.store";
+import { formatCompleteName, formatFullName } from "src/utils/stringUtils";
 
 // TODO: replace with your actual hooks
 // import { useUser } from "../context/UserContext";
@@ -45,6 +47,7 @@ const getInitials = (name?: string) => {
 const HomeScreen = () => {
 	const insets = useSafeAreaInsets();
 	const { appMode, setAppMode } = useAppMode();
+	const { account } = useAccountStore();
 	const { theme } = useTheme();
 	const [showQR, setShowQR] = useState(false);
 
@@ -83,7 +86,7 @@ const HomeScreen = () => {
 					<Text
 						style={[styles.title, { ...(design.typography.h1 as TextStyle) }]}
 					>
-						Hi, Caloy
+						Hi, {account?.nickname ?? account?.firstName}
 					</Text>
 					<Text
 						style={[
@@ -121,7 +124,11 @@ const HomeScreen = () => {
 									design.typography.h4 as TextStyle,
 								]}
 							>
-								Carlo Renoria
+								{formatCompleteName(
+									account?.firstName,
+									account?.middleName,
+									account?.lastName,
+								)}
 							</Text>
 							<Text
 								style={[
