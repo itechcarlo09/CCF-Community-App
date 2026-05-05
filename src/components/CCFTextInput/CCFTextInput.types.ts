@@ -7,4 +7,6 @@ export interface CCFTextInputProps extends TextInputProps {
 	disabled?: boolean;
 	isSearch?: boolean;
 	containerStyle?: StyleProp<ViewStyle> | undefined;
+	label?: string;
+	required?: boolean;
 }

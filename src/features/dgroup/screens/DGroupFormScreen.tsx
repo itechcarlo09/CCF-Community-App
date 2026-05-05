@@ -44,7 +44,8 @@ const DGroupFormScreen = () => {
 			>
 				<View style={{ rowGap: design.spacing.lg, flex: 1 }}>
 					<CCFTextInput
-						placeholder="DGroup Name"
+						label="Dgroup Name"
+						placeholder="Input Name"
 						value={formik.values.name}
 						onChangeText={formik.handleChange("name")}
 						error={formik.errors.name}
@@ -56,6 +57,8 @@ const DGroupFormScreen = () => {
 						onChange={(value) => formik.setFieldValue("type", value)}
 					/>
 					<CCFSelectInput
+						label="DGroup Leader"
+						required
 						placeholder="Select Leader"
 						value={formik.values.lifeStage}
 						onPress={() => navigation.navigate("DGroupListScreen")}

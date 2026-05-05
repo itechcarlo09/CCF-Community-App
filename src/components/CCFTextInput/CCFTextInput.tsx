@@ -22,6 +22,8 @@ const CCFTextInput: React.FC<CCFTextInputProps> = ({
 	containerStyle,
 	disabled = false,
 	isSearch = false,
+	label,
+	required,
 }) => {
 	const { theme } = useTheme();
 
@@ -54,6 +56,12 @@ const CCFTextInput: React.FC<CCFTextInputProps> = ({
 
 	return (
 		<View style={[styles.wrapper, containerStyle]}>
+			{label && (
+				<Text style={{ marginBottom: 6, color: theme.text, fontSize: 14 }}>
+					{label}
+					{required && <Text style={{ color: theme.error.textColor }}> *</Text>}
+				</Text>
+			)}
 			<View>
 				{isSearch && (
 					<View style={styles.leftIcon}>

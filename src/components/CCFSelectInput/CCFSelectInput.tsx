@@ -14,6 +14,8 @@ interface CCFSelectInputProps {
 	containerStyle?: any;
 	disabled?: boolean;
 	isSearch?: boolean;
+	label?: string;
+	required?: boolean;
 }
 
 const CCFSelectInput: React.FC<CCFSelectInputProps> = ({
@@ -25,6 +27,8 @@ const CCFSelectInput: React.FC<CCFSelectInputProps> = ({
 	containerStyle,
 	disabled = false,
 	isSearch = false,
+	label,
+	required,
 }) => {
 	const { theme } = useTheme();
 	const [isFocused, setIsFocused] = useState(false);
@@ -57,6 +61,12 @@ const CCFSelectInput: React.FC<CCFSelectInputProps> = ({
 
 	return (
 		<View style={[styles.wrapper, containerStyle]}>
+			{label && (
+				<Text style={{ marginBottom: 6, color: theme.text, fontSize: 14 }}>
+					{label}
+					{required && <Text style={{ color: theme.error.textColor }}> *</Text>}
+				</Text>
+			)}
 			<TouchableOpacity
 				activeOpacity={0.7}
 				onPress={onPress}
